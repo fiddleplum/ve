@@ -1,3 +1,5 @@
 prj/.vs
+prj/tmp
 prj/*.VC.opendb
+prj/*.vcxproj.user
 lib/*
