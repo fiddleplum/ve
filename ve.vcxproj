@@ -71,18 +71,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\lib\</OutDir>
-    <SourcePath>$(VC_SourcePath)\..\src;</SourcePath>
-    <IntDir>$(SolutionDir)\tmp\</IntDir>
+    <OutDir>$(SolutionDir)lib\</OutDir>
+    <SourcePath>$(VC_SourcePath)src;</SourcePath>
+    <IntDir>$(SolutionDir)tmp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\..\lib\</OutDir>
-    <SourcePath>$(VC_SourcePath)\..\src;</SourcePath>
-    <IntDir>$(SolutionDir)\tmp\</IntDir>
+    <OutDir>$(SolutionDir)lib\</OutDir>
+    <SourcePath>$(VC_SourcePath)src;</SourcePath>
+    <IntDir>$(SolutionDir)tmp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -148,6 +148,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\serialize.h" />
+    <ClInclude Include="src\vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\compile_test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
