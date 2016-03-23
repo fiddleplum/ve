@@ -1,5 +1,5 @@
-prj/.vs
-prj/tmp
-prj/*.VC.opendb
-prj/*.vcxproj.user
+.vs
+tmp
+*.VC.opendb
+*.vcxproj.user
 lib/*
