@@ -94,6 +94,8 @@ namespace ve
 	private:
 		T * p;
 		_PtrCounter * c;
+
+		template<typename Y, bool OWNY, bool USEY> friend class PtrBase;
 	};
 
 	template <typename T>
@@ -113,7 +115,7 @@ namespace ve
 		virtual void destroy() = 0;
 
 		int oc = 0; // PtrBase[OWN=true] reference counter
-		int pc = 0; // PtrBase[USE=true] reference counter
+		int uc = 0; // PtrBase[USE=true] reference counter
 		int ac = 0; // PtrBase[ANY] reference counter
 	};
 
