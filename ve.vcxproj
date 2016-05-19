@@ -74,6 +74,7 @@
     <OutDir>$(SolutionDir)lib\</OutDir>
     <SourcePath>$(VC_SourcePath)src;</SourcePath>
     <IntDir>$(SolutionDir)tmp\</IntDir>
+    <IncludePath>C:\stephen\projects\_external\SDL2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -149,10 +150,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\event.h" />
+    <ClInclude Include="src\glcorearb.h" />
     <ClInclude Include="src\gui\container.h" />
     <ClInclude Include="src\gui\element.h" />
     <ClInclude Include="src\interval.h" />
     <ClInclude Include="src\container_vector.h" />
+    <ClInclude Include="src\open_gl.h" />
     <ClInclude Include="src\ptr.h" />
     <ClInclude Include="src\rect.h" />
     <ClInclude Include="src\serialize.h" />
@@ -164,6 +167,7 @@
     <ClCompile Include="src\event.cpp" />
     <ClCompile Include="src\gui\container.cpp" />
     <ClCompile Include="src\gui\element.cpp" />
+    <ClCompile Include="src\open_gl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

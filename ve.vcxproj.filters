@@ -11,12 +11,15 @@
     <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\ptr.h" />
     <ClInclude Include="src\container_vector.h" />
+    <ClInclude Include="src\open_gl.h" />
+    <ClInclude Include="src\glcorearb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\compile_test.cpp" />
     <ClCompile Include="src\event.cpp" />
     <ClCompile Include="src\gui\element.cpp" />
     <ClCompile Include="src\gui\container.cpp" />
+    <ClCompile Include="src\open_gl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

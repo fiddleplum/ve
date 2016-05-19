@@ -1,0 +1,26 @@
+== Messaging System and Rationale
+
+I'm thinking about the problem of a button closing its parent container. An initial problem is the user of smart pointers. The button needs a smart pointer to its parent container. However, the parent container cannot give one itself because it only has "this", which is a raw pointer. But even if the button had a smart pointer, when it calls delete on its container, it must delete itself, causing possible stack corruption.
+
+The only solution to this is to have a delay on which the button calls a close-next-frame function which closes the parent on the next frame. In some implementations, I have put this mechanism in the container object itself, so that the button close container request is added to a list of items to be removed next frame by the container's container, but this feels a bit hacky.
+
+Then I thought that there might be a messaging system which passes messages to the different objects. The button just sends a "close container" message, which gets processed later to close the container. This would also allow for a scripting system to be implemented. It would also decouple elements from each other, and allow buttons to call all sorts of things, not just specific functions.
+
+This messaging system would extend to the whole program, rather than just the gui. It wouldn't be used for high-frequency things, just the events that happen occasionally.
+
+
+I'm wavering between a message system and sticking to containers having an add/remove objects at the end of their update function.
+
+== Smart Pointers or Raw Pointers?
+
+I'm thinking about the problem of having a container class have a button. The container uses its own bound function as a callback for button to use. The issue is "this". The container needs a reference to itself, but it can only do it as a raw pointer, especially if its in its own constructor.
+
+I need OwnPtrs and UsePtrs are great, except in this particular situation. I need a third semantic which handles it, one which can wrap "this" in its own constructor, without worrying about lifetimes. I have a few options:
+
+1. Create a non-reference counted RawPtr class that can just wrap this and pass it to a child class. This is a simple solution, but the child class must be careful not to pass the RawPtr anywhere else.
+
+2. I can have a container inherit from a base "Object" class which, upon its construction, contains an OwnPtr that can be used for anything. This way, a container class can pass a Ptr to its children. The problem with this, however, is that when destruction time comes the container will not be able to be destroyed because it still has Ptrs existing, but they can't be removed until the destruction of the container starts.
+
+I can use the RawPtr solution, but it still keeps track of its OwnPtr so that it is "smart" about the referencing. Itself however will not be reference counted. This is the best option. I don't need to use option 2 and have the child use a Ptr, because other structures exist which guarantee the life of the container that the RawPtr points to. However, the "smartness" of the RawPtr is there just in case.
+
+
