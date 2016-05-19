@@ -1,5 +1,7 @@
 .vs
 tmp
+*.sdf
 *.VC.opendb
 *.vcxproj.user
+*.VC.db
 lib/*

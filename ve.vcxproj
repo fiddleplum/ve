@@ -148,11 +148,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\event.h" />
+    <ClInclude Include="src\gui\container.h" />
+    <ClInclude Include="src\gui\element.h" />
+    <ClInclude Include="src\interval.h" />
+    <ClInclude Include="src\container_vector.h" />
+    <ClInclude Include="src\ptr.h" />
+    <ClInclude Include="src\rect.h" />
     <ClInclude Include="src\serialize.h" />
+    <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\compile_test.cpp" />
+    <ClCompile Include="src\event.cpp" />
+    <ClCompile Include="src\gui\container.cpp" />
+    <ClCompile Include="src\gui\element.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\!DESIGN.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

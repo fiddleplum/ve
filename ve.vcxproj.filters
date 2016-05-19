@@ -3,8 +3,22 @@
   <ItemGroup>
     <ClInclude Include="src\vector.h" />
     <ClInclude Include="src\serialize.h" />
+    <ClInclude Include="src\interval.h" />
+    <ClInclude Include="src\rect.h" />
+    <ClInclude Include="src\event.h" />
+    <ClInclude Include="src\gui\element.h" />
+    <ClInclude Include="src\gui\container.h" />
+    <ClInclude Include="src\std\optional.hpp" />
+    <ClInclude Include="src\ptr.h" />
+    <ClInclude Include="src\container_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\compile_test.cpp" />
+    <ClCompile Include="src\event.cpp" />
+    <ClCompile Include="src\gui\element.cpp" />
+    <ClCompile Include="src\gui\container.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\!DESIGN.txt" />
   </ItemGroup>
 </Project>
