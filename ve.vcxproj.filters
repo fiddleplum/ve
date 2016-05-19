@@ -10,7 +10,6 @@
     <ClInclude Include="src\gui\container.h" />
     <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\ptr.h" />
-    <ClInclude Include="src\container_vector.h" />
     <ClInclude Include="src\open_gl.h" />
     <ClInclude Include="src\glcorearb.h" />
   </ItemGroup>
