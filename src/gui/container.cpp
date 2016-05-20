@@ -29,60 +29,6 @@ namespace ve
 			}
 		}
 
-		void Container::removeElement(UsePtr<Element> const & element)
-		{
-			infos.erase(find(element));
-			lookup.erase(element);
-		}
-
-		void Container::moveElementToFront(UsePtr<Element> const & element)
-		{
-			auto itOld = find(element);
-			ElementInfo info = *itOld; // make a copy so it doesn't destruct
-			infos.erase(itOld);
-			lookup.erase(element);
-			auto itNew = infos.insert(infos.end(), info);
-			lookup[info.element] = itNew;
-		}
-
-		void Container::setElementActive(UsePtr<Element> const & element, bool active)
-		{
-			auto it = find(element);
-			it->active = active;
-		}
-
-		void Container::setElementPosition(UsePtr<Element> const & element, Vector2f fractionOfContainer, Vector2f fractionOfElement, Vector2i offset)
-		{
-			auto it = find(element);
-			it->positionFractionOfElement = fractionOfElement;
-			it->positionFractionOfContainer = fractionOfContainer;
-			it->positionOffset = offset;
-			updateElementBounds(*it);
-		}
-
-		void Container::setElementSize(UsePtr<Element> const & element, Vector2f fractionOfContainer, Vector2i offset)
-		{
-			auto it = find(element);
-			it->sizeFractionOfContainer = fractionOfContainer;
-			it->sizeOffset = offset;
-			updateElementBounds(*it);
-		}
-
-		void Container::setContainerEventHandler(std::function<bool(Event const & event, std::optional<Vector2i> cursorPosition)> handler)
-		{
-			eventHandler = handler;
-		}
-
-		void Container::setUpdateHandler(std::function<void(float dt)> handler)
-		{
-			updateHandler = handler;
-		}
-
-		void Container::setPreRenderUpdateHandler(std::function<void()> handler)
-		{
-			preRenderUpdateHandler = handler;
-		}
-
 		bool Container::handleEvent(Event const & event, std::optional<Vector2i> cursorPosition)
 		{
 			bool consumed = false;
@@ -144,6 +90,60 @@ namespace ve
 				}
 			}
 			ve::glScissorPop();
+		}
+
+		void Container::removeElement(UsePtr<Element> const & element)
+		{
+			infos.erase(find(element));
+			lookup.erase(element);
+		}
+
+		void Container::moveElementToFront(UsePtr<Element> const & element)
+		{
+			auto itOld = find(element);
+			ElementInfo info = *itOld; // make a copy so it doesn't destruct
+			infos.erase(itOld);
+			lookup.erase(element);
+			auto itNew = infos.insert(infos.end(), info);
+			lookup[info.element] = itNew;
+		}
+
+		void Container::setElementActive(UsePtr<Element> const & element, bool active)
+		{
+			auto it = find(element);
+			it->active = active;
+		}
+
+		void Container::setElementPosition(UsePtr<Element> const & element, Vector2f fractionOfContainer, Vector2f fractionOfElement, Vector2i offset)
+		{
+			auto it = find(element);
+			it->positionFractionOfElement = fractionOfElement;
+			it->positionFractionOfContainer = fractionOfContainer;
+			it->positionOffset = offset;
+			updateElementBounds(*it);
+		}
+
+		void Container::setElementSize(UsePtr<Element> const & element, Vector2f fractionOfContainer, Vector2i offset)
+		{
+			auto it = find(element);
+			it->sizeFractionOfContainer = fractionOfContainer;
+			it->sizeOffset = offset;
+			updateElementBounds(*it);
+		}
+
+		void Container::setContainerEventHandler(std::function<bool(Event const & event, std::optional<Vector2i> cursorPosition)> handler)
+		{
+			eventHandler = handler;
+		}
+
+		void Container::setUpdateHandler(std::function<void(float dt)> handler)
+		{
+			updateHandler = handler;
+		}
+
+		void Container::setPreRenderUpdateHandler(std::function<void()> handler)
+		{
+			preRenderUpdateHandler = handler;
 		}
 
 		std::list<Container::ElementInfo>::iterator Container::find(UsePtr<Element> const & element) const

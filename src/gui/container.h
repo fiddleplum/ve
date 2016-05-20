@@ -19,6 +19,15 @@ namespace ve
 
 			void setSize(Vector2i size) override;
 
+			bool handleEvent(Event const & event, std::optional<Vector2i> cursorPosition) override;
+
+			void update(float dt) override;
+
+			void preRenderUpdate() override;
+
+			void render(Vector2i windowSize) const override;
+
+		protected:
 			template <typename T> UsePtr<T> addElement();
 
 			void removeElement(UsePtr<Element> const & element);
@@ -36,14 +45,6 @@ namespace ve
 			void setUpdateHandler(std::function<void(float dt)> handler);
 
 			void setPreRenderUpdateHandler(std::function<void()> handler);
-
-			bool handleEvent(Event const & event, std::optional<Vector2i> cursorPosition) override;
-
-			void update(float dt) override;
-
-			void preRenderUpdate() override;
-
-			void render(Vector2i windowSize) const override;
 
 		private:
 			class ElementInfo
