@@ -1,7 +1,7 @@
-.vs
+bin
 tmp
+.vs
 *.sdf
 *.VC.opendb
 *.vcxproj.user
 *.VC.db
-lib/*

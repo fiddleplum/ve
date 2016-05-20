@@ -92,7 +92,7 @@ namespace ve
 	inline void serialize(std::ostream & out, std::string const & v)
 	{
 		serialize(out, (int)v.size());
-		serialize(out, (void const *)&v[0], v.size());
+		serialize(out, (void const *)&v[0], (int)v.size());
 	}
 
 	// Deserialize a string.

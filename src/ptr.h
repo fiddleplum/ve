@@ -80,7 +80,7 @@ namespace ve
 		T * raw() const;
 
 		// Get the unsigned integer value of the address of the object.
-		operator unsigned int() const;
+		operator intptr_t() const;
 
 		// Returns a use pointer dynamically casted to Y.
 		template <typename Y> PtrBase<Y, OWN, USE> as() const;
@@ -353,9 +353,9 @@ namespace ve
 	}
 
 	template <typename T, bool OWN, bool USE>
-	PtrBase<T, OWN, USE>::operator unsigned int() const
+	PtrBase<T, OWN, USE>::operator intptr_t() const
 	{
-		return (unsigned int)p;
+		return (intptr_t)p;
 	}
 
 	template <typename T, bool OWN, bool USE> template <typename Y>
