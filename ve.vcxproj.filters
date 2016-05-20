@@ -14,6 +14,7 @@
     <ClInclude Include="src\glcorearb.h" />
     <ClInclude Include="src\gui\window.h" />
     <ClInclude Include="src\display.h" />
+    <ClInclude Include="src\app.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\compile_test.cpp" />
@@ -23,6 +24,7 @@
     <ClCompile Include="src\open_gl.cpp" />
     <ClCompile Include="src\gui\window.cpp" />
     <ClCompile Include="src\display.cpp" />
+    <ClCompile Include="src\app.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

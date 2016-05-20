@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\app.h" />
     <ClInclude Include="src\display.h" />
     <ClInclude Include="src\event.h" />
     <ClInclude Include="src\glcorearb.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="src\gui\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\compile_test.cpp" />
     <ClCompile Include="src\display.cpp" />
     <ClCompile Include="src\event.cpp" />
