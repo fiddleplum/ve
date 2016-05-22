@@ -1,15 +1,5 @@
 #pragma once
 
-//#ifdef _DEBUG
-//#pragma comment (lib, "base_d.lib")
-//#pragma comment (lib, "app_d.lib")
-//#else
-//#pragma comment (lib, "base.lib")
-//#pragma comment (lib, "app.lib")
-//#endif
-//#pragma comment (lib, "SDL2.lib")
-//#pragma comment (lib, "SDL2main.lib")
-
 #include "gui/window.h"
 #include <set>
 
