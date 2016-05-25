@@ -28,9 +28,9 @@ namespace ve
 			return aspectRatio;
 		}
 
-		void Camera::setAspectRatio(float newAspectRatio)
+		void Camera::setAspectRatio(float aspectRatio_)
 		{
-			aspectRatio = newAspectRatio;
+			aspectRatio = aspectRatio_;
 			localToNdcTransformNeedsUpdate = true;
 		}
 
@@ -39,9 +39,9 @@ namespace ve
 			return near;
 		}
 
-		void Camera::setNear(float newNear)
+		void Camera::setNear(float near_)
 		{
-			near = newNear;
+			near = near_;
 			localToNdcTransformNeedsUpdate = true;
 		}
 
@@ -50,9 +50,9 @@ namespace ve
 			return far;
 		}
 
-		void Camera::setFar(float newFar)
+		void Camera::setFar(float far_)
 		{
-			far = newFar;
+			far = far_;
 			localToNdcTransformNeedsUpdate = true;
 		}
 
@@ -61,16 +61,21 @@ namespace ve
 			return fovY;
 		}
 
-		void Camera::setFovY(float newFovY)
+		void Camera::setFovY(float fovY_)
 		{
-			fovY = newFovY;
+			fovY = fovY_;
 			perspective = true;
 			localToNdcTransformNeedsUpdate = true;
 		}
 
-		void Camera::setHeight(float newHeight)
+		float Camera::getHeight() const
 		{
-			height = newHeight;
+			return height;
+		}
+
+		void Camera::setHeight(float height_)
+		{
+			height = height_;
 			perspective = false;
 			localToNdcTransformNeedsUpdate = true;
 		}
