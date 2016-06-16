@@ -172,7 +172,7 @@ namespace ve
 	template <typename T, bool OWN, bool USE> template <typename Y, bool OWNY, bool USEY>
 	PtrBase<T, OWN, USE>::PtrBase(PtrBase<Y, OWNY, USEY> const & ptr) : p(ptr.p), c(ptr.c)
 	{
-		assert(!OWN || OWNY);
+		static_assert(!OWN || OWNY, "Can't convert from UsePtr to OwnPtr");
 		if (p != nullptr)
 		{
 			if (OWN)
