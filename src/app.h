@@ -8,59 +8,30 @@
 //#include <string>
 //#include <map>
 
-class Scene;
-typedef void * SDL_GLContext;
-union SDL_Event;
-
 namespace ve
 {
-	// Called after the app is opened and before the loop. Implemented by the user.
-	void onAppOpen(std::vector<std::string> const & params);
+	// Called when the application starts. Implemented by the user. You can open a window and call loop from here.
+	void start(std::vector<std::string> const & params);
 
-	// Called before the app is closed. Implemented by the user.
-	void onAppClose();
+	// Starts the application game loop.
+	void loop();
 
-	class App
-	{
-	public:
-		// Constructor.
-		App();
+	// Quits the application. Continues until the end of the current iteration of the loop and then stops.
+	void quit();
 
-		// Destructor.
-		~App();
+	// Creates a new window.
+	UsePtr<gui::Window> addWindow(std::string const & title);
 
-		// Quits the application. Stops the loop.
-		void quit();
+	// Removes a window.
+	void removeWindow(UsePtr<gui::Window> window);
 
-		// Creates a new window.
-		UsePtr<gui::Window> addWindow(std::string const & title);
+	// Adds a scene.
+	//Ptr<Scene> addScene();
 
-		// Removes a window.
-		void removeWindow(UsePtr<gui::Window> window);
+	// Removes a scene.
+	//void removeScene(Ptr<Scene> scene);
 
-		// Adds a scene.
-		//Ptr<Scene> addScene();
-
-		// Removes a scene.
-		//void removeScene(Ptr<Scene> scene);
-
-		// Shows a message dialog box.
-		void showMessage(std::string const & message);
-
-		// Called by main to start the loop.
-		void loop();
-
-	private:
-		void handleSDLEvent(SDL_Event const & event);
-		UsePtr<gui::Window> getWindowFromId(unsigned int id) const;
-
-		std::set<OwnPtr<gui::Window>> windows;
-		//PtrSet<Scene> scenes;
-		bool looping;
-		float targetFrameRate;
-		SDL_GLContext glContext;
-	};
-
-	extern OwnPtr<App> app;
+	// Shows a message dialog box.
+	void showMessage(std::string const & message);
 }
 

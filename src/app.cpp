@@ -10,108 +10,16 @@
 
 namespace ve
 {
-	OwnPtr<App> app;
+	void handleSDLEvent(SDL_Event const & event);
+	UsePtr<gui::Window> getWindowFromId(unsigned int id);
 
-	App::App()
-	{
-		glContext = nullptr;
-		looping = false;
-		targetFrameRate = 60.f;
+	std::set<OwnPtr<gui::Window>> windows;
+	//PtrSet<Scene> scenes;
+	bool looping;
+	float targetFrameRate = 60.f;
+	SDL_GLContext glContext = nullptr;
 
-		// Start SDL.
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-		{
-			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
-		}
-
-		// Initialize the singletons.
-		//InputSystem::createInstance();
-		//shaderCache.setNew();
-		//textureCache.setNew();
-		//fontCache.setNew();
-		//SceneModelCache::createInstance();
-
-		//SDL_InitSubSystem(SDL_INIT_AUDIO);
-	}
-
-	App::~App()
-	{
-		//scenes.clear();
-		windows.clear();
-		// Destroy the singletons.
-		//fontCache.setNull();
-		//textureCache.setNull();
-		//shaderCache.setNull();
-		//SceneModelCache::destroyInstance();
-		//InputSystem::destroyInstance();
-
-		// Stop SDL.
-		SDL_Quit();
-	}
-
-	void App::quit()
-	{
-		looping = false;
-	}
-
-	UsePtr<gui::Window> App::addWindow(std::string const & title)
-	{
-		OwnPtr<gui::Window> window;
-		window.setNew(title);
-		if (windows.empty())
-		{
-			glContext = SDL_GL_CreateContext(window->getSDLWindow());
-			glInitialize();
-		}
-		windows.insert(window);
-		return window;
-	}
-
-	void App::removeWindow(UsePtr<gui::Window> window)
-	{
-		if (!window.isValid())
-		{
-			throw std::runtime_error("Invalid window.");
-		}
-		//if (!scenes.empty() && windows.size() == 1)
-		//{
-		//	throw std::runtime_error("All scenes must be removed before the last window is removed.");
-		//}
-		windows.erase(window);
-		if (windows.empty())
-		{
-			SDL_GL_DeleteContext(glContext);
-			glContext = 0;
-		}
-	}
-
-	//Ptr<Scene> App::addScene()
-	//{
-	//	if (windows.empty())
-	//	{
-	//		throw std::runtime_error("A scene may not be created until a window has been created.");
-	//	}
-	//	OwnPtr<Scene> scene;
-	//	scene.setNew();
-	//	scenes.insert(scene);
-	//	return scene;
-	//}
-
-	//void App::removeScene(Ptr<Scene> scene)
-	//{
-	//	if (!scene.isValid())
-	//	{
-	//		throw std::runtime_error("Invalid scene.");
-	//	}
-	//	scenes.erase(scene);
-	//}
-
-	void App::showMessage(std::string const & message)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Information", message.c_str(), nullptr);
-	}
-
-	void App::loop()
+	void loop()
 	{
 		looping = true;
 		while (looping)
@@ -174,7 +82,69 @@ namespace ve
 		}
 	}
 
-	void App::handleSDLEvent(SDL_Event const & sdlEvent)
+	void quit()
+	{
+		looping = false;
+	}
+
+	UsePtr<gui::Window> addWindow(std::string const & title)
+	{
+		OwnPtr<gui::Window> window;
+		window.setNew(title);
+		if (windows.empty())
+		{
+			glContext = SDL_GL_CreateContext(window->getSDLWindow());
+			glInitialize();
+		}
+		windows.insert(window);
+		return window;
+	}
+
+	void removeWindow(UsePtr<gui::Window> window)
+	{
+		if (!window.isValid())
+		{
+			throw std::runtime_error("Invalid window.");
+		}
+		//if (!scenes.empty() && windows.size() == 1)
+		//{
+		//	throw std::runtime_error("All scenes must be removed before the last window is removed.");
+		//}
+		windows.erase(window);
+		if (windows.empty())
+		{
+			SDL_GL_DeleteContext(glContext);
+			glContext = 0;
+		}
+	}
+
+	//Ptr<Scene> addScene()
+	//{
+	//	if (windows.empty())
+	//	{
+	//		throw std::runtime_error("A scene may not be created until a window has been created.");
+	//	}
+	//	OwnPtr<Scene> scene;
+	//	scene.setNew();
+	//	scenes.insert(scene);
+	//	return scene;
+	//}
+
+	//void removeScene(Ptr<Scene> scene)
+	//{
+	//	if (!scene.isValid())
+	//	{
+	//		throw std::runtime_error("Invalid scene.");
+	//	}
+	//	scenes.erase(scene);
+	//}
+
+	void showMessage(std::string const & message)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Information", message.c_str(), nullptr);
+	}
+
+	void handleSDLEvent(SDL_Event const & sdlEvent)
 	{
 		UsePtr<gui::Window> window;
 		switch (sdlEvent.type)
@@ -204,7 +174,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<gui::Window> App::getWindowFromId(unsigned int id) const
+	UsePtr<gui::Window> getWindowFromId(unsigned int id)
 	{
 		SDL_Window * sdlWindow = SDL_GetWindowFromID(id);
 		if (sdlWindow != NULL)
@@ -220,7 +190,7 @@ namespace ve
 		return UsePtr<gui::Window>();
 	}
 
-	//void App::_setCursorPosition(int windowId, Coord2i position)
+	//void _setCursorPosition(int windowId, Coord2i position)
 	//{
 	//	Ptr<Window> window = getWindowFromId(windowId);
 	//	if(window.isValid())
@@ -234,7 +204,7 @@ namespace ve
 	//	// TODO
 	//}
 
-	//void App::handleEvent(Event const & event)
+	//void handleEvent(Event const & event)
 	//{
 	//	for(auto window : app->windows)
 	//	{
@@ -259,11 +229,35 @@ int main(int argc, char *argv[])
 		{
 			args.push_back(std::string(argv[i]));
 		}
-		ve::app.setNew();
-		ve::onAppOpen(args);
-		ve::app->loop();
-		ve::onAppClose();
-		ve::app.setNull();
+
+		// Start SDL.
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+		{
+			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
+		}
+
+		// Initialize the singletons.
+		//InputSystem::createInstance();
+		//shaderCache.setNew();
+		//textureCache.setNew();
+		//fontCache.setNew();
+		//SceneModelCache::createInstance();
+
+		//SDL_InitSubSystem(SDL_INIT_AUDIO);
+
+		ve::start(args);
+
+		//scenes.clear();
+		ve::windows.clear();
+		// Destroy the singletons.
+		//fontCache.setNull();
+		//textureCache.setNull();
+		//shaderCache.setNull();
+		//SceneModelCache::destroyInstance();
+		//InputSystem::destroyInstance();
+
+		// Stop SDL.
+		SDL_Quit();
 	}
 	catch(std::exception const & e)
 	{
