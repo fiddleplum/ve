@@ -22,11 +22,11 @@ namespace ve
 		// Returns true if an object with the given name is in the cache. O(log number of objects)
 		bool has(std::string const & name) const;
 
-		// Returns a UsePtr of the object of the given name. If an object with the given name isn't already in the cache, throws an exception. O(log number of objects)
-		//UsePtr<Object> get(std::string const & name) const;
+		// Returns the named object. If it doesn't exist, an exception is thrown. O(log number of objects)
+		UsePtr<Object> get(std::string const & name) const;
 
-		// Returns a UsePtr of the object of the given name. If an object with the given name isn't already in the cache, it creates the object. O(log number of objects)
-		template <typename... Args> UsePtr<Object> get(std::string const & name, Args... args);
+		// Returns the named object. If it doesn't exist, it creates the object using the args. O(log number of objects)
+		template <typename... Args> UsePtr<Object> getOrCreate(std::string const & name, Args... args);
 
 		// Removes and destroys the objects that aren't referenced outside of the cache. O(number of objects).
 		void clean();
@@ -66,23 +66,23 @@ namespace ve
 		return objects.find(name) != objects.end();
 	}
 
-	//template <typename Object>
-	//Ptr<Object> ObjectCache<Object>::get(std::string const & name) const
-	//{
-	//	auto it = objects.find(name);
-	//	if (it != objects.end())
-	//	{
-	//		return it->second;
-	//	}
-	//	else
-	//	{
-	//		throw std::runtime_error("'" + name + "' was not found in the cache.");
-	//	}
-	//}
+	template <typename Object>
+	UsePtr<Object> Cache<Object>::get(std::string const & name) const
+	{
+		auto it = objects.find(name);
+		if (it != objects.end())
+		{
+			return it->second;
+		}
+		else
+		{
+			throw std::runtime_error("'" + name + "' was not found in the cache.");
+		}
+	}
 
 	template <typename Object>
 	template <typename... Args>
-	UsePtr<Object> Cache<Object>::get(std::string const & name, Args... args)
+	UsePtr<Object> Cache<Object>::getOrCreate(std::string const & name, Args... args)
 	{
 		auto it = objects.find(name);
 		if (it != objects.end())
