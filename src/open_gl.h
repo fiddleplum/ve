@@ -1,5 +1,6 @@
 #pragma once
 
+#define NOMINMAX
 #include "glcorearb.h"
 
 namespace ve
@@ -43,6 +44,7 @@ extern PFNGLDELETEPROGRAMPROC glDeleteProgram;
 extern PFNGLUSEPROGRAMPROC glUseProgram;
 extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
 extern PFNGLGETATTRIBLOCATIONPROC glGetAttribLocation;
+extern PFNGLBINDATTRIBLOCATIONPROC glBindAttribLocation;
 extern PFNGLGETACTIVEUNIFORMPROC glGetActiveUniform;
 extern PFNGLGETACTIVEUNIFORMSIVPROC glGetActiveUniformsiv;
 extern PFNGLGETACTIVEUNIFORMNAMEPROC glGetActiveUniformName;
