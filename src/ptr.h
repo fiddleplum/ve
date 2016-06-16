@@ -250,7 +250,10 @@ namespace ve
 	template <typename T, bool OWN, bool USE> template <typename Y>
 	void PtrBase<T, OWN, USE>::setRaw(Y * newP, void(*deleteFunction) (Y *))
 	{
-		assert(OWN);
+		if (!OWN)
+		{
+			static_assert(OWN, "Must be OwnPtr");
+		}
 		setNull();
 		p = newP;
 		if (p != nullptr)
