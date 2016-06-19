@@ -15,6 +15,9 @@ namespace ve
 		// Load a PNG or JPG from a file.
 		Image(std::string const & filename);
 
+		// Saves the image to a file.
+		void save(std::string const & filename);
+
 		// Get the size of the image.
 		Vector2i getSize() const;
 

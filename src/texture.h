@@ -22,9 +22,6 @@ namespace ve
 		// Updates the pixels from the image.
 		void updatePixels(UsePtr<Image> image);
 
-		// Sets the texture content from raw RGBA32 pixels.
-		void setPixels(void const * pixels);
-
 		// Activates the texture in the GL slot. Used by Models.
 		void activate(unsigned int slot) const;
 
@@ -35,6 +32,8 @@ namespace ve
 		static Cache<Texture> cache;
 
 	private:
+		void init(UsePtr<Image> image);
+
 		Vector2i size;
 		unsigned int id;
 	};

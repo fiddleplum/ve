@@ -1,7 +1,5 @@
 #include "texture.h"
 #include "open_gl.h"
-#include <vector>
-#include <SDL_image.h>
 
 namespace ve
 {
@@ -9,12 +7,7 @@ namespace ve
 
 	Texture::Texture(UsePtr<Image> image)
 	{
-		size = image->getSize();
-		glGenTextures(1, &id);
-		glBindTexture(GL_TEXTURE_2D, id);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size[0], size[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, &image->getPixels()[0]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		init(image);
 	}
 
 	Texture::Texture(std::string const & filename)
@@ -24,11 +17,7 @@ namespace ve
 		{
 			image = Image::cache.create(filename, filename);
 		}
-
-		glGenTextures(1, &id);
-		updatePixels(image);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		init(image);
 	}
 
 	Texture::~Texture()
@@ -88,6 +77,14 @@ namespace ve
 			glBindTexture(GL_TEXTURE_2D, 0);
 			currentTextures[slot] = 0;
 		}
+	}
+
+	void Texture::init(UsePtr<Image> image)
+	{
+		glGenTextures(1, &id);
+		updatePixels(image);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 }
 

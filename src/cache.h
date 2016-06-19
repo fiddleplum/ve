@@ -19,14 +19,11 @@ namespace ve
 		// Destructor. Calls clean(). Throws an exception if it still has any objects. O(number of objects)
 		~Cache();
 
-		// Returns true if an object with the given name is in the cache. O(log number of objects)
-		bool has(std::string const & name) const;
-
-		// Returns the named object. If it doesn't exist, an exception is thrown. O(log number of objects)
+		// Returns the named object or null if it is not found. O(log number of objects)
 		UsePtr<Object> get(std::string const & name) const;
 
-		// Returns the named object. If it doesn't exist, it creates the object using the args. O(log number of objects)
-		template <typename... Args> UsePtr<Object> getOrCreate(std::string const & name, Args... args);
+		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects)
+		template <typename... Args> UsePtr<Object> create(std::string const & name, Args... args);
 
 		// Removes and destroys the objects that aren't referenced outside of the cache. O(number of objects).
 		void clean();
@@ -61,12 +58,6 @@ namespace ve
 	}
 
 	template <typename Object>
-	bool Cache<Object>::has(std::string const & name) const
-	{
-		return objects.find(name) != objects.end();
-	}
-
-	template <typename Object>
 	UsePtr<Object> Cache<Object>::get(std::string const & name) const
 	{
 		auto it = objects.find(name);
@@ -76,20 +67,16 @@ namespace ve
 		}
 		else
 		{
-			throw std::runtime_error("'" + name + "' was not found in the cache.");
+			return UsePtr<Object>();
 		}
 	}
 
 	template <typename Object>
 	template <typename... Args>
-	UsePtr<Object> Cache<Object>::getOrCreate(std::string const & name, Args... args)
+	UsePtr<Object> Cache<Object>::create(std::string const & name, Args... args)
 	{
 		auto it = objects.find(name);
-		if (it != objects.end())
-		{
-			return it->second;
-		}
-		else
+		if (it == objects.end())
 		{
 			OwnPtr<Object> object;
 			try
@@ -102,6 +89,10 @@ namespace ve
 			}
 			objects[name] = object;
 			return object;
+		}
+		else
+		{
+			throw std::runtime_error("'" + name + "' is already in the cache.");
 		}
 	}
 

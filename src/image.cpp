@@ -43,12 +43,29 @@ namespace ve
 			bytesPerPixel = 4;
 			break;
 		default:
-			throw std::runtime_error("Error loading image '" + filename +"': Only RGB24 and RGBA32 pixel formats are supported. ");
+			throw std::runtime_error("Error loading image '" + filename + "': Only RGB24 and RGBA32 pixel formats are supported. ");
 		}
 
 		pixels.resize(size[0] * size[1] * bytesPerPixel);
 		memcpy(&pixels[0], surface->pixels, pixels.size());
 		SDL_FreeSurface(surface);
+	}
+
+	void Image::save(std::string const & filename)
+	{
+		if (format != RGB24 && format != RGBA32)
+		{
+			throw std::runtime_error("Error saving image '" + filename + "': Only RGB24 and RGBA32 pixel formats are supported. ");
+		}
+
+		SDL_Surface * surface = SDL_CreateRGBSurface(0, size[0], size[1], bytesPerPixel * 8, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
+		memcpy(surface->pixels, &pixels[0], surface->pitch * surface->h);
+		int result = IMG_SavePNG(surface, filename.c_str());
+		SDL_FreeSurface(surface);
+		if(result != 0)
+		{
+			throw std::runtime_error("Error saving image '" + filename + "': File save failed. ");
+		}
 	}
 
 	Vector2i Image::getSize() const
