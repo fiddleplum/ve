@@ -106,7 +106,7 @@ namespace ve
 
 	// Serialize a vector of items using a serialize function for each item.
 	template <class T>
-	void serialize(std::ostream & out, std::vector<T> const & v, void(*serializeItem)(std::ostream &, T const &))
+	void serialize(std::ostream & out, std::vector<T> const & v, void(*serializeItem)(std::ostream &, T const &) = serialize)
 	{
 		serialize(out, (int)v.size());
 		for (T const & item : v)
@@ -117,7 +117,7 @@ namespace ve
 
 	// Deserialize a vector of items using a deserialize function for each item.
 	template <class T>
-	void deserialize(std::istream & in, std::vector<T> & v, void(*deserializeItem)(std::istream &, T &))
+	void deserialize(std::istream & in, std::vector<T> & v, void(*deserializeItem)(std::istream &, T &) = deserialize)
 	{
 		int size;
 		deserialize(in, size);
