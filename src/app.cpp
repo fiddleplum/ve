@@ -110,7 +110,7 @@ namespace ve
 		//{
 		//	throw std::runtime_error("All scenes must be removed before the last window is removed.");
 		//}
-		windows.erase(window);
+		windows.erase(std::find(windows.begin(), windows.end(), window));
 		if (windows.empty())
 		{
 			SDL_GL_DeleteContext(glContext);
