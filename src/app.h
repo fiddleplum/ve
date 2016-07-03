@@ -11,7 +11,7 @@
 namespace ve
 {
 	// Called when the application starts. Implemented by the user. You can open a window and call loop from here.
-	void start(std::vector<std::string> const & params);
+	void main(std::vector<std::string> const & params);
 
 	// Starts the application game loop.
 	void loop();

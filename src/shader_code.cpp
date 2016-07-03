@@ -3,6 +3,8 @@
 
 namespace ve
 {
+	Cache<ShaderCode> ShaderCode::cache;
+
 	ShaderCode::ShaderCode(std::string const & filename)
 	{
 		code = readFile(filename);

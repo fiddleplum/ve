@@ -2,6 +2,7 @@
 #include "mesh.h"
 #include "open_gl.h"
 #include "util.h"
+#include "uniform.h"
 
 // TODO: Make the shader use specific attribute locations chosen by an enum based on the attribute names.
 // This allows multiple shaders to be used with a single vbo and all be compatible.
@@ -21,7 +22,23 @@
 
 namespace ve
 {
+	Cache<Shader> Shader::cache;
+
 	unsigned int currentProgram = 0; // maintains current open gl state
+	std::map<std::string, int> attributeLocations = { // mapping from attribute names as strings to their corresponding bound locations
+		{"position3d", Mesh::POSITION_3D},
+		{"position2d", Mesh::POSITION_2D},
+		{"normal", Mesh::NORMAL},
+		{"tangent", Mesh::TANGENT},
+		{"color0rgb", Mesh::COLOR0_RGB},
+		{"color0rgba", Mesh::COLOR0_RGBA},
+		{"color1rgb", Mesh::COLOR1_RGB},
+		{"color1rgba", Mesh::COLOR1_RGBA},
+		{"uv0", Mesh::UV0},
+		{"uv0", Mesh::UV1},
+		{"uv0", Mesh::UV2},
+		{"uv0", Mesh::UV3}
+	};
 
 	Shader::Shader(std::string const & shaderCodeNames)
 	{
@@ -40,11 +57,11 @@ namespace ve
 		std::vector<unsigned int> shaderObjects;
 		try
 		{
-			for (unsigned int type = 0; type < NumCodeTypes; type++)
+			for (unsigned int type = 0; type < ShaderCode::NumCodeTypes; type++)
 			{
 				if (!shaderObjectCode[type].empty())
 				{
-					shaderObjects.push_back(compileShaderObject((CodeType)type, shaderObjectCode[type]));
+					shaderObjects.push_back(compileShaderObject(type, shaderObjectCode[type]));
 				}
 			}
 		}
@@ -57,7 +74,7 @@ namespace ve
 			throw;
 		}
 		program = linkShaderProgram(shaderObjects); // delete shader objects as well
-		populateVariableLocations();
+		populateUniformInfos();
 	}
 
 	Shader::~Shader()
@@ -65,14 +82,9 @@ namespace ve
 		glDeleteProgram(program);
 	}
 
-	int Shader::getUniformLocation(std::string const & name) const
+	std::map<std::string, Shader::UniformInfo> const & Shader::getUniformInfos() const
 	{
-		auto it = uniformLocations.find(name);
-		if (it == uniformLocations.end())
-		{
-			return -1;
-		}
-		return it->second;
+		return uniformInfos;
 	}
 
 	int Shader::getAttributeLocation(std::string const & name) const
@@ -100,74 +112,14 @@ namespace ve
 		glUseProgram(0);
 	}
 
-	void Shader::setUniform(int location, int value)
-	{
-		glUniform1i(location, value);
-	}
-
-	void Shader::setUniform(int location, float value)
-	{
-		glUniform1f(location, value);
-	}
-
-	void Shader::setUniform(int location, Vector2i value)
-	{
-		glUniform2iv(location, 1, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Vector2f value)
-	{
-		glUniform2fv(location, 1, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Vector3i value)
-	{
-		glUniform3iv(location, 1, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Vector3f value)
-	{
-		glUniform3fv(location, 1, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Vector4i value)
-	{
-		glUniform4iv(location, 1, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Vector4f value)
-	{
-		glUniform4fv(location, 1, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Matrix33f const & value)
-	{
-		glUniformMatrix3fv(location, 1, false, value.ptr());
-	}
-
-	void Shader::setUniform(int location, Matrix44f const & value)
-	{
-		glUniformMatrix4fv(location, 1, false, value.ptr());
-	}
-
-	void Shader::setUniform(int location, std::vector<Vector2f> const & value)
-	{
-		glUniform2fv(location, (GLsizei)value.size(), (GLfloat const *)&value[0]);
-	}
-
-	void Shader::setUniform(int location, std::vector<Vector3f> const & value)
-	{
-		glUniform3fv(location, (GLsizei)value.size(), (GLfloat const *)&value[0]);
-	}
-
-	unsigned int Shader::compileShaderObject(CodeType type, std::string const & code)
+	unsigned int Shader::compileShaderObject(int type, std::string const & code)
 	{
 		unsigned int glType = 0;
-		if (type == Vertex)
+		if (type == ShaderCode::Vertex)
 		{
 			glType = GL_VERTEX_SHADER;
 		}
-		else if (type == Fragment)
+		else if (type == ShaderCode::Fragment)
 		{
 			glType = GL_FRAGMENT_SHADER;
 		}
@@ -254,7 +206,7 @@ namespace ve
 		glLinkProgram(program); // need to relink after attributes are bound. No checking of errors here, because it was already linked successfully once.
 	}
 
-	void Shader::populateVariableLocations()
+	void Shader::populateUniformInfos()
 	{
 		GLint numVariables;
 		GLint maxNameSize;
@@ -264,16 +216,28 @@ namespace ve
 		for (int i = 0; i < numVariables; i++)
 		{
 			GLsizei nameSize;
-			GLint size;
-			GLenum type;
+			GLint glSize;
+			GLenum glType;
 			name.resize(maxNameSize);
-			glGetActiveUniform(program, i, maxNameSize, &nameSize, &size, &type, &name[0]);
+			glGetActiveUniform(program, i, maxNameSize, &nameSize, &glSize, &glType, &name[0]);
 			name.resize(nameSize);
-			GLint location = glGetUniformLocation(program, name.c_str());
-			if (location != -1)
+			int location = glGetUniformLocation(program, name.c_str());
+			int type = 0;
+			switch (glType)
 			{
-				uniformLocations[name] = location;
+			case GL_INT: type = Uniform::INT; break;
+			case GL_FLOAT: type = Uniform::FLOAT; break;
+			case GL_INT_VEC2: type = Uniform::VECTOR_2I; break;
+			case GL_FLOAT_VEC2: type = Uniform::VECTOR_2F; break;
+			case GL_INT_VEC3: type = Uniform::VECTOR_3I; break;
+			case GL_FLOAT_VEC3: type = Uniform::VECTOR_3F; break;
+			case GL_INT_VEC4: type = Uniform::VECTOR_4I; break;
+			case GL_FLOAT_VEC4: type = Uniform::VECTOR_4F; break;
+			case GL_FLOAT_MAT3: type = Uniform::MATRIX_33F; break;
+			case GL_FLOAT_MAT4: type = Uniform::MATRIX_44F; break;
+			default: throw std::runtime_error("Invalid type of uniform for '" + name + "'. "); break;
 			}
+			uniformInfos[name] = UniformInfo {location, type};
 		}
 	}
 }

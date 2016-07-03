@@ -21,7 +21,17 @@
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\scene\camera.h" />
     <ClInclude Include="src\scene\light.h" />
+    <ClInclude Include="src\vertex_buffer_object.h" />
+    <ClInclude Include="src\texture.h" />
+    <ClInclude Include="src\cache.h" />
     <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\image.h" />
+    <ClInclude Include="src\shader_code.h" />
+    <ClInclude Include="src\util.h" />
+    <ClInclude Include="src\material.h" />
+    <ClInclude Include="src\model.h" />
+    <ClInclude Include="src\uniform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\compile_test.cpp" />
@@ -35,7 +45,16 @@
     <ClCompile Include="src\scene\entity.cpp" />
     <ClCompile Include="src\scene\camera.cpp" />
     <ClCompile Include="src\scene\light.cpp" />
+    <ClCompile Include="src\vertex_buffer_object.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\mesh.cpp" />
+    <ClCompile Include="src\image.cpp" />
+    <ClCompile Include="src\shader_code.cpp" />
+    <ClCompile Include="src\util.cpp" />
+    <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\model.cpp" />
+    <ClCompile Include="src\uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

@@ -73,12 +73,12 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
-    <IncludePath>C:\stephen\projects\_external\SDL2\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\stephen\projects\_external\SDL2\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
@@ -87,11 +87,11 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
-    <IncludePath>C:\stephen\projects\_external\SDL2\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\stephen\projects\_external\SDL2\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
   </PropertyGroup>
@@ -107,6 +107,10 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -120,6 +124,10 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -162,21 +170,31 @@
     <ClInclude Include="src\glcorearb.h" />
     <ClInclude Include="src\gui\container.h" />
     <ClInclude Include="src\gui\element.h" />
+    <ClInclude Include="src\image.h" />
     <ClInclude Include="src\interval.h" />
+    <ClInclude Include="src\material.h" />
     <ClInclude Include="src\matrix.h" />
+    <ClInclude Include="src\cache.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\model.h" />
     <ClInclude Include="src\open_gl.h" />
     <ClInclude Include="src\ptr.h" />
     <ClInclude Include="src\quaternion.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\rect.h" />
+    <ClInclude Include="src\shader_code.h" />
+    <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\scene\entity.h" />
     <ClInclude Include="src\scene\camera.h" />
     <ClInclude Include="src\scene\light.h" />
     <ClInclude Include="src\serialize.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\std\optional.hpp" />
+    <ClInclude Include="src\uniform.h" />
+    <ClInclude Include="src\util.h" />
     <ClInclude Include="src\vector.h" />
     <ClInclude Include="src\gui\window.h" />
+    <ClInclude Include="src\vertex_buffer_object.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app.cpp" />
@@ -185,12 +203,21 @@
     <ClCompile Include="src\event.cpp" />
     <ClCompile Include="src\gui\container.cpp" />
     <ClCompile Include="src\gui\element.cpp" />
+    <ClCompile Include="src\image.cpp" />
+    <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\mesh.cpp" />
+    <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\open_gl.cpp" />
     <ClCompile Include="src\gui\window.cpp" />
+    <ClCompile Include="src\shader_code.cpp" />
+    <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\scene\entity.cpp" />
     <ClCompile Include="src\scene\camera.cpp" />
     <ClCompile Include="src\scene\light.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\uniform.cpp" />
+    <ClCompile Include="src\util.cpp" />
+    <ClCompile Include="src\vertex_buffer_object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

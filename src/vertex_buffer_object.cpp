@@ -62,13 +62,13 @@ namespace ve
 			unsigned int sizeOfComponent = 0;
 			switch (mesh->formatTypes[i])
 			{
-			case Mesh::POSITION_XY:
+			case Mesh::POSITION_2D:
 			case Mesh::UV0:
 			case Mesh::UV1:
 			case Mesh::UV2:
 			case Mesh::UV3:
 				sizeOfComponent = 2; break;
-			case Mesh::POSITION_XYZ:
+			case Mesh::POSITION_3D:
 			case Mesh::NORMAL:
 			case Mesh::TANGENT:
 			case Mesh::COLOR0_RGB:

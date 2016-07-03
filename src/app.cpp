@@ -218,14 +218,18 @@ namespace ve
 	//
 }
 
+#include "app.h"
+#include <SDL.h>
+
 // Called by SDL to run the entire app.
 int main(int argc, char *argv[])
 {
+#undef main
 	std::vector<std::string> args;
 	try
 	{
 		// Grab the params.
-		for(int i = 1; i < argc; ++i) // don't include the 0th arg, because it is the program name
+		for (int i = 1; i < argc; ++i) // don't include the 0th arg, because it is the program name
 		{
 			args.push_back(std::string(argv[i]));
 		}
@@ -245,7 +249,7 @@ int main(int argc, char *argv[])
 
 		//SDL_InitSubSystem(SDL_INIT_AUDIO);
 
-		ve::start(args);
+		ve::main(args);
 
 		//scenes.clear();
 		ve::windows.clear();
@@ -259,7 +263,7 @@ int main(int argc, char *argv[])
 		// Stop SDL.
 		SDL_Quit();
 	}
-	catch(std::exception const & e)
+	catch (std::exception const & e)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", e.what(), nullptr);
 		return -1;

@@ -48,12 +48,12 @@ namespace ve
 		clean();
 		if (!objects.empty())
 		{
-			std::string message = "There are still objects referenced:\n";
-			for (auto const & pair : objects)
-			{
-				message += pair.first + "\n";
-			}
-			throw std::runtime_error(message);
+			//std::string message = "There are still objects referenced:\n";
+			//for (auto const & pair : objects)
+			//{
+			//	message += pair.first + "\n";
+			//}
+			//throw std::runtime_error(message);
 		}
 	}
 

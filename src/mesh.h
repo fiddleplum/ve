@@ -7,7 +7,7 @@ namespace ve
 	{
 	public:
 		// All of the possible types for a given vertex component. For shader and vbo attributes, the GL locations are the ordinals of the enums.
-		enum FormatType { POSITION_XYZ, POSITION_XY, NORMAL, TANGENT, COLOR0_RGB, COLOR0_RGBA, COLOR1_RGB, COLOR1_RGBA, UV0, UV1, UV2, UV3 };
+		enum FormatType { POSITION_3D, POSITION_2D, NORMAL, TANGENT, COLOR0_RGB, COLOR0_RGBA, COLOR1_RGB, COLOR1_RGBA, UV0, UV1, UV2, UV3 };
 
 		// Constructs an empty mesh.
 		Mesh();
