@@ -26,13 +26,13 @@ namespace ve
 			Matrix44f const & getWorldToLocalTransform() const;
 
 		private:
-			void updateTransforms();
+			void checkTransforms() const;
 
 			Vector3f position;
 			Quaternionf orientation;
-			bool transformsNeedUpdate;
-			Matrix44f localToWorldTransform;
-			Matrix44f worldToLocalTransform;
+			mutable bool transformsNeedUpdate;
+			mutable Matrix44f localToWorldTransform;
+			mutable Matrix44f worldToLocalTransform;
 		};
 	}
 }

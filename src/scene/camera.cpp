@@ -20,7 +20,7 @@ namespace ve
 			ndcToLocalTransform(1, 1) = 0;
 			ndcToLocalTransform(1, 3) = 1;
 			ndcToLocalTransform(2, 2) = 0;
-			localToNdcTransformNeedsUpdate = true;
+			transformsNeedUpdate = true;
 		}
 
 		float Camera::getAspectRatio() const
@@ -31,7 +31,7 @@ namespace ve
 		void Camera::setAspectRatio(float aspectRatio_)
 		{
 			aspectRatio = aspectRatio_;
-			localToNdcTransformNeedsUpdate = true;
+			transformsNeedUpdate = true;
 		}
 
 		float Camera::getNear() const
@@ -42,7 +42,7 @@ namespace ve
 		void Camera::setNear(float near_)
 		{
 			near = near_;
-			localToNdcTransformNeedsUpdate = true;
+			transformsNeedUpdate = true;
 		}
 
 		float Camera::getFar() const
@@ -53,7 +53,7 @@ namespace ve
 		void Camera::setFar(float far_)
 		{
 			far = far_;
-			localToNdcTransformNeedsUpdate = true;
+			transformsNeedUpdate = true;
 		}
 
 		float Camera::getFovY() const
@@ -65,7 +65,7 @@ namespace ve
 		{
 			fovY = fovY_;
 			perspective = true;
-			localToNdcTransformNeedsUpdate = true;
+			transformsNeedUpdate = true;
 		}
 
 		float Camera::getHeight() const
@@ -77,88 +77,79 @@ namespace ve
 		{
 			height = height_;
 			perspective = false;
-			localToNdcTransformNeedsUpdate = true;
+			transformsNeedUpdate = true;
 		}
 
 		Vector2f Camera::getNdcPosition(Vector3f worldPosition) const
 		{
-			if (localToNdcTransformNeedsUpdate)
-			{
-				const_cast<Camera *>(this)->updateLocalToNdc();
-			}
+			checkTransforms();
 			Vector3f localPosition = getWorldToLocalTransform().transform(worldPosition, 1);
 			return localToNdcTransform.transform(localPosition, 1).shrink<2>();
 		}
 
 		Ray3f Camera::getRay(Vector2f ndcPosition) const
 		{
-			if (localToNdcTransformNeedsUpdate)
-			{
-				const_cast<Camera *>(this)->updateLocalToNdc();
-			}
+			checkTransforms();
 			Vector3f localPosition = ndcToLocalTransform.transform(Vector3f({ ndcPosition[0], +1.f, ndcPosition[1] }), 1);
 			return Ray3f(getPosition(), getLocalToWorldTransform().transform(localPosition, 1));
 		}
 
 		Matrix44f const & Camera::getLocalToNdcTransform() const
 		{
-			if (localToNdcTransformNeedsUpdate)
-			{
-				const_cast<Camera *>(this)->updateLocalToNdc();
-			}
+			checkTransforms();
 			return localToNdcTransform;
 		}
 
 		Matrix44f const & Camera::getNdcToLocalTransform() const
 		{
-			if (localToNdcTransformNeedsUpdate)
-			{
-				const_cast<Camera *>(this)->updateLocalToNdc();
-			}
+			checkTransforms();
 			return ndcToLocalTransform;
 		}
 
-		void Camera::updateLocalToNdc()
+		void Camera::checkTransforms() const
 		{
-			float scale;
-			if (perspective)
+			if (transformsNeedUpdate)
 			{
-				scale = std::tan(fovY / 2.0f);
+				float scale;
+				if (perspective)
+				{
+					scale = std::tan(fovY / 2.0f);
+				}
+				else
+				{
+					scale = height;
+				}
+				if (scale == 0 || aspectRatio == 0 || far == near || near == 0 || far == 0)
+				{
+					return;
+				}
+				float scaleInv = 1.0f / scale;
+				localToNdcTransform(0, 0) = scaleInv / aspectRatio;
+				localToNdcTransform(1, 2) = scaleInv;
+				ndcToLocalTransform(0, 0) = scale * aspectRatio;
+				ndcToLocalTransform(2, 1) = scale;
+				if (perspective)
+				{
+					float nf2 = 2 * near * far;
+					float nmf = near - far;
+					float npf = near + far;
+					localToNdcTransform(2, 1) = -npf / nmf;
+					localToNdcTransform(2, 3) = nf2 / nmf;
+					ndcToLocalTransform(3, 2) = nmf / nf2;
+					ndcToLocalTransform(3, 3) = npf / nf2;
+				}
+				else
+				{
+					// TODO, NEEDS FIXING
+					float nmf = near - far;
+					float npf = near + far;
+					localToNdcTransform(2, 1) = 2 / nmf;
+					localToNdcTransform(2, 3) = -npf / nmf;
+					ndcToLocalTransform(1, 2) = nmf / 2;
+					ndcToLocalTransform(2, 3) = npf / 2;
+				}
+				transformsNeedUpdate = false;
 			}
-			else
-			{
-				scale = height;
-			}
-			if (scale == 0 || aspectRatio == 0 || far == near || near == 0 || far == 0)
-			{
-				return;
-			}
-			float scaleInv = 1.0f / scale;
-			localToNdcTransform(0, 0) = scaleInv / aspectRatio;
-			localToNdcTransform(1, 2) = scaleInv;
-			ndcToLocalTransform(0, 0) = scale * aspectRatio;
-			ndcToLocalTransform(2, 1) = scale;
-			if (perspective)
-			{
-				float nf2 = 2 * near * far;
-				float nmf = near - far;
-				float npf = near + far;
-				localToNdcTransform(2, 1) = -npf / nmf;
-				localToNdcTransform(2, 3) = nf2 / nmf;
-				ndcToLocalTransform(3, 2) = nmf / nf2;
-				ndcToLocalTransform(3, 3) = npf / nf2;
-			}
-			else
-			{
-				// TODO, NEEDS FIXING
-				float nmf = near - far;
-				float npf = near + far;
-				localToNdcTransform(2, 1) = 2 / nmf;
-				localToNdcTransform(2, 3) = -npf / nmf;
-				ndcToLocalTransform(1, 2) = nmf / 2;
-				ndcToLocalTransform(2, 3) = npf / 2;
-			}
-			localToNdcTransformNeedsUpdate = false;
 		}
 	}
 }

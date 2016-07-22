@@ -41,7 +41,7 @@ namespace ve
 			Matrix44f const & getNdcToLocalTransform() const;
 
 		private:
-			void updateLocalToNdc();
+			void checkTransforms() const;
 
 			float aspectRatio;
 			float near;
@@ -49,9 +49,9 @@ namespace ve
 			float fovY;
 			float height;
 			bool perspective;
-			bool localToNdcTransformNeedsUpdate;
-			Matrix44f localToNdcTransform;
-			Matrix44f ndcToLocalTransform;
+			mutable bool transformsNeedUpdate;
+			mutable Matrix44f localToNdcTransform;
+			mutable Matrix44f ndcToLocalTransform;
 		};
 	}
 }
