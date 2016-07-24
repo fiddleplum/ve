@@ -64,7 +64,7 @@ namespace ve
 			void handleResize(Vector2i size);
 
 			// Called by App when an event comes in.
-			void handleEvent(Event const & event);
+			void handleInputEvent(InputEvent const & event);
 
 			// Called by App to update the window gui elements.
 			void update(float dt);

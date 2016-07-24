@@ -19,7 +19,7 @@ namespace ve
 
 			void setSize(Vector2i size) override;
 
-			bool handleEvent(Event const & event, std::optional<Vector2i> cursorPosition) override;
+			bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition) override;
 
 			void update(float dt) override;
 
@@ -40,7 +40,7 @@ namespace ve
 
 			void setElementSize(UsePtr<Element> const & element, Vector2f fractionOfContainer, Vector2i offset);
 
-			void setContainerEventHandler(std::function<bool(Event const & event, std::optional<Vector2i> cursorPosition)> handler);
+			void setContainerInputEventHandler(std::function<bool(InputEvent const & event, std::optional<Vector2i> cursorPosition)> handler);
 
 			void setUpdateHandler(std::function<void(float dt)> handler);
 
@@ -65,7 +65,7 @@ namespace ve
 			Recti bounds;
 			std::list<ElementInfo> infos;
 			std::map<UsePtr<Element>, std::list<ElementInfo>::iterator> lookup;
-			std::function<bool(Event const & event, std::optional<Vector2i> cursorPosition)> eventHandler;
+			std::function<bool(InputEvent const & event, std::optional<Vector2i> cursorPosition)> inputEventHandler;
 			std::function<void(float dt)> updateHandler;
 			std::function<void()> preRenderUpdateHandler;
 		};

@@ -47,13 +47,13 @@ namespace ve
 	{
 		switch (mesh->numIndicesPerPrimitive)
 		{
-		case 1:
-			mode = GL_POINTS; break;
-		case 2:
-			mode = GL_LINES; break;
-		case 3:
-		default:
-			mode = GL_TRIANGLES; break;
+			case 1:
+				mode = GL_POINTS; break;
+			case 2:
+				mode = GL_LINES; break;
+			case 3:
+			default:
+				mode = GL_TRIANGLES; break;
 		}
 
 		bytesPerVertex = 0;
@@ -62,21 +62,21 @@ namespace ve
 			unsigned int sizeOfComponent = 0;
 			switch (mesh->formatTypes[i])
 			{
-			case Mesh::POSITION_2D:
-			case Mesh::UV0:
-			case Mesh::UV1:
-			case Mesh::UV2:
-			case Mesh::UV3:
-				sizeOfComponent = 2; break;
-			case Mesh::POSITION_3D:
-			case Mesh::NORMAL:
-			case Mesh::TANGENT:
-			case Mesh::COLOR0_RGB:
-			case Mesh::COLOR1_RGB:
-				sizeOfComponent = 3; break;
-			case Mesh::COLOR0_RGBA:
-			case Mesh::COLOR1_RGBA:
-				sizeOfComponent = 4; break;
+				case Mesh::POSITION_2D:
+				case Mesh::UV0:
+				case Mesh::UV1:
+				case Mesh::UV2:
+				case Mesh::UV3:
+					sizeOfComponent = 2; break;
+				case Mesh::POSITION_3D:
+				case Mesh::NORMAL:
+				case Mesh::TANGENT:
+				case Mesh::COLOR0_RGB:
+				case Mesh::COLOR1_RGB:
+					sizeOfComponent = 3; break;
+				case Mesh::COLOR0_RGBA:
+				case Mesh::COLOR1_RGBA:
+					sizeOfComponent = 4; break;
 			}
 			vertexComponents.push_back({mesh->formatTypes[i], sizeOfComponent, bytesPerVertex});
 			bytesPerVertex += sizeOfComponent;

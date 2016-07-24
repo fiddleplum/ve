@@ -10,13 +10,13 @@ namespace ve
 
 		switch (format)
 		{
-		case RGB24:
-			bytesPerPixel = 3;
-			break;
-		case RGBA32:
-		case GRAYSCALE32:
-			bytesPerPixel = 4;
-			break;
+			case RGB24:
+				bytesPerPixel = 3;
+				break;
+			case RGBA32:
+			case GRAYSCALE32:
+				bytesPerPixel = 4;
+				break;
 		}
 
 		pixels.resize(size[0] * size[1] * bytesPerPixel);
@@ -34,16 +34,16 @@ namespace ve
 
 		switch (surface->format->BitsPerPixel)
 		{
-		case 24:
-			format = RGB24;
-			bytesPerPixel = 3;
-			break;
-		case 32:
-			format = RGBA32;
-			bytesPerPixel = 4;
-			break;
-		default:
-			throw std::runtime_error("Error loading image '" + filename + "': Only RGB24 and RGBA32 pixel formats are supported. ");
+			case 24:
+				format = RGB24;
+				bytesPerPixel = 3;
+				break;
+			case 32:
+				format = RGBA32;
+				bytesPerPixel = 4;
+				break;
+			default:
+				throw std::runtime_error("Error loading image '" + filename + "': Only RGB24 and RGBA32 pixel formats are supported. ");
 		}
 
 		pixels.resize(size[0] * size[1] * bytesPerPixel);

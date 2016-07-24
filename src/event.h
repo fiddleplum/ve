@@ -5,7 +5,7 @@
 
 namespace ve
 {
-	class Event
+	class InputEvent
 	{
 	public:
 		// All of the possible types of events.
@@ -23,7 +23,7 @@ namespace ve
 		};
 
 		// Constructs an event of a given type.
-		Event(Type type);
+		InputEvent(Type type);
 		
 		// Returns the type of the event.
 		bool is(Type type) const;
@@ -39,7 +39,7 @@ namespace ve
 		Type type;
 	};
 
-	class KeyboardEvent : public Event
+	class KeyboardEvent : public InputEvent
 	{
 	public:
 		enum Key
@@ -61,13 +61,15 @@ namespace ve
 
 		KeyboardEvent();
 
+		void setFromSDL(int type, int sym);
+
 		virtual std::string toString() const override;
 
-		Key key;
+		int key;
 		bool pressed;
 	};
 
-	class TextEvent : public Event
+	class TextEvent : public InputEvent
 	{
 	public:
 		TextEvent();
@@ -77,7 +79,7 @@ namespace ve
 		std::string text; // UTF-8 encoded
 	};
 
-	class MouseButtonEvent : public Event
+	class MouseButtonEvent : public InputEvent
 	{
 	public:
 		enum Button
@@ -90,33 +92,39 @@ namespace ve
 
 		MouseButtonEvent();
 
+		void setFromSDL(int type, int sym);
+
 		virtual std::string toString() const override;
 
 		int button;
 		bool pressed;
 	};
 
-	class MouseMoveEvent : public Event
+	class MouseMoveEvent : public InputEvent
 	{
 	public:
 		MouseMoveEvent();
+
+		void setFromSDL(int xrel, int yrel);
 
 		virtual std::string toString() const override;
 
 		Vector2i offset;
 	};
 
-	class MouseWheelEvent : public Event
+	class MouseWheelEvent : public InputEvent
 	{
 	public:
 		MouseWheelEvent();
+
+		void setFromSDL(int amount);
 
 		virtual std::string toString() const override;
 
 		bool up;
 	};
 
-	class ControllerButtonEvent : public Event
+	class ControllerButtonEvent : public InputEvent
 	{
 	public:
 		ControllerButtonEvent();
@@ -128,7 +136,7 @@ namespace ve
 		bool pressed;
 	};
 
-	class ControllerAxisEvent : public Event
+	class ControllerAxisEvent : public InputEvent
 	{
 	public:
 		ControllerAxisEvent();
@@ -143,7 +151,7 @@ namespace ve
 	// Template Implementations
 
 	template <typename EventType>
-	EventType const & Event::as() const
+	EventType const & InputEvent::as() const
 	{
 			return dynamic_cast<EventType const &>(*this);
 	}

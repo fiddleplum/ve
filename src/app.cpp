@@ -14,7 +14,7 @@ namespace ve
 	UsePtr<gui::Window> getWindowFromId(unsigned int id);
 
 	std::set<OwnPtr<gui::Window>> windows;
-	//PtrSet<Scene> scenes;
+	std::set<OwnPtr<scene::Scene>> scenes;
 	bool looping;
 	float targetFrameRate = 60.f;
 	SDL_GLContext glContext = nullptr;
@@ -89,8 +89,7 @@ namespace ve
 
 	UsePtr<gui::Window> addWindow(std::string const & title)
 	{
-		OwnPtr<gui::Window> window;
-		window.setNew(title);
+		auto window = OwnPtr<gui::Window>::createNew(title);
 		if (windows.empty())
 		{
 			glContext = SDL_GL_CreateContext(window->getSDLWindow());
@@ -106,10 +105,10 @@ namespace ve
 		{
 			throw std::runtime_error("Invalid window.");
 		}
-		//if (!scenes.empty() && windows.size() == 1)
-		//{
-		//	throw std::runtime_error("All scenes must be removed before the last window is removed.");
-		//}
+		if (!scenes.empty() && windows.size() == 1)
+		{
+			throw std::runtime_error("All scenes must be removed before the last window is removed, because the OpenGL context is destroyed. ");
+		}
 		windows.erase(std::find(windows.begin(), windows.end(), window));
 		if (windows.empty())
 		{
@@ -118,26 +117,25 @@ namespace ve
 		}
 	}
 
-	//Ptr<Scene> addScene()
-	//{
-	//	if (windows.empty())
-	//	{
-	//		throw std::runtime_error("A scene may not be created until a window has been created.");
-	//	}
-	//	OwnPtr<Scene> scene;
-	//	scene.setNew();
-	//	scenes.insert(scene);
-	//	return scene;
-	//}
+	UsePtr<scene::Scene> addScene()
+	{
+		if (windows.empty())
+		{
+			throw std::runtime_error("A scene may not be created until a window has been created, because it needs an OpenGL context. ");
+		}
+		auto scene = OwnPtr<scene::Scene>::createNew();
+		scenes.insert(scene);
+		return scene;
+	}
 
-	//void removeScene(Ptr<Scene> scene)
-	//{
-	//	if (!scene.isValid())
-	//	{
-	//		throw std::runtime_error("Invalid scene.");
-	//	}
-	//	scenes.erase(scene);
-	//}
+	void removeScene(UsePtr<scene::Scene> scene)
+	{
+		if (!scene.isValid())
+		{
+			throw std::runtime_error("Invalid scene.");
+		}
+		scenes.erase(std::find(scenes.begin(), scenes.end(), scene));
+	}
 
 	void showMessage(std::string const & message)
 	{
@@ -149,28 +147,65 @@ namespace ve
 		UsePtr<gui::Window> window;
 		switch (sdlEvent.type)
 		{
-		case SDL_QUIT:
-			quit();
-			break;
-		case SDL_WINDOWEVENT:
-			window = getWindowFromId(sdlEvent.window.windowID);
-			if (!window.isValid())
-			{
-				return;
-			}
-			switch (sdlEvent.window.event)
-			{
-			case SDL_WINDOWEVENT_CLOSE:
+			case SDL_WINDOWEVENT:
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_MOUSEBUTTONUP:
+				window = getWindowFromId(sdlEvent.key.windowID);
+				if (!window.isValid())
+				{
+					return;
+				}
+		}
+		switch (sdlEvent.type)
+		{
+			case SDL_QUIT:
 				quit();
 				break;
-			case SDL_WINDOWEVENT_SIZE_CHANGED:
-				window->handleResize({ sdlEvent.window.data1, sdlEvent.window.data2 });
-				break;
-			case SDL_WINDOWEVENT_LEAVE:
-				window->setCursorPosition(std::nullopt);
+			case SDL_WINDOWEVENT:
+				switch (sdlEvent.window.event)
+				{
+					case SDL_WINDOWEVENT_CLOSE:
+						quit();
+						break;
+					case SDL_WINDOWEVENT_SIZE_CHANGED:
+						window->handleResize({sdlEvent.window.data1, sdlEvent.window.data2});
+						break;
+					case SDL_WINDOWEVENT_LEAVE:
+						window->setCursorPosition(std::nullopt);
+						break;
+				}
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+			{
+				KeyboardEvent kevent;
+				kevent.setFromSDL(sdlEvent.type, sdlEvent.key.keysym.sym);
+				window->handleInputEvent(kevent);
 				break;
 			}
-			break;
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_MOUSEBUTTONUP:
+			{
+				MouseButtonEvent mbevent;
+				mbevent.setFromSDL(sdlEvent.type, sdlEvent.button.button);
+				window->handleInputEvent(mbevent);
+				break;
+			}
+			case SDL_MOUSEMOTION:
+			{
+				MouseMoveEvent mmevent;
+				mmevent.setFromSDL(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+				window->handleInputEvent(mmevent);
+				break;
+			}
+			case SDL_MOUSEWHEEL:
+			{
+				MouseWheelEvent mwevent;
+				mwevent.setFromSDL(sdlEvent.wheel.y * (sdlEvent.wheel.direction == SDL_MOUSEWHEEL_NORMAL ? 1 : -1));
+				window->handleInputEvent(mwevent);
+				break;
+			}
 		}
 	}
 
@@ -190,32 +225,10 @@ namespace ve
 		return UsePtr<gui::Window>();
 	}
 
-	//void _setCursorPosition(int windowId, Coord2i position)
-	//{
-	//	Ptr<Window> window = getWindowFromId(windowId);
-	//	if(window.isValid())
-	//	{
-	//		window->setCursorPosition(position);
-	//	}
-	//}
-	//
 	//void setCursorActive(bool)
 	//{
 	//	// TODO
 	//}
-
-	//void handleEvent(Event const & event)
-	//{
-	//	for(auto window : app->windows)
-	//	{
-	//		window->handleEvent(event);
-	//	}
-	//	for(auto scene : app->scenes)
-	//	{
-	//		scene->handleEvent(event);
-	//	}
-	//}
-	//
 }
 
 #include "app.h"

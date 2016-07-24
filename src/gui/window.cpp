@@ -109,9 +109,9 @@ namespace ve
 			root->setSize(size);
 		}
 
-		void Window::handleEvent(Event const & event)
+		void Window::handleInputEvent(InputEvent const & event)
 		{
-			root->handleEvent(event, cursorPosition);
+			root->handleInputEvent(event, cursorPosition);
 		}
 
 		void Window::update(float dt)

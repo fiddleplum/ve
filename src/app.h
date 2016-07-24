@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gui/window.h"
+#include "scene/scene.h"
 #include <set>
 
 //#include <list>
@@ -26,10 +27,10 @@ namespace ve
 	void removeWindow(UsePtr<gui::Window> window);
 
 	// Adds a scene.
-	//Ptr<Scene> addScene();
+	UsePtr<scene::Scene> addScene();
 
 	// Removes a scene.
-	//void removeScene(Ptr<Scene> scene);
+	void removeScene(UsePtr<scene::Scene> scene);
 
 	// Shows a message dialog box.
 	void showMessage(std::string const & message);

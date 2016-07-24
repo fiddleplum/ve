@@ -18,10 +18,10 @@ namespace ve
 		{
 		}
 
-		bool Element::handleEvent(Event const & event, std::optional<Vector2i> cursorPosition)
+		bool Element::handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition)
 		{
 			// Mouse clicks and wheel turns are automatically consumed by all elements by default.
-			if(event.is(Event::MouseButton))
+			if(event.is(InputEvent::MouseButton))
 			{
 				auto mbEvent = event.as<MouseButtonEvent>();
 				if(mbEvent.pressed && cursorIsOver(cursorPosition))
@@ -29,7 +29,7 @@ namespace ve
 					return true;
 				}
 			}
-			else if (event.is(Event::MouseWheel))
+			else if (event.is(InputEvent::MouseWheel))
 			{
 				if(cursorIsOver(cursorPosition))
 				{

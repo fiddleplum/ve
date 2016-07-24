@@ -182,6 +182,7 @@
     <ClInclude Include="src\quaternion.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\rect.h" />
+    <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\shader_code.h" />
     <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\scene\entity.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\open_gl.cpp" />
     <ClCompile Include="src\gui\window.cpp" />
+    <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\shader_code.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\scene\entity.cpp" />

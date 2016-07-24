@@ -29,12 +29,12 @@ namespace ve
 			}
 		}
 
-		bool Container::handleEvent(Event const & event, std::optional<Vector2i> cursorPosition)
+		bool Container::handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition)
 		{
 			bool consumed = false;
-			if (eventHandler)
+			if (inputEventHandler)
 			{
-				consumed = eventHandler(event, cursorPosition);
+				consumed = inputEventHandler(event, cursorPosition);
 			}
 			bool cursorPositionIsValidInContainer = cursorPosition && bounds.contains(cursorPosition.value());
 			for (auto it = infos.rbegin(); !consumed && it != infos.rend(); it++)
@@ -42,7 +42,7 @@ namespace ve
 				ElementInfo & info = *it;
 				if (info.active)
 				{
-					consumed = info.element->handleEvent(event, cursorPosition);
+					consumed = info.element->handleInputEvent(event, cursorPosition);
 				}
 			}
 			return consumed;
@@ -131,9 +131,9 @@ namespace ve
 			updateElementBounds(*it);
 		}
 
-		void Container::setContainerEventHandler(std::function<bool(Event const & event, std::optional<Vector2i> cursorPosition)> handler)
+		void Container::setContainerInputEventHandler(std::function<bool(InputEvent const & event, std::optional<Vector2i> cursorPosition)> handler)
 		{
-			eventHandler = handler;
+			inputEventHandler = handler;
 		}
 
 		void Container::setUpdateHandler(std::function<void(float dt)> handler)

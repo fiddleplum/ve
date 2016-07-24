@@ -37,7 +37,7 @@ namespace ve
 			// The cursorPosition is relative to the parent window.
 			// If the cursor position is inside the window and not blocked by another widget, cursorPosition is valid.
 			// Returns true if the event is consumed.
-			virtual bool handleEvent(Event const & event, std::optional<Vector2i> cursorPosition);
+			virtual bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition);
 
 			// Called by GuiContainer to update the element once every frame.
 			virtual void update(float dt) {}

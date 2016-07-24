@@ -225,17 +225,17 @@ namespace ve
 			int type = 0;
 			switch (glType)
 			{
-			case GL_INT: type = Uniform::INT; break;
-			case GL_FLOAT: type = Uniform::FLOAT; break;
-			case GL_INT_VEC2: type = Uniform::VECTOR_2I; break;
-			case GL_FLOAT_VEC2: type = Uniform::VECTOR_2F; break;
-			case GL_INT_VEC3: type = Uniform::VECTOR_3I; break;
-			case GL_FLOAT_VEC3: type = Uniform::VECTOR_3F; break;
-			case GL_INT_VEC4: type = Uniform::VECTOR_4I; break;
-			case GL_FLOAT_VEC4: type = Uniform::VECTOR_4F; break;
-			case GL_FLOAT_MAT3: type = Uniform::MATRIX_33F; break;
-			case GL_FLOAT_MAT4: type = Uniform::MATRIX_44F; break;
-			default: throw std::runtime_error("Invalid type of uniform for '" + name + "'. "); break;
+				case GL_INT: type = Uniform::INT; break;
+				case GL_FLOAT: type = Uniform::FLOAT; break;
+				case GL_INT_VEC2: type = Uniform::VECTOR_2I; break;
+				case GL_FLOAT_VEC2: type = Uniform::VECTOR_2F; break;
+				case GL_INT_VEC3: type = Uniform::VECTOR_3I; break;
+				case GL_FLOAT_VEC3: type = Uniform::VECTOR_3F; break;
+				case GL_INT_VEC4: type = Uniform::VECTOR_4I; break;
+				case GL_FLOAT_VEC4: type = Uniform::VECTOR_4F; break;
+				case GL_FLOAT_MAT3: type = Uniform::MATRIX_33F; break;
+				case GL_FLOAT_MAT4: type = Uniform::MATRIX_44F; break;
+				default: throw std::runtime_error("Invalid type of uniform for '" + name + "'. "); break;
 			}
 			uniformInfos[name] = UniformInfo {location, type};
 		}

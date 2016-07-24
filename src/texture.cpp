@@ -39,12 +39,12 @@ namespace ve
 		GLenum type;
 		switch (image->getFormat())
 		{
-		case Image::RGB24:
-			internalFormat = format = GL_RGB; type = GL_UNSIGNED_BYTE; break;
-		case Image::RGBA32:
-			internalFormat = format = GL_RGBA; type = GL_UNSIGNED_BYTE; break;
-		case Image::GRAYSCALE32:
-			internalFormat = GL_R32UI; format = GL_RED; type = GL_UNSIGNED_INT; break;
+			case Image::RGB24:
+				internalFormat = format = GL_RGB; type = GL_UNSIGNED_BYTE; break;
+			case Image::RGBA32:
+				internalFormat = format = GL_RGBA; type = GL_UNSIGNED_BYTE; break;
+			case Image::GRAYSCALE32:
+				internalFormat = GL_R32UI; format = GL_RED; type = GL_UNSIGNED_INT; break;
 		}
 
 		glBindTexture(GL_TEXTURE_2D, id);
