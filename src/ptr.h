@@ -14,6 +14,13 @@ namespace ve
 		delete[] p;
 	}
 
+	// This is the standard delete function. It just calls the delete operator.
+	template <typename T>
+	void deleteObject(T * p)
+	{
+		delete p;
+	}
+
 	// An exception for accessing objects that don't exist (null pointers, bad pointers, etc).
 	class nullptr_exception : public std::exception
 	{
@@ -64,7 +71,7 @@ namespace ve
 		bool isInUse() const;
 
 		// Point the pointer to newP, which can have a type that is subclass of T. Only pass in something that looks like 'new T()' to ensure that the raw pointer isn't used elsewhere.
-		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = nullptr);
+		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject);
 
 		// Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
 		template <typename... Args> void setNew(Args... args);
@@ -144,16 +151,12 @@ namespace ve
 			{
 				deleteFunction(p);
 			}
-			else
-			{
-				delete p;
-			}
-			deleteFunction = nullptr;
+			deleteFunction = deleteObject;
 			p = nullptr;
 		}
 
-		T * p = 0; // Derived type for correct destruction, even without base virtual destructor.
-		void(*deleteFunction) (T *) = 0; // User-supplied destroy function.
+		T * p = nullptr; // Derived type for correct destruction, even without base virtual destructor.
+		void(*deleteFunction) (T *) = deleteObject; // User-supplied destroy function.
 	};
 
 	template <typename T, bool OWN>
