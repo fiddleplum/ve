@@ -35,7 +35,6 @@
     <ClInclude Include="src\scene\scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\compile_test.cpp" />
     <ClCompile Include="src\event.cpp" />
     <ClCompile Include="src\gui\element.cpp" />
     <ClCompile Include="src\gui\container.cpp" />

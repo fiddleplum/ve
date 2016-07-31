@@ -199,7 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app.cpp" />
-    <ClCompile Include="src\compile_test.cpp" />
     <ClCompile Include="src\display.cpp" />
     <ClCompile Include="src\event.cpp" />
     <ClCompile Include="src\gui\container.cpp" />
