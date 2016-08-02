@@ -170,6 +170,7 @@
     <ClInclude Include="src\glcorearb.h" />
     <ClInclude Include="src\gui\container.h" />
     <ClInclude Include="src\gui\element.h" />
+    <ClInclude Include="src\gui\viewport.h" />
     <ClInclude Include="src\image.h" />
     <ClInclude Include="src\interval.h" />
     <ClInclude Include="src\material.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="src\event.cpp" />
     <ClCompile Include="src\gui\container.cpp" />
     <ClCompile Include="src\gui\element.cpp" />
+    <ClCompile Include="src\gui\viewport.cpp" />
     <ClCompile Include="src\image.cpp" />
     <ClCompile Include="src\material.cpp" />
     <ClCompile Include="src\mesh.cpp" />

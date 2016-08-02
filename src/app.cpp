@@ -52,20 +52,16 @@ namespace ve
 			{
 				window->update(dt);
 			}
-			//for (auto & scene : scenes)
-			//{
-			//	scene->update(dt);
-			//}
+			for (auto & scene : scenes)
+			{
+				scene->update(dt);
+			}
 
 			// PreRender Update
 			for (auto & window : windows)
 			{
 				window->preRenderUpdate();
 			}
-			//for (auto scene : scenes)
-			//{
-			//	scene->preRenderUpdate();
-			//}
 
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)

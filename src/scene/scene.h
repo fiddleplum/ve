@@ -42,7 +42,7 @@ namespace ve
 			// Called by App to update the scene every frame.
 			void update(float dt);
 
-			// Called by App to update the scene after a regular update but before the render. Good for things that keep track of other scene elements.
+			// Called by the Viewport to update the scene after a regular update but before the render. Good for things that keep track of other scene elements.
 			void preRenderUpdate();
 
 			// Called by GuiViewport to render the scene.

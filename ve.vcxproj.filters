@@ -33,6 +33,7 @@
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\uniform.h" />
     <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\gui\viewport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\event.cpp" />
@@ -56,6 +57,7 @@
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\uniform.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
+    <ClCompile Include="src\gui\viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
