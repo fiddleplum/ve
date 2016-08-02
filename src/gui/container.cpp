@@ -12,8 +12,7 @@ namespace ve
 
 		void Container::setPosition(Vector2i position)
 		{
-			bounds.max += position - bounds.min;
-			bounds.min = position;
+			bounds.setPosition(position);
 			for (auto const & info : infos)
 			{
 				updateElementBounds(info);
@@ -22,7 +21,7 @@ namespace ve
 
 		void Container::setSize(Vector2i size)
 		{
-			bounds.max = bounds.min + size - Vector2i{ 1, 1 };
+			bounds.setSize(size);
 			for (auto const & info : infos)
 			{
 				updateElementBounds(info);
@@ -80,7 +79,6 @@ namespace ve
 
 		void Container::render(Vector2i windowSize) const
 		{
-			Recti bounds = getBounds();
 			ve::glScissorPush(bounds.min[0], bounds.min[1], bounds.max[0] - bounds.min[0] + 1, bounds.max[1] - bounds.min[1] + 1);
 			for (auto const & info : infos)
 			{
@@ -161,12 +159,11 @@ namespace ve
 
 		void Container::updateElementBounds(ElementInfo const & info)
 		{
-			Recti containerBounds = getBounds();
-			Vector2i containerSize = containerBounds.max - containerBounds.min + Vector2i{ 1, 1 };
+			Vector2i containerSize = bounds.max - bounds.min + Vector2i{ 1, 1 };
 			Recti elementBounds = info.element->getBounds();
-			Vector2i elementSize = elementBounds.max - elementBounds.min + Vector2i{ 1, 1 };
-			info.element->setSize(Vector2i(info.sizeFractionOfContainer.scale(containerSize)) + info.sizeOffset);
-			info.element->setPosition(Vector2i(info.positionFractionOfContainer.scale(containerSize) - info.positionFractionOfElement.scale(elementSize)) + info.positionOffset);
+			Vector2i elementSize = elementBounds.getSize();
+			info.element->setSize(bounds.getSizeRelativeToThis(info.sizeFractionOfContainer, info.sizeOffset));
+			info.element->setPosition(bounds.getPositionRelativeToThis(elementSize,info.positionFractionOfElement, info.positionFractionOfContainer, info.positionOffset));
 		}
 	}
 }
