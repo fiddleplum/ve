@@ -28,8 +28,11 @@ namespace ve
 		// Returns a vector with all elements equal to a.
 		static Vector<dim, T> filled(T a);
 
-		// Implicit conversion from one dimensional vector to type T
-		operator T () const;
+		// Explicit conversion from one dimensional vector to type T.
+		explicit operator T () const;
+
+		// Explicit conversion from to vector of type Y.
+		template <typename Y> explicit operator Vector<dim, Y> () const;
 
 		// Access element at index i.
 		T & operator [] (unsigned int i);
@@ -222,6 +225,17 @@ namespace ve
 	{
 		assert(dim == 1);
 		return c[0];
+	}
+
+	template <unsigned int dim, typename T> template <typename Y>
+	Vector<dim, T>::operator Vector<dim, Y> () const
+	{
+		Vector<dim, Y> r;
+		for (unsigned int i = 0; i < dim; ++i)
+		{
+			r.c[i] = (Y)c[i];
+		}
+		return r;
 	}
 
 	template <unsigned int dim, typename T>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/window.h"
+#include "window.h"
 #include "scene/scene.h"
 #include <set>
 
@@ -21,10 +21,10 @@ namespace ve
 	void quit();
 
 	// Creates a new window.
-	UsePtr<gui::Window> addWindow(std::string const & title);
+	UsePtr<Window> addWindow(std::string const & title);
 
 	// Removes a window.
-	void removeWindow(UsePtr<gui::Window> window);
+	void removeWindow(UsePtr<Window> window);
 
 	// Adds a scene.
 	UsePtr<scene::Scene> addScene();

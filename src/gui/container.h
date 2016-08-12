@@ -12,12 +12,8 @@ namespace ve
 	{
 		class Container : public Element
 		{
-		public:
-			Recti getBounds() const override;
-
-			void setPosition(Vector2i position) override;
-
-			void setSize(Vector2i size) override;
+		protected:
+			void handleNewBounds() override;
 
 			bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition) override;
 
@@ -27,7 +23,6 @@ namespace ve
 
 			void render(Vector2i windowSize) const override;
 
-		protected:
 			template <typename T> UsePtr<T> addElement();
 
 			void removeElement(UsePtr<Element> const & element);
@@ -62,7 +57,6 @@ namespace ve
 			std::list<ElementInfo>::iterator find(UsePtr<Element> const & element) const;
 			void updateElementBounds(ElementInfo const & info);
 
-			Recti bounds;
 			std::list<ElementInfo> infos;
 			std::map<UsePtr<Element>, std::list<ElementInfo>::iterator> lookup;
 			std::function<bool(InputEvent const & event, std::optional<Vector2i> cursorPosition)> inputEventHandler;

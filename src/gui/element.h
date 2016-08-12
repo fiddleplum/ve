@@ -6,51 +6,48 @@
 
 namespace ve
 {
+	class Window;
+
 	namespace gui
 	{
 		class Element
 		{
-		public:
+		protected:
 			// Virtual destructor, so it can be deleted properly.
 			virtual ~Element() {}
 
 			// Returns the bounds of the element.
-			virtual Recti getBounds() const = 0;
+			Recti getBounds() const;
 
-			// Sets the position of the element.
-			virtual void setPosition(Vector2i position) = 0;
+			// Sets the bounds of the element of the element. Note that some elements will not change their size to the size, but may be smaller.
+			void setBounds(Recti bounds);
 
-			// Sets the size of the element. Note that some elements will not change their size.
-			virtual void setSize(Vector2i size) = 0;
+			// Called when the bounds have changed.
+			virtual void handleNewBounds() {}
 
-			// Can the element have focus?
-			virtual bool canHaveFocus();
+			// Called by GuiContainer to handle an event. The cursorPosition is relative to the parent window, and may not be valid. Returns true if the event is consumed.
+			virtual bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition) { return false; }
 
-			// Returns true if the element has focus.
-			virtual bool hasFocus() const;
-
-// SHOULD THIS BE HERE, OR IN A MAIN GUI CLASS? ONLY ONE ELEMENT CAN HAVE FOCUS AT A TIME.
-			// Sets the focus to the element.
-			virtual void setFocus(bool value);
-
-			// Called by GuiContainer to handle an event.
-			// The cursorPosition is relative to the parent window.
-			// If the cursor position is inside the window and not blocked by another widget, cursorPosition is valid.
-			// Returns true if the event is consumed.
-			virtual bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition);
-
-			// Called by GuiContainer to update the element once every frame.
+			// Called by Container or Window to update the element once every frame.
 			virtual void update(float dt) {}
 
-			// Called by GuiContainer to update the element after a regular update but before the render. Good for things that keep track of scene elements.
+			// Called by Container or Window to update the element after a regular update but before the render. Good for things that keep track of scene elements.
 			virtual void preRenderUpdate() {}
 
-			// Called by GuiContainer to render the element.
-			virtual void render(Vector2i windowSize) const = 0;
+			// Called by Container or Window to render the element.
+			virtual void render(Vector2i windowSize) const {}
 
-		protected:
-			// Returns true if the cursor is within the bounds of the element. Helper function for subclasses.
-			bool cursorIsOver(std::optional<Vector2i> cursorPosition) const;
+			// Returns true if the cursor is over the element. Defaults to just using the bounds.
+			virtual bool cursorIsOver(std::optional<Vector2i> cursorPosition) const
+			{
+				return cursorPosition && bounds.contains(cursorPosition.value());
+			}
+
+		private:
+			Recti bounds;
+
+			friend class Container;
+			friend class ve::Window;
 		};
 	}
 }

@@ -195,7 +195,7 @@
     <ClInclude Include="src\uniform.h" />
     <ClInclude Include="src\util.h" />
     <ClInclude Include="src\vector.h" />
-    <ClInclude Include="src\gui\window.h" />
+    <ClInclude Include="src\window.h" />
     <ClInclude Include="src\vertex_buffer_object.h" />
   </ItemGroup>
   <ItemGroup>
@@ -210,7 +210,7 @@
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\open_gl.cpp" />
-    <ClCompile Include="src\gui\window.cpp" />
+    <ClCompile Include="src\window.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\shader_code.cpp" />
     <ClCompile Include="src\texture.cpp" />

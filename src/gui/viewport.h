@@ -3,6 +3,7 @@
 #include "element.h"
 #include "../ptr.h"
 #include "../scene/camera.h"
+#include "../scene/scene.h"
 
 namespace ve
 {
@@ -11,16 +12,24 @@ namespace ve
 		class Viewport : public Element
 		{
 		public:
-			virtual Recti getBounds() const;
+			// Returns the camera used by the viewport.
+			UsePtr<scene::Camera> getCamera() const;
 
-			virtual void setPosition(Vector2i position);
+			// Returns the scene to be rendered by the viewport.
+			UsePtr<scene::Scene> getScene() const;
 
-			virtual void setSize(Vector2i size);
+			// Sets the scene to be rendered and the camera within that scene to be used.
+			void setSceneAndCamera(UsePtr<scene::Scene> scene, UsePtr<scene::Camera> camera);
 
-			virtual void render(Vector2i windowSize) const;
+		protected:
+			void handleNewBounds() override;
+
+			void render(Vector2i windowSize) const override;
 
 		private:
-			Recti bounds;
+			void updateCamera();
+
+			UsePtr<scene::Scene> scene;
 			UsePtr<scene::Camera> camera;
 		};
 	}

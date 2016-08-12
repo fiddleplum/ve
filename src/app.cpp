@@ -11,9 +11,9 @@
 namespace ve
 {
 	void handleSDLEvent(SDL_Event const & event);
-	UsePtr<gui::Window> getWindowFromId(unsigned int id);
+	UsePtr<Window> getWindowFromId(unsigned int id);
 
-	std::set<OwnPtr<gui::Window>> windows;
+	std::set<OwnPtr<Window>> windows;
 	std::set<OwnPtr<scene::Scene>> scenes;
 	bool looping;
 	float targetFrameRate = 60.f;
@@ -83,9 +83,9 @@ namespace ve
 		looping = false;
 	}
 
-	UsePtr<gui::Window> addWindow(std::string const & title)
+	UsePtr<Window> addWindow(std::string const & title)
 	{
-		auto window = OwnPtr<gui::Window>::createNew(title);
+		auto window = OwnPtr<Window>::createNew(title);
 		if (windows.empty())
 		{
 			glContext = SDL_GL_CreateContext(window->getSDLWindow());
@@ -95,7 +95,7 @@ namespace ve
 		return window;
 	}
 
-	void removeWindow(UsePtr<gui::Window> window)
+	void removeWindow(UsePtr<Window> window)
 	{
 		if (!window.isValid())
 		{
@@ -140,7 +140,7 @@ namespace ve
 
 	void handleSDLEvent(SDL_Event const & sdlEvent)
 	{
-		UsePtr<gui::Window> window;
+		UsePtr<Window> window;
 		switch (sdlEvent.type)
 		{
 			case SDL_WINDOWEVENT:
@@ -148,6 +148,8 @@ namespace ve
 			case SDL_KEYUP:
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEMOTION:
+			case SDL_MOUSEWHEEL:
 				window = getWindowFromId(sdlEvent.key.windowID);
 				if (!window.isValid())
 				{
@@ -205,7 +207,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<gui::Window> getWindowFromId(unsigned int id)
+	UsePtr<Window> getWindowFromId(unsigned int id)
 	{
 		SDL_Window * sdlWindow = SDL_GetWindowFromID(id);
 		if (sdlWindow != NULL)
@@ -218,7 +220,7 @@ namespace ve
 				}
 			}
 		}
-		return UsePtr<gui::Window>();
+		return UsePtr<Window>();
 	}
 
 	//void setCursorActive(bool)

@@ -5,23 +5,8 @@ namespace ve
 {
 	namespace gui
 	{
-		Recti Container::getBounds() const
+		void Container::handleNewBounds()
 		{
-			return bounds;
-		}
-
-		void Container::setPosition(Vector2i position)
-		{
-			bounds.setPosition(position);
-			for (auto const & info : infos)
-			{
-				updateElementBounds(info);
-			}
-		}
-
-		void Container::setSize(Vector2i size)
-		{
-			bounds.setSize(size);
 			for (auto const & info : infos)
 			{
 				updateElementBounds(info);
@@ -162,8 +147,8 @@ namespace ve
 			Vector2i containerSize = bounds.max - bounds.min + Vector2i{ 1, 1 };
 			Recti elementBounds = info.element->getBounds();
 			Vector2i elementSize = elementBounds.getSize();
-			info.element->setSize(bounds.getSizeRelativeToThis(info.sizeFractionOfContainer, info.sizeOffset));
-			info.element->setPosition(bounds.getPositionRelativeToThis(elementSize,info.positionFractionOfElement, info.positionFractionOfContainer, info.positionOffset));
+			elementBounds.setSize(info.sizeOffset + (Vector2i)(info.sizeFractionOfContainer.scale((Vector2f)containerSize)));
+			elementBounds.setPosition(info.positionOffset + (Vector2i)(info.positionFractionOfContainer.scale((Vector2f)containerSize)) - (Vector2i)(info.positionFractionOfElement.scale((Vector2f)elementBounds.getSize())));
 		}
 	}
 }

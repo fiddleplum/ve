@@ -1,26 +1,51 @@
 #include "viewport.h"
+#include "../open_gl.h"
 
 namespace ve
 {
 	namespace gui
 	{
-		Recti Viewport::getBounds() const
+		UsePtr<scene::Camera> Viewport::getCamera() const
 		{
-			return bounds;
+			return camera;
 		}
 
-		void Viewport::setPosition(Vector2i position)
+		UsePtr<scene::Scene> Viewport::getScene() const
 		{
-			bounds.setPosition(position);
+			return scene;
 		}
 
-		void Viewport::setSize(Vector2i size)
+		void Viewport::setSceneAndCamera(UsePtr<scene::Scene> scene_, UsePtr<scene::Camera> camera_)
 		{
-			bounds.setSize(size);
+			camera = camera_;
+			scene = scene_;
+			updateCamera();
+		}
+
+		void Viewport::handleNewBounds()
+		{
+			updateCamera();
 		}
 
 		void Viewport::render(Vector2i windowSize) const
 		{
+			if (scene && camera)
+			{
+				Recti bounds = getBounds();
+				glViewport(bounds.min[0], windowSize[1] - (bounds.max[1] + 1), (bounds.max[0] + 1) - bounds.min[0], (bounds.max[1] + 1) - bounds.min[1]);
+				scene->render(camera);
+				glViewport(0, 0, windowSize[0], windowSize[1]);
+			}
+		}
+
+		void Viewport::updateCamera()
+		{
+			if (camera)
+			{
+				Vector2i size = getBounds().getSize();
+				if (size[1] != 0)
+					camera->setAspectRatio((float)size[0] / (float)size[1]);
+			}
 		}
 	}
 }
