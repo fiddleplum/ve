@@ -3,7 +3,9 @@
 
 namespace ve
 {
-	Image::Image(Vector2i size_, int format_)
+	Cache<Image> Image::cache;
+
+	Image::Image(Vector2i size_, Format format_)
 	{
 		size = size_;
 		format = format_;
@@ -73,7 +75,7 @@ namespace ve
 		return size;
 	}
 
-	int Image::getFormat() const
+	Image::Format Image::getFormat() const
 	{
 		return format;
 	}

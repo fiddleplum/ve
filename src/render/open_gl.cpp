@@ -1,5 +1,5 @@
 #include "open_gl.h"
-#include "rect.h"
+#include "../rect.h"
 #include <stack>
 #include <SDL.h>
 
@@ -45,6 +45,7 @@ PFNGLUNIFORM3IVPROC glUniform3iv;
 PFNGLUNIFORM3FVPROC glUniform3fv;
 PFNGLUNIFORM4IVPROC glUniform4iv;
 PFNGLUNIFORM4FVPROC glUniform4fv;
+PFNGLUNIFORMMATRIX2FVPROC glUniformMatrix2fv;
 PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv;
 PFNGLUNIFORMMATRIX4FVPROC glUniformMatrix4fv;
 
@@ -64,6 +65,12 @@ PFNGLACTIVETEXTUREPROC glActiveTexture;
 PFNGLBINDTEXTUREPROC glBindTexture;
 PFNGLTEXIMAGE2DPROC glTexImage2D;
 PFNGLTEXPARAMETERIPROC glTexParameteri;
+
+PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers;
+PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers;
+PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
+PFNGLFRAMEBUFFERTEXTUREPROC glFramebufferTexture;
+PFNGLDRAWBUFFERSPROC glDrawBuffers;
 
 namespace ve
 {
@@ -113,6 +120,7 @@ namespace ve
 		glUniform3fv = (PFNGLUNIFORM3FVPROC)SDL_GL_GetProcAddress("glUniform3fv");
 		glUniform4iv = (PFNGLUNIFORM4IVPROC)SDL_GL_GetProcAddress("glUniform4iv");
 		glUniform4fv = (PFNGLUNIFORM4FVPROC)SDL_GL_GetProcAddress("glUniform4fv");
+		glUniformMatrix2fv = (PFNGLUNIFORMMATRIX2FVPROC)SDL_GL_GetProcAddress("glUniformMatrix2fv");
 		glUniformMatrix3fv = (PFNGLUNIFORMMATRIX3FVPROC)SDL_GL_GetProcAddress("glUniformMatrix3fv");
 		glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)SDL_GL_GetProcAddress("glUniformMatrix4fv");
 
@@ -132,6 +140,12 @@ namespace ve
 		glBindTexture = (PFNGLBINDTEXTUREPROC)SDL_GL_GetProcAddress("glBindTexture");
 		glTexImage2D = (PFNGLTEXIMAGE2DPROC)SDL_GL_GetProcAddress("glTexImage2D");
 		glTexParameteri = (PFNGLTEXPARAMETERIPROC)SDL_GL_GetProcAddress("glTexParameteri");
+
+		glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)SDL_GL_GetProcAddress("glGenFramebuffers");
+		glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)SDL_GL_GetProcAddress("glDeleteFramebuffers");
+		glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glBindFramebuffer");
+		glFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC)SDL_GL_GetProcAddress("glFramebufferTexture");
+		glDrawBuffers = (PFNGLDRAWBUFFERSPROC)SDL_GL_GetProcAddress("glDrawBuffers");
 	}
 
 	float glGetGLSLVersion()

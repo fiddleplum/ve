@@ -57,9 +57,11 @@ extern PFNGLUNIFORM3IVPROC glUniform3iv;
 extern PFNGLUNIFORM3FVPROC glUniform3fv;
 extern PFNGLUNIFORM4IVPROC glUniform4iv;
 extern PFNGLUNIFORM4FVPROC glUniform4fv;
+extern PFNGLUNIFORMMATRIX2FVPROC glUniformMatrix2fv;
 extern PFNGLUNIFORMMATRIX3FVPROC glUniformMatrix3fv;
 extern PFNGLUNIFORMMATRIX4FVPROC glUniformMatrix4fv;
 
+// Vertex Buffer Objects
 extern PFNGLGENBUFFERSPROC glGenBuffers;
 extern PFNGLBINDBUFFERPROC glBindBuffer;
 extern PFNGLDELETEBUFFERSPROC glDeleteBuffers;
@@ -70,10 +72,18 @@ extern PFNGLVERTEXATTRIBIPOINTERPROC glVertexAttribIPointer;
 extern PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
 extern PFNGLDRAWELEMENTSPROC glDrawElements;
 
+// Textures
 extern PFNGLGENTEXTURESPROC glGenTextures;
 extern PFNGLDELETETEXTURESPROC glDeleteTextures;
 extern PFNGLACTIVETEXTUREPROC glActiveTexture;
 extern PFNGLBINDTEXTUREPROC glBindTexture;
 extern PFNGLTEXIMAGE2DPROC glTexImage2D;
 extern PFNGLTEXPARAMETERIPROC glTexParameteri;
+
+// Render Targets
+extern PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers;
+extern PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers;
+extern PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
+extern PFNGLFRAMEBUFFERTEXTUREPROC glFramebufferTexture;
+extern PFNGLDRAWBUFFERSPROC glDrawBuffers;
 

@@ -10,7 +10,7 @@ namespace ve
 		enum Format { RGB24, RGBA32, GRAYSCALE32 };
 
 		// Create a blank image.
-		Image(Vector2i size, int format);
+		Image(Vector2i size, Format format);
 
 		// Load a PNG or JPG from a file.
 		Image(std::string const & filename);
@@ -22,7 +22,7 @@ namespace ve
 		Vector2i getSize() const;
 
 		// Get the format of the image.
-		int getFormat() const;
+		Format getFormat() const;
 
 		// Get the raw pixel data.
 		std::vector<uint8_t> const & getPixels() const;
@@ -45,10 +45,11 @@ namespace ve
 		// Write a pixel.
 		void setPixelGrayScale32(Vector2i position, uint32_t value);
 
+		// Cache for images.
 		static Cache<Image> cache;
 
 	private:
-		int format;
+		Format format;
 		int bytesPerPixel;
 		Vector2i size;
 		std::vector<uint8_t> pixels;
