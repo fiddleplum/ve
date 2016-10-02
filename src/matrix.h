@@ -63,6 +63,8 @@ namespace ve
 		T c[rows * cols];
 	};
 
+	typedef Matrix<2, 2, float> Matrix22f;
+	typedef Matrix<2, 2, double> Matrix22d;
 	typedef Matrix<3, 3, float> Matrix33f;
 	typedef Matrix<3, 3, double> Matrix33d;
 	typedef Matrix<4, 4, float> Matrix44f;
