@@ -75,7 +75,6 @@ namespace ve
 
 		if (c == '{') // Dictionary
 		{
-			i += 1;
 			type = Dictionary;
 			while (i < content.size())
 			{
@@ -87,16 +86,14 @@ namespace ve
 					i += 1;
 					break;
 				}
-				size_t iNext = content.find_first_of(" \t\n\r:", i);
-				key = trim(content.substr(i, iNext));
-				i = iNext;
+				
+				key = trim(readUntilAny(content, i, " \t\n\r:"));
 
 				children[key].parse(content, i);
 			}
 		}
 		else if (c == '[') // List
 		{
-			i += 1; // Skip [
 			type = List;
 			int count = 0;
 			while (i < content.size())
@@ -115,23 +112,26 @@ namespace ve
 		else // String
 		{
 			type = String;
-			if (isStringNext(content, i, "\"")) // Double Quote
+			auto nextC = getChar(content, i);
+
+			std::string quoteStart;
+			if (nextC == '"' || nextC == '\'' || nextC == '`') // Quote, grab all of same characters.
 			{
-				i += 1; // Skip "
-				text = readUntil(content, i, "\"");
-				i += 1; // Skip "
+				auto quoteC = nextC;
+				do
+				{
+					quoteStart += getStringFromChar(nextC);
+					nextC = getChar(content, i);
+				} while (nextC == quoteC);
 			}
-			else if (isStringNext(content, i, "```")) // Uber Quote
+			text += getStringFromChar(nextC);
+			if (!quoteStart.empty())
 			{
-				i += 3; // Skip ```
-				text = readUntil(content, i, "```");
-				i += 3; // Skip ```
+				text = readUntil(content, i, quoteStart);
 			}
-			else // No Quote
+			else
 			{
-				size_t iNext = content.find_first_of(" \t\n\r}]", i);
-				text = content.substr(i, iNext);
-				i = iNext;
+				text = readUntilAny(content, i, " \t\n\r}]");
 			}
 		}
 	}

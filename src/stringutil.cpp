@@ -66,7 +66,7 @@ namespace ve
 		return result;
 	}
 
-	unsigned int getChar(std::string const & subject, size_t i)
+	unsigned int getChar(std::string const & subject, size_t & i)
 	{
 		uint32_t codePoint = 0;
 		if (i < subject.length())
@@ -74,32 +74,38 @@ namespace ve
 			if (subject[i] <= 0x7f) // 0 to 7f
 			{
 				codePoint = subject[i] & 0x7f;
+				i += 1;
 			}
 			else if ((subject[i] & 0xe0) == 0xc0 && i + 1 < subject.length()) // 80 to 7ff
 			{
 				codePoint = ((unsigned int)(subject[i] & 0x1f) << 6) + (unsigned int)(subject[i + 1] & 0x3f);
+				i += 2;
 			}
 			else if ((subject[i] & 0xf0) == 0xe0 && i + 2 < subject.length()) // 800 to ffff
 			{
 				codePoint = ((unsigned int)(subject[i] & 0x0f) << 12) + ((unsigned int)(subject[i + 1] & 0x3f) << 6) + (unsigned int)(subject[i + 2] & 0x3f);
+				i += 3;
 			}
 			else if ((subject[i] & 0xf8) == 0xf0 && i + 3 < subject.length()) // 10000 to 1fffff
 			{
 				codePoint = ((unsigned int)(subject[i] & 0x07) << 18) + ((unsigned int)(subject[i + 1] & 0x3f) << 12) + ((unsigned int)(subject[i + 2] & 0x3f) << 6) + (unsigned int)(subject[i + 3] & 0x3f);
+				i += 4;
 			}
 			else if ((subject[i] & 0xfc) == 0xf8 && i + 4 < subject.length()) // 200000 to 3ffffff
 			{
 				codePoint = ((unsigned int)(subject[i] & 0x03) << 24) + ((unsigned int)(subject[i + 1] & 0x3f) << 18) + ((unsigned int)(subject[i + 2] & 0x3f) << 12) + ((unsigned int)(subject[i + 3] & 0x3f) << 6) + (unsigned int)(subject[i + 4] & 0x3f);
+				i += 5;
 			}
 			else if ((subject[i] & 0xfe) == 0xfc && i + 5 < subject.length()) // 4000000 to 7fffffff
 			{
 				codePoint = ((unsigned int)(subject[i] & 0x01) << 30) + ((unsigned int)(subject[i + 1] & 0x3f) << 24) + ((unsigned int)(subject[i + 2] & 0x3f) << 18) + ((unsigned int)(subject[i + 3] & 0x3f) << 12) + ((unsigned int)(subject[i + 4] & 0x3f) << 6) + (unsigned int)(subject[i + 5] & 0x3f);
+				i += 6;
 			}
 		}
 		return codePoint;
 	}
 
-	std::string getStringfromChar(unsigned int c)
+	std::string getStringFromChar(unsigned int c)
 	{
 		std::string s;
 		if (c <= 0x7f)
@@ -190,7 +196,17 @@ namespace ve
 	std::string readUntil(std::string const & content, size_t & i, std::string const & delimiter)
 	{
 		size_t iNext = content.find(delimiter, i);
-		return content.substr(i, iNext);
+		std::string ret = content.substr(i, iNext);
+		i = iNext;
+		return ret;
+	}
+
+	std::string readUntilAny(std::string const & content, size_t & i, std::string const & delimiters)
+	{
+		size_t iNext = content.find_first_of(delimiters, i);
+		std::string ret = content.substr(i, iNext);
+		i = iNext;
+		return ret;
 	}
 
 	void skipWhiteSpace(std::string const & content, size_t & i)

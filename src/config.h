@@ -22,14 +22,19 @@ namespace ve
 		// Return a string of the config.
 		void toString(std::string & text, size_t tabDepth = 0) const;
 
+		// The possible types of the value.
 		enum Type { Dictionary, List, String };
 
+		// Access the value at the key.
 		std::optional<Config const &> operator [] (std::string const & key) const;
 
+		// Access the value at the key.
 		std::optional<Config &> operator [] (std::string & key);
 
+		// Access the value at the index.
 		std::optional<Config const &> operator [] (int i) const;
 
+		// Access the value at the index.
 		std::optional<Config &> operator [] (int i);
 
 		// The type of the value.
@@ -52,7 +57,7 @@ Root = > Value
 Value = > Dictionary | List | String
 Dictionary = > '{' (Key ':' Value)* '}'
 List = > '[' Value* ']'
-String = > string ended by whitespace, ] (if in array), or } (if in dictionary) or enclosed by " or ```
+String = > string ended by whitespace, ] (if in array), or } (if in dictionary) or enclosed by consecutive ', `, or " characters
 Key = > string ended by ':' or whitespace
-All white space is trimmed unless enclosed by " or ```
+All white space is trimmed unless quoted
 */
