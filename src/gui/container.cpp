@@ -1,5 +1,5 @@
 #include "container.h"
-#include "../open_gl.h"
+#include "../render/open_gl.h"
 
 namespace ve
 {
@@ -75,9 +75,10 @@ namespace ve
 			ve::glScissorPop();
 		}
 
-		void Container::removeElement(UsePtr<Element> const & element)
+		void Container::destroyElement(UsePtr<Element> & element)
 		{
-			infos.erase(find(element));
+			std::findelement)
+			infos.erase();
 			lookup.erase(element);
 		}
 

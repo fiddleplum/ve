@@ -1,5 +1,6 @@
+#pragma once
+
 #include "vector.h"
-#include "cache.h"
 
 namespace ve
 {
@@ -44,9 +45,6 @@ namespace ve
 
 		// Write a pixel.
 		void setPixelGrayScale32(Vector2i position, uint32_t value);
-
-		// Cache for images.
-		static Cache<Image> cache;
 
 	private:
 		Format format;

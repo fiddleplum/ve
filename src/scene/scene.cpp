@@ -1,5 +1,5 @@
 #include "scene.h"
-#include "../open_gl.h"
+#include "../render/open_gl.h"
 #include <map>
 #include <vector>
 
@@ -41,15 +41,20 @@ namespace ve
 			cameras.erase(iter);
 		}
 
-		//UsePtr<Object> Scene::addObject()
-		//{
-		//	return *objects.insert(OwnPtr<Object>::createNew());
-		//}
+		UsePtr<Object> Scene::addObject()
+		{
+			return *objects.insert(OwnPtr<Object>::createNew()).first;
+		}
 
-		//void Scene::removeObject(UsePtr<Object> object)
-		//{
-		//	objects.erase(object);
-		//}
+		void Scene::removeObject(UsePtr<Object> object)
+		{
+			auto iter = std::find(objects.begin(), objects.end(), object);
+			if (iter == objects.end())
+			{
+				throw std::exception("Object not in scene. ");
+			}
+			objects.erase(iter);
+		}
 
 		void Scene::setInputEventHandler(std::function<void(InputEvent const &)> handler)
 		{
@@ -96,6 +101,9 @@ namespace ve
 			glEnable(GL_DEPTH_TEST);
 
 			// Create the list of models to render. O(n log n)
+			for (auto object : objects)
+			{
+			}
 			//std::multimap<UsePtr<SceneModel>, UsePtr<SceneEntity>> modelsToRender;
 			//for (auto object : objects)
 			//{
@@ -129,6 +137,29 @@ namespace ve
 			//}
 
 			glDisable(GL_DEPTH_TEST);
+		}
+
+		bool Scene::less(OwnPtr<Object> const & lhs, OwnPtr<Object> const & rhs)
+		{
+			UsePtr<render::Model> lhsModel = lhs->getModel();
+			UsePtr<render::Model> rhsModel = rhs->getModel();
+			UsePtr<render::Material> lhsMaterial = lhsModel->getMaterial();
+			UsePtr<render::Material> rhsMaterial = rhsModel->getMaterial();
+			if (lhsMaterial != rhsMaterial)
+			{
+				if (lhsMaterial->getShader() != rhsMaterial->getShader())
+				{
+					return lhsMaterial->getShader() < rhsMaterial->getShader();
+				}
+				else
+				{
+					return true;// compare textures
+				}
+			}
+			else
+			{
+				return lhs < rhs;
+			}
 		}
 	}
 }

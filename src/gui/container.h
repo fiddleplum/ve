@@ -1,6 +1,7 @@
 #pragma once
 
-#include "element.h"
+#include "sprite.h"
+#include "viewport.h"
 #include "../ptr.h"
 #include <map>
 #include <list>
@@ -10,6 +11,7 @@ namespace ve
 {
 	namespace gui
 	{
+		// A base class of all elements which contain other elements.
 		class Container : public Element
 		{
 		protected:
@@ -23,9 +25,9 @@ namespace ve
 
 			void render(Vector2i windowSize) const override;
 
-			template <typename T> UsePtr<T> addElement();
+			template <typename T> UsePtr<T> createElement();
 
-			void removeElement(UsePtr<Element> const & element);
+			void destroyElement(UsePtr<Element> & element);
 
 			void moveElementToFront(UsePtr<Element> const & element);
 
@@ -54,7 +56,6 @@ namespace ve
 				Vector2i sizeOffset;
 			};
 
-			std::list<ElementInfo>::iterator find(UsePtr<Element> const & element) const;
 			void updateElementBounds(ElementInfo const & info);
 
 			std::list<ElementInfo> infos;

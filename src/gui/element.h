@@ -2,14 +2,15 @@
 
 #include "../event.h"
 #include "../rect.h"
+#include "../ptr.h"
+#include "../render/stage.h"
 #include "../std/optional.hpp" // eventually when msvc supports c++17, include <optional>
 
 namespace ve
 {
-	class Window;
-
 	namespace gui
 	{
+		// A base class for all elements within a Gui.
 		class Element
 		{
 		protected:
@@ -22,32 +23,35 @@ namespace ve
 			// Sets the bounds of the element of the element. Note that some elements will not change their size to the size, but may be smaller.
 			void setBounds(Recti bounds);
 
-			// Called when the bounds have changed.
-			virtual void handleNewBounds() {}
+			// Called when the bounds have changed. Default does nothing.
+			virtual void handleNewBounds();
 
-			// Called by GuiContainer to handle an event. The cursorPosition is relative to the parent window, and may not be valid. Returns true if the event is consumed.
-			virtual bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition) { return false; }
+			// Returns the depth of the element.
+			float getDepth() const;
 
-			// Called by Container or Window to update the element once every frame.
-			virtual void update(float dt) {}
+			// Sets the depth value of the element. Used in sorting for rendering.
+			void setDepth(float depth);
 
-			// Called by Container or Window to update the element after a regular update but before the render. Good for things that keep track of scene elements.
-			virtual void preRenderUpdate() {}
+			// Called when the depth has changed. Default does nothing.
+			virtual void handleNewDepth();
 
-			// Called by Container or Window to render the element.
-			virtual void render(Vector2i windowSize) const {}
+			// Called by GuiContainer to handle an event. The cursorPosition is relative to the parent window, and may not be valid. Returns true if the event is consumed. Default does nothing and returns false.
+			virtual bool handleInputEvent(InputEvent const & event, std::optional<Vector2i> cursorPosition);
+
+			// Called by Container or Window to update the element once every frame. Default does nothing.
+			virtual void update(float dt);
+
+			// Called by Container or Window to update the element after a regular update but before the render. Good for things that keep track of scene elements. Default does nothing.
+			virtual void preRender(UsePtr<render::Stage> stage);
 
 			// Returns true if the cursor is over the element. Defaults to just using the bounds.
-			virtual bool cursorIsOver(std::optional<Vector2i> cursorPosition) const
-			{
-				return cursorPosition && bounds.contains(cursorPosition.value());
-			}
+			virtual bool cursorIsOver(std::optional<Vector2i> cursorPosition) const;
 
 		private:
-			Recti bounds;
+			Recti bounds = {{0, 0}, {0, 0}};
+			float depth = 0;
 
 			friend class Container;
-			friend class ve::Window;
 		};
 	}
 }

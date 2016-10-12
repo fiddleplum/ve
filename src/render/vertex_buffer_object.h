@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../mesh.h"
+#include "mesh.h"
+#include "ptr.h"
 
 namespace ve
 {
@@ -12,9 +13,6 @@ namespace ve
 			// Constructs the VBO from a mesh.
 			VertexBufferObject(UsePtr<Mesh> mesh);
 
-			// Constructs the VBO from a filename. Uses the cache.
-			VertexBufferObject(std::string const & filename);
-
 			// Destructs the VBO.
 			~VertexBufferObject();
 
@@ -25,8 +23,6 @@ namespace ve
 			void render() const;
 
 		private:
-			void init(UsePtr<Mesh> mesh);
-
 			struct VertexComponent
 			{
 			public:

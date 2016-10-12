@@ -1,5 +1,5 @@
 #include "viewport.h"
-#include "../open_gl.h"
+#include "../render/open_gl.h"
 
 namespace ve
 {

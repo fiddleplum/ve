@@ -1,8 +1,8 @@
 #include "app.h"
-#include "open_gl.h"
+#include "render/open_gl.h"
+#include "window_internal.h"
 //#include "input_system.h"
 //#include "resources.h"
-//#include "window.h"
 //#include "scene.h"
 #include <SDL.h>
 
@@ -11,9 +11,9 @@
 namespace ve
 {
 	void handleSDLEvent(SDL_Event const & event);
-	UsePtr<Window> getWindowFromId(unsigned int id);
+	UsePtr<WindowInternal> getWindowFromId(unsigned int id);
 
-	std::set<OwnPtr<Window>> windows;
+	std::set<OwnPtr<WindowInternal>> windows;
 	std::set<OwnPtr<scene::Scene>> scenes;
 	bool looping;
 	float targetFrameRate = 60.f;
@@ -83,9 +83,9 @@ namespace ve
 		looping = false;
 	}
 
-	UsePtr<Window> addWindow(std::string const & title)
+	UsePtr<Window> createWindow(std::string const & title)
 	{
-		auto window = OwnPtr<Window>::createNew(title);
+		auto window = OwnPtr<WindowInternal>::createNew(title);
 		if (windows.empty())
 		{
 			glContext = SDL_GL_CreateContext(window->getSDLWindow());
@@ -95,7 +95,7 @@ namespace ve
 		return window;
 	}
 
-	void removeWindow(UsePtr<Window> window)
+	void destroyWindow(UsePtr<Window> window)
 	{
 		if (!window.isValid())
 		{
@@ -113,7 +113,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<scene::Scene> addScene()
+	UsePtr<scene::Scene> createScene()
 	{
 		if (windows.empty())
 		{
@@ -124,7 +124,7 @@ namespace ve
 		return scene;
 	}
 
-	void removeScene(UsePtr<scene::Scene> scene)
+	void destroyScene(UsePtr<scene::Scene> scene)
 	{
 		if (!scene.isValid())
 		{

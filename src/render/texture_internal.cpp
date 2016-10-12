@@ -1,51 +1,40 @@
-#include "texture.h"
+#include "render/texture_internal.h"
 #include "open_gl.h"
 
 namespace ve
 {
 	namespace render
 	{
-		std::vector<unsigned int> currentTextures; // Current textures in the OpenGL state.
+		std::vector<unsigned int> currentTextures; // Current Textures in the OpenGL state.
 
-		Texture::Texture(Vector2i size_, Image::Format format)
+		TextureInternal::TextureInternal(Vector2i size_, Image::Format format)
 		{
 			glGenTextures(1, &id);
 			setPixels(size_, format, 0);
 		}
 
-		Texture::Texture(UsePtr<Image> image)
+		TextureInternal::TextureInternal(UsePtr<Image> image)
 		{
 			glGenTextures(1, &id);
 			setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
 		}
 
-		Texture::Texture(std::string const & filename)
-		{
-			UsePtr<Image> image = Image::cache.get(filename);
-			if (!image.isValid())
-			{
-				image = Image::cache.create(filename, filename);
-			}
-			glGenTextures(1, &id);
-			setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
-		}
-
-		Texture::~Texture()
+		TextureInternal::~TextureInternal()
 		{
 			glDeleteTextures(1, &id);
 		}
 
-		Vector2i Texture::getSize() const
+		Vector2i TextureInternal::getSize() const
 		{
 			return size;
 		}
 
-		void Texture::updatePixels(UsePtr<Image> image)
+		void TextureInternal::updatePixels(UsePtr<Image> image)
 		{
 			setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
 		}
 
-		void Texture::activate(unsigned int slot) const
+		void TextureInternal::activate(unsigned int slot) const
 		{
 			if (slot >= currentTextures.size() || id != currentTextures[slot])
 			{
@@ -59,7 +48,7 @@ namespace ve
 			}
 		}
 
-		void Texture::deactivateRest(unsigned int slot)
+		void TextureInternal::deactivateRest(unsigned int slot)
 		{
 			for (; slot < currentTextures.size(); slot++)
 			{
@@ -73,7 +62,7 @@ namespace ve
 			}
 		}
 
-		void Texture::setPixels(Vector2i size_, Image::Format format, const uint8_t * pixels)
+		void TextureInternal::setPixels(Vector2i size_, Image::Format format, const uint8_t * pixels)
 		{
 			size = size_;
 

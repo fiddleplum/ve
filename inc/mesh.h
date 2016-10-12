@@ -1,4 +1,7 @@
-#include "cache.h"
+#pragma once
+
+#include <string>
+#include <vector>
 
 namespace ve
 {
@@ -31,9 +34,6 @@ namespace ve
 
 		// The indices each refer to an index in the vertex array.
 		std::vector<unsigned int> indices;
-
-		// Cache for meshes.
-		static Cache<Mesh> cache;
 	};
 }
 

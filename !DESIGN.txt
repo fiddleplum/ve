@@ -8,7 +8,6 @@ Then I thought that there might be a messaging system which passes messages to t
 
 This messaging system would extend to the whole program, rather than just the gui. It wouldn't be used for high-frequency things, just the events that happen occasionally.
 
-
 I'm wavering between a message system and sticking to containers having an add/remove objects at the end of their update function.
 
 == Smart Pointers or Raw Pointers?
@@ -23,4 +22,16 @@ I need OwnPtrs and UsePtrs are great, except in this particular situation. I nee
 
 I can use the RawPtr solution, but it still keeps track of its OwnPtr so that it is "smart" about the referencing. Itself however will not be reference counted. This is the best option. I don't need to use option 2 and have the child use a Ptr, because other structures exist which guarantee the life of the container that the RawPtr points to. However, the "smartness" of the RawPtr is there just in case.
 
+
+
+
+
+
+RenderingStage
+	Renders a scene to a RenderTarget, which is either a texture or a viewport on screen.
+	Contains a lit of render objects. Each render object contains:
+		a shader,
+		a material,
+		a depth value,
+		a boolean transparency flag
 

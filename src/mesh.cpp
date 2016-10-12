@@ -4,8 +4,6 @@
 
 namespace ve
 {
-	Cache<Mesh> Mesh::cache;
-
 	Mesh::Mesh()
 	{
 	}

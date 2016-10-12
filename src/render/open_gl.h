@@ -1,7 +1,7 @@
 #pragma once
 
 #define NOMINMAX
-#include "glcorearb.h"
+#include "render/glcorearb.h"
 
 namespace ve
 {

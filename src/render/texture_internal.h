@@ -1,31 +1,28 @@
 #pragma once
 
-#include "../image.h"
+#include "render/texture.h"
 
 namespace ve
 {
 	namespace render
 	{
-		class Texture
+		class TextureInternal : public Texture
 		{
 		public:
 			// Creates a new texture from a size and format (from Image::Format). The pixels are uninitialized.
-			Texture(Vector2i size, Image::Format format);
+			TextureInternal(Vector2i size, Image::Format format);
 
 			// Creates a new texture from an Image.
-			Texture(UsePtr<Image> image);
-
-			// Creates a texture from a file.
-			Texture(std::string const & filename);
+			TextureInternal(UsePtr<Image> image);
 
 			// Destroys the texture.
-			virtual ~Texture();
+			virtual ~TextureInternal();
 
 			// Returns the size of the texture.
-			Vector2i getSize() const;
+			Vector2i getSize() const override;
 
 			// Updates the pixels from the image.
-			void updatePixels(UsePtr<Image> image);
+			void updatePixels(UsePtr<Image> image) override;
 
 			// Activates the texture in the GL slot. Used by Models.
 			void activate(unsigned int slot) const;

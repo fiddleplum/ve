@@ -1,16 +1,15 @@
-#include "window.h"
+#include "window_internal.h"
 #include "display.h"
-#include "open_gl.h"
+#include "render/open_gl.h"
 #include <string>
 #include <algorithm>
 #include <map>
-#include <SDL.h>
 
 namespace ve
 {
-	Window::Window(std::string const & title)
+	WindowInternal::WindowInternal(std::string const & title)
 	{
-		Vector2i initialSize = { 800, 600 };
+		Vector2i initialSize = {800, 600};
 		cursorPosition = std::nullopt;
 		sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, initialSize[0], initialSize[1], SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 		if (sdlWindow == nullptr)
@@ -19,24 +18,24 @@ namespace ve
 		}
 	}
 
-	Window::~Window()
+	WindowInternal::~WindowInternal()
 	{
 		root.setNull();
 		SDL_DestroyWindow(sdlWindow);
 	}
 
-	void Window::setTitle(std::string const & title)
+	void WindowInternal::setTitle(std::string const & title)
 	{
 		SDL_SetWindowTitle(sdlWindow, title.c_str());
 	}
 
-	void Window::setWindowed()
+	void WindowInternal::setWindowed()
 	{
 		SDL_SetWindowFullscreen(sdlWindow, 0);
 		SDL_EnableScreenSaver();
 	}
 
-	void Window::setFullscreen(int display, Vector2i size)
+	void WindowInternal::setFullscreen(int display, Vector2i resolution)
 	{
 		try
 		{
@@ -45,8 +44,8 @@ namespace ve
 			{
 				throw std::exception();
 			}
-			mode.w = size[0];
-			mode.h = size[1];
+			mode.w = resolution[0];
+			mode.h = resolution[1];
 			SDL_DisableScreenSaver();
 			if (SDL_SetWindowDisplayMode(sdlWindow, &mode) < 0)
 			{
@@ -59,29 +58,29 @@ namespace ve
 		}
 		catch (...)
 		{
-			throw std::runtime_error("Could not set display " + std::to_string(display) + " to the resolution " + std::to_string(size[0]) + "x" + std::to_string(size[1]) + ".");
+			throw std::runtime_error("Could not set display " + std::to_string(display) + " to the resolution " + std::to_string(resolution[0]) + "x" + std::to_string(resolution[1]) + ".");
 		}
 	}
 
-	void Window::setFullscreen()
+	void WindowInternal::setFullscreen()
 	{
 		int display = getDisplay();
 		setFullscreen(display, Display::getStartingResolution(display));
 	}
 
-	Vector2i Window::getSize() const
+	Vector2i WindowInternal::getSize() const
 	{
 		Vector2i size;
 		SDL_GetWindowSize(sdlWindow, &size[0], &size[1]);
 		return size;
 	}
 
-	bool Window::isFullscreen() const
+	bool WindowInternal::isFullscreen() const
 	{
 		return (SDL_GetWindowFlags(sdlWindow) & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0;
 	}
 
-	int Window::getDisplay() const
+	int WindowInternal::getDisplay() const
 	{
 		int display = SDL_GetWindowDisplayIndex(sdlWindow);
 		if (display >= 0)
@@ -91,7 +90,7 @@ namespace ve
 		throw std::runtime_error("Could not get the display the window is within. ");
 	}
 
-	UsePtr<gui::Element> Window::getRootGuiElement()
+	UsePtr<gui::Element> WindowInternal::getRootGuiElement()
 	{
 		return root;
 	}
@@ -100,31 +99,31 @@ namespace ve
 	{
 	}
 
-	void Window::handleResize(Vector2i size)
+	void WindowInternal::handleResize(Vector2i size)
 	{
-		if(root)
+		if (root)
 			root->setBounds(Recti {{0, 0}, {size[0], size[1]}});
 	}
 
-	void Window::handleInputEvent(InputEvent const & event)
+	void WindowInternal::handleInputEvent(InputEvent const & event)
 	{
 		if (root)
 			root->handleInputEvent(event, cursorPosition);
 	}
 
-	void Window::update(float dt)
+	void WindowInternal::update(float dt)
 	{
 		if (root)
 			root->update(dt);
 	}
 
-	void Window::preRenderUpdate()
+	void WindowInternal::preRenderUpdate()
 	{
 		if (root)
 			root->preRenderUpdate();
 	}
 
-	void Window::render(SDL_GLContext glContext) const
+	void WindowInternal::render(SDL_GLContext glContext) const
 	{
 		SDL_GL_MakeCurrent(sdlWindow, glContext);
 
@@ -148,17 +147,17 @@ namespace ve
 		SDL_GL_SwapWindow(sdlWindow);
 	}
 
-	void Window::setCursorPosition(std::optional<Vector2i> position)
+	void WindowInternal::setCursorPosition(std::optional<Vector2i> position)
 	{
 		cursorPosition = position;
 	}
 
-	SDL_Window * Window::getSDLWindow() const
+	SDL_Window * WindowInternal::getSDLWindow() const
 	{
 		return sdlWindow;
 	}
 
-	void Window::setRoot(OwnPtr<gui::Element> element)
+	void WindowInternal::setRoot(OwnPtr<gui::Element> element)
 	{
 		root = element;
 		Vector2i windowSize = getSize();

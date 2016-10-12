@@ -3,8 +3,6 @@
 
 namespace ve
 {
-	Cache<Image> Image::cache;
-
 	Image::Image(Vector2i size_, Format format_)
 	{
 		size = size_;
@@ -88,6 +86,10 @@ namespace ve
 	Vector<3, uint8_t> Image::getPixelRGB(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
+		if (format != RGB24)
+		{
+			throw std::runtime_error("Wrong format for getting the pixel.");
+		}
 		if (offset < 0 || pixels.size() < offset + 3)
 		{
 			throw std::runtime_error("When accessing pixel, position is out of bounds.");
@@ -98,6 +100,10 @@ namespace ve
 	Vector<4, uint8_t> Image::getPixelRGBA(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
+		if (format != RGBA32)
+		{
+			throw std::runtime_error("Wrong format for getting the pixel.");
+		}
 		if (offset < 0 || pixels.size() < offset + 4)
 		{
 			throw std::runtime_error("When accessing pixel, position is out of bounds.");
@@ -108,6 +114,10 @@ namespace ve
 	uint32_t Image::getPixelGrayScale32(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
+		if (format != GRAYSCALE32)
+		{
+			throw std::runtime_error("Wrong format for getting the pixel.");
+		}
 		if (offset < 0 || pixels.size() < offset + 4)
 		{
 			throw std::runtime_error("When accessing pixel, position is out of bounds.");
@@ -118,6 +128,10 @@ namespace ve
 	void Image::setPixelRGB24(Vector2i position, Vector<3, uint8_t> value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
+		if (format != RGB24)
+		{
+			throw std::runtime_error("Wrong format for setting the pixel.");
+		}
 		if (offset < 0 || pixels.size() < offset + 3)
 		{
 			throw std::runtime_error("When accessing pixel, position is out of bounds.");
@@ -130,6 +144,10 @@ namespace ve
 	void Image::setPixelRGBA32(Vector2i position, Vector<4, uint8_t> value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
+		if (format != RGBA32)
+		{
+			throw std::runtime_error("Wrong format for setting the pixel.");
+		}
 		if (offset < 0 || pixels.size() < offset + 4)
 		{
 			throw std::runtime_error("When accessing pixel, position is out of bounds.");
@@ -143,6 +161,10 @@ namespace ve
 	void Image::setPixelGrayScale32(Vector2i position, uint32_t value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
+		if (format != GRAYSCALE32)
+		{
+			throw std::runtime_error("Wrong format for setting the pixel.");
+		}
 		if (offset < 0 || pixels.size() < offset + 4)
 		{
 			throw std::runtime_error("When accessing pixel, position is out of bounds.");
