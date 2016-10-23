@@ -73,12 +73,12 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
-    <IncludePath>inc;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>inc;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
@@ -87,11 +87,11 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
-    <IncludePath>inc;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>inc;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
   </PropertyGroup>
@@ -164,79 +164,47 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="inc\app.h" />
-    <ClInclude Include="inc\config.h" />
-    <ClInclude Include="inc\image.h" />
-    <ClInclude Include="inc\interval.h" />
-    <ClInclude Include="inc\matrix.h" />
-    <ClInclude Include="inc\ptr.h" />
-    <ClInclude Include="inc\quaternion.h" />
-    <ClInclude Include="inc\rect.h" />
-    <ClInclude Include="inc\resource_manager.h" />
-    <ClInclude Include="inc\serialize.h" />
-    <ClInclude Include="inc\stringutil.h" />
-    <ClInclude Include="inc\vector.h" />
-    <ClInclude Include="src\display.h" />
-    <ClInclude Include="src\event.h" />
-    <ClInclude Include="src\gui\gui.h" />
-    <ClInclude Include="src\gui\sprite.h" />
-    <ClInclude Include="src\render\glcorearb.h" />
-    <ClInclude Include="src\gui\container.h" />
-    <ClInclude Include="src\gui\element.h" />
-    <ClInclude Include="src\gui\viewport.h" />
-    <ClInclude Include="src\render\material.h" />
+    <ClInclude Include="api\app.h" />
+    <ClInclude Include="api\coord.h" />
+    <ClInclude Include="api\image.h" />
+    <ClInclude Include="api\interval.h" />
+    <ClInclude Include="api\panel.h" />
+    <ClInclude Include="api\ptr.h" />
+    <ClInclude Include="api\rect.h" />
+    <ClInclude Include="api\sprite.h" />
+    <ClInclude Include="src\texture.h" />
+    <ClInclude Include="api\text_button.h" />
+    <ClInclude Include="api\ve.h" />
+    <ClInclude Include="api\widget.h" />
+    <ClInclude Include="api\window.h" />
+    <ClInclude Include="src\app_internal.h" />
     <ClInclude Include="src\cache.h" />
-    <ClInclude Include="inc\mesh.h" />
-    <ClInclude Include="src\render\model.h" />
-    <ClInclude Include="src\render\open_gl.h" />
-    <ClInclude Include="inc\ray.h" />
-    <ClInclude Include="src\render\render.h" />
-    <ClInclude Include="src\render\stage.h" />
-    <ClInclude Include="src\render\texture_internal.h" />
-    <ClInclude Include="src\scene\scene.h" />
-    <ClInclude Include="inc\render\texture.h" />
-    <ClInclude Include="src\scene\entity.h" />
-    <ClInclude Include="src\scene\camera.h" />
-    <ClInclude Include="src\scene\light.h" />
-    <ClInclude Include="src\render\shader.h" />
-    <ClInclude Include="inc\std\optional.hpp" />
-    <ClInclude Include="src\render\uniform.h" />
-    <ClInclude Include="src\text.h" />
-    <ClInclude Include="src\window.h" />
-    <ClInclude Include="src\render\vertex_buffer_object.h" />
+    <ClInclude Include="src\glcorearb.h" />
+    <ClInclude Include="src\image_internal.h" />
+    <ClInclude Include="src\object_list.h" />
+    <ClInclude Include="src\open_gl.h" />
+    <ClInclude Include="src\panel_internal.h" />
+    <ClInclude Include="api\resource_store.h" />
+    <ClInclude Include="src\resources_store_internal.h" />
+    <ClInclude Include="src\sprite_internal.h" />
+    <ClInclude Include="src\text_button_internal.h" />
+    <ClInclude Include="src\widget_internal.h" />
     <ClInclude Include="src\window_internal.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\config.cpp" />
-    <ClCompile Include="src\image.cpp" />
-    <ClCompile Include="src\stringutil.cpp" />
-    <ClCompile Include="src\app.cpp" />
-    <ClCompile Include="src\display.cpp" />
-    <ClCompile Include="src\event.cpp" />
-    <ClCompile Include="src\gui\container.cpp" />
-    <ClCompile Include="src\gui\element.cpp" />
-    <ClCompile Include="src\gui\gui.cpp" />
-    <ClCompile Include="src\gui\sprite.cpp" />
-    <ClCompile Include="src\gui\viewport.cpp" />
-    <ClCompile Include="src\render\material.cpp" />
-    <ClCompile Include="src\mesh.cpp" />
-    <ClCompile Include="src\render\model.cpp" />
-    <ClCompile Include="src\render\open_gl.cpp" />
-    <ClCompile Include="src\render\render.cpp" />
-    <ClCompile Include="src\render\stage.cpp" />
-    <ClCompile Include="src\render\texture_internal.cpp" />
-    <ClCompile Include="src\text.cpp" />
-    <ClCompile Include="src\scene\scene.cpp" />
-    <ClCompile Include="src\scene\entity.cpp" />
-    <ClCompile Include="src\scene\camera.cpp" />
-    <ClCompile Include="src\scene\light.cpp" />
-    <ClCompile Include="src\render\shader.cpp" />
-    <ClCompile Include="src\render\uniform.cpp" />
-    <ClCompile Include="src\render\vertex_buffer_object.cpp" />
-    <ClCompile Include="src\window_internal.cpp" />
+    <Text Include="src\!DESIGN.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\!DESIGN.txt" />
+    <ClCompile Include="src\app_internal.cpp" />
+    <ClCompile Include="src\image_internal.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\open_gl.cpp" />
+    <ClCompile Include="src\panel_internal.cpp" />
+    <ClCompile Include="src\resource_store_internal.cpp" />
+    <ClCompile Include="src\sprite_internal.cpp" />
+    <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\text_button_internal.cpp" />
+    <ClCompile Include="src\window_internal.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

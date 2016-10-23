@@ -1,4 +1,4 @@
-#include "render/open_gl.h"
+#include "open_gl.h"
 #include "rect.h"
 #include <stack>
 #include <SDL.h>

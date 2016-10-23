@@ -1,30 +1,30 @@
-#include "app.h"
-#include "render/open_gl.h"
-#include "window_internal.h"
-//#include "input_system.h"
-//#include "resources.h"
-//#include "scene.h"
+#include "app_internal.h"
+#include "ve.h"
+#include "open_gl.h"
 #include <SDL.h>
-
-//#include "audio.h"
 
 namespace ve
 {
-	void handleSDLEvent(SDL_Event const & event);
-	UsePtr<WindowInternal> getWindowFromId(unsigned int id);
-
-	std::set<OwnPtr<WindowInternal>> windows;
-	std::set<OwnPtr<scene::Scene>> scenes;
-	bool looping;
-	float targetFrameRate = 60.f;
-	SDL_GLContext glContext = nullptr;
-
-	void loop()
+	AppInternal::AppInternal()
 	{
 		looping = true;
+		secondsPerUpdate = 1.f / 24.f;
+		resourceStore.setNew();
+
+		// Start SDL.
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+		{
+			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
+		}
+	}
+
+	void AppInternal::loop()
+	{
+		float lastFrameTime = SDL_GetTicks() / 1000.f;
+		float accumulator = 0.f;
 		while (looping)
 		{
-			float frameStartTime = SDL_GetTicks() / 1000.f;
+			float currentFrameTime = SDL_GetTicks() / 1000.f;
 
 			//// Handle events
 			//controllers::startFrame();
@@ -46,66 +46,69 @@ namespace ve
 			//	}
 			//}
 
+			windows.processElementsToErase();
+
 			// Update
-			float dt = 1.f / targetFrameRate;
-			for (auto & window : windows)
+			while (accumulator >= secondsPerUpdate)
 			{
-				window->update(dt);
-			}
-			for (auto & scene : scenes)
-			{
-				scene->update(dt);
+				ve::update(secondsPerUpdate);
+
+				for (auto & window : windows)
+				{
+					window->update(secondsPerUpdate);
+				}
+				//for (auto & scene : scenes)
+				//{
+				//	scene->update(dt);
+				//}
+
+				accumulator -= secondsPerUpdate;
 			}
 
 			// PreRender Update
 			for (auto & window : windows)
 			{
-				window->preRenderUpdate();
+				//window->preRenderUpdate();
 			}
 
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
-				window->render(glContext);
+				//window->render(glContext);
 			}
 
-			// FIX THIS: Introduce better loop timing
-			float delayTime = (1.f / targetFrameRate) - (SDL_GetTicks() / 1000.f - frameStartTime);
-			if (delayTime > 0)
-			{
-				SDL_Delay((unsigned int)(delayTime * 1000));
-			}
+			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
+			// This algorithm is from http://gafferongames.com/game-physics/fix-your-timestep.
+			accumulator += currentFrameTime - lastFrameTime;
+			lastFrameTime = currentFrameTime;
 		}
 	}
 
-	void quit()
+	void AppInternal::quit()
 	{
 		looping = false;
 	}
 
-	UsePtr<Window> createWindow(std::string const & title)
+	UsePtr<Window> AppInternal::createWindow()
 	{
-		auto window = OwnPtr<WindowInternal>::createNew(title);
+		auto window = OwnPtr<WindowInternal>::createNew();
 		if (windows.empty())
 		{
 			glContext = SDL_GL_CreateContext(window->getSDLWindow());
 			glInitialize();
 		}
-		windows.insert(window);
+		windows.push_back(window);
 		return window;
 	}
 
-	void destroyWindow(UsePtr<Window> window)
+	void AppInternal::destroyWindow(UsePtr<Window> window)
 	{
-		if (!window.isValid())
+		auto it = std::find(windows.begin(), windows.end(), window);
+		if (it == windows.end())
 		{
-			throw std::runtime_error("Invalid window.");
+			throw std::runtime_error("Window not found. ");
 		}
-		if (!scenes.empty() && windows.size() == 1)
-		{
-			throw std::runtime_error("All scenes must be removed before the last window is removed, because the OpenGL context is destroyed. ");
-		}
-		windows.erase(std::find(windows.begin(), windows.end(), window));
+		windows.erase(it);
 		if (windows.empty())
 		{
 			SDL_GL_DeleteContext(glContext);
@@ -113,34 +116,21 @@ namespace ve
 		}
 	}
 
-	UsePtr<scene::Scene> createScene()
+	UsePtr<ResourceStore> AppInternal::getResourceStore() const
 	{
-		if (windows.empty())
-		{
-			throw std::runtime_error("A scene may not be created until a window has been created, because it needs an OpenGL context. ");
-		}
-		auto scene = OwnPtr<scene::Scene>::createNew();
-		scenes.insert(scene);
-		return scene;
+		return resourceStore;
 	}
 
-	void destroyScene(UsePtr<scene::Scene> scene)
+	UsePtr<ResourceStoreInternal> AppInternal::getResourceStoreInternal() const
 	{
-		if (!scene.isValid())
-		{
-			throw std::runtime_error("Invalid scene.");
-		}
-		scenes.erase(std::find(scenes.begin(), scenes.end(), scene));
+		return resourceStore;
 	}
 
-	void showMessage(std::string const & message)
+	void AppInternal::handleSDLEvent(SDL_Event const & sdlEvent)
 	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Information", message.c_str(), nullptr);
-	}
+		UsePtr<WindowInternal> window;
 
-	void handleSDLEvent(SDL_Event const & sdlEvent)
-	{
-		UsePtr<Window> window;
+		// Certain events are associated with a window. Get that window.
 		switch (sdlEvent.type)
 		{
 			case SDL_WINDOWEVENT:
@@ -159,55 +149,57 @@ namespace ve
 		switch (sdlEvent.type)
 		{
 			case SDL_QUIT:
-				quit();
 				break;
 			case SDL_WINDOWEVENT:
 				switch (sdlEvent.window.event)
 				{
 					case SDL_WINDOWEVENT_CLOSE:
-						quit();
+						if (window->callCloseHandler())
+						{
+							destroyWindow(window);
+						}
 						break;
-					case SDL_WINDOWEVENT_SIZE_CHANGED:
-						window->handleResize({sdlEvent.window.data1, sdlEvent.window.data2});
-						break;
-					case SDL_WINDOWEVENT_LEAVE:
-						window->setCursorPosition(std::nullopt);
-						break;
+					//case SDL_WINDOWEVENT_SIZE_CHANGED:
+					//	window->handleResize({sdlEvent.window.data1, sdlEvent.window.data2});
+					//	break;
+					//case SDL_WINDOWEVENT_LEAVE:
+					//	window->setCursorPosition(std::nullopt);
+					//	break;
 				}
-			case SDL_KEYDOWN:
-			case SDL_KEYUP:
-			{
-				KeyboardEvent kevent;
-				kevent.setFromSDL(sdlEvent.type, sdlEvent.key.keysym.sym);
-				window->handleInputEvent(kevent);
-				break;
-			}
-			case SDL_MOUSEBUTTONDOWN:
-			case SDL_MOUSEBUTTONUP:
-			{
-				MouseButtonEvent mbevent;
-				mbevent.setFromSDL(sdlEvent.type, sdlEvent.button.button);
-				window->handleInputEvent(mbevent);
-				break;
-			}
-			case SDL_MOUSEMOTION:
-			{
-				MouseMoveEvent mmevent;
-				mmevent.setFromSDL(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
-				window->handleInputEvent(mmevent);
-				break;
-			}
-			case SDL_MOUSEWHEEL:
-			{
-				MouseWheelEvent mwevent;
-				mwevent.setFromSDL(sdlEvent.wheel.y * (sdlEvent.wheel.direction == SDL_MOUSEWHEEL_NORMAL ? 1 : -1));
-				window->handleInputEvent(mwevent);
-				break;
-			}
+			//case SDL_KEYDOWN:
+			//case SDL_KEYUP:
+			//{
+			//	KeyboardEvent kevent;
+			//	kevent.setFromSDL(sdlEvent.type, sdlEvent.key.keysym.sym);
+			//	window->handleInputEvent(kevent);
+			//	break;
+			//}
+			//case SDL_MOUSEBUTTONDOWN:
+			//case SDL_MOUSEBUTTONUP:
+			//{
+			//	MouseButtonEvent mbevent;
+			//	mbevent.setFromSDL(sdlEvent.type, sdlEvent.button.button);
+			//	window->handleInputEvent(mbevent);
+			//	break;
+			//}
+			//case SDL_MOUSEMOTION:
+			//{
+			//	MouseMoveEvent mmevent;
+			//	mmevent.setFromSDL(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+			//	window->handleInputEvent(mmevent);
+			//	break;
+			//}
+			//case SDL_MOUSEWHEEL:
+			//{
+			//	MouseWheelEvent mwevent;
+			//	mwevent.setFromSDL(sdlEvent.wheel.y * (sdlEvent.wheel.direction == SDL_MOUSEWHEEL_NORMAL ? 1 : -1));
+			//	window->handleInputEvent(mwevent);
+			//	break;
+			//}
 		}
 	}
 
-	UsePtr<Window> getWindowFromId(unsigned int id)
+	UsePtr<WindowInternal> AppInternal::getWindowFromId(unsigned int id)
 	{
 		SDL_Window * sdlWindow = SDL_GetWindowFromID(id);
 		if (sdlWindow != NULL)
@@ -220,65 +212,6 @@ namespace ve
 				}
 			}
 		}
-		return UsePtr<Window>();
+		return UsePtr<WindowInternal>();
 	}
-
-	//void setCursorActive(bool)
-	//{
-	//	// TODO
-	//}
 }
-
-#include "app.h"
-#include <SDL.h>
-
-// Called by SDL to run the entire app.
-int main(int argc, char *argv[])
-{
-#undef main
-	std::vector<std::string> args;
-	try
-	{
-		// Grab the params.
-		for (int i = 1; i < argc; ++i) // don't include the 0th arg, because it is the program name
-		{
-			args.push_back(std::string(argv[i]));
-		}
-
-		// Start SDL.
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-		{
-			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
-		}
-
-		// Initialize the singletons.
-		//InputSystem::createInstance();
-		//shaderCache.setNew();
-		//textureCache.setNew();
-		//fontCache.setNew();
-		//SceneModelCache::createInstance();
-
-		//SDL_InitSubSystem(SDL_INIT_AUDIO);
-
-		ve::main(args);
-
-		//scenes.clear();
-		ve::windows.clear();
-		// Destroy the singletons.
-		//fontCache.setNull();
-		//textureCache.setNull();
-		//shaderCache.setNull();
-		//SceneModelCache::destroyInstance();
-		//InputSystem::destroyInstance();
-
-		// Stop SDL.
-		SDL_Quit();
-	}
-	catch (std::exception const & e)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", e.what(), nullptr);
-		return -1;
-	}
-	return 0;
-}
-

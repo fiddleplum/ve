@@ -43,7 +43,7 @@ namespace ve
 
 	// The base class for OwnPtr and UsePtr.
 	template <typename T, bool OWN>
-	class PtrBase
+	class PtrBase final
 	{
 	public:
 		// Default constructor. Initializes this to point to null.
@@ -304,7 +304,7 @@ namespace ve
 			{
 				if (c->oc == 1 && c->uc > 0)
 				{
-					throw bad_destroy_exception(); // This PtrBase still has other PtrBase[!OWN] out there, so it can't be destroyed.
+					throw bad_destroy_exception(); // This OwnPtr still has other UsePtrs out there, so it can't be destroyed. All other UsePtrs need to be cleared.
 				}
 				c->oc--;
 				if (c->oc == 0)
@@ -393,7 +393,6 @@ namespace ve
 	template <typename T, bool OWN> template <typename Y, bool OWNY>
 	bool PtrBase<T, OWN>::operator == (PtrBase<Y, OWNY> const & ptr) const
 	{
-		return (void const *)p == (void const *)ptr.p;
+		return (void const *)c == (void const *)ptr.c;
 	}
 }
-

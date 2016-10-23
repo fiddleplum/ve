@@ -29,7 +29,7 @@ namespace ve
 		void clean();
 
 		// Gets a list of objects in the cache by name.
-		std::vector<std::string> getObjectNames();
+		std::vector<std::string> getObjectNames() const;
 
 	private:
 		std::map<std::string, OwnPtr<Object>> objects;
@@ -113,7 +113,7 @@ namespace ve
 	}
 
 	template <typename Object>
-	std::vector<std::string> Cache<Object>::getObjectNames()
+	std::vector<std::string> Cache<Object>::getObjectNames() const
 	{
 		std::vector<std::string> names;
 		for (auto const & pair : objects)
@@ -123,4 +123,3 @@ namespace ve
 		return names;
 	}
 }
-

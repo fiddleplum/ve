@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.h"
+#include "coord.h"
 
 namespace ve
 {
@@ -16,19 +16,19 @@ namespace ve
 		Interval(Interval<dim, T> const & other);
 
 		// Constructs to min and max.
-		Interval(Vector<dim, T> min, Vector<dim, T> max);
+		Interval(Coord<dim, T> min, Coord<dim, T> max);
 
 		// Returns true if every element in v is within the corresponding dimension of the interval.
-		bool contains(Vector<dim, T> v) const;
+		bool contains(Coord<dim, T> v) const;
 
 		// Returns true if any part of the interval is within the other and vice versa.
 		bool intersects(Interval<dim, T> other) const;
 
 		// Returns the point closest to p within within the interval.
-		Vector<dim, T> closest(Vector<dim, T> p) const;
+		Coord<dim, T> closest(Coord<dim, T> p) const;
 
 		// Returns an interval that is the interval extended around p by decreasing the min or increasing the max, if necessary.
-		Interval<dim, T> extendedTo(Vector<dim, T> p) const;
+		Interval<dim, T> extendedTo(Coord<dim, T> p) const;
 
 		// Returns an interval that is the union of this and other.
 		Interval<dim, T> unionedWith(Interval<dim, T> const & other) const;
@@ -37,22 +37,22 @@ namespace ve
 		Interval<dim, T> intersectedWith(Interval<dim, T> const & other) const;
 
 		// Returns the size of the interval (max - min). If T is an integer, then one is added to the result.
-		Vector<dim, T> getSize() const;
+		Coord<dim, T> getSize() const;
 
 		// Returns a position or size aligned to the interval.
-		template <typename Y> Vector<dim, T> getSizeRelativeToThis(Vector<dim, Y> fractionOfThisSize, Vector<dim, T> offset) const;
+		template <typename Y> Coord<dim, T> getSizeRelativeToThis(Coord<dim, Y> fractionOfThisSize, Coord<dim, T> offset) const;
 
 		// Returns an object position aligned to the interval, given the size of an object. You may want to set the size of the object first using the function above.
-		template <typename Y> Vector<dim, T> getPositionRelativeToThis(Vector<dim, T> objectSize, Vector<dim, Y> fractionOfObjectSize, Vector<dim, Y> fractionOfThisSize, Vector<dim, T> offset) const;
+		template <typename Y> Coord<dim, T> getPositionRelativeToThis(Coord<dim, T> objectSize, Coord<dim, Y> fractionOfObjectSize, Coord<dim, Y> fractionOfThisSize, Coord<dim, T> offset) const;
 
 		// Sets the min to position while keeping the size.
-		void setPosition(Vector<dim, T> position);
+		void setPosition(Coord<dim, T> position);
 
 		// Sets the max to (min + size). If T is an integer, then subtract one from max, because max is included in the range.
-		void setSize(Vector<dim, T> size);
+		void setSize(Coord<dim, T> size);
 
-		Vector<dim, T> min;
-		Vector<dim, T> max;
+		Coord<dim, T> min;
+		Coord<dim, T> max;
 	};
 
 	template <int dim, typename T>
@@ -68,14 +68,14 @@ namespace ve
 	}
 
 	template <int dim, typename T>
-	Interval<dim, T>::Interval(Vector<dim, T> min_, Vector<dim, T> max_)
+	Interval<dim, T>::Interval(Coord<dim, T> min_, Coord<dim, T> max_)
 	{
 		min = min_;
 		max = max_;
 	}
 
 	template <int dim, typename T>
-	bool Interval<dim, T>::contains(Vector<dim, T> v) const
+	bool Interval<dim, T>::contains(Coord<dim, T> v) const
 	{
 		for (int i = 0; i < dim; ++i)
 		{
@@ -101,9 +101,9 @@ namespace ve
 	}
 
 	template <int dim, typename T>
-	Vector<dim, T> Interval<dim, T>::closest(Vector<dim, T> p) const
+	Coord<dim, T> Interval<dim, T>::closest(Coord<dim, T> p) const
 	{
-		Vector<dim, T> r;
+		Coord<dim, T> r;
 		for (int i = 0; i < dim; ++i)
 		{
 			if (p[i] < min[i])
@@ -123,7 +123,7 @@ namespace ve
 	}
 
 	template <int dim, typename T>
-	Interval<dim, T> Interval<dim, T>::extendedTo(Vector<dim, T> p) const
+	Interval<dim, T> Interval<dim, T>::extendedTo(Coord<dim, T> p) const
 	{
 		Interval<dim, T> r;
 		for (int i = 0; i < dim; ++i)
@@ -163,21 +163,21 @@ namespace ve
 	}
 
 	template <int dim, typename T>
-	Vector<dim, T> Interval<dim, T>::getSize() const
+	Coord<dim, T> Interval<dim, T>::getSize() const
 	{
-		Vector<dim, T> r = max - min;
+		Coord<dim, T> r = max - min;
 		if (std::is_integral<T>::value)
 		{
-			r += Vector<dim, T>::filled(1);
+			r += Coord<dim, T>::filled(1);
 		}
 		return r;
 	}
 
 	template <int dim, typename T> template <typename Y>
-	Vector<dim, T> Interval<dim, T>::getSizeRelativeToThis(Vector<dim, Y> fractionOfThisSize, Vector<dim, T> offset) const
+	Coord<dim, T> Interval<dim, T>::getSizeRelativeToThis(Coord<dim, Y> fractionOfThisSize, Coord<dim, T> offset) const
 	{
-		Vector<dim, T> thisSize = getSize();
-		Vector<dim, T> r;
+		Coord<dim, T> thisSize = getSize();
+		Coord<dim, T> r;
 		for (int i = 0; i < dim; ++i)
 		{
 			r[i] = offset[i] + (T)(thisSize[i] * fractionOfThisSize[i]);
@@ -186,10 +186,10 @@ namespace ve
 	}
 
 	template <int dim, typename T> template <typename Y>
-	Vector<dim, T> Interval<dim, T>::getPositionRelativeToThis(Vector<dim, T> objectSize, Vector<dim, Y> fractionOfObjectSize, Vector<dim, Y> fractionOfThisSize, Vector<dim, T> offset) const
+	Coord<dim, T> Interval<dim, T>::getPositionRelativeToThis(Coord<dim, T> objectSize, Coord<dim, Y> fractionOfObjectSize, Coord<dim, Y> fractionOfThisSize, Coord<dim, T> offset) const
 	{
-		Vector<dim, T> thisSize = getSize();
-		Vector<dim, T> r;
+		Coord<dim, T> thisSize = getSize();
+		Coord<dim, T> r;
 		for (int i = 0; i < dim; ++i)
 		{
 			r[i] = min[i] + offset[i] + (T)(thisSize[i] * fractionOfThisSize[i]) - (T)(objectSize[i] * fractionOfObjectSize[i]);
@@ -198,20 +198,19 @@ namespace ve
 	}
 
 	template <int dim, typename T>
-	void Interval<dim, T>::setPosition(Vector<dim, T> position)
+	void Interval<dim, T>::setPosition(Coord<dim, T> position)
 	{
 		max += position - min;
 		min = position;
 	}
 
 	template <int dim, typename T>
-	void Interval<dim, T>::setSize(Vector<dim, T> size)
+	void Interval<dim, T>::setSize(Coord<dim, T> size)
 	{
 		max = min + size;
 		if (std::is_integral<T>::value)
 		{
-			max -= Vector<dim, T>::filled(1);
+			max -= Coord<dim, T>::filled(1);
 		}
 	}
 }
-
