@@ -13,22 +13,22 @@ namespace ve
 		// Default constructor.
 		ObjectList();
 
-		// Adds an item at the end.
-		void push_back(T const & item);
+		// Adds an element at the end.
+		void push_back(T const & element);
 
-		// Inserts value before pos
-		typename std::list<T>::iterator insert(typename std::list<T>::const_iterator pos, T const & value);
+		// Inserts an element before position
+		typename std::list<T>::iterator insert(typename std::list<T>::const_iterator position, T const & element);
 
-		// Removes the element at pos.
-		void erase(typename std::list<T>::const_iterator pos);
+		// Removes the element at position.
+		void erase(typename std::list<T>::const_iterator position);
 
 		// Returns true if there there are no elements.
 		bool empty() const;
 
-		// Removes all items.
+		// Removes all elements.
 		void clear();
 
-		// Processes any removes that have accumulated since the last call.
+		// Processes any erased elements that have accumulated since the last call.
 		void processElementsToErase();
 
 		// The iterators.
@@ -55,22 +55,21 @@ namespace ve
 	}
 
 	template <typename T>
-	void ObjectList<T>::push_back(T const & item)
+	void ObjectList<T>::push_back(T const & element)
 	{
-		list.push_back(item);
+		list.push_back(element);
 	}
 
 	template <typename T>
-	typename std::list<T>::iterator ObjectList<T>::insert(typename std::list<T>::const_iterator pos, T const & value)
+	typename std::list<T>::iterator ObjectList<T>::insert(typename std::list<T>::const_iterator position, T const & element)
 	{
-		return list.insert(pos, value);
+		return list.insert(position, element);
 	}
 
 	template <typename T>
-	void ObjectList<T>::erase(typename std::list<T>::const_iterator pos)
+	void ObjectList<T>::erase(typename std::list<T>::const_iterator position)
 	{
-		auto result = elementsToErase.insert(pos);
-
+		elementsToErase.insert(position);
 	}
 
 	template <typename T>

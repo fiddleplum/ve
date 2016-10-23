@@ -47,4 +47,11 @@ namespace ve
 	{
 		gui->update(dt);
 	}
+
+	void WindowInternal::render(UsePtr<Renderer> renderer) const
+	{
+		//renderer->render(scene, stage)
+	/*	What goes on here?
+			It needs to call the renderer to render using a render camera, render scene, and viewport.
+*/	}
 }

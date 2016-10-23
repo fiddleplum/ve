@@ -1,0 +1,8 @@
+# Render Stage Architecture
+
+Every stage has a render texture as output and a scene as input. A render texture knows its own stage.
+When you apply a render texture to a material, the material knows which scene it is apart of,
+and tells the scene to add the render texture's stage as a dependency. Then when the stages
+are sorted, the use the render texture/scene dependency graph to get the right ordering.
+Research topological sorting.
+

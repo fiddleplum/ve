@@ -5,6 +5,7 @@
 #include "ptr.h"
 #include "object_list.h"
 #include "resources_store_internal.h"
+#include "render/renderer.h"
 
 namespace ve
 {
@@ -38,9 +39,9 @@ namespace ve
 
 		bool looping;
 		float secondsPerUpdate;
-		SDL_GLContext glContext;
 		ObjectList<OwnPtr<WindowInternal>> windows;
 		OwnPtr<ResourceStoreInternal> resourceStore;
+		OwnPtr<Renderer> renderer;
 	};
 
 	// Called to get the single instance of the app.

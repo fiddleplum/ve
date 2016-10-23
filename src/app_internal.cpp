@@ -1,6 +1,6 @@
 #include "app_internal.h"
 #include "ve.h"
-#include "open_gl.h"
+#include "render/open_gl.h"
 #include <SDL.h>
 
 namespace ve
@@ -74,7 +74,7 @@ namespace ve
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
-				//window->render(glContext);
+				window->render(renderer);
 			}
 
 			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
@@ -94,8 +94,7 @@ namespace ve
 		auto window = OwnPtr<WindowInternal>::createNew();
 		if (windows.empty())
 		{
-			glContext = SDL_GL_CreateContext(window->getSDLWindow());
-			glInitialize();
+			renderer.createNew(window->getSDLWindow());
 		}
 		windows.push_back(window);
 		return window;
@@ -111,8 +110,7 @@ namespace ve
 		windows.erase(it);
 		if (windows.empty())
 		{
-			SDL_GL_DeleteContext(glContext);
-			glContext = 0;
+			renderer.setNull();
 		}
 	}
 

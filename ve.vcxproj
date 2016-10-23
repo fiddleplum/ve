@@ -172,38 +172,42 @@
     <ClInclude Include="api\ptr.h" />
     <ClInclude Include="api\rect.h" />
     <ClInclude Include="api\sprite.h" />
-    <ClInclude Include="src\texture.h" />
+    <ClInclude Include="src\object_map.h" />
+    <ClInclude Include="src\render\renderer.h" />
+    <ClInclude Include="src\render\texture.h" />
     <ClInclude Include="api\text_button.h" />
     <ClInclude Include="api\ve.h" />
     <ClInclude Include="api\widget.h" />
     <ClInclude Include="api\window.h" />
     <ClInclude Include="src\app_internal.h" />
     <ClInclude Include="src\cache.h" />
-    <ClInclude Include="src\glcorearb.h" />
+    <ClInclude Include="src\render\glcorearb.h" />
     <ClInclude Include="src\image_internal.h" />
     <ClInclude Include="src\object_list.h" />
-    <ClInclude Include="src\open_gl.h" />
-    <ClInclude Include="src\panel_internal.h" />
+    <ClInclude Include="src\render\open_gl.h" />
+    <ClInclude Include="src\gui\panel_internal.h" />
     <ClInclude Include="api\resource_store.h" />
     <ClInclude Include="src\resources_store_internal.h" />
-    <ClInclude Include="src\sprite_internal.h" />
-    <ClInclude Include="src\text_button_internal.h" />
-    <ClInclude Include="src\widget_internal.h" />
+    <ClInclude Include="src\gui\sprite_internal.h" />
+    <ClInclude Include="src\gui\text_button_internal.h" />
+    <ClInclude Include="src\gui\widget_internal.h" />
     <ClInclude Include="src\window_internal.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="api\_notes.txt" />
     <Text Include="src\!DESIGN.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app_internal.cpp" />
     <ClCompile Include="src\image_internal.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\open_gl.cpp" />
-    <ClCompile Include="src\panel_internal.cpp" />
+    <ClCompile Include="src\render\open_gl.cpp" />
+    <ClCompile Include="src\gui\panel_internal.cpp" />
+    <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\resource_store_internal.cpp" />
-    <ClCompile Include="src\sprite_internal.cpp" />
-    <ClCompile Include="src\texture.cpp" />
-    <ClCompile Include="src\text_button_internal.cpp" />
+    <ClCompile Include="src\gui\sprite_internal.cpp" />
+    <ClCompile Include="src\render\texture.cpp" />
+    <ClCompile Include="src\gui\text_button_internal.cpp" />
     <ClCompile Include="src\window_internal.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

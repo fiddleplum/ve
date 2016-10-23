@@ -2,7 +2,7 @@
 
 #include "resource_store.h"
 #include "image_internal.h"
-#include "texture.h"
+#include "render/texture.h"
 #include "cache.h"
 
 namespace ve
