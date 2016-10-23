@@ -3,6 +3,11 @@
 
 namespace ve
 {
+	void SpriteInternal::setBounds(Recti bounds_)
+	{
+		bounds = bounds_;
+	}
+
 	void SpriteInternal::setImage(std::string const & name)
 	{
 		auto textureName = name + "_texture";

@@ -4,32 +4,69 @@
 
 namespace ve
 {
+	void PanelInternal::setBounds(Recti bounds_)
+	{
+		bounds = bounds_;
+		for (auto widgetInfo : widgetInfos)
+		{
+			updateWidgetBounds(widgetInfo);
+		}
+	}
+
 	UsePtr<Sprite> PanelInternal::createSprite()
 	{
-		auto widget = OwnPtr<SpriteInternal>::createNew();
-		widgets.push_back(widget);
-		return widget;
+		return createWidget<SpriteInternal>();
 	}
 
 	UsePtr<TextButton> PanelInternal::createTextButton()
 	{
-		auto widget = OwnPtr<TextButtonInternal>::createNew();
-		widgets.push_back(widget);
-		return widget;
+		return createWidget<TextButtonInternal>();
+	}
+
+	void PanelInternal::setBounds(UsePtr<Widget> widget, Coord2f originInPanel, Coord2f originInWidget, Coord2i originOffset, Coord2f sizeInPanel, Coord2i sizeOffset)
+	{
+		for (auto it = widgetInfos.begin(); it != widgetInfos.end(); it++)
+		{
+			if (it->widget == widget)
+			{
+				auto & widgetInfo = *it;
+				widgetInfo.originInPanel = originInPanel;
+				widgetInfo.originInWidget = originInWidget;
+				widgetInfo.originOffset = originOffset;
+				widgetInfo.sizeInPanel = sizeInPanel;
+				widgetInfo.sizeOffset = sizeOffset;
+				updateWidgetBounds(widgetInfo);
+				return;
+			}
+		}
+		throw std::runtime_error("Widget not found. ");
 	}
 
 	void PanelInternal::update(float dt)
 	{
-		widgets.processElementsToErase();
+		widgetInfos.processElementsToErase();
 
-		for (auto widget : widgets)
+		for (auto widgetInfo : widgetInfos)
 		{
-			widget->update(dt);
+			widgetInfo.widget->update(dt);
 		}
 	}
 
-	void PanelInternal::addWidget(OwnPtr<WidgetInternal> widget)
+	template <typename T> UsePtr<T> PanelInternal::createWidget()
 	{
-		widgets.push_back(widget);
+		OwnPtr<T> widget = OwnPtr<T>::createNew();
+		WidgetInfo widgetInfo;
+		widgetInfo.widget = widget;
+		widgetInfos.push_back(widgetInfo);
+		updateWidgetBounds(widgetInfo);
+		return widget;
+	}
+
+	void PanelInternal::updateWidgetBounds(WidgetInfo const & widgetInfo) const
+	{
+		Coord2f panelSize = Coord2f {bounds.max - bounds.min + Coord2i {1, 1}};
+		Coord2f widgetSize = panelSize.scale(widgetInfo.sizeInPanel) + Coord2f {widgetInfo.sizeOffset};
+		Coord2f widgetPosition = panelSize.scale(widgetInfo.originInPanel) - widgetSize.scale(widgetInfo.originInWidget) + Coord2f {widgetInfo.originOffset};
+		widgetInfo.widget->setBounds(Recti {Coord2i{widgetPosition}, Coord2i{widgetPosition + widgetSize}});
 	}
 }

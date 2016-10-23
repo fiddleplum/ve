@@ -8,7 +8,8 @@ namespace ve
 	class TextButtonInternal : public virtual TextButton, public virtual WidgetInternal
 	{
 	public:
-		TextButtonInternal();
+		// Sets the bounds of the sprite.
+		void setBounds(Recti bounds) override;
 
 		void update(float dt);
 

@@ -13,6 +13,7 @@ namespace ve
 
 		//virtual void setTexture(UsePtr<Texture> texture) = 0;
 
+	protected:
 		// Virtual destructor.
 		virtual ~Sprite() = default;
 	};

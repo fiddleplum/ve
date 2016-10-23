@@ -42,6 +42,7 @@ namespace ve
 		// Write a pixel.
 		virtual void setPixelGrayScale32(Coord2i position, uint32_t value) = 0;
 
+	protected:
 		// Virtual destructor.
 		virtual ~Image() = default;
 	};

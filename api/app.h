@@ -21,6 +21,7 @@ namespace ve
 		// Gets the resource manager.
 		virtual UsePtr<ResourceStore> getResourceStore() const = 0;
 
+	protected:
 		// Virtual destructor.
 		virtual ~App() = default;
 	};

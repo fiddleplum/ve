@@ -6,7 +6,7 @@ namespace ve
 {
 	class TextButton : public virtual Widget
 	{
-	public:
+	protected:
 		// Virtual destructor.
 		virtual ~TextButton() = default;
 	};

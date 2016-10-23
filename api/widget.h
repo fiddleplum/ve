@@ -4,8 +4,7 @@ namespace ve
 {
 	class Widget
 	{
-	public:
-
+	protected:
 		// Virtual destructor.
 		virtual ~Widget() = default;
 	};

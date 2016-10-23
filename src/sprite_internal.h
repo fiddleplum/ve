@@ -10,6 +10,9 @@ namespace ve
 	class SpriteInternal : public virtual Sprite, public virtual WidgetInternal
 	{
 	public:
+		// Sets the bounds of the sprite.
+		void setBounds(Recti bounds) override;
+
 		// Loads a image from the store into the sprite.
 		void setImage(std::string const & name) override;
 
@@ -17,6 +20,7 @@ namespace ve
 		void update(float dt);
 
 	private:
+		Recti bounds;
 		UsePtr<Texture> texture;
 	};
 }

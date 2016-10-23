@@ -2,7 +2,7 @@
 
 namespace ve
 {
-	TextButtonInternal::TextButtonInternal()
+	void TextButtonInternal::setBounds(Recti bounds_)
 	{
 
 	}

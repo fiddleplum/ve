@@ -15,6 +15,7 @@ namespace ve
 		// Gets the root panel element which is the gui.
 		virtual UsePtr<Panel> getGui() const = 0;
 
+	protected:
 		// Virtual destructor.
 		virtual ~Window() = default;
 	};
