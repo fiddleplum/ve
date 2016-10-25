@@ -36,4 +36,29 @@ namespace ve
 	{
 		textureCache.create(name, image);
 	}
+
+	UsePtr<Mesh> ResourceStoreInternal::getMesh(std::string const & name)
+	{
+		return meshCache.get(name);
+	}
+
+	UsePtr<MeshInternal> ResourceStoreInternal::getMeshInternal(std::string const & name)
+	{
+		return meshCache.get(name);
+	}
+
+	void ResourceStoreInternal::loadMesh(std::string const & name, std::string const & location)
+	{
+		meshCache.create(name, location);
+	}
+
+	void ResourceStoreInternal::createMesh(std::string const & name)
+	{
+		meshCache.create(name);
+	}
+
+	std::vector<std::string> ResourceStoreInternal::listMeshes() const
+	{
+		return meshCache.getObjectNames();
+	}
 }
