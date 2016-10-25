@@ -61,4 +61,14 @@ namespace ve
 	{
 		return meshCache.getObjectNames();
 	}
+
+	UsePtr<VertexBufferObject> ResourceStoreInternal::getVertexBufferObject(std::string const & name)
+	{
+		return vertexBufferObjectCache.get(name);
+	}
+
+	void ResourceStoreInternal::creaateVertexBufferObject(std::string const & name, UsePtr<Mesh> mesh)
+	{
+		vertexBufferObjectCache.create(name, mesh);
+	}
 }

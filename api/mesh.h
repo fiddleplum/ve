@@ -16,22 +16,22 @@ namespace ve
 		virtual void save(std::string const & filename) const = 0;
 
 		// Returns the number of consecutive indices that make a single primitive. 1 means points, 2 means lines, 3 means triangles.
-		virtual int getNumIndicesPerPrimitive() const = 0;
+		virtual unsigned int getNumIndicesPerPrimitive() const = 0;
 
 		// Sets the number of consecutive indices that make a single primitive. 1 means points, 2 means lines, 3 means triangles.
-		virtual void setNumIndicesPerPrimitive(int numIndicesPerPrimitive) = 0;
+		virtual void setNumIndicesPerPrimitive(unsigned int numIndicesPerPrimitive) = 0;
 
 		// Returns the number of vertices in a single animation frame. Zero means the whole set of vertices is used.
-		virtual int getNumVerticesPerFrame() const = 0;
+		virtual unsigned int getNumVerticesPerFrame() const = 0;
 
 		// Sets the number of vertices in a single animation frame. Zero means the whole set of vertices is used.
-		virtual void setNumVerticesPerFrame(int numVerticesPerFrame) = 0;
+		virtual void setNumVerticesPerFrame(unsigned int numVerticesPerFrame) = 0;
 
 		// Returns the format that defines the types and ordering of the components of the vertices.
-		virtual std::vector<int> const & getFormatTypes() const = 0;
+		virtual std::vector<unsigned int> const & getFormatTypes() const = 0;
 
 		// Sets the format that defines the types and ordering of the components of the vertices.
-		virtual void setFormatTypes(std::vector<int> const & formatTypes) = 0;
+		virtual void setFormatTypes(std::vector<unsigned int> const & formatTypes) = 0;
 
 		// Returns the vertices of the mesh. The format types determine how the floats make up a vertex.
 		virtual std::vector<float> const & getVertices() const = 0;

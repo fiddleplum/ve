@@ -189,6 +189,7 @@
     <ClInclude Include="src\render\open_gl.h" />
     <ClInclude Include="src\gui\panel_internal.h" />
     <ClInclude Include="api\resource_store.h" />
+    <ClInclude Include="src\render\vertex_buffer_object.h" />
     <ClInclude Include="src\resources_store_internal.h" />
     <ClInclude Include="src\gui\sprite_internal.h" />
     <ClInclude Include="src\gui\text_button_internal.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="src\render\open_gl.cpp" />
     <ClCompile Include="src\gui\panel_internal.cpp" />
     <ClCompile Include="src\render\renderer.cpp" />
+    <ClCompile Include="src\render\vertex_buffer_object.cpp" />
     <ClCompile Include="src\resource_store_internal.cpp" />
     <ClCompile Include="src\gui\sprite_internal.cpp" />
     <ClCompile Include="src\render\texture.cpp" />

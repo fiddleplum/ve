@@ -30,32 +30,32 @@ namespace ve
 		serialize(out, indices);
 	}
 
-	int MeshInternal::getNumIndicesPerPrimitive() const
+	unsigned int MeshInternal::getNumIndicesPerPrimitive() const
 	{
 		return numIndicesPerPrimitive;
 	}
 
-	void MeshInternal::setNumIndicesPerPrimitive(int numIndicesPerPrimitive_)
+	void MeshInternal::setNumIndicesPerPrimitive(unsigned int numIndicesPerPrimitive_)
 	{
 		numIndicesPerPrimitive = numIndicesPerPrimitive_;
 	}
 
-	int MeshInternal::getNumVerticesPerFrame() const
+	unsigned int MeshInternal::getNumVerticesPerFrame() const
 	{
 		return numVerticesPerFrame;
 	}
 
-	void MeshInternal::setNumVerticesPerFrame(int numVerticesPerFrame_)
+	void MeshInternal::setNumVerticesPerFrame(unsigned int numVerticesPerFrame_)
 	{
 		numVerticesPerFrame = numVerticesPerFrame_;
 	}
 
-	std::vector<int> const & MeshInternal::getFormatTypes() const
+	std::vector<unsigned int> const & MeshInternal::getFormatTypes() const
 	{
 		return formatTypes;
 	}
 
-	void MeshInternal::setFormatTypes(std::vector<int> const & formatTypes_)
+	void MeshInternal::setFormatTypes(std::vector<unsigned int> const & formatTypes_)
 	{
 		formatTypes = formatTypes_;
 	}

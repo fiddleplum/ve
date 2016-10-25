@@ -32,6 +32,7 @@
     <ClInclude Include="src\mesh_internal.h" />
     <ClInclude Include="api\mesh.h" />
     <ClInclude Include="src\serialize.h" />
+    <ClInclude Include="src\render\vertex_buffer_object.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -50,5 +51,6 @@
     <ClCompile Include="src\render\open_gl.cpp" />
     <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\mesh_internal.cpp" />
+    <ClCompile Include="src\render\vertex_buffer_object.cpp" />
   </ItemGroup>
 </Project>

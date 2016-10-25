@@ -4,6 +4,7 @@
 #include "image_internal.h"
 #include "render/texture.h"
 #include "mesh_internal.h"
+#include "render/vertex_buffer_object.h"
 #include "cache.h"
 
 namespace ve
@@ -47,9 +48,16 @@ namespace ve
 		// List the names of all the meshes in the store.
 		virtual std::vector<std::string> listMeshes() const = 0;
 
+		// Get a vertex buffer object from the store.
+		UsePtr<VertexBufferObject> getVertexBufferObject(std::string const & name);
+
+		// Create a vertex buffer object from an mesh in the store.
+		void creaateVertexBufferObject(std::string const & name, UsePtr<Mesh> mesh);
+
 	private:
 		Cache<ImageInternal> imageCache;
 		Cache<Texture> textureCache;
 		Cache<MeshInternal> meshCache;
+		Cache<VertexBufferObject> vertexBufferObjectCache;
 	};
 }

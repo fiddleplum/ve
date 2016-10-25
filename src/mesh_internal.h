@@ -13,17 +13,17 @@ namespace ve
 
 		void save(std::string const & filename) const override;
 
-		int getNumIndicesPerPrimitive() const override;
+		unsigned int getNumIndicesPerPrimitive() const override;
 
-		void setNumIndicesPerPrimitive(int numIndicesPerPrimitive) override;
+		void setNumIndicesPerPrimitive(unsigned int numIndicesPerPrimitive) override;
 
-		int getNumVerticesPerFrame() const override;
+		unsigned int getNumVerticesPerFrame() const override;
 
-		void setNumVerticesPerFrame(int numVerticesPerFrame) override;
+		void setNumVerticesPerFrame(unsigned int numVerticesPerFrame) override;
 
-		std::vector<int> const & getFormatTypes() const override;
+		std::vector<unsigned int> const & getFormatTypes() const override;
 
-		void setFormatTypes(std::vector<int> const & formatTypes) override;
+		void setFormatTypes(std::vector<unsigned int> const & formatTypes) override;
 
 		std::vector<float> const & getVertices() const override;
 
@@ -34,9 +34,9 @@ namespace ve
 		void setIndices(std::vector<unsigned int> const & indices) override;
 
 	private:
-		int numIndicesPerPrimitive;
-		int numVerticesPerFrame;
-		std::vector<int> formatTypes;
+		unsigned int numIndicesPerPrimitive;
+		unsigned int numVerticesPerFrame;
+		std::vector<unsigned int> formatTypes;
 		std::vector<float> vertices;
 		std::vector<unsigned int> indices;
 	};
@@ -45,12 +45,12 @@ namespace ve
 /*
 * Notes on the Mesh file format. All ints and floats are 32-bit.
 *
-* int numIndicesPerPrimitive
-* int numVerticesPerFrame
-* int formatTypes.length
-* int[] formatTypes
-* int vertices.length (number of floats)
+* unsigned int numIndicesPerPrimitive
+* unsigned int numVerticesPerFrame
+* unsigned int formatTypes.length
+* unsigned int[] formatTypes
+* unsigned int vertices.length (number of floats)
 * float[] vertices
-* int indices.length
-* int[] indices
+* unsigned int indices.length
+* unsigned int[] indices
 */
