@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.h"
+#include "coord.h"
 
 /*
 	This is a standard mathematical matrix class. Rows and cols are the dimensions of the matrix and T is the type of its elements.
@@ -8,6 +8,7 @@
 	for a translation matrix, the elements m(0, 3), m(1, 3), and m(2, 3) should contain the translation components. In addition, video cards
 	expect the translation components to be in elements 12, 13, and 14, which would then indicate a column-major order.
 */
+
 namespace ve
 {
 	template <unsigned int rows, unsigned int cols, typename T>
@@ -27,7 +28,7 @@ namespace ve
 		static Matrix<rows, cols, T> identity();
 
 		// Returns a matrix equivalent to the cross product with the first operand as v.
-		static Matrix<rows, cols, T> crossProduct(Vector<rows, T> v);
+		static Matrix<rows, cols, T> crossProduct(Coord<rows, T> v);
 
 		// Access the element at row row and column col.
 		T & operator()(unsigned int row, unsigned int col);
@@ -54,10 +55,10 @@ namespace ve
 		Matrix<cols, rows, T> transpose() const;
 
 		// Returns this v, extending v either as a point(v3 = 1) or direction(v3 = 0). Rows must equal cols.
-		Vector<rows - 1, T> transform(Vector<cols - 1, T> v, T v3) const;
+		Coord<rows - 1, T> transform(Coord<cols - 1, T> v, T v3) const;
 
 		// Returns v this. Used for dealing with row-major systems.
-		Vector<cols, T> preMultiply(Vector<rows, T> v) const;
+		Coord<cols, T> preMultiply(Coord<rows, T> v) const;
 
 	private:
 		T c[rows * cols];
@@ -89,7 +90,7 @@ namespace ve
 	template <unsigned int rows, unsigned int cols, typename T> Matrix<rows, cols, T> operator * (T a, Matrix<rows, cols, T> const & m);
 
 	// Returns m v.
-	template <unsigned int rows, unsigned int cols, typename T> Vector<rows, T> operator * (Matrix<rows, cols, T> const & m, Vector<cols, T> v);
+	template <unsigned int rows, unsigned int cols, typename T> Coord<rows, T> operator * (Matrix<rows, cols, T> const & m, Coord<cols, T> v);
 
 	// Template Implementations
 
@@ -132,7 +133,7 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Matrix<rows, cols, T> Matrix<rows, cols, T>::crossProduct(Vector<rows, T> v)
+	Matrix<rows, cols, T> Matrix<rows, cols, T>::crossProduct(Coord<rows, T> v)
 	{
 		assert(rows == 3 && cols == 3);
 		Matrix<rows, cols, T> r;
@@ -227,10 +228,10 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Vector<rows - 1, T> Matrix<rows, cols, T>::transform(Vector<cols - 1, T> v, T v3) const
+	Coord<rows - 1, T> Matrix<rows, cols, T>::transform(Coord<cols - 1, T> v, T v3) const
 	{
 		assert(rows == cols && rows > 1);
-		Vector<rows - 1, T> r;
+		Coord<rows - 1, T> r;
 		for (unsigned int i = 0; i < rows - 1; ++i)
 		{
 			r[i] = (T)0;
@@ -253,9 +254,9 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Vector<cols, T> Matrix<rows, cols, T>::preMultiply(Vector<rows, T> v) const
+	Coord<cols, T> Matrix<rows, cols, T>::preMultiply(Coord<rows, T> v) const
 	{
-		Vector<cols, T> r;
+		Coord<cols, T> r;
 		for (int i = 0; i < cols; ++i)
 		{
 			r[i] = (T)0;
@@ -353,9 +354,9 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Vector<rows, T> operator * (Matrix<rows, cols, T> const & m, Vector<cols, T> v)
+	Coord<rows, T> operator * (Matrix<rows, cols, T> const & m, Coord<cols, T> v)
 	{
-		Vector<rows, T> r;
+		Coord<rows, T> r;
 		for (unsigned int i = 0; i < rows; ++i)
 		{
 			r[i] = (T)0;
@@ -372,4 +373,3 @@ namespace ve
 		return r;
 	}
 }
-

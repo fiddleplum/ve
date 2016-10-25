@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../vector.h"
-#include "../matrix.h"
-#include "../config.h"
+#include "matrix.h"
+#include "config.h"
 #include <string>
 #include <map>
 #include <vector>

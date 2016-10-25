@@ -219,4 +219,3 @@ namespace ve
 		return content.compare(i, token.length(), token) == 0;
 	}
 }
-

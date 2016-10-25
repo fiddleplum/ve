@@ -49,4 +49,3 @@ namespace ve
 	// Returns true if the next characters are the token.
 	bool isStringNext(std::string const & content, size_t i, std::string const & token);
 }
-

@@ -34,19 +34,19 @@ namespace ve
 		void createTexture(std::string const & name, UsePtr<Image> image);
 
 		// Get a mesh from the store.
-		virtual UsePtr<Mesh> getMesh(std::string const & name) = 0;
+		UsePtr<Mesh> getMesh(std::string const & name) override;
 
 		// Get a mesh from the store.
-		virtual UsePtr<MeshInternal> getMeshInternal(std::string const & name) = 0;
+		UsePtr<MeshInternal> getMeshInternal(std::string const & name);
 
 		// Load a mesh into the store with the given name.
-		virtual void loadMesh(std::string const & name, std::string const & location) = 0;
+		void loadMesh(std::string const & name, std::string const & location) override;
 
 		// Create a new mesh in the store with the given name.
-		virtual void createMesh(std::string const & name) = 0;
+		void createMesh(std::string const & name) override;
 
 		// List the names of all the meshes in the store.
-		virtual std::vector<std::string> listMeshes() const = 0;
+		std::vector<std::string> listMeshes() const override;
 
 		// Get a vertex buffer object from the store.
 		UsePtr<VertexBufferObject> getVertexBufferObject(std::string const & name);

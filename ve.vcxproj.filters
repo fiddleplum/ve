@@ -33,6 +33,11 @@
     <ClInclude Include="api\mesh.h" />
     <ClInclude Include="src\serialize.h" />
     <ClInclude Include="src\render\vertex_buffer_object.h" />
+    <ClInclude Include="api\matrix.h" />
+    <ClInclude Include="api\config.h" />
+    <ClInclude Include="api\stringutil.h" />
+    <ClInclude Include="src\render\shader.h" />
+    <ClInclude Include="src\render\uniform.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -52,5 +57,9 @@
     <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\mesh_internal.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
+    <ClCompile Include="src\stringutil.cpp" />
+    <ClCompile Include="src\config.cpp" />
+    <ClCompile Include="src\render\shader.cpp" />
+    <ClCompile Include="src\render\uniform.cpp" />
   </ItemGroup>
 </Project>

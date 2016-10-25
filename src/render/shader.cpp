@@ -1,8 +1,8 @@
 #include "shader.h"
 #include "open_gl.h"
 #include "uniform.h"
-#include "../mesh.h"
-#include "../stringutil.h"
+#include "mesh.h"
+#include "stringutil.h"
 
 // TODO: Make the shader use specific attribute locations chosen by an enum based on the attribute names.
 // This allows multiple shaders to be used with a single vbo and all be compatible.
@@ -255,12 +255,12 @@ namespace ve
 				{
 					case GL_INT: type = Uniform::INT; break;
 					case GL_FLOAT: type = Uniform::FLOAT; break;
-					case GL_INT_VEC2: type = Uniform::VECTOR_2I; break;
-					case GL_FLOAT_VEC2: type = Uniform::VECTOR_2F; break;
-					case GL_INT_VEC3: type = Uniform::VECTOR_3I; break;
-					case GL_FLOAT_VEC3: type = Uniform::VECTOR_3F; break;
-					case GL_INT_VEC4: type = Uniform::VECTOR_4I; break;
-					case GL_FLOAT_VEC4: type = Uniform::VECTOR_4F; break;
+					case GL_INT_VEC2: type = Uniform::COORD_2I; break;
+					case GL_FLOAT_VEC2: type = Uniform::COORD_2F; break;
+					case GL_INT_VEC3: type = Uniform::COORD_3I; break;
+					case GL_FLOAT_VEC3: type = Uniform::COORD_3F; break;
+					case GL_INT_VEC4: type = Uniform::COORD_4I; break;
+					case GL_FLOAT_VEC4: type = Uniform::COORD_4F; break;
 					case GL_FLOAT_MAT3: type = Uniform::MATRIX_33F; break;
 					case GL_FLOAT_MAT4: type = Uniform::MATRIX_44F; break;
 					case GL_SAMPLER_2D: type = Uniform::TEXTURE_2D; break;
