@@ -29,6 +29,9 @@
     <ClInclude Include="src\render\open_gl.h" />
     <ClInclude Include="src\render\renderer.h" />
     <ClInclude Include="src\object_map.h" />
+    <ClInclude Include="src\mesh_internal.h" />
+    <ClInclude Include="api\mesh.h" />
+    <ClInclude Include="src\serialize.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -46,5 +49,6 @@
     <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\render\open_gl.cpp" />
     <ClCompile Include="src\render\renderer.cpp" />
+    <ClCompile Include="src\mesh_internal.cpp" />
   </ItemGroup>
 </Project>
