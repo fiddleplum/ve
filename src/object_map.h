@@ -19,6 +19,12 @@ namespace ve
 		// Removes the value at the position.
 		void erase(typename std::map<K, V>::const_iterator position);
 
+		// Returns an iterator to the key, or end().
+		typename std::map<K, V>::iterator find(K const & key);
+
+		// Returns an iterator to the key, or end().
+		typename std::map<K, V>::const_iterator find(K const & key) const;
+
 		// Returns true if there there are no elements.
 		bool empty() const;
 
@@ -54,13 +60,25 @@ namespace ve
 	template <typename K, typename V>
 	std::pair<typename std::map<K, V>::iterator, bool> ObjectMap<K, V>::insert(K const & key, V const & value)
 	{
-		return map.insert(key, value);
+		return map.insert(std::pair<K const, V>(key, value));
 	}
 
 	template <typename K, typename V>
 	void ObjectMap<K, V>::erase(typename std::map<K, V>::const_iterator position)
 	{
 		elementsToErase.insert(position);
+	}
+
+	template <typename K, typename V>
+	typename std::map<K, V>::iterator ObjectMap<K, V>::find(K const & key)
+	{
+		return map.find(key);
+	}
+
+	template <typename K, typename V>
+	typename std::map<K, V>::const_iterator ObjectMap<K, V>::find(K const & key) const
+	{
+		return map.find(key);
 	}
 
 	template <typename K, typename V>

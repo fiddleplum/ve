@@ -2,8 +2,8 @@
 
 #include "texture.h"
 #include "model.h"
-#include "../rect.h"
-#include "../ptr.h"
+#include "rect.h"
+#include "ptr.h"
 #include <set>
 
 namespace ve

@@ -396,3 +396,16 @@ namespace ve
 		return (void const *)c == (void const *)ptr.c;
 	}
 }
+
+// For hash function template specialization.
+
+namespace std
+{
+	template <typename T, bool OWN> struct hash<ve::PtrBase<T, OWN>>
+	{
+		size_t operator()(ve::PtrBase<T, OWN> const & p) const
+		{
+			return p;
+		}
+	};
+}

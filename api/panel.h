@@ -16,6 +16,9 @@ namespace ve
 		// Creates a text button contained in the panel.
 		virtual UsePtr<TextButton> createTextButton() = 0;
 
+		// Destroys a widget.
+		virtual void destroyWidget(UsePtr<Widget> widget) = 0;
+
 		// Sets the relative bounds for the widget.
 		virtual void setBounds(UsePtr<Widget> widget, Coord2f originInPanel, Coord2f originInWidget, Coord2i originOffset, Coord2f sizeInPanel, Coord2i sizeOffset) = 0;
 

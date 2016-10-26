@@ -7,7 +7,6 @@
     <ClInclude Include="api\ptr.h" />
     <ClInclude Include="api\window.h" />
     <ClInclude Include="src\window_internal.h" />
-    <ClInclude Include="src\object_list.h" />
     <ClInclude Include="api\panel.h" />
     <ClInclude Include="api\text_button.h" />
     <ClInclude Include="api\sprite.h" />
@@ -38,6 +37,11 @@
     <ClInclude Include="api\stringutil.h" />
     <ClInclude Include="src\render\shader.h" />
     <ClInclude Include="src\render\uniform.h" />
+    <ClInclude Include="src\render\material.h" />
+    <ClInclude Include="src\render\model.h" />
+    <ClInclude Include="src\render\scene.h" />
+    <ClInclude Include="src\object_set.h" />
+    <ClInclude Include="src\object_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -61,5 +65,8 @@
     <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\render\shader.cpp" />
     <ClCompile Include="src\render\uniform.cpp" />
+    <ClCompile Include="src\render\material.cpp" />
+    <ClCompile Include="src\render\model.cpp" />
+    <ClCompile Include="src\render\scene.cpp" />
   </ItemGroup>
 </Project>

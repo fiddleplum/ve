@@ -2,7 +2,7 @@
 
 #include "panel.h"
 #include "widget_internal.h"
-#include "object_list.h"
+#include "object_vector.h"
 
 namespace ve
 {
@@ -17,6 +17,9 @@ namespace ve
 
 		// Creates a text button contained in the panel.
 		UsePtr<TextButton> createTextButton() override;
+
+		// Destroys a widget.
+		void destroyWidget(UsePtr<Widget> widget) override;
 
 		// Sets the relative bounds for the widget.
 		void setBounds(UsePtr<Widget> widget, Coord2f originInPanel, Coord2f originInWidget, Coord2i originOffset, Coord2f sizeInPanel, Coord2i sizeOffset) override;
@@ -36,9 +39,10 @@ namespace ve
 		};
 
 		template <typename T> UsePtr<T> createWidget();
+		std::vector<WidgetInfo>::iterator PanelInternal::getWidgetInfo(UsePtr<Widget> widget);
 		void updateWidgetBounds(WidgetInfo const & widgetInfo) const;
 
 		Recti bounds;
-		ObjectList<WidgetInfo> widgetInfos;
+		ObjectVector<WidgetInfo> widgetInfos;
 	};
 }
