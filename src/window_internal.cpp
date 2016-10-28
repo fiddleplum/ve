@@ -33,7 +33,7 @@ namespace ve
 		return true;
 	}
 
-	UsePtr<Panel> WindowInternal::getGui() const
+	UsePtr<Gui> WindowInternal::getGui() const
 	{
 		return gui;
 	}

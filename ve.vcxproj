@@ -167,6 +167,7 @@
     <ClInclude Include="api\app.h" />
     <ClInclude Include="api\config.h" />
     <ClInclude Include="api\coord.h" />
+    <ClInclude Include="api\gui.h" />
     <ClInclude Include="api\image.h" />
     <ClInclude Include="api\interval.h" />
     <ClInclude Include="api\matrix.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="api\rect.h" />
     <ClInclude Include="api\sprite.h" />
     <ClInclude Include="api\stringutil.h" />
+    <ClInclude Include="src\gui\gui_internal.h" />
     <ClInclude Include="src\mesh_internal.h" />
     <ClInclude Include="src\object_map.h" />
     <ClInclude Include="src\object_set.h" />
@@ -213,6 +215,8 @@
   <ItemGroup>
     <ClCompile Include="src\app_internal.cpp" />
     <ClCompile Include="src\config.cpp" />
+    <ClCompile Include="src\gui\gui_internal.cpp" />
+    <ClCompile Include="src\gui\WidgetInternal.cpp" />
     <ClCompile Include="src\image_internal.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mesh_internal.cpp" />

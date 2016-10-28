@@ -10,6 +10,12 @@ namespace ve
 	class SpriteInternal : public virtual Sprite, public virtual WidgetInternal
 	{
 	public:
+		// Constructor.
+		SpriteInternal(UsePtr<Scene> scene);
+
+		// Destructor.
+		~SpriteInternal();
+
 		// Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 

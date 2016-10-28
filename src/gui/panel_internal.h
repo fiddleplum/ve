@@ -9,6 +9,9 @@ namespace ve
 	class PanelInternal : public virtual Panel, public virtual WidgetInternal
 	{
 	public:
+		// Constructor.
+		PanelInternal(UsePtr<Scene> scene);
+
 		// Sets the bounds of the panel.
 		void setBounds(Recti bounds) override;
 

@@ -1,8 +1,27 @@
 # Render Stage Architecture
 
-Every stage has a render texture as output and a scene as input. A render texture knows its own stage.
+Every stage has a render texture as output and a camera/scene as input. A render texture knows its own stage.
 When you apply a render texture to a material, the material knows which scene it is apart of,
 and tells the scene to add the render texture's stage as a dependency. Then when the stages
 are sorted, the use the render texture/scene dependency graph to get the right ordering.
 Research topological sorting.
 
+# Alternate to Render Stage Architecture
+
+The user calls:
+
+app->getRenderer()->render(scene, camera, target, depthTarget = null);
+
+It will render the scene using the camera to the target. If the target is null, it will render to the screen.
+There is an optional depth target for rendering to multiple targets.
+
+There is no need for topological sorting, as the user just decides the order of the rendering. If things are out of order,
+it is simple for the user to arrange the calls correctly.
+
+But if the user is saying when to render, it feels weird, because other parts of the game loop happen automatically.
+I would still like the user to put the stages into the renderer (in a list) and then the renderer renders the stages in
+that order.
+
+#
+
+Each window needs it own final render stage.

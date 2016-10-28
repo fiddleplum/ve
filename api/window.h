@@ -1,6 +1,6 @@
 #pragma once
 
-#include "panel.h"
+#include "gui.h"
 #include "ptr.h"
 #include <functional>
 
@@ -13,7 +13,7 @@ namespace ve
 		virtual void setCloseHandler(std::function<bool()> closeHandler) = 0;
 
 		// Gets the root panel element which is the gui.
-		virtual UsePtr<Panel> getGui() const = 0;
+		virtual UsePtr<Gui> getGui() const = 0;
 
 	protected:
 		// Virtual destructor.

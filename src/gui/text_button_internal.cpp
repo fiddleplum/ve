@@ -2,6 +2,12 @@
 
 namespace ve
 {
+	TextButtonInternal::TextButtonInternal(UsePtr<Scene> scene)
+		: WidgetInternal(scene)
+	{
+
+	}
+
 	void TextButtonInternal::setBounds(Recti bounds_)
 	{
 

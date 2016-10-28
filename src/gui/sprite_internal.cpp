@@ -3,6 +3,17 @@
 
 namespace ve
 {
+	SpriteInternal::SpriteInternal(UsePtr<Scene> scene)
+		: WidgetInternal(scene)
+	{
+
+	}
+
+	SpriteInternal::~SpriteInternal()
+	{
+
+	}
+
 	void SpriteInternal::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;

@@ -42,6 +42,8 @@
     <ClInclude Include="src\render\scene.h" />
     <ClInclude Include="src\object_set.h" />
     <ClInclude Include="src\object_vector.h" />
+    <ClInclude Include="api\gui.h" />
+    <ClInclude Include="src\gui\gui_internal.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -68,5 +70,7 @@
     <ClCompile Include="src\render\material.cpp" />
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\scene.cpp" />
+    <ClCompile Include="src\gui\WidgetInternal.cpp" />
+    <ClCompile Include="src\gui\gui_internal.cpp" />
   </ItemGroup>
 </Project>

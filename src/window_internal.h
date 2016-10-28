@@ -1,7 +1,7 @@
 #pragma once
 
 #include "window.h"
-#include "gui/panel_internal.h"
+#include "gui/gui_internal.h"
 #include "render/renderer.h"
 #include <SDL.h>
 
@@ -23,7 +23,7 @@ namespace ve
 		bool callCloseHandler();
 
 		// Gets the root panel element which is the gui.
-		UsePtr<Panel> getGui() const override;
+		UsePtr<Gui> getGui() const override;
 
 		// Gets the SDL Window handle.
 		SDL_Window * getSDLWindow() const;
@@ -37,6 +37,6 @@ namespace ve
 	private:
 		SDL_Window * sdlWindow;
 		std::function<bool()> closeHandler;
-		OwnPtr<PanelInternal> gui;
+		OwnPtr<GuiInternal> gui;
 	};
 }

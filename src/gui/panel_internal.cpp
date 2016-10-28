@@ -5,6 +5,12 @@
 
 namespace ve
 {
+	PanelInternal::PanelInternal(UsePtr<Scene> scene)
+		: WidgetInternal(scene)
+	{
+
+	}
+
 	void PanelInternal::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
@@ -53,7 +59,7 @@ namespace ve
 
 	template <typename T> UsePtr<T> PanelInternal::createWidget()
 	{
-		OwnPtr<T> widget = OwnPtr<T>::createNew();
+		auto widget = OwnPtr<T>::createNew(getScene());
 		WidgetInfo widgetInfo;
 		widgetInfo.widget = widget;
 		widgetInfos.push_back(widgetInfo);

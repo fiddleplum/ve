@@ -3,7 +3,7 @@
 #include "app.h"
 #include "window_internal.h"
 #include "ptr.h"
-#include "object_list.h"
+#include "object_vector.h"
 #include "resources_store_internal.h"
 #include "render/renderer.h"
 
@@ -39,7 +39,7 @@ namespace ve
 
 		bool looping;
 		float secondsPerUpdate;
-		ObjectList<OwnPtr<WindowInternal>> windows;
+		ObjectVector<OwnPtr<WindowInternal>> windows;
 		OwnPtr<ResourceStoreInternal> resourceStore;
 		OwnPtr<Renderer> renderer;
 	};
