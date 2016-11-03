@@ -2,7 +2,7 @@
 
 #include "sprite.h"
 #include "widget_internal.h"
-#include "../render/texture.h"
+#include "../render/model.h"
 #include "ptr.h"
 
 namespace ve
@@ -16,6 +16,12 @@ namespace ve
 		// Destructor.
 		~SpriteInternal();
 
+		// Returns the depth.
+		float getDepth() const override;
+
+		// Sets the depth.
+		void setDepth(float depth) override;
+
 		// Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 
@@ -27,6 +33,9 @@ namespace ve
 
 	private:
 		Recti bounds;
-		UsePtr<Texture> texture;
+		UsePtr<Model> model;
+		int minUniformLocation;
+		int maxUniformLocation;
+		int textureLocation;
 	};
 }

@@ -15,6 +15,9 @@ namespace ve
 		// Removes a model.
 		void destroyModel(UsePtr<Model> & model);
 
+		// Renders the scene.
+		void render();
+
 	private:
 		std::unordered_set<OwnPtr<Model>> models;
 	};

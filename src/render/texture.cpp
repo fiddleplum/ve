@@ -11,6 +11,11 @@ namespace ve
 		setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
 	}
 
+	Texture::~Texture()
+	{
+		glDeleteTextures(1, &id);
+	}
+
 	Coord2i Texture::getSize() const
 	{
 		return size;
@@ -49,6 +54,11 @@ namespace ve
 		}
 	}
 
+	unsigned int Texture::getGLId() const
+	{
+		return id;
+	}
+
 	void Texture::setPixels(Coord2i size_, Image::Format format, uint8_t const * pixels)
 	{
 		size = size_;
@@ -79,11 +89,6 @@ namespace ve
 		glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, pixels);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	}
-
-	Texture::~Texture()
-	{
-		glDeleteTextures(1, &id);
 	}
 }
 

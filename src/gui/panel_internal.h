@@ -12,6 +12,12 @@ namespace ve
 		// Constructor.
 		PanelInternal(UsePtr<Scene> scene);
 
+		// Returns the depth.
+		float getDepth() const override;
+
+		// Sets the depth.
+		void setDepth(float depth) override;
+
 		// Sets the bounds of the panel.
 		void setBounds(Recti bounds) override;
 

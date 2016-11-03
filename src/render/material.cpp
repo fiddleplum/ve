@@ -6,6 +6,11 @@ namespace ve
 	{
 	}
 
+	Material::Material(std::string const & filename)
+	{
+
+	}
+
 	Material::~Material()
 	{
 	}

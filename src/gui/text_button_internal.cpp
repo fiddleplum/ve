@@ -8,6 +8,16 @@ namespace ve
 
 	}
 
+	float TextButtonInternal::getDepth() const
+	{
+		return 0;
+	}
+
+	void TextButtonInternal::setDepth(float depth)
+	{
+
+	}
+
 	void TextButtonInternal::setBounds(Recti bounds_)
 	{
 

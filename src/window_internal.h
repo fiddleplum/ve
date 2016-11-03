@@ -3,7 +3,30 @@
 #include "window.h"
 #include "gui/gui_internal.h"
 #include "render/renderer.h"
+#include "render/stage.h"
 #include <SDL.h>
+
+/*
+
+each window has a useptr<stage> as its root stage.
+each stage has a list of dependencies:
+	addpriorstage()
+	removepriorstage()
+	clearpriorstages()
+
+render:
+	go through all stages and clear the 'rendered' flag
+	for each window, render its top level stage
+		do a depth first rendering of each stage
+			if the 'rendered' flag isn't set
+				render
+				set 'rendered' flag
+			else
+				skip stage
+
+	each stage has a scene and target
+		how can i get cameras and lights into the stage? stage shouldn't know about anything 3d
+*/
 
 namespace ve
 {
@@ -32,11 +55,12 @@ namespace ve
 		void update(float dt);
 
 		// Called to render the window.
-		void render(UsePtr<Renderer> renderer) const;
+		void render() const;
 
 	private:
 		SDL_Window * sdlWindow;
 		std::function<bool()> closeHandler;
+		OwnPtr<WindowStage> stage;
 		OwnPtr<GuiInternal> gui;
 	};
 }

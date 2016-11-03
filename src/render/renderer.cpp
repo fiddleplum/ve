@@ -31,4 +31,21 @@ namespace ve
 		}
 		scenes.erase(it);
 	}
+
+	UsePtr<TextureStage> Renderer::createTextureStage()
+	{
+		auto stage = OwnPtr<TextureStage>::createNew();
+		textureStages.insert(stage);
+		return stage;
+	}
+
+	void Renderer::destroyTextureStage(UsePtr<TextureStage> stage)
+	{
+		auto it = textureStages.find(stage);
+		if (it == textureStages.end())
+		{
+			throw std::runtime_error("Stage not found while erasing. ");
+		}
+		textureStages.erase(it);
+	}
 }

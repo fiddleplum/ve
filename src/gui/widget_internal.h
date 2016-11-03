@@ -12,14 +12,20 @@ namespace ve
 		// Constructor.
 		WidgetInternal(UsePtr<Scene> scene);
 
+		// Virtual destructor.
+		virtual ~WidgetInternal() = default;
+
+		// Returns the depth.
+		virtual float getDepth() const = 0;
+
+		// Sets the depth.
+		virtual void setDepth(float depth) = 0;
+
 		// Sets the bounds of the widget.
 		virtual void setBounds(Recti bounds) = 0;
 
 		// Updates the widget.
 		virtual void update(float dt) = 0;
-
-		// Virtual destructor.
-		virtual ~WidgetInternal() = default;
 
 	protected:
 		// Returns the scene used by the widget (and its parent gui).

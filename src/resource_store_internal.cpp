@@ -2,24 +2,31 @@
 
 namespace ve
 {
-	UsePtr<Image> ResourceStoreInternal::getImage(std::string const & name)
+	UsePtr<Image> ResourceStoreInternal::getImage(std::string const & name) const
 	{
 		return imageCache.get(name);
 	}
 
-	UsePtr<ImageInternal> ResourceStoreInternal::getImageInternal(std::string const & name)
+	UsePtr<ImageInternal> ResourceStoreInternal::getImageInternal(std::string const & name) const
 	{
 		return imageCache.get(name);
 	}
 
-	void ResourceStoreInternal::loadImage(std::string const & name, std::string const & location)
+	UsePtr<Image> ResourceStoreInternal::loadImage(std::string const & name, std::string const & location)
 	{
-		imageCache.create(name, location);
+		if (location != "")
+		{
+			return imageCache.create(name, location);
+		}
+		else
+		{
+			return imageCache.create(name, "assets/images/" + name + ".png");
+		}
 	}
 
-	void ResourceStoreInternal::createImage(std::string const & name, Coord2i size, Image::Format format)
+	UsePtr<Image> ResourceStoreInternal::createImage(std::string const & name, Coord2i size, Image::Format format)
 	{
-		imageCache.create(name, size, format);
+		return imageCache.create(name, size, format);
 	}
 
 	std::vector<std::string> ResourceStoreInternal::listImages() const
@@ -27,34 +34,41 @@ namespace ve
 		return imageCache.getObjectNames();
 	}
 
-	UsePtr<Texture> ResourceStoreInternal::getTexture(std::string const & name)
+	UsePtr<Texture> ResourceStoreInternal::getTexture(std::string const & name) const
 	{
 		return textureCache.get(name);
 	}
 
-	void ResourceStoreInternal::createTexture(std::string const & name, UsePtr<Image> image)
+	UsePtr<Texture> ResourceStoreInternal::createTexture(std::string const & name, UsePtr<Image> image)
 	{
-		textureCache.create(name, image);
+		return textureCache.create(name, image);
 	}
 
-	UsePtr<Mesh> ResourceStoreInternal::getMesh(std::string const & name)
+	UsePtr<Mesh> ResourceStoreInternal::getMesh(std::string const & name) const
 	{
 		return meshCache.get(name);
 	}
 
-	UsePtr<MeshInternal> ResourceStoreInternal::getMeshInternal(std::string const & name)
+	UsePtr<MeshInternal> ResourceStoreInternal::getMeshInternal(std::string const & name) const
 	{
 		return meshCache.get(name);
 	}
 
-	void ResourceStoreInternal::loadMesh(std::string const & name, std::string const & location)
+	UsePtr<Mesh> ResourceStoreInternal::loadMesh(std::string const & name, std::string const & location)
 	{
-		meshCache.create(name, location);
+		if (location != "")
+		{
+			return meshCache.create(name, location);
+		}
+		else
+		{
+			return meshCache.create(name, "assets/meshes/" + name + ".mesh");
+		}
 	}
 
-	void ResourceStoreInternal::createMesh(std::string const & name)
+	UsePtr<Mesh> ResourceStoreInternal::createMesh(std::string const & name)
 	{
-		meshCache.create(name);
+		return meshCache.create(name);
 	}
 
 	std::vector<std::string> ResourceStoreInternal::listMeshes() const
@@ -62,13 +76,74 @@ namespace ve
 		return meshCache.getObjectNames();
 	}
 
-	UsePtr<VertexBufferObject> ResourceStoreInternal::getVertexBufferObject(std::string const & name)
+	UsePtr<VertexBufferObject> ResourceStoreInternal::getVertexBufferObject(std::string const & name) const
 	{
 		return vertexBufferObjectCache.get(name);
 	}
 
-	void ResourceStoreInternal::creaateVertexBufferObject(std::string const & name, UsePtr<Mesh> mesh)
+	UsePtr<VertexBufferObject> ResourceStoreInternal::createVertexBufferObject(std::string const & name, UsePtr<Mesh> mesh)
 	{
-		vertexBufferObjectCache.create(name, mesh);
+		if (mesh.isValid())
+		{
+			return vertexBufferObjectCache.create(name, mesh);
+		}
+		else
+		{
+			return vertexBufferObjectCache.create(name, loadMesh(name));
+		}
+	}
+
+	std::vector<std::string> ResourceStoreInternal::listVertexBufferObjects() const
+	{
+		return vertexBufferObjectCache.getObjectNames();
+	}
+
+	UsePtr<Shader> ResourceStoreInternal::getShader(std::string const & name) const
+	{
+		return shaderCache.get(name);
+	}
+
+	UsePtr<Shader> ResourceStoreInternal::loadShader(std::string const & name, std::string const & filename)
+	{
+		if (filename != "")
+		{
+			return shaderCache.create(name, filename);
+		}
+		else
+		{
+			return shaderCache.create(name, "assets/shaders/" + name + ".shader");
+		}
+	}
+
+	std::vector<std::string> ResourceStoreInternal::listShaders() const
+	{
+		return shaderCache.getObjectNames();
+	}
+
+	UsePtr<Material> ResourceStoreInternal::getMaterial(std::string const & name) const
+	{
+		return materialCache.get(name);
+	}
+
+	UsePtr<Material> ResourceStoreInternal::loadMaterial(std::string const & name, std::string const & filename)
+	{
+		if (filename != "")
+		{
+			return materialCache.create(name, filename);
+		}
+		else
+		{
+			return materialCache.create(name, "assets/materials/" + name + ".material");
+		}
+	}
+
+	UsePtr<Material> ResourceStoreInternal::createMaterial(std::string const & name)
+	{
+		return materialCache.create(name);
+	}
+
+	std::vector<std::string> ResourceStoreInternal::listMaterials() const
+	{
+		return materialCache.getObjectNames();
 	}
 }

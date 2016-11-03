@@ -1,4 +1,5 @@
 #include "window_internal.h"
+#include "app_internal.h"
 #include <stdexcept>
 
 namespace ve
@@ -12,6 +13,9 @@ namespace ve
 		}
 
 		gui.setNew();
+
+		stage.setNew();
+		stage->setScene(gui->getScene());
 	}
 
 	WindowInternal::~WindowInternal()
@@ -48,10 +52,8 @@ namespace ve
 		gui->update(dt);
 	}
 
-	void WindowInternal::render(UsePtr<Renderer> renderer) const
+	void WindowInternal::render() const
 	{
-		//renderer->render(scene, stage)
-	/*	What goes on here?
-			It needs to call the renderer to render using a render camera, render scene, and viewport.
-*/	}
+		stage->render();
+	}
 }

@@ -64,6 +64,8 @@ int main(int argc, char *argv[])
 	catch (std::exception const & e)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", e.what(), nullptr);
+		ve::shutdown();
+		app.setNull();
 		return -1;
 	}
 	return 0;

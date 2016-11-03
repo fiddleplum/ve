@@ -12,7 +12,7 @@ namespace ve
 	{
 	public:
 		// Constructs a shader from the name.
-		Shader(Config const & config);
+		Shader(std::string const & filename);
 
 		// Destructor.
 		~Shader();

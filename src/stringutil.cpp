@@ -9,6 +9,10 @@ namespace ve
 	std::string readFile(std::string const & filename)
 	{
 		std::ifstream in(filename, std::ios::in | std::ios::binary);
+		if (in.fail())
+		{
+			throw std::runtime_error("Could not open file '" + filename + "'. ");
+		}
 		std::stringstream ss;
 		ss << in.rdbuf();
 		return ss.str();
@@ -196,6 +200,10 @@ namespace ve
 	std::string readUntil(std::string const & content, size_t & i, std::string const & delimiter)
 	{
 		size_t iNext = content.find(delimiter, i);
+		if (iNext == std::string::npos)
+		{
+			iNext = content.size();
+		}
 		std::string ret = content.substr(i, iNext);
 		i = iNext;
 		return ret;
@@ -204,6 +212,10 @@ namespace ve
 	std::string readUntilAny(std::string const & content, size_t & i, std::string const & delimiters)
 	{
 		size_t iNext = content.find_first_of(delimiters, i);
+		if (iNext == std::string::npos)
+		{
+			iNext = content.size();
+		}
 		std::string ret = content.substr(i, iNext);
 		i = iNext;
 		return ret;
@@ -212,6 +224,10 @@ namespace ve
 	void skipWhiteSpace(std::string const & content, size_t & i)
 	{
 		i = content.find_first_not_of(" \t\r\n", i);
+		if (i == std::string::npos)
+		{
+			i = content.size();
+		}
 	}
 
 	bool isStringNext(std::string const & content, size_t i, std::string const & token)

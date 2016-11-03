@@ -38,8 +38,10 @@ namespace ve
 		{"uv0", Mesh::UV3}
 	};
 
-	Shader::Shader(Config const & config)
+	Shader::Shader(std::string const & filename)
 	{
+		Config config {filename};
+
 		std::vector<unsigned int> shaderObjects;
 
 		try

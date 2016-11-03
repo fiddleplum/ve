@@ -11,6 +11,12 @@ namespace ve
 		// Constructor.
 		TextButtonInternal(UsePtr<Scene> scene);
 
+		// Returns the depth.
+		float getDepth() const override;
+
+		// Sets the depth.
+		void setDepth(float depth) override;
+
 		// Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 

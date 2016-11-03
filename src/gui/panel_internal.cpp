@@ -11,6 +11,16 @@ namespace ve
 
 	}
 
+	float PanelInternal::getDepth() const
+	{
+		return 0;
+	}
+
+	void PanelInternal::setDepth(float depth)
+	{
+
+	}
+
 	void PanelInternal::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;

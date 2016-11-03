@@ -1,72 +1,78 @@
 #pragma once
 
 #include "texture.h"
-#include "model.h"
+#include "scene.h"
 #include "rect.h"
 #include "ptr.h"
 #include <set>
 
 namespace ve
 {
-	namespace render
+	class Stage
 	{
-		class Stage
-		{
-		public:
-			// Destructor for inheritance.
-			virtual ~Stage() {}
+	public:
+		// Destructor for inheritance.
+		virtual ~Stage() {}
 
-			// Creates a new model in the stage and returns it.
-			UsePtr<Model> createModel();
+		// Adds a stage that this stage depends on.
+		void addPriorStage(UsePtr<Stage> stage);
 
-			// Removes a model from the stage.
-			void destroyModel(UsePtr<Model> & model);
+		// Removes a stage that this no longer depends on.
+		void removePriorStage(UsePtr<Stage> stage);
 
-			// Renders to the target.
-			void render() const;
+		// Clears all stages that this stage depends on.
+		void clearPriorStages();
 
-			// Prepares the target surface for rendering.
-			virtual void setupTarget() const = 0;
+		// Sets the scene that this stage will render.
+		void setScene(UsePtr<Scene> scene);
 
-		private:
-			std::set<OwnPtr<Model>> models;
-		};
+		// Renders the scene to the target. First renders all unrendered prior stages.
+		void render() const;
 
-		class ScreenStage : public Stage
-		{
-		public:
-			// Sets the window size for calculating the GL bounds.
-			void setWindowSize(Vector2i windowSize);
+	protected:
+		// Prepares the target surface for rendering.
+		virtual void setupTarget() const = 0;
 
-			// Prepares the stage to use the screen as the target.
-			void setupTarget() const override;
+	private:
+		std::set<UsePtr<Stage>> priorStages;
+		UsePtr<Scene> scene;
+	};
 
-		private:
-			Vector2i windowSize = {0, 0};
-		};
+	class WindowStage : public Stage
+	{
+	public:
+		// Sets the window size for calculating the GL bounds.
+		void setWindowSize(Coord2i windowSize);
 
-		class TextureStage : public Stage
-		{
-		public:
-			// Constructs a new stage. Defaults to rendering to screen.
-			TextureStage();
+	protected:
+		// Prepares the stage to use the screen as the target.
+		void setupTarget() const override;
 
-			// Destructs.
-			~TextureStage();
+	private:
+		Coord2i windowSize = {0, 0};
+	};
 
-			// Clears the targets.
-			void clearTargets();
+	class TextureStage : public Stage
+	{
+	public:
+		// Constructs a new stage. Defaults to rendering to screen.
+		TextureStage();
 
-			// Sets a texture as a render target at the specific index.
-			void setTarget(int index, UsePtr<Texture> target);
+		// Destructs.
+		~TextureStage();
 
-			// Prepares the stage to use the textures as the target.
-			void setupTarget() const override;
+		// Clears the targets.
+		void clearTargets();
 
-		private:
-			std::vector<UsePtr<Texture>> targets;
-			unsigned int framebuffer;
-		};
-	}
+		// Sets a texture as a render target at the specific index.
+		void setTarget(int index, UsePtr<Texture> target);
+
+	protected:
+		// Prepares the stage to use the textures as the target.
+		void setupTarget() const override;
+
+	private:
+		std::vector<UsePtr<Texture>> targets;
+		unsigned int framebuffer;
+	};
 }
-

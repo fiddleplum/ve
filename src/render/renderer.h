@@ -2,13 +2,12 @@
 
 #include "ptr.h"
 #include "scene.h"
+#include "stage.h"
 #include <SDL.h>
 #include <set>
 
 namespace ve
 {
-	class Stage;
-
 	class Renderer
 	{
 	public:
@@ -24,11 +23,15 @@ namespace ve
 		// Destroy a scene.
 		void destroyScene(UsePtr<Scene> scene);
 
-		// Render a given stage.
-		void render(UsePtr<Stage> stage);
+		// Creates a new stage.
+		UsePtr<TextureStage> createTextureStage();
+
+		// Destroys a stage.
+		void destroyTextureStage(UsePtr<TextureStage> stage);
 
 	private:
 		SDL_GLContext glContext;
 		std::set<OwnPtr<Scene>, std::less<>> scenes;
+		std::set<OwnPtr<TextureStage>, std::less<>> textureStages;
 	};
 }

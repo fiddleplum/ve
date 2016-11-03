@@ -12,6 +12,9 @@ namespace ve
 		// Creates a new texture from an Image.
 		Texture(UsePtr<Image> image);
 
+		// Destroys the texture.
+		virtual ~Texture();
+
 		// Returns the size of the texture.
 		Coord2i getSize() const;
 
@@ -24,8 +27,8 @@ namespace ve
 		// Deactivates all slots equal to or greater than the GL slot. Used to clear out excess textures not needed by a material.
 		static void deactivateRest(unsigned int slot);
 
-		// Destroys the texture.
-		virtual ~Texture();
+		// Returns the OpenGL ID.
+		unsigned int getGLId() const;
 
 	private:
 		void setPixels(Coord2i size, Image::Format format, uint8_t const * pixels);

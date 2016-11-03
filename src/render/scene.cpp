@@ -1,4 +1,5 @@
 #include "scene.h"
+#include <set>
 #include <algorithm>
 
 namespace ve
@@ -16,6 +17,20 @@ namespace ve
 		if (*it == model)
 		{
 			models.erase(it);
+		}
+	}
+
+	void Scene::render()
+	{
+		std::set<UsePtr<Model>> modelsSorted;
+		for (auto model : models)
+		{
+			modelsSorted.insert(model);
+		}
+
+		for (auto model : modelsSorted)
+		{
+			model->render();
 		}
 	}
 }

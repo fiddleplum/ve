@@ -12,6 +12,9 @@ namespace ve
 		// Constructs the material.
 		Material();
 
+		// Constructs the material from a file.
+		Material(std::string const & filename);
+
 		// Destructs the material.
 		~Material();
 
