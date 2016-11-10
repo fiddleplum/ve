@@ -74,7 +74,7 @@ namespace ve
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
-				window->render(renderer);
+				window->render(renderer->getGlContext());
 			}
 
 			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
@@ -91,10 +91,10 @@ namespace ve
 
 	UsePtr<Window> AppInternal::createWindow()
 	{
-		auto window = OwnPtr<WindowInternal>::createNew();
+		auto window = OwnPtr<WindowInternal>::returnNew();
 		if (windows.empty())
 		{
-			renderer.createNew(window->getSDLWindow());
+			renderer.setNew(window->getSDLWindow());
 		}
 		windows.push_back(window);
 		return window;

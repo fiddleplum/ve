@@ -17,6 +17,9 @@ namespace ve
 		// Destructor.
 		~Renderer();
 
+		// Returns the gl context of the thread.
+		SDL_GLContext getGlContext() const;
+
 		// Create a new scene.
 		UsePtr<Scene> createScene();
 

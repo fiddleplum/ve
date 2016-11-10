@@ -11,6 +11,9 @@ namespace ve
 	class Shader
 	{
 	public:
+		// Constructs a shader from a config.
+		Shader(Config const & config);
+
 		// Constructs a shader from the name.
 		Shader(std::string const & filename);
 

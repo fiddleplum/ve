@@ -38,22 +38,45 @@ namespace ve
 		{"uv0", Mesh::UV3}
 	};
 
-	Shader::Shader(std::string const & filename)
+	Shader::Shader(Config const & config)
 	{
-		Config config {filename};
-
 		std::vector<unsigned int> shaderObjects;
 
 		try
 		{
 			auto vertexValueOpt = config["vertex"];
-			if (vertexValueOpt && vertexValueOpt->type == Config::List)
+			if (vertexValueOpt)
 			{
-				auto vertexValue = vertexValueOpt.value();
-				for (auto pair : vertexValue.children)
+				if (vertexValueOpt->type == Config::List)
 				{
-					auto filename = pair.second.text;
-					auto code = readFile(filename);
+					auto vertexValue = vertexValueOpt.value();
+					for (auto pair : vertexValue.children)
+					{
+						std::string code;
+						if (endsWith(pair.second.text, ".vert"))
+						{
+							auto filename = pair.second.text;
+							code = readFile(filename);
+						}
+						else
+						{
+							code = pair.second.text;
+						}
+						shaderObjects.push_back(compileShaderObject(Vertex, code));
+					}
+				}
+				else if (vertexValueOpt->type == Config::String)
+				{
+					std::string code;
+					if (endsWith(vertexValueOpt->text, ".frag"))
+					{
+						auto filename = vertexValueOpt->text;
+						code = readFile(filename);
+					}
+					else
+					{
+						code = vertexValueOpt->text;
+					}
 					shaderObjects.push_back(compileShaderObject(Vertex, code));
 				}
 			}
@@ -63,13 +86,38 @@ namespace ve
 			}
 
 			auto fragmentValueOpt = config["fragment"];
-			if (fragmentValueOpt && fragmentValueOpt->type == Config::List)
+			if (fragmentValueOpt)
 			{
-				auto fragmentValue = fragmentValueOpt.value();
-				for (auto pair : fragmentValue.children)
+				if (fragmentValueOpt->type == Config::List)
 				{
-					auto filename = pair.second.text;
-					auto code = readFile(filename);
+					auto fragmentValue = fragmentValueOpt.value();
+					for (auto pair : fragmentValue.children)
+					{
+						std::string code;
+						if (endsWith(pair.second.text, ".frag"))
+						{
+							auto filename = pair.second.text;
+							code = readFile(filename);
+						}
+						else
+						{
+							code = pair.second.text;
+						}
+						shaderObjects.push_back(compileShaderObject(Fragment, code));
+					}
+				}
+				else if (fragmentValueOpt->type == Config::String)
+				{
+					std::string code;
+					if (endsWith(fragmentValueOpt->text, ".frag"))
+					{
+						auto filename = fragmentValueOpt->text;
+						code = readFile(filename);
+					}
+					else
+					{
+						code = fragmentValueOpt->text;
+					}
 					shaderObjects.push_back(compileShaderObject(Fragment, code));
 				}
 			}
@@ -88,6 +136,11 @@ namespace ve
 		}
 		program = linkShaderProgram(shaderObjects); // delete shader objects as well
 		populateUniformInfos();
+	}
+
+	Shader::Shader(std::string const & filename)
+		: Shader(Config {filename})
+	{
 	}
 
 	Shader::~Shader()

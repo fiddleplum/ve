@@ -34,19 +34,19 @@ namespace ve
 			{
 				switch (pair.second.type)
 				{
-					case Uniform::INT: uniform = OwnPtr<UniformInt>::createNew(pair.second.location); break;
-					case Uniform::COORD_2I: uniform = OwnPtr<UniformCoord2i>::createNew(pair.second.location); break;
-					case Uniform::COORD_3I: uniform = OwnPtr<UniformCoord3i>::createNew(pair.second.location); break;
-					case Uniform::COORD_4I: uniform = OwnPtr<UniformCoord4i>::createNew(pair.second.location); break;
-					case Uniform::FLOAT: uniform = OwnPtr<UniformFloat>::createNew(pair.second.location); break;
-					case Uniform::COORD_2F: uniform = OwnPtr<UniformCoord2f>::createNew(pair.second.location); break;
-					case Uniform::COORD_3F: uniform = OwnPtr<UniformCoord3f>::createNew(pair.second.location); break;
-					case Uniform::COORD_4F: uniform = OwnPtr<UniformCoord4f>::createNew(pair.second.location); break;
-					case Uniform::MATRIX_22F: uniform = OwnPtr<UniformMatrix22f>::createNew(pair.second.location); break;
-					case Uniform::MATRIX_33F: uniform = OwnPtr<UniformMatrix33f>::createNew(pair.second.location); break;
-					case Uniform::MATRIX_44F: uniform = OwnPtr<UniformMatrix44f>::createNew(pair.second.location); break;
+					case Uniform::INT: uniform = OwnPtr<UniformInt>::returnNew(pair.second.location); break;
+					case Uniform::COORD_2I: uniform = OwnPtr<UniformCoord2i>::returnNew(pair.second.location); break;
+					case Uniform::COORD_3I: uniform = OwnPtr<UniformCoord3i>::returnNew(pair.second.location); break;
+					case Uniform::COORD_4I: uniform = OwnPtr<UniformCoord4i>::returnNew(pair.second.location); break;
+					case Uniform::FLOAT: uniform = OwnPtr<UniformFloat>::returnNew(pair.second.location); break;
+					case Uniform::COORD_2F: uniform = OwnPtr<UniformCoord2f>::returnNew(pair.second.location); break;
+					case Uniform::COORD_3F: uniform = OwnPtr<UniformCoord3f>::returnNew(pair.second.location); break;
+					case Uniform::COORD_4F: uniform = OwnPtr<UniformCoord4f>::returnNew(pair.second.location); break;
+					case Uniform::MATRIX_22F: uniform = OwnPtr<UniformMatrix22f>::returnNew(pair.second.location); break;
+					case Uniform::MATRIX_33F: uniform = OwnPtr<UniformMatrix33f>::returnNew(pair.second.location); break;
+					case Uniform::MATRIX_44F: uniform = OwnPtr<UniformMatrix44f>::returnNew(pair.second.location); break;
 					case Uniform::TEXTURE_2D:
-						OwnPtr<UniformTexture2d> sampler2dUniform = OwnPtr<UniformTexture2d>::createNew(pair.second.location, numTextures);
+						OwnPtr<UniformTexture2d> sampler2dUniform = OwnPtr<UniformTexture2d>::returnNew(pair.second.location, numTextures);
 						texture2dUniforms.push_back(sampler2dUniform);
 						uniform = sampler2dUniform;
 						numTextures++;

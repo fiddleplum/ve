@@ -43,7 +43,8 @@ namespace ve
 			bytesPerVertex += sizeOfComponent;
 		}
 
-		glGenBuffers(1, &vertexBuffer);
+		GLuint buffer;
+		glGenBuffers(1, &buffer);
 		glGenBuffers(1, &indexBuffer);
 		updateVertices(mesh);
 		auto const & indices = mesh->getIndices();

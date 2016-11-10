@@ -103,6 +103,11 @@ namespace ve
 		return shaderCache.get(name);
 	}
 
+	UsePtr<Shader> ResourceStoreInternal::loadShader(std::string const & name, Config const & config)
+	{
+		return shaderCache.create(name, config);
+	}
+
 	UsePtr<Shader> ResourceStoreInternal::loadShader(std::string const & name, std::string const & filename)
 	{
 		if (filename != "")

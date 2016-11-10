@@ -52,8 +52,10 @@ namespace ve
 		gui->update(dt);
 	}
 
-	void WindowInternal::render() const
+	void WindowInternal::render(SDL_GLContext glContext) const
 	{
+		SDL_GL_MakeCurrent(sdlWindow, glContext);
 		stage->render();
+		SDL_GL_SwapWindow(sdlWindow);
 	}
 }

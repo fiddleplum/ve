@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
 		//SDL_InitSubSystem(SDL_INIT_AUDIO);
 
-		app = ve::OwnPtr<ve::AppInternal>::createNew();
+		app.setNew();
 
 		ve::startup(args);
 

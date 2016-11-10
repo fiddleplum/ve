@@ -63,6 +63,9 @@ namespace ve
 		// Get a shader from the store.
 		UsePtr<Shader> getShader(std::string const & name) const;
 
+		// Load a shader from a config.
+		UsePtr<Shader> loadShader(std::string const & name, Config const & config);
+
 		// Load a shader from a file.
 		UsePtr<Shader> loadShader(std::string const & name, std::string const & filename = "");
 

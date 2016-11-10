@@ -69,7 +69,7 @@ namespace ve
 
 	template <typename T> UsePtr<T> PanelInternal::createWidget()
 	{
-		auto widget = OwnPtr<T>::createNew(getScene());
+		auto widget = OwnPtr<T>::returnNew(getScene());
 		WidgetInfo widgetInfo;
 		widgetInfo.widget = widget;
 		widgetInfos.push_back(widgetInfo);

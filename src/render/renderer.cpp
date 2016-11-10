@@ -6,7 +6,18 @@ namespace ve
 	Renderer::Renderer(SDL_Window * sdlWindow)
 	{
 		glContext = SDL_GL_CreateContext(sdlWindow);
+		int result = SDL_GL_MakeCurrent(sdlWindow, glContext);
 		glInitialize();
+		char *version = (char*)glGetString(GL_VERSION);
+
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+		GLuint gProgramID = glCreateProgram();
+		GLuint buffer;
+		glGenBuffers(1, &buffer);
 	}
 
 	Renderer::~Renderer()
@@ -15,9 +26,14 @@ namespace ve
 		glContext = 0;
 	}
 
+	SDL_GLContext Renderer::getGlContext() const
+	{
+		return glContext;
+	}
+
 	UsePtr<Scene> Renderer::createScene()
 	{
-		auto scene = OwnPtr<Scene>::createNew();
+		auto scene = OwnPtr<Scene>::returnNew();
 		scenes.insert(scene);
 		return scene;
 	}
@@ -34,7 +50,7 @@ namespace ve
 
 	UsePtr<TextureStage> Renderer::createTextureStage()
 	{
-		auto stage = OwnPtr<TextureStage>::createNew();
+		auto stage = OwnPtr<TextureStage>::returnNew();
 		textureStages.insert(stage);
 		return stage;
 	}

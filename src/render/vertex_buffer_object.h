@@ -28,8 +28,8 @@ namespace ve
 			unsigned int size;
 			intptr_t offset;
 		};
-		unsigned int vertexBuffer;
-		unsigned int indexBuffer;
+		unsigned int vertexBuffer = 1;
+		unsigned int indexBuffer = 2;
 		unsigned int mode;
 		unsigned int numIndices;
 		unsigned int bytesPerVertex;

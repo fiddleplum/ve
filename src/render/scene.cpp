@@ -6,7 +6,7 @@ namespace ve
 {
 	UsePtr<Model> Scene::createModel()
 	{
-		auto model = OwnPtr<Model>::createNew();
+		auto model = OwnPtr<Model>::returnNew();
 		models.insert(model);
 		return model;
 	}

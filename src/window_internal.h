@@ -55,7 +55,7 @@ namespace ve
 		void update(float dt);
 
 		// Called to render the window.
-		void render() const;
+		void render(SDL_GLContext glContext) const;
 
 	private:
 		SDL_Window * sdlWindow;

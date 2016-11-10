@@ -80,7 +80,7 @@ namespace ve
 		template <typename Y, typename... Args> void setNew(Args... args);
 
 		// Returns a newly created OwnPtr using setNew above.
-		template <typename ...Args> static PtrBase<T, OWN> createNew(Args... args);
+		template <typename ...Args> static PtrBase<T, OWN> returnNew(Args... args);
 
 		// Resets this to point to null.
 		void setNull();
@@ -288,7 +288,7 @@ namespace ve
 	}
 
 	template <typename T, bool OWN> template <typename ...Args>
-	PtrBase<T, OWN> PtrBase<T, OWN>::createNew(Args... args)
+	PtrBase<T, OWN> PtrBase<T, OWN>::returnNew(Args... args)
 	{
 		PtrBase<T, OWN> ptr;
 		ptr.setNew(args...);

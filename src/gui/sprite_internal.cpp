@@ -28,7 +28,26 @@ namespace ve
 			auto shader = store->getShader("guiShader");
 			if (!shader)
 			{
-				shader = store->loadShader("guiShader");
+				Config shaderConfig;
+				shaderConfig.children["vertex"].text =
+					"uniform ivec2 min;"
+					"uniform ivec2 max;"
+					"uniform ivec2 guiSize;"
+					"attribute vec2 position2d;"
+					"attribute vec2 uv0;"
+					"varying vec2 v_uv0;"
+					"void main(void) {"
+					"	gl_Position = vec4((min + position2d * (max - min + 1)) / guiSize - vec2(0.5, -0.5), 0, 0);"
+					"	v_uv0 = uv0;"
+					"}";
+				shaderConfig.children["fragment"].text =
+					"varying vec2 v_uv0;"
+					"uniform sampler2D tex;"
+					"void main(void) {"
+					"	gl_FragColor = texture(tex, v_uv0);"
+						
+					"}";
+				shader = store->loadShader("guiShader", shaderConfig);
 			}
 			material = store->createMaterial("guiMaterial");
 			material->setShader(shader);
@@ -68,7 +87,7 @@ namespace ve
 	void SpriteInternal::setImage(std::string const & name)
 	{
 		auto store = getAppInternal()->getResourceStoreInternal();
-		auto & texture = model->getMaterial()->getUniform("texture").as<UniformTexture2d>()->texture;
+		auto & texture = model->getMaterial()->getUniform("tex").as<UniformTexture2d>()->texture;
 		texture = store->getTexture(name);
 		if (!texture)
 		{
