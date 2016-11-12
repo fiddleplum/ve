@@ -59,8 +59,8 @@ namespace ve
 		model->setMaterial(material);
 		model->setUniformsFunction([this]()
 		{
-			model->getMaterial()->getUniform(minUniformLocation).as<UniformCoord2i>()->value = bounds.min;
-			model->getMaterial()->getUniform(maxUniformLocation).as<UniformCoord2i>()->value = bounds.max;
+			model->getMaterial()->getUniform(minUniformLocation).as<UniformVector2i>()->value = bounds.min;
+			model->getMaterial()->getUniform(maxUniformLocation).as<UniformVector2i>()->value = bounds.max;
 		});
 	}
 

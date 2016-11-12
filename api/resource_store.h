@@ -17,7 +17,7 @@ namespace ve
 		virtual UsePtr<Image> loadImage(std::string const & name, std::string const & location) = 0;
 
 		// Create a new image in the store with the given name.
-		virtual UsePtr<Image> createImage(std::string const & name, Coord2i size, Image::Format format) = 0;
+		virtual UsePtr<Image> createImage(std::string const & name, Vector2i size, Image::Format format) = 0;
 
 		// List the names of all the images in the store.
 		virtual std::vector<std::string> listImages() const = 0;

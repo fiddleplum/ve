@@ -30,7 +30,7 @@ namespace ve
 		scene->render();
 	}
 
-	void WindowStage::setWindowSize(Coord2i windowSize_)
+	void WindowStage::setWindowSize(Vector2i windowSize_)
 	{
 		windowSize = windowSize_;
 	}
@@ -86,7 +86,7 @@ namespace ve
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		if (!targets.empty())
 		{
-			Coord2i size = targets[0]->getSize(); // Use the first target as the viewport size. All targets should be the same size.
+			Vector2i size = targets[0]->getSize(); // Use the first target as the viewport size. All targets should be the same size.
 			glViewport(0, 0, size[0], size[1]);
 		}
 	}

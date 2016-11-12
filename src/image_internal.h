@@ -8,7 +8,7 @@ namespace ve
 	{
 	public:
 		// Create a blank image. Pixels are uninitializaed.
-		ImageInternal(Coord2i size, Format format);
+		ImageInternal(Vector2i size, Format format);
 
 		// Load a PNG or JPG from a file.
 		ImageInternal(std::string const & filename);
@@ -17,7 +17,7 @@ namespace ve
 		void save(std::string const & filename) const override;
 
 		// Get the size of the image.
-		Coord2i getSize() const override;
+		Vector2i getSize() const override;
 
 		// Get the format of the image.
 		Format getFormat() const override;
@@ -26,27 +26,27 @@ namespace ve
 		std::vector<uint8_t> const & getPixels() const override;
 
 		// Read a pixel.
-		Coord<3, uint8_t> getPixelRGB(Coord2i position) const override;
+		Vector<3, uint8_t> getPixelRGB(Vector2i position) const override;
 
 		// Read a pixel.
-		Coord<4, uint8_t> getPixelRGBA(Coord2i position) const override;
+		Vector<4, uint8_t> getPixelRGBA(Vector2i position) const override;
 
 		// Read a pixel.
-		uint32_t getPixelGrayScale32(Coord2i position) const override;
+		uint32_t getPixelGrayScale32(Vector2i position) const override;
 
 		// Write a pixel.
-		void setPixelRGB24(Coord2i position, Coord<3, uint8_t> value) override;
+		void setPixelRGB24(Vector2i position, Vector<3, uint8_t> value) override;
 
 		// Write a pixel.
-		void setPixelRGBA32(Coord2i position, Coord<4, uint8_t> value) override;
+		void setPixelRGBA32(Vector2i position, Vector<4, uint8_t> value) override;
 
 		// Write a pixel.
-		void setPixelGrayScale32(Coord2i position, uint32_t value) override;
+		void setPixelGrayScale32(Vector2i position, uint32_t value) override;
 
 	private:
 		Format format;
 		int bytesPerPixel;
-		Coord2i size;
+		Vector2i size;
 		std::vector<uint8_t> pixels;
 	};
 }

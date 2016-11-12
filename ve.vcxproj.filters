@@ -12,7 +12,6 @@
     <ClInclude Include="api\sprite.h" />
     <ClInclude Include="api\widget.h" />
     <ClInclude Include="api\image.h" />
-    <ClInclude Include="api\coord.h" />
     <ClInclude Include="src\image_internal.h" />
     <ClInclude Include="api\interval.h" />
     <ClInclude Include="api\rect.h" />
@@ -45,6 +44,7 @@
     <ClInclude Include="api\gui.h" />
     <ClInclude Include="src\gui\gui_internal.h" />
     <ClInclude Include="src\render\stage.h" />
+    <ClInclude Include="api\vector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

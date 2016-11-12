@@ -26,29 +26,29 @@ namespace ve
 		glUniform1i(getLocation(), value);
 	}
 
-	UniformCoord2i::UniformCoord2i(int location) : Uniform(COORD_2I, location)
+	UniformVector2i::UniformVector2i(int location) : Uniform(COORD_2I, location)
 	{
 	}
 
-	void UniformCoord2i::sendToActiveShader() const
+	void UniformVector2i::sendToActiveShader() const
 	{
 		glUniform2iv(getLocation(), 1, value.ptr());
 	}
 
-	UniformCoord3i::UniformCoord3i(int location) : Uniform(COORD_3I, location)
+	UniformVector3i::UniformVector3i(int location) : Uniform(COORD_3I, location)
 	{
 	}
 
-	void UniformCoord3i::sendToActiveShader() const
+	void UniformVector3i::sendToActiveShader() const
 	{
 		glUniform3iv(getLocation(), 1, value.ptr());
 	}
 
-	UniformCoord4i::UniformCoord4i(int location) : Uniform(COORD_4I, location)
+	UniformVector4i::UniformVector4i(int location) : Uniform(COORD_4I, location)
 	{
 	}
 
-	void UniformCoord4i::sendToActiveShader() const
+	void UniformVector4i::sendToActiveShader() const
 	{
 		glUniform4iv(getLocation(), 1, value.ptr());
 	}
@@ -62,29 +62,29 @@ namespace ve
 		glUniform1f(getLocation(), value);
 	}
 
-	UniformCoord2f::UniformCoord2f(int location) : Uniform(COORD_2F, location)
+	UniformVector2f::UniformVector2f(int location) : Uniform(COORD_2F, location)
 	{
 	}
 
-	void UniformCoord2f::sendToActiveShader() const
+	void UniformVector2f::sendToActiveShader() const
 	{
 		glUniform2fv(getLocation(), 1, value.ptr());
 	}
 
-	UniformCoord3f::UniformCoord3f(int location) : Uniform(COORD_3F, location)
+	UniformVector3f::UniformVector3f(int location) : Uniform(COORD_3F, location)
 	{
 	}
 
-	void UniformCoord3f::sendToActiveShader() const
+	void UniformVector3f::sendToActiveShader() const
 	{
 		glUniform3fv(getLocation(), 1, value.ptr());
 	}
 
-	UniformCoord4f::UniformCoord4f(int location) : Uniform(COORD_4F, location)
+	UniformVector4f::UniformVector4f(int location) : Uniform(COORD_4F, location)
 	{
 	}
 
-	void UniformCoord4f::sendToActiveShader() const
+	void UniformVector4f::sendToActiveShader() const
 	{
 		glUniform4fv(getLocation(), 1, value.ptr());
 	}

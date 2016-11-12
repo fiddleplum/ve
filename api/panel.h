@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ptr.h"
-#include "coord.h"
+#include "vector.h"
 #include "sprite.h"
 #include "text_button.h"
 
@@ -20,7 +20,7 @@ namespace ve
 		virtual void destroyWidget(UsePtr<Widget> widget) = 0;
 
 		// Sets the relative bounds for the widget.
-		virtual void setBounds(UsePtr<Widget> widget, Coord2f originInPanel, Coord2f originInWidget, Coord2i originOffset, Coord2f sizeInPanel, Coord2i sizeOffset) = 0;
+		virtual void setBounds(UsePtr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) = 0;
 
 	protected:
 		// Virtual destructor.

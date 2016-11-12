@@ -166,7 +166,7 @@
   <ItemGroup>
     <ClInclude Include="api\app.h" />
     <ClInclude Include="api\config.h" />
-    <ClInclude Include="api\coord.h" />
+    <ClInclude Include="api\vector.h" />
     <ClInclude Include="api\gui.h" />
     <ClInclude Include="api\image.h" />
     <ClInclude Include="api\interval.h" />

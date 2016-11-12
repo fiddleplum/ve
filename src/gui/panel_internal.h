@@ -31,7 +31,7 @@ namespace ve
 		void destroyWidget(UsePtr<Widget> widget) override;
 
 		// Sets the relative bounds for the widget.
-		void setBounds(UsePtr<Widget> widget, Coord2f originInPanel, Coord2f originInWidget, Coord2i originOffset, Coord2f sizeInPanel, Coord2i sizeOffset) override;
+		void setBounds(UsePtr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) override;
 
 		// Updates the panel.
 		void update(float dt) override;
@@ -40,11 +40,11 @@ namespace ve
 		struct WidgetInfo
 		{
 			OwnPtr<WidgetInternal> widget;
-			Coord2f originInPanel;
-			Coord2f originInWidget;
-			Coord2i originOffset;
-			Coord2f sizeInPanel;
-			Coord2i sizeOffset;
+			Vector2f originInPanel;
+			Vector2f originInWidget;
+			Vector2i originOffset;
+			Vector2f sizeInPanel;
+			Vector2i sizeOffset;
 		};
 
 		template <typename T> UsePtr<T> createWidget();

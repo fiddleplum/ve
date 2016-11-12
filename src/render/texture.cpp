@@ -16,7 +16,7 @@ namespace ve
 		glDeleteTextures(1, &id);
 	}
 
-	Coord2i Texture::getSize() const
+	Vector2i Texture::getSize() const
 	{
 		return size;
 	}
@@ -59,7 +59,7 @@ namespace ve
 		return id;
 	}
 
-	void Texture::setPixels(Coord2i size_, Image::Format format, uint8_t const * pixels)
+	void Texture::setPixels(Vector2i size_, Image::Format format, uint8_t const * pixels)
 	{
 		size = size_;
 

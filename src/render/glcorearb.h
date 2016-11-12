@@ -3114,9 +3114,9 @@ GLAPI void APIENTRY glBlendFuncSeparateiARB (GLuint buf, GLenum srcRGB, GLenum d
 #define GL_ARB_explicit_uniform_location 1
 #endif /* GL_ARB_explicit_uniform_location */
 
-#ifndef GL_ARB_fragment_coord_conventions
-#define GL_ARB_fragment_coord_conventions 1
-#endif /* GL_ARB_fragment_coord_conventions */
+#ifndef GL_ARB_fragment_vector_conventions
+#define GL_ARB_fragment_vector_conventions 1
+#endif /* GL_ARB_fragment_vector_conventions */
 
 #ifndef GL_ARB_fragment_layer_viewport
 #define GL_ARB_fragment_layer_viewport 1

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "image.h"
-#include "coord.h"
+#include "vector.h"
 #include "ptr.h"
 
 namespace ve
@@ -16,7 +16,7 @@ namespace ve
 		virtual ~Texture();
 
 		// Returns the size of the texture.
-		Coord2i getSize() const;
+		Vector2i getSize() const;
 
 		// Updates the pixels from the image.
 		void updatePixels(UsePtr<Image> image);
@@ -31,9 +31,9 @@ namespace ve
 		unsigned int getGLId() const;
 
 	private:
-		void setPixels(Coord2i size, Image::Format format, uint8_t const * pixels);
+		void setPixels(Vector2i size, Image::Format format, uint8_t const * pixels);
 
 		unsigned int id;
-		Coord2i size;
+		Vector2i size;
 	};
 }

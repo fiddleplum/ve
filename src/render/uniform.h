@@ -1,7 +1,7 @@
 #pragma once
 
 #include "texture.h"
-#include "coord.h"
+#include "vector.h"
 #include "matrix.h"
 #include "ptr.h"
 
@@ -49,45 +49,45 @@ namespace ve
 	};
 
 	// An OpenGL uniform used by Shader and Material.
-	class UniformCoord2i : public Uniform
+	class UniformVector2i : public Uniform
 	{
 	public:
 		// Constructor.
-		UniformCoord2i(int location);
+		UniformVector2i(int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
 
 		// The value to be sent to the Shader.
-		Coord2i value;
+		Vector2i value;
 	};
 
 	// An OpenGL uniform used by Shader and Material.
-	class UniformCoord3i : public Uniform
+	class UniformVector3i : public Uniform
 	{
 	public:
 		// Constructor.
-		UniformCoord3i(int location);
+		UniformVector3i(int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
 
 		// The value to be sent to the Shader.
-		Coord3i value;
+		Vector3i value;
 	};
 
 	// An OpenGL uniform used by Shader and Material.
-	class UniformCoord4i : public Uniform
+	class UniformVector4i : public Uniform
 	{
 	public:
 		// Constructor.
-		UniformCoord4i(int location);
+		UniformVector4i(int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
 
 		// The value to be sent to the Shader.
-		Coord4i value;
+		Vector4i value;
 	};
 
 	// An OpenGL uniform used by Shader and Material.
@@ -105,45 +105,45 @@ namespace ve
 	};
 
 	// An OpenGL uniform used by Shader and Material.
-	class UniformCoord2f : public Uniform
+	class UniformVector2f : public Uniform
 	{
 	public:
 		// Constructor.
-		UniformCoord2f(int location);
+		UniformVector2f(int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
 
 		// The value to be sent to the Shader.
-		Coord2f value;
+		Vector2f value;
 	};
 
 	// An OpenGL uniform used by Shader and Material.
-	class UniformCoord3f : public Uniform
+	class UniformVector3f : public Uniform
 	{
 	public:
 		// Constructor.
-		UniformCoord3f(int location);
+		UniformVector3f(int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
 
 		// The value to be sent to the Shader.
-		Coord3f value;
+		Vector3f value;
 	};
 
 	// An OpenGL uniform used by Shader and Material.
-	class UniformCoord4f : public Uniform
+	class UniformVector4f : public Uniform
 	{
 	public:
 		// Constructor.
-		UniformCoord4f(int location);
+		UniformVector4f(int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
 
 		// The value to be sent to the Shader.
-		Coord4f value;
+		Vector4f value;
 	};
 
 	// An OpenGL uniform used by Shader and Material.

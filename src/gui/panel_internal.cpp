@@ -46,7 +46,7 @@ namespace ve
 		widgetInfos.erase(it);
 	}
 
-	void PanelInternal::setBounds(UsePtr<Widget> widget, Coord2f originInPanel, Coord2f originInWidget, Coord2i originOffset, Coord2f sizeInPanel, Coord2i sizeOffset)
+	void PanelInternal::setBounds(UsePtr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
 	{
 		auto & widgetInfo = *getWidgetInfo(widget);
 		widgetInfo.originInPanel = originInPanel;
@@ -91,9 +91,9 @@ namespace ve
 
 	void PanelInternal::updateWidgetBounds(WidgetInfo const & widgetInfo) const
 	{
-		Coord2f panelSize = Coord2f {bounds.max - bounds.min + Coord2i {1, 1}};
-		Coord2f widgetSize = panelSize.scale(widgetInfo.sizeInPanel) + Coord2f {widgetInfo.sizeOffset};
-		Coord2f widgetPosition = panelSize.scale(widgetInfo.originInPanel) - widgetSize.scale(widgetInfo.originInWidget) + Coord2f {widgetInfo.originOffset};
-		widgetInfo.widget->setBounds(Recti {Coord2i{widgetPosition}, Coord2i{widgetPosition + widgetSize}});
+		Vector2f panelSize = Vector2f {bounds.max - bounds.min + Vector2i {1, 1}};
+		Vector2f widgetSize = panelSize.scale(widgetInfo.sizeInPanel) + Vector2f {widgetInfo.sizeOffset};
+		Vector2f widgetPosition = panelSize.scale(widgetInfo.originInPanel) - widgetSize.scale(widgetInfo.originInWidget) + Vector2f {widgetInfo.originOffset};
+		widgetInfo.widget->setBounds(Recti {Vector2i{widgetPosition}, Vector2i{widgetPosition + widgetSize}});
 	}
 }

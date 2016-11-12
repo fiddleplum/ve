@@ -42,14 +42,14 @@ namespace ve
 	{
 	public:
 		// Sets the window size for calculating the GL bounds.
-		void setWindowSize(Coord2i windowSize);
+		void setWindowSize(Vector2i windowSize);
 
 	protected:
 		// Prepares the stage to use the screen as the target.
 		void setupTarget() const override;
 
 	private:
-		Coord2i windowSize = {0, 0};
+		Vector2i windowSize = {0, 0};
 	};
 
 	class TextureStage : public Stage

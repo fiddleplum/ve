@@ -24,7 +24,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<Image> ResourceStoreInternal::createImage(std::string const & name, Coord2i size, Image::Format format)
+	UsePtr<Image> ResourceStoreInternal::createImage(std::string const & name, Vector2i size, Image::Format format)
 	{
 		return imageCache.create(name, size, format);
 	}

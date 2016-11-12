@@ -25,7 +25,7 @@ namespace ve
 		UsePtr<Image> loadImage(std::string const & name, std::string const & location = "") override;
 
 		// Create a new image in the store with the given name.
-		UsePtr<Image> createImage(std::string const & name, Coord2i size, Image::Format format) override;
+		UsePtr<Image> createImage(std::string const & name, Vector2i size, Image::Format format) override;
 
 		// List the names of all the images in the store.
 		std::vector<std::string> listImages() const override;

@@ -3,7 +3,7 @@
 
 namespace ve
 {
-	ImageInternal::ImageInternal(Coord2i size_, Format format_)
+	ImageInternal::ImageInternal(Vector2i size_, Format format_)
 	{
 		size = size_;
 		format = format_;
@@ -68,7 +68,7 @@ namespace ve
 		}
 	}
 
-	Coord2i ImageInternal::getSize() const
+	Vector2i ImageInternal::getSize() const
 	{
 		return size;
 	}
@@ -83,7 +83,7 @@ namespace ve
 		return pixels;
 	}
 
-	Coord<3, uint8_t> ImageInternal::getPixelRGB(Coord2i position) const
+	Vector<3, uint8_t> ImageInternal::getPixelRGB(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGB24)
@@ -97,7 +97,7 @@ namespace ve
 		return {pixels[offset + 0], pixels[offset + 1], pixels[offset + 2]};
 	}
 
-	Coord<4, uint8_t> ImageInternal::getPixelRGBA(Coord2i position) const
+	Vector<4, uint8_t> ImageInternal::getPixelRGBA(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGBA32)
@@ -111,7 +111,7 @@ namespace ve
 		return {pixels[offset + 0], pixels[offset + 1], pixels[offset + 2], pixels[offset + 3]};
 	}
 
-	uint32_t ImageInternal::getPixelGrayScale32(Coord2i position) const
+	uint32_t ImageInternal::getPixelGrayScale32(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != GRAYSCALE32)
@@ -125,7 +125,7 @@ namespace ve
 		return (pixels[offset + 0] << 24) + (pixels[offset + 1] << 16) + (pixels[offset + 2] << 8) + pixels[offset + 3];
 	}
 
-	void ImageInternal::setPixelRGB24(Coord2i position, Coord<3, uint8_t> value)
+	void ImageInternal::setPixelRGB24(Vector2i position, Vector<3, uint8_t> value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGB24)
@@ -141,7 +141,7 @@ namespace ve
 		pixels[offset + 2] = value[2];
 	}
 
-	void ImageInternal::setPixelRGBA32(Coord2i position, Coord<4, uint8_t> value)
+	void ImageInternal::setPixelRGBA32(Vector2i position, Vector<4, uint8_t> value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGBA32)
@@ -158,7 +158,7 @@ namespace ve
 		pixels[offset + 3] = value[3];
 	}
 
-	void ImageInternal::setPixelGrayScale32(Coord2i position, uint32_t value)
+	void ImageInternal::setPixelGrayScale32(Vector2i position, uint32_t value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != GRAYSCALE32)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "coord.h"
+#include "vector.h"
 
 /*
 	This is a standard mathematical matrix class. Rows and cols are the dimensions of the matrix and T is the type of its elements.
@@ -21,6 +21,15 @@ namespace ve
 		// Copy constructor.
 		Matrix(Matrix<rows, cols, T> const & m);
 
+		// Initializer list constructor.
+		Matrix(std::initializer_list<T> const & m);
+
+		// Assignment operator.
+		Matrix<rows, cols, T> & operator = (Matrix<rows, cols, T> const & m);
+
+		// Set the elements from an initializer list.
+		Matrix<rows, cols, T> const & operator = (std::initializer_list<T> const & m);
+
 		// Returns a matrix where each element is zero.
 		static Matrix<rows, cols, T> zero();
 
@@ -28,37 +37,31 @@ namespace ve
 		static Matrix<rows, cols, T> identity();
 
 		// Returns a matrix equivalent to the cross product with the first operand as v.
-		static Matrix<rows, cols, T> crossProduct(Coord<rows, T> v);
+		static Matrix<rows, cols, T> crossProduct(Vector<rows, T> v);
 
-		// Access the element at row row and column col.
+		// Returns the element at row row and column col.
 		T & operator()(unsigned int row, unsigned int col);
 
-		// Access the element at row row and column col.
+		// Returns the element at row row and column col.
 		T const & operator()(unsigned int row, unsigned int col) const;
 
-		// Access the element at index i. Remember the matrix is column-major.
+		// Returns the element at index i. The matrix is column-major.
 		T & operator [](unsigned int i);
 
-		// Access the element at index i. Remember the matrix is column-major.
+		// Returns the element at index i. The matrix is column-major.
 		T const & operator [](unsigned int i) const;
 
-		// Assignment operator.
-		Matrix<rows, cols, T> & operator = (Matrix<rows, cols, T> const & m);
-
-		// Get a pointer to the elements.
+		// Returns a pointer to the elements.
 		T * ptr();
 
-		// Get a pointer to the elements.
+		// Returns a pointer to the elements.
 		T const * ptr() const;
 
 		// Returns the transpose.
 		Matrix<cols, rows, T> transpose() const;
 
-		// Returns this v, extending v either as a point(v3 = 1) or direction(v3 = 0). Rows must equal cols.
-		Coord<rows - 1, T> transform(Coord<cols - 1, T> v, T v3) const;
-
-		// Returns v this. Used for dealing with row-major systems.
-		Coord<cols, T> preMultiply(Coord<rows, T> v) const;
+		// Returns this * v, extending v either as a point (v3 = 1) or direction (v3 = 0), and returns the result without the last dimension.
+		Vector<rows - 1, T> transform(Vector<cols - 1, T> v, T v3) const;
 
 	private:
 		T c[rows * cols];
@@ -83,28 +86,68 @@ namespace ve
 	// Returns m0 - m1.
 	template <unsigned int rows, unsigned int cols, typename T> Matrix<rows, cols, T> operator - (Matrix<rows, cols, T> const & m0, Matrix<rows, cols, T> const & m1);
 
-	// Returns m0 m1.
+	// Returns m0 * m1.
 	template <unsigned int rows, unsigned int mid, unsigned int cols, typename T> Matrix<rows, cols, T> operator * (Matrix<rows, mid, T> const & m0, Matrix<mid, cols, T> const & m1);
 
-	// Returns a m. There is no m a syntax to be consistent with standard mathematical formula writing order.
+	// Returns a * m.
 	template <unsigned int rows, unsigned int cols, typename T> Matrix<rows, cols, T> operator * (T a, Matrix<rows, cols, T> const & m);
 
-	// Returns m v.
-	template <unsigned int rows, unsigned int cols, typename T> Coord<rows, T> operator * (Matrix<rows, cols, T> const & m, Coord<cols, T> v);
+	// Returns m * a.
+	template <unsigned int rows, unsigned int cols, typename T> Matrix<rows, cols, T> operator * (Matrix<rows, cols, T> const & m, T a);
+
+	// Returns m * v.
+	template <unsigned int rows, unsigned int cols, typename T> Vector<rows, T> operator * (Matrix<rows, cols, T> const & m, Vector<cols, T> v);
+
+	// Returns v * m.
+	template <unsigned int rows, unsigned int cols, typename T> Vector<cols, T> operator * (Vector<rows, T> v, Matrix<rows, cols, T> const & m);
 
 	// Template Implementations
 
 	template <unsigned int rows, unsigned int cols, typename T>
 	Matrix<rows, cols, T>::Matrix()
 	{
-		assert(rows > 0 && cols > 0);
+		static_assert(rows > 0 && cols > 0, "rows == 0 || cols == 0");
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
 	Matrix<rows, cols, T>::Matrix(Matrix<rows, cols, T> const & m)
 	{
-		assert(rows > 0 && cols > 0);
+		static_assert(rows > 0 && cols > 0, "rows == 0 || cols == 0");
 		*this = m;
+	}
+
+	template <unsigned int rows, unsigned int cols, typename T>
+	Matrix<rows, cols, T>::Matrix(std::initializer_list<T> const & m)
+	{
+		static_assert(rows > 0 && cols > 0, "rows == 0 || cols == 0");
+		*this = m;
+	}
+
+	template <unsigned int rows, unsigned int cols, typename T>
+	Matrix<rows, cols, T> & Matrix<rows, cols, T>::operator = (Matrix<rows, cols, T> const & m)
+	{
+		unsigned int size = rows * cols;
+		for (unsigned int i = 0; i < size; ++i)
+		{
+			c[i] = m.c[i];
+		}
+		return *this;
+	}
+
+	template <unsigned int rows, unsigned int cols, typename T>
+	Matrix<rows, cols, T> const & Matrix<rows, cols, T>::operator = (std::initializer_list<T> const & m)
+	{
+		if (m.size() != rows * cols)
+		{
+			throw std::exception();
+		}
+		unsigned int i = 0;
+		for (auto t : m)
+		{
+			c[i] = t;
+			i++;
+		}
+		return *this;
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
@@ -122,7 +165,7 @@ namespace ve
 	template <unsigned int rows, unsigned int cols, typename T>
 	Matrix<rows, cols, T> Matrix<rows, cols, T>::identity()
 	{
-		assert(rows == cols);
+		static_assert(rows == cols, "rows != cols");
 		Matrix<rows, cols, T> r = zero();
 		unsigned int size = rows * cols;
 		for (unsigned int i = 0; i < size; i += rows + 1)
@@ -133,9 +176,9 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Matrix<rows, cols, T> Matrix<rows, cols, T>::crossProduct(Coord<rows, T> v)
+	Matrix<rows, cols, T> Matrix<rows, cols, T>::crossProduct(Vector<rows, T> v)
 	{
-		assert(rows == 3 && cols == 3);
+		static_assert(rows == 3 && cols == 3, "rows != 3 || cols != 3");
 		Matrix<rows, cols, T> r;
 		r.c[0 * rows + 0] = 0;
 		r.c[1 * rows + 0] = -v[2];
@@ -190,17 +233,6 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Matrix<rows, cols, T> & Matrix<rows, cols, T>::operator = (Matrix<rows, cols, T> const & m)
-	{
-		unsigned int size = rows * cols;
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			c[i] = m.c[i];
-		}
-		return *this;
-	}
-
-	template <unsigned int rows, unsigned int cols, typename T>
 	T * Matrix<rows, cols, T>::ptr()
 	{
 		return c;
@@ -228,10 +260,10 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Coord<rows - 1, T> Matrix<rows, cols, T>::transform(Coord<cols - 1, T> v, T v3) const
+	Vector<rows - 1, T> Matrix<rows, cols, T>::transform(Vector<cols - 1, T> v, T v3) const
 	{
-		assert(rows == cols && rows > 1);
-		Coord<rows - 1, T> r;
+		static_assert(rows == cols && rows > 1, "rows != cols || rows <= 1");
+		Vector<rows - 1, T> r;
 		for (unsigned int i = 0; i < rows - 1; ++i)
 		{
 			r[i] = (T)0;
@@ -249,25 +281,6 @@ namespace ve
 		for (unsigned int i = 0; i < rows - 1; i++)
 		{
 			r[i] += c[krows + i] * v3;
-		}
-		return r;
-	}
-
-	template <unsigned int rows, unsigned int cols, typename T>
-	Coord<cols, T> Matrix<rows, cols, T>::preMultiply(Coord<rows, T> v) const
-	{
-		Coord<cols, T> r;
-		for (int i = 0; i < cols; ++i)
-		{
-			r[i] = (T)0;
-		}
-		for (unsigned int i = 0; i < cols; ++i)
-		{
-			unsigned int irows = i * rows;
-			for (unsigned int k = 0; k < rows; ++k)
-			{
-				r[i] += v[k] * c[irows + k];
-			}
 		}
 		return r;
 	}
@@ -354,20 +367,51 @@ namespace ve
 	}
 
 	template <unsigned int rows, unsigned int cols, typename T>
-	Coord<rows, T> operator * (Matrix<rows, cols, T> const & m, Coord<cols, T> v)
+	Matrix<rows, cols, T> operator * (Matrix<rows, cols, T> const & m, T a)
 	{
-		Coord<rows, T> r;
-		for (unsigned int i = 0; i < rows; ++i)
+		Matrix<rows, cols, T> r;
+		unsigned int size = rows * cols;
+		for (unsigned int i = 0; i < size; ++i)
 		{
-			r[i] = (T)0;
+			r[i] = m[i] * a;
 		}
-		for (unsigned int k = 0; k < cols; ++k)
+		return r;
+	}
+
+	template <unsigned int rows, unsigned int cols, typename T>
+	Vector<rows, T> operator * (Matrix<rows, cols, T> const & m, Vector<cols, T> v)
+	{
+		Vector<rows, T> r;
+		for (unsigned int row = 0; row < rows; ++row)
 		{
-			unsigned int krows = k * rows;
-			T v_k = v[k];
-			for (unsigned int i = 0; i < rows; ++i)
+			r[row] = (T)0;
+		}
+		for (unsigned int col = 0; col < cols; ++col)
+		{
+			unsigned int i = col * rows;
+			T v_col = v[col];
+			for (unsigned int row = 0; row < rows; ++row)
 			{
-				r[i] += m[krows + i] * v_k;
+				r[row] += m[i + row] * v_col;
+			}
+		}
+		return r;
+	}
+
+	template <unsigned int rows, unsigned int cols, typename T>
+	Vector<cols, T> operator * (Vector<rows, T> v, Matrix<rows, cols, T> const & m)
+	{
+		Vector<cols, T> r;
+		for (unsigned int col = 0; col < cols; ++col)
+		{
+			r[col] = (T)0;
+		}
+		for (unsigned int col = 0; col < cols; ++col)
+		{
+			unsigned int i = col * rows;
+			for (unsigned int row = 0; row < rows; ++row)
+			{
+				r[col] += v[row] * m[i + row];
 			}
 		}
 		return r;

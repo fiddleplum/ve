@@ -35,13 +35,13 @@ namespace ve
 				switch (pair.second.type)
 				{
 					case Uniform::INT: uniform = OwnPtr<UniformInt>::returnNew(pair.second.location); break;
-					case Uniform::COORD_2I: uniform = OwnPtr<UniformCoord2i>::returnNew(pair.second.location); break;
-					case Uniform::COORD_3I: uniform = OwnPtr<UniformCoord3i>::returnNew(pair.second.location); break;
-					case Uniform::COORD_4I: uniform = OwnPtr<UniformCoord4i>::returnNew(pair.second.location); break;
+					case Uniform::COORD_2I: uniform = OwnPtr<UniformVector2i>::returnNew(pair.second.location); break;
+					case Uniform::COORD_3I: uniform = OwnPtr<UniformVector3i>::returnNew(pair.second.location); break;
+					case Uniform::COORD_4I: uniform = OwnPtr<UniformVector4i>::returnNew(pair.second.location); break;
 					case Uniform::FLOAT: uniform = OwnPtr<UniformFloat>::returnNew(pair.second.location); break;
-					case Uniform::COORD_2F: uniform = OwnPtr<UniformCoord2f>::returnNew(pair.second.location); break;
-					case Uniform::COORD_3F: uniform = OwnPtr<UniformCoord3f>::returnNew(pair.second.location); break;
-					case Uniform::COORD_4F: uniform = OwnPtr<UniformCoord4f>::returnNew(pair.second.location); break;
+					case Uniform::COORD_2F: uniform = OwnPtr<UniformVector2f>::returnNew(pair.second.location); break;
+					case Uniform::COORD_3F: uniform = OwnPtr<UniformVector3f>::returnNew(pair.second.location); break;
+					case Uniform::COORD_4F: uniform = OwnPtr<UniformVector4f>::returnNew(pair.second.location); break;
 					case Uniform::MATRIX_22F: uniform = OwnPtr<UniformMatrix22f>::returnNew(pair.second.location); break;
 					case Uniform::MATRIX_33F: uniform = OwnPtr<UniformMatrix33f>::returnNew(pair.second.location); break;
 					case Uniform::MATRIX_44F: uniform = OwnPtr<UniformMatrix44f>::returnNew(pair.second.location); break;
