@@ -2,8 +2,8 @@
 
 #include "app.h"
 #include "window_internal.h"
-#include "ptr.h"
-#include "object_vector.h"
+#include "util/ptr.h"
+#include "util/object_vector.h"
 #include "resources_store_internal.h"
 #include "render/renderer.h"
 

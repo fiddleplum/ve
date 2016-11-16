@@ -1,4 +1,4 @@
-#include "sprite_internal.h"
+#include "gui/sprite_internal.h"
 #include "app_internal.h"
 
 namespace ve

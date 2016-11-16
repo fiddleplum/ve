@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mesh.h"
-#include "ptr.h"
+#include "render/mesh.h"
+#include "util/ptr.h"
 
 namespace ve
 {

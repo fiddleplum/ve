@@ -1,6 +1,6 @@
 #include "ve.h"
 #include "app_internal.h"
-#include "ptr.h"
+#include "util/ptr.h"
 #include <SDL.h>
 #include <vector>
 #include <string>

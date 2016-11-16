@@ -1,7 +1,7 @@
 #pragma once
 
-#include "model.h"
-#include "ptr.h"
+#include "render/model.h"
+#include "util/ptr.h"
 #include <unordered_set>
 
 namespace ve

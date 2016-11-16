@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ptr.h"
-#include "panel.h"
+#include "util/ptr.h"
+#include "gui/panel.h"
 
 namespace ve
 {

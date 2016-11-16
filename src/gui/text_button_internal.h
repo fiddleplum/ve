@@ -1,7 +1,7 @@
 #pragma once
 
-#include "text_button.h"
-#include "widget_internal.h"
+#include "gui/text_button.h"
+#include "gui/widget_internal.h"
 
 namespace ve
 {

@@ -1,13 +1,13 @@
 #pragma once
 
 #include "resource_store.h"
-#include "image_internal.h"
+#include "render/image_internal.h"
 #include "render/texture.h"
-#include "mesh_internal.h"
+#include "render/mesh_internal.h"
 #include "render/vertex_buffer_object.h"
 #include "render/shader.h"
 #include "render/material.h"
-#include "cache.h"
+#include "util/cache.h"
 
 namespace ve
 {

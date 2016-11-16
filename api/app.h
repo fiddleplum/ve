@@ -1,7 +1,7 @@
 #pragma once
 
 #include "window.h"
-#include "ptr.h"
+#include "util/ptr.h"
 #include "resource_store.h"
 
 namespace ve

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ptr.h"
-#include "scene.h"
-#include "stage.h"
+#include "util/ptr.h"
+#include "render/scene.h"
+#include "render/stage.h"
 #include <SDL.h>
 #include <set>
 

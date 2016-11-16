@@ -1,8 +1,8 @@
 #pragma once
 
-#include "panel.h"
-#include "widget_internal.h"
-#include "object_vector.h"
+#include "gui/panel.h"
+#include "gui/widget_internal.h"
+#include "util/object_vector.h"
 
 namespace ve
 {

@@ -1,5 +1,5 @@
-#include "mesh_internal.h"
-#include "serialize.h"
+#include "render/mesh_internal.h"
+#include "util/serialize.h"
 #include <fstream>
 
 namespace ve

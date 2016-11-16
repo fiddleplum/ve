@@ -1,8 +1,8 @@
-#include "shader.h"
-#include "open_gl.h"
-#include "uniform.h"
-#include "mesh.h"
-#include "stringutil.h"
+#include "render/shader.h"
+#include "render/open_gl.h"
+#include "render/uniform.h"
+#include "render/mesh.h"
+#include "util/stringutil.h"
 
 // TODO: Make the shader use specific attribute locations chosen by an enum based on the attribute names.
 // This allows multiple shaders to be used with a single vbo and all be compatible.

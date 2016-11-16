@@ -4,18 +4,8 @@
     <ClInclude Include="api\ve.h" />
     <ClInclude Include="api\app.h" />
     <ClInclude Include="src\app_internal.h" />
-    <ClInclude Include="api\ptr.h" />
     <ClInclude Include="api\window.h" />
     <ClInclude Include="src\window_internal.h" />
-    <ClInclude Include="api\panel.h" />
-    <ClInclude Include="api\text_button.h" />
-    <ClInclude Include="api\sprite.h" />
-    <ClInclude Include="api\widget.h" />
-    <ClInclude Include="api\image.h" />
-    <ClInclude Include="src\image_internal.h" />
-    <ClInclude Include="api\interval.h" />
-    <ClInclude Include="api\rect.h" />
-    <ClInclude Include="src\cache.h" />
     <ClInclude Include="api\resource_store.h" />
     <ClInclude Include="src\resources_store_internal.h" />
     <ClInclude Include="src\gui\text_button_internal.h" />
@@ -26,35 +16,44 @@
     <ClInclude Include="src\render\texture.h" />
     <ClInclude Include="src\render\open_gl.h" />
     <ClInclude Include="src\render\renderer.h" />
-    <ClInclude Include="src\object_map.h" />
-    <ClInclude Include="src\mesh_internal.h" />
-    <ClInclude Include="api\mesh.h" />
-    <ClInclude Include="src\serialize.h" />
     <ClInclude Include="src\render\vertex_buffer_object.h" />
-    <ClInclude Include="api\matrix.h" />
-    <ClInclude Include="api\config.h" />
-    <ClInclude Include="api\stringutil.h" />
     <ClInclude Include="src\render\shader.h" />
     <ClInclude Include="src\render\uniform.h" />
     <ClInclude Include="src\render\material.h" />
     <ClInclude Include="src\render\model.h" />
     <ClInclude Include="src\render\scene.h" />
-    <ClInclude Include="src\object_set.h" />
-    <ClInclude Include="src\object_vector.h" />
-    <ClInclude Include="api\gui.h" />
     <ClInclude Include="src\gui\gui_internal.h" />
     <ClInclude Include="src\render\stage.h" />
-    <ClInclude Include="api\vector.h" />
+    <ClInclude Include="api\std\optional.hpp" />
+    <ClInclude Include="src\util\cache.h" />
+    <ClInclude Include="src\util\object_map.h" />
+    <ClInclude Include="src\util\object_set.h" />
+    <ClInclude Include="src\util\object_vector.h" />
+    <ClInclude Include="src\util\serialize.h" />
+    <ClInclude Include="api\util\stringutil.h" />
+    <ClInclude Include="api\util\rect.h" />
+    <ClInclude Include="api\util\ptr.h" />
+    <ClInclude Include="api\util\matrix.h" />
+    <ClInclude Include="api\util\interval.h" />
+    <ClInclude Include="api\util\config.h" />
+    <ClInclude Include="api\gui\gui.h" />
+    <ClInclude Include="api\gui\sprite.h" />
+    <ClInclude Include="api\gui\text_button.h" />
+    <ClInclude Include="api\gui\panel.h" />
+    <ClInclude Include="api\gui\widget.h" />
+    <ClInclude Include="api\render\image.h" />
+    <ClInclude Include="api\render\mesh.h" />
+    <ClInclude Include="api\util\vector.h" />
+    <ClInclude Include="src\render\image_internal.h" />
+    <ClInclude Include="src\render\mesh_internal.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
     <Text Include="api\_notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\app_internal.cpp" />
     <ClCompile Include="src\window_internal.cpp" />
-    <ClCompile Include="src\image_internal.cpp" />
     <ClCompile Include="src\resource_store_internal.cpp" />
     <ClCompile Include="src\gui\sprite_internal.cpp" />
     <ClCompile Include="src\gui\text_button_internal.cpp" />
@@ -62,10 +61,7 @@
     <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\render\open_gl.cpp" />
     <ClCompile Include="src\render\renderer.cpp" />
-    <ClCompile Include="src\mesh_internal.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
-    <ClCompile Include="src\stringutil.cpp" />
-    <ClCompile Include="src\config.cpp" />
     <ClCompile Include="src\render\shader.cpp" />
     <ClCompile Include="src\render\uniform.cpp" />
     <ClCompile Include="src\render\material.cpp" />
@@ -74,5 +70,10 @@
     <ClCompile Include="src\gui\gui_internal.cpp" />
     <ClCompile Include="src\gui\widget_internal.cpp" />
     <ClCompile Include="src\render\stage.cpp" />
+    <ClCompile Include="src\util\stringutil.cpp" />
+    <ClCompile Include="src\util\config.cpp" />
+    <ClCompile Include="src\render\image_internal.cpp" />
+    <ClCompile Include="src\render\mesh_internal.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
 </Project>

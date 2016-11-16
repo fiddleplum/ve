@@ -1,10 +1,10 @@
-<h1>Render System</h1>
-
-<ul>
-<li>Texture</li>
-</ul>
-<p>Game loop, after Update and PreRenderUpdate, calls Render on each of its Windows. Each Window has a built in stage and calls Stage.Render().
+<h1>Architecture</h1>
 
 App
 	Window*
-		Scene->Render
+		Stage
+		Gui
+	Renderer
+		Scene*
+		Stage*
+	Store

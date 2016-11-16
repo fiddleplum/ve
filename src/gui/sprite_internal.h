@@ -1,9 +1,9 @@
 #pragma once
 
-#include "sprite.h"
-#include "widget_internal.h"
-#include "../render/model.h"
-#include "ptr.h"
+#include "gui/sprite.h"
+#include "gui/widget_internal.h"
+#include "render/model.h"
+#include "util/ptr.h"
 
 namespace ve
 {

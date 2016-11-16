@@ -1,7 +1,7 @@
 #pragma once
 
-#include "matrix.h"
-#include "config.h"
+#include "util/matrix.h"
+#include "util/config.h"
 #include <string>
 #include <map>
 #include <vector>

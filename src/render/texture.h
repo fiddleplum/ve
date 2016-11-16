@@ -1,8 +1,8 @@
 #pragma once
 
-#include "image.h"
-#include "vector.h"
-#include "ptr.h"
+#include "render/image.h"
+#include "util/vector.h"
+#include "util/ptr.h"
 
 namespace ve
 {

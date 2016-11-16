@@ -1,7 +1,7 @@
 #pragma once
 
-#include "widget.h"
-#include "rect.h"
+#include "gui/widget.h"
+#include "util/rect.h"
 #include "render/scene.h"
 
 namespace ve
