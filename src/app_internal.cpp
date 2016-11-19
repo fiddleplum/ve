@@ -22,8 +22,19 @@ namespace ve
 	{
 		float lastFrameTime = SDL_GetTicks() / 1000.f;
 		float accumulator = 0.f;
-		while (looping)
+		while (true)
 		{
+			windows.processEraseQueue();
+			if (windows.empty())
+			{
+				renderer.setNull();
+			}
+
+			if (!looping)
+			{
+				break;
+			}
+
 			float currentFrameTime = SDL_GetTicks() / 1000.f;
 
 			//// Handle events
@@ -45,8 +56,6 @@ namespace ve
 			//		handleEvent(event);
 			//	}
 			//}
-
-			windows.processElementsToErase();
 
 			// Update
 			while (accumulator >= secondsPerUpdate)
@@ -107,11 +116,7 @@ namespace ve
 		{
 			throw std::runtime_error("Window not found. ");
 		}
-		windows.erase(it);
-		if (windows.empty())
-		{
-			renderer.setNull();
-		}
+		windows.queueForErase(it);
 	}
 
 	UsePtr<ResourceStore> AppInternal::getResourceStore() const
@@ -152,10 +157,7 @@ namespace ve
 				switch (sdlEvent.window.event)
 				{
 					case SDL_WINDOWEVENT_CLOSE:
-						if (window->callCloseHandler())
-						{
-							destroyWindow(window);
-						}
+						window->callCloseHandler();
 						break;
 					//case SDL_WINDOWEVENT_SIZE_CHANGED:
 					//	window->handleResize({sdlEvent.window.data1, sdlEvent.window.data2});

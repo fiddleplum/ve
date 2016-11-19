@@ -16,6 +16,7 @@ namespace ve
 		auto it = std::lower_bound(models.begin(), models.end(), model);
 		if (*it == model)
 		{
+			model.setNull();
 			models.erase(it);
 		}
 	}

@@ -20,21 +20,21 @@ namespace ve
 
 	WindowInternal::~WindowInternal()
 	{
+		stage.setNull();
 		SDL_DestroyWindow(sdlWindow);
 	}
 
-	void WindowInternal::setCloseHandler(std::function<bool()> closeHandler_)
+	void WindowInternal::setCloseHandler(std::function<void()> closeHandler_)
 	{
 		closeHandler = closeHandler_;
 	}
 
-	bool WindowInternal::callCloseHandler()
+	void WindowInternal::callCloseHandler()
 	{
 		if (closeHandler)
 		{
-			return closeHandler();
+			closeHandler();
 		}
-		return true;
 	}
 
 	UsePtr<Gui> WindowInternal::getGui() const

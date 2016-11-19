@@ -43,7 +43,7 @@ namespace ve
 	void PanelInternal::destroyWidget(UsePtr<Widget> widget)
 	{
 		auto it = getWidgetInfo(widget);
-		widgetInfos.erase(it);
+		widgetInfos.queueForErase(it);
 	}
 
 	void PanelInternal::setBounds(UsePtr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
@@ -59,7 +59,7 @@ namespace ve
 
 	void PanelInternal::update(float dt)
 	{
-		widgetInfos.processElementsToErase();
+		widgetInfos.processEraseQueue();
 
 		for (auto const & widgetInfo : widgetInfos)
 		{
@@ -77,7 +77,7 @@ namespace ve
 		return widget;
 	}
 
-	std::vector<PanelInternal::WidgetInfo>::iterator PanelInternal::getWidgetInfo(UsePtr<Widget> widget)
+	std::list<PanelInternal::WidgetInfo>::iterator PanelInternal::getWidgetInfo(UsePtr<Widget> widget)
 	{
 		for (auto it = widgetInfos.begin(); it != widgetInfos.end(); it++)
 		{

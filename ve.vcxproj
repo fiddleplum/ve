@@ -197,7 +197,7 @@
     <ClInclude Include="src\util\cache.h" />
     <ClInclude Include="src\render\glcorearb.h" />
     <ClInclude Include="src\render\image_internal.h" />
-    <ClInclude Include="src\util\object_vector.h" />
+    <ClInclude Include="src\util\object_list.h" />
     <ClInclude Include="src\render\open_gl.h" />
     <ClInclude Include="src\gui\panel_internal.h" />
     <ClInclude Include="api\resource_store.h" />

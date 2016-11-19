@@ -28,7 +28,6 @@
     <ClInclude Include="src\util\cache.h" />
     <ClInclude Include="src\util\object_map.h" />
     <ClInclude Include="src\util\object_set.h" />
-    <ClInclude Include="src\util\object_vector.h" />
     <ClInclude Include="src\util\serialize.h" />
     <ClInclude Include="api\util\stringutil.h" />
     <ClInclude Include="api\util\rect.h" />
@@ -46,6 +45,7 @@
     <ClInclude Include="api\util\vector.h" />
     <ClInclude Include="src\render\image_internal.h" />
     <ClInclude Include="src\render\mesh_internal.h" />
+    <ClInclude Include="src\util\object_list.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />

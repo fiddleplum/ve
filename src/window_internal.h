@@ -39,11 +39,11 @@ namespace ve
 		// Destruct the window.
 		~WindowInternal();
 
-		// Sets the function to be called when the window is closed by the user. Returning true destroys the window.
-		void setCloseHandler(std::function<bool()> closeHandler) override;
+		// Sets the function to be called when the window is closed by the user.
+		void setCloseHandler(std::function<void()> closeHandler) override;
 
 		// Calls the close handler. Called by App when it receives the event.
-		bool callCloseHandler();
+		void callCloseHandler();
 
 		// Gets the root panel element which is the gui.
 		UsePtr<Gui> getGui() const override;
@@ -59,7 +59,7 @@ namespace ve
 
 	private:
 		SDL_Window * sdlWindow;
-		std::function<bool()> closeHandler;
+		std::function<void()> closeHandler;
 		OwnPtr<WindowStage> stage;
 		OwnPtr<GuiInternal> gui;
 	};

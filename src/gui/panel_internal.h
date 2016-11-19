@@ -2,7 +2,7 @@
 
 #include "gui/panel.h"
 #include "gui/widget_internal.h"
-#include "util/object_vector.h"
+#include "util/object_list.h"
 
 namespace ve
 {
@@ -48,10 +48,10 @@ namespace ve
 		};
 
 		template <typename T> UsePtr<T> createWidget();
-		std::vector<WidgetInfo>::iterator PanelInternal::getWidgetInfo(UsePtr<Widget> widget);
+		std::list<WidgetInfo>::iterator PanelInternal::getWidgetInfo(UsePtr<Widget> widget);
 		void updateWidgetBounds(WidgetInfo const & widgetInfo) const;
 
 		Recti bounds;
-		ObjectVector<WidgetInfo> widgetInfos;
+		ObjectList<WidgetInfo> widgetInfos;
 	};
 }
