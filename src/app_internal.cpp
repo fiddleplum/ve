@@ -22,19 +22,8 @@ namespace ve
 	{
 		float lastFrameTime = SDL_GetTicks() / 1000.f;
 		float accumulator = 0.f;
-		while (true)
+		while (looping)
 		{
-			windows.processEraseQueue();
-			if (windows.empty())
-			{
-				renderer.setNull();
-			}
-
-			if (!looping)
-			{
-				break;
-			}
-
 			float currentFrameTime = SDL_GetTicks() / 1000.f;
 
 			//// Handle events
@@ -90,6 +79,13 @@ namespace ve
 			// This algorithm is from http://gafferongames.com/game-physics/fix-your-timestep.
 			accumulator += currentFrameTime - lastFrameTime;
 			lastFrameTime = currentFrameTime;
+
+			// Do frame cleanup.
+			windows.processEraseQueue();
+			if (windows.empty())
+			{
+				renderer.setNull();
+			}
 		}
 	}
 
