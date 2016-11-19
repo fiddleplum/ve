@@ -94,7 +94,7 @@ namespace ve
 		looping = false;
 	}
 
-	UsePtr<Window> AppInternal::createWindow()
+	Ptr<Window> AppInternal::createWindow()
 	{
 		auto window = OwnPtr<WindowInternal>::returnNew();
 		if (windows.empty())
@@ -105,7 +105,7 @@ namespace ve
 		return window;
 	}
 
-	void AppInternal::destroyWindow(UsePtr<Window> window)
+	void AppInternal::destroyWindow(Ptr<Window> window)
 	{
 		auto it = std::find(windows.begin(), windows.end(), window);
 		if (it == windows.end())
@@ -127,7 +127,7 @@ namespace ve
 
 	void AppInternal::handleSDLEvent(SDL_Event const & sdlEvent)
 	{
-		UsePtr<WindowInternal> window;
+		Ptr<WindowInternal> window;
 
 		// Certain events are associated with a window. Get that window.
 		switch (sdlEvent.type)
@@ -195,7 +195,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<WindowInternal> AppInternal::getWindowFromId(unsigned int id)
+	Ptr<WindowInternal> AppInternal::getWindowFromId(unsigned int id)
 	{
 		SDL_Window * sdlWindow = SDL_GetWindowFromID(id);
 		if (sdlWindow != NULL)
@@ -208,6 +208,6 @@ namespace ve
 				}
 			}
 		}
-		return UsePtr<WindowInternal>();
+		return Ptr<WindowInternal>();
 	}
 }

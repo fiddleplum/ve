@@ -7,12 +7,12 @@
 
 ve::OwnPtr<ve::AppInternal> app;
 
-ve::UsePtr<ve::App> ve::getApp()
+ve::Ptr<ve::App> ve::getApp()
 {
 	return app;
 }
 
-ve::UsePtr<ve::AppInternal> ve::getAppInternal()
+ve::Ptr<ve::AppInternal> ve::getAppInternal()
 {
 	return app;
 }

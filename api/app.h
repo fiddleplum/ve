@@ -13,10 +13,10 @@ namespace ve
 		virtual void quit() = 0;
 
 		// Creates a window.
-		virtual UsePtr<Window> createWindow() = 0;
+		virtual Ptr<Window> createWindow() = 0;
 
 		// Destroys a window.
-		virtual void destroyWindow(UsePtr<Window> window) = 0;
+		virtual void destroyWindow(Ptr<Window> window) = 0;
 
 		// Gets the resource manager.
 		virtual UsePtr<ResourceStore> getResourceStore() const = 0;
@@ -27,5 +27,5 @@ namespace ve
 	};
 
 	// Called to get the single instance of the app.
-	UsePtr<App> getApp();
+	Ptr<App> getApp();
 }

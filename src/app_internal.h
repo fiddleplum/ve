@@ -22,10 +22,10 @@ namespace ve
 		void quit() override;
 
 		// Creates a window.
-		UsePtr<Window> createWindow() override;
+		Ptr<Window> createWindow() override;
 
 		// Destroys a window.
-		void destroyWindow(UsePtr<Window> window) override;
+		void destroyWindow(Ptr<Window> window) override;
 
 		// Gets the resource manager.
 		UsePtr<ResourceStore> getResourceStore() const override;
@@ -35,7 +35,7 @@ namespace ve
 
 	private:
 		void handleSDLEvent(SDL_Event const & sdlEvent);
-		UsePtr<WindowInternal> getWindowFromId(unsigned int id);
+		Ptr<WindowInternal> getWindowFromId(unsigned int id);
 
 		bool looping;
 		float secondsPerUpdate;
@@ -45,5 +45,5 @@ namespace ve
 	};
 
 	// Called to get the single instance of the app.
-	UsePtr<AppInternal> getAppInternal();
+	Ptr<AppInternal> getAppInternal();
 }

@@ -1,3 +1,13 @@
+== Pointers Rationale
+
+I don't like the shared_ptr/weak_ptr paradigm because weak_ptr can be turned into a shared_ptr, thereby removing the ability of an object to have complete control over any of its own shared_ptr objects. This spells doom for an API that needs to have complete control over its own objects.
+
+I have created OwnPtr and UsePtr. OwnPtr is like shared_ptr and UsePtr is like weak_ptr with two exceptions: OwnPtr cannot become null until all of its UsePtrs are gone and a UsePtr cannot ever become an OwnPtr.
+
+The first exception is leading to a big problem with the API. When the API passes out UsePtrs, its OwnPtrs become beholden to the user's code. If the user creates a window but forgets to destroy that window at the right time, the API crashes when it tries to null the window pointer because the user code still has a UsePtr of the window. The API should be stable and never crash no matter what the user code does.
+
+In order to solve this problem, I need to make a weaker UsePtr called Ptr. It should not hold the OwnPtr hostage, but the OwnPtr shouldn't care if it exists or not. If the OwnPtr has been nulled and the Ptr tries to access the object, it would throw a null_ptr_exception.
+
 == Messaging System and Rationale
 
 I'm thinking about the problem of a button closing its parent container. An initial problem is the user of smart pointers. The button needs a smart pointer to its parent container. However, the parent container cannot give one itself because it only has "this", which is a raw pointer. But even if the button had a smart pointer, when it calls delete on its container, it must delete itself, causing possible stack corruption.
