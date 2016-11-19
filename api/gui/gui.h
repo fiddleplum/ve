@@ -9,7 +9,7 @@ namespace ve
 	{
 	public:
 		// Returns the root panel used by the gui.
-		virtual UsePtr<Panel> getRootPanel() const = 0;
+		virtual Ptr<Panel> getRootPanel() const = 0;
 
 	protected:
 		virtual ~Gui() = default;

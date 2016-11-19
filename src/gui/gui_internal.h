@@ -16,10 +16,10 @@ namespace ve
 		~GuiInternal();
 
 		// Returns the root panel used by the gui.
-		UsePtr<Panel> getRootPanel() const override;
+		Ptr<Panel> getRootPanel() const override;
 
 		// Returns the scene used by the gui.
-		UsePtr<Scene> getScene() const;
+		Ptr<Scene> getScene() const;
 
 		// Updates the gui.
 		void update(float dt);

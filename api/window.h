@@ -13,7 +13,7 @@ namespace ve
 		virtual void setCloseHandler(std::function<void()> closeHandler) = 0;
 
 		// Gets the root panel element which is the gui.
-		virtual UsePtr<Gui> getGui() const = 0;
+		virtual Ptr<Gui> getGui() const = 0;
 
 	protected:
 		// Virtual destructor.

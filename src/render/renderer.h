@@ -21,16 +21,16 @@ namespace ve
 		SDL_GLContext getGlContext() const;
 
 		// Create a new scene.
-		UsePtr<Scene> createScene();
+		Ptr<Scene> createScene();
 
 		// Destroy a scene.
-		void destroyScene(UsePtr<Scene> scene);
+		void destroyScene(Ptr<Scene> scene);
 
 		// Creates a new stage.
-		UsePtr<TextureStage> createTextureStage();
+		Ptr<TextureStage> createTextureStage();
 
 		// Destroys a stage.
-		void destroyTextureStage(UsePtr<TextureStage> stage);
+		void destroyTextureStage(Ptr<TextureStage> stage);
 
 	private:
 		SDL_GLContext glContext;

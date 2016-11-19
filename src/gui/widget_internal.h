@@ -10,7 +10,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		WidgetInternal(UsePtr<Scene> scene);
+		WidgetInternal(Ptr<Scene> scene);
 
 		// Virtual destructor.
 		virtual ~WidgetInternal() = default;
@@ -29,9 +29,9 @@ namespace ve
 
 	protected:
 		// Returns the scene used by the widget (and its parent gui).
-		UsePtr<Scene> getScene() const;
+		Ptr<Scene> getScene() const;
 
 	private:
-		UsePtr<Scene> scene;
+		Ptr<Scene> scene;
 	};
 }

@@ -10,10 +10,10 @@ namespace ve
 	{
 	public:
 		// Creates a new model.
-		UsePtr<Model> createModel();
+		Ptr<Model> createModel();
 
 		// Removes a model.
-		void destroyModel(UsePtr<Model> & model);
+		void destroyModel(Ptr<Model> & model);
 
 		// Renders the scene.
 		void render();

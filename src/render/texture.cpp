@@ -5,7 +5,7 @@ namespace ve
 {
 	std::vector<unsigned int> currentTextures; // Current Textures in the OpenGL state.
 
-	Texture::Texture(UsePtr<Image> image)
+	Texture::Texture(Ptr<Image> image)
 	{
 		glGenTextures(1, &id);
 		setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
@@ -21,7 +21,7 @@ namespace ve
 		return size;
 	}
 
-	void Texture::updatePixels(UsePtr<Image> image)
+	void Texture::updatePixels(Ptr<Image> image)
 	{
 		setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
 	}

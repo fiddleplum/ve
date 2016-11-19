@@ -14,12 +14,12 @@ namespace ve
 		scene.setNull();
 	}
 
-	UsePtr<Panel> GuiInternal::getRootPanel() const
+	Ptr<Panel> GuiInternal::getRootPanel() const
 	{
 		return root;
 	}
 
-	UsePtr<Scene> GuiInternal::getScene() const
+	Ptr<Scene> GuiInternal::getScene() const
 	{
 		return scene;
 	}

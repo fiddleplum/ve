@@ -3,7 +3,7 @@
 
 namespace ve
 {
-	VertexBufferObject::VertexBufferObject(UsePtr<Mesh> mesh)
+	VertexBufferObject::VertexBufferObject(Ptr<Mesh> mesh)
 	{
 		switch (mesh->getNumIndicesPerPrimitive())
 		{
@@ -59,7 +59,7 @@ namespace ve
 		glDeleteBuffers(1, &vertexBuffer);
 	}
 
-	void VertexBufferObject::updateVertices(UsePtr<Mesh> mesh)
+	void VertexBufferObject::updateVertices(Ptr<Mesh> mesh)
 	{
 		auto const & vertices = mesh->getVertices();
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

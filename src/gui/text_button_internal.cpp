@@ -2,7 +2,7 @@
 
 namespace ve
 {
-	TextButtonInternal::TextButtonInternal(UsePtr<Scene> scene)
+	TextButtonInternal::TextButtonInternal(Ptr<Scene> scene)
 		: WidgetInternal(scene)
 	{
 

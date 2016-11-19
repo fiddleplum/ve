@@ -19,7 +19,7 @@ namespace ve
 		virtual void destroyWindow(Ptr<Window> window) = 0;
 
 		// Gets the resource manager.
-		virtual UsePtr<ResourceStore> getResourceStore() const = 0;
+		virtual Ptr<ResourceStore> getResourceStore() const = 0;
 
 	protected:
 		// Virtual destructor.

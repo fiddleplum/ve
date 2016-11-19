@@ -20,10 +20,10 @@ namespace ve
 		~Cache();
 
 		// Returns the named object or null if it is not found. O(log number of objects)
-		UsePtr<Object> get(std::string const & name) const;
+		Ptr<Object> get(std::string const & name) const;
 
 		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects)
-		template <typename... Args> UsePtr<Object> create(std::string const & name, Args... args);
+		template <typename... Args> Ptr<Object> create(std::string const & name, Args... args);
 
 		// Removes and destroys the objects that aren't referenced outside of the cache. O(number of objects).
 		void clean();
@@ -58,7 +58,7 @@ namespace ve
 	}
 
 	template <typename Object>
-	UsePtr<Object> Cache<Object>::get(std::string const & name) const
+	Ptr<Object> Cache<Object>::get(std::string const & name) const
 	{
 		auto it = objects.find(name);
 		if (it != objects.end())
@@ -67,13 +67,13 @@ namespace ve
 		}
 		else
 		{
-			return UsePtr<Object>();
+			return Ptr<Object>();
 		}
 	}
 
 	template <typename Object>
 	template <typename... Args>
-	UsePtr<Object> Cache<Object>::create(std::string const & name, Args... args)
+	Ptr<Object> Cache<Object>::create(std::string const & name, Args... args)
 	{
 		auto it = objects.find(name);
 		if (it == objects.end())

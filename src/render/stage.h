@@ -15,16 +15,16 @@ namespace ve
 		virtual ~Stage() {}
 
 		// Adds a stage that this stage depends on.
-		void addPriorStage(UsePtr<Stage> stage);
+		void addPriorStage(Ptr<Stage> stage);
 
 		// Removes a stage that this no longer depends on.
-		void removePriorStage(UsePtr<Stage> stage);
+		void removePriorStage(Ptr<Stage> stage);
 
 		// Clears all stages that this stage depends on.
 		void clearPriorStages();
 
 		// Sets the scene that this stage will render.
-		void setScene(UsePtr<Scene> scene);
+		void setScene(Ptr<Scene> scene);
 
 		// Renders the scene to the target. First renders all unrendered prior stages.
 		void render() const;
@@ -34,8 +34,8 @@ namespace ve
 		virtual void setupTarget() const = 0;
 
 	private:
-		std::set<UsePtr<Stage>> priorStages;
-		UsePtr<Scene> scene;
+		std::set<Ptr<Stage>> priorStages;
+		Ptr<Scene> scene;
 	};
 
 	class WindowStage : public Stage
@@ -65,14 +65,14 @@ namespace ve
 		void clearTargets();
 
 		// Sets a texture as a render target at the specific index.
-		void setTarget(int index, UsePtr<Texture> target);
+		void setTarget(int index, Ptr<Texture> target);
 
 	protected:
 		// Prepares the stage to use the textures as the target.
 		void setupTarget() const override;
 
 	private:
-		std::vector<UsePtr<Texture>> targets;
+		std::vector<Ptr<Texture>> targets;
 		unsigned int framebuffer;
 	};
 }

@@ -15,12 +15,12 @@ namespace ve
 	{
 	}
 
-	UsePtr<Shader> Material::getShader() const
+	Ptr<Shader> Material::getShader() const
 	{
 		return shader;
 	}
 
-	void Material::setShader(UsePtr<Shader> shader_)
+	void Material::setShader(Ptr<Shader> shader_)
 	{
 		shader = shader_;
 		uniforms.clear();
@@ -57,7 +57,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<Uniform> Material::getUniform(int location)
+	Ptr<Uniform> Material::getUniform(int location)
 	{
 		auto iter = uniforms.find(location);
 		if (iter != uniforms.end())
@@ -66,11 +66,11 @@ namespace ve
 		}
 		else
 		{
-			return UsePtr<Uniform>();
+			return Ptr<Uniform>();
 		}
 	}
 
-	UsePtr<Uniform> Material::getUniform(std::string const & name)
+	Ptr<Uniform> Material::getUniform(std::string const & name)
 	{
 		if (shader)
 		{
@@ -78,7 +78,7 @@ namespace ve
 		}
 		else
 		{
-			return UsePtr<Uniform>();
+			return Ptr<Uniform>();
 		}
 	}
 
@@ -121,7 +121,7 @@ namespace ve
 		}
 	}
 
-	bool operator < (UsePtr<Material> const & lhs, UsePtr<Material> const & rhs)
+	bool operator < (Ptr<Material> const & lhs, Ptr<Material> const & rhs)
 	{
 		return *lhs < *rhs;
 	}

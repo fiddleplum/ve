@@ -28,10 +28,10 @@ namespace ve
 		void destroyWindow(Ptr<Window> window) override;
 
 		// Gets the resource manager.
-		UsePtr<ResourceStore> getResourceStore() const override;
+		Ptr<ResourceStore> getResourceStore() const override;
 
 		// Gets the resource manager.
-		UsePtr<ResourceStoreInternal> getResourceStoreInternal() const;
+		Ptr<ResourceStoreInternal> getResourceStoreInternal() const;
 
 	private:
 		void handleSDLEvent(SDL_Event const & sdlEvent);

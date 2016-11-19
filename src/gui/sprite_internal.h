@@ -11,7 +11,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		SpriteInternal(UsePtr<Scene> scene);
+		SpriteInternal(Ptr<Scene> scene);
 
 		// Destructor.
 		~SpriteInternal();
@@ -33,7 +33,7 @@ namespace ve
 
 	private:
 		Recti bounds;
-		UsePtr<Model> model;
+		Ptr<Model> model;
 		int minUniformLocation;
 		int maxUniformLocation;
 		int textureLocation;

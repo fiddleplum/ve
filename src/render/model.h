@@ -17,16 +17,16 @@ namespace ve
 		void setDepth(float depth);
 
 		// Gets the material used by the model.
-		UsePtr<Material> getMaterial() const;
+		Ptr<Material> getMaterial() const;
 
 		// Sets the material used by the model.
-		void setMaterial(UsePtr<Material> material);
+		void setMaterial(Ptr<Material> material);
 
 		// Gets the vertex buffer object used by the model.
-		UsePtr<VertexBufferObject> getVertexBufferObject() const;
+		Ptr<VertexBufferObject> getVertexBufferObject() const;
 
 		// Sets the vertex buffer object used by the model.
-		void setVertexBufferObject(UsePtr<VertexBufferObject> vertexBufferObject);
+		void setVertexBufferObject(Ptr<VertexBufferObject> vertexBufferObject);
 
 		// Sets the function to be called that sets any model-specific uniforms.
 		void setUniformsFunction(std::function<void()> uniformsFunction);
@@ -39,10 +39,10 @@ namespace ve
 
 	private:
 		float depth;
-		UsePtr<Material> material;
-		UsePtr<VertexBufferObject> vertexBufferObject;
+		Ptr<Material> material;
+		Ptr<VertexBufferObject> vertexBufferObject;
 		std::function<void()> uniformsFunction;
 	};
 
-	bool operator < (UsePtr<Model> const & lhs, UsePtr<Model> const & rhs);
+	bool operator < (Ptr<Model> const & lhs, Ptr<Model> const & rhs);
 }

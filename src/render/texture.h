@@ -10,7 +10,7 @@ namespace ve
 	{
 	public:
 		// Creates a new texture from an Image.
-		Texture(UsePtr<Image> image);
+		Texture(Ptr<Image> image);
 
 		// Destroys the texture.
 		virtual ~Texture();
@@ -19,7 +19,7 @@ namespace ve
 		Vector2i getSize() const;
 
 		// Updates the pixels from the image.
-		void updatePixels(UsePtr<Image> image);
+		void updatePixels(Ptr<Image> image);
 
 		// Activates the texture in the GL slot. Used by Models.
 		void activate(unsigned int slot) const;

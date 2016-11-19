@@ -12,22 +12,22 @@ namespace ve
 		depth = depth_;
 	}
 
-	UsePtr<Material> Model::getMaterial() const
+	Ptr<Material> Model::getMaterial() const
 	{
 		return material;
 	}
 
-	void Model::setMaterial(UsePtr<Material> material_)
+	void Model::setMaterial(Ptr<Material> material_)
 	{
 		material = material_;
 	}
 
-	UsePtr<VertexBufferObject> Model::getVertexBufferObject() const
+	Ptr<VertexBufferObject> Model::getVertexBufferObject() const
 	{
 		return vertexBufferObject;
 	}
 
-	void Model::setVertexBufferObject(UsePtr<VertexBufferObject> vertexBufferObject_)
+	void Model::setVertexBufferObject(Ptr<VertexBufferObject> vertexBufferObject_)
 	{
 		vertexBufferObject = vertexBufferObject_;
 	}
@@ -58,7 +58,7 @@ namespace ve
 		return material < model.material;
 	}
 
-	bool operator < (UsePtr<Model> const & lhs, UsePtr<Model> const & rhs)
+	bool operator < (Ptr<Model> const & lhs, Ptr<Model> const & rhs)
 	{
 		return *lhs < *rhs;
 	}

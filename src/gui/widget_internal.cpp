@@ -2,12 +2,12 @@
 
 namespace ve
 {
-	WidgetInternal::WidgetInternal(UsePtr<Scene> scene_)
+	WidgetInternal::WidgetInternal(Ptr<Scene> scene_)
 	{
 		scene = scene_;
 	}
 
-	UsePtr<Scene> WidgetInternal::getScene() const
+	Ptr<Scene> WidgetInternal::getScene() const
 	{
 		return scene;
 	}

@@ -16,70 +16,70 @@ namespace ve
 	{
 	public:
 		// Get an image from the store.
-		UsePtr<Image> getImage(std::string const & name) const override;
+		Ptr<Image> getImage(std::string const & name) const override;
 
 		// Get an image from the store.
-		UsePtr<ImageInternal> getImageInternal(std::string const & name) const;
+		Ptr<ImageInternal> getImageInternal(std::string const & name) const;
 
 		// Load an image into the store with the given name.
-		UsePtr<Image> loadImage(std::string const & name, std::string const & location = "") override;
+		Ptr<Image> loadImage(std::string const & name, std::string const & location = "") override;
 
 		// Create a new image in the store with the given name.
-		UsePtr<Image> createImage(std::string const & name, Vector2i size, Image::Format format) override;
+		Ptr<Image> createImage(std::string const & name, Vector2i size, Image::Format format) override;
 
 		// List the names of all the images in the store.
 		std::vector<std::string> listImages() const override;
 
 		// Get a texture from the store.
-		UsePtr<Texture> getTexture(std::string const & name) const;
+		Ptr<Texture> getTexture(std::string const & name) const;
 
 		// Create a texture from an image in the store.
-		UsePtr<Texture> createTexture(std::string const & name, UsePtr<Image> image);
+		Ptr<Texture> createTexture(std::string const & name, Ptr<Image> image);
 
 		// Get a mesh from the store.
-		UsePtr<Mesh> getMesh(std::string const & name) const override;
+		Ptr<Mesh> getMesh(std::string const & name) const override;
 
 		// Get a mesh from the store.
-		UsePtr<MeshInternal> getMeshInternal(std::string const & name) const;
+		Ptr<MeshInternal> getMeshInternal(std::string const & name) const;
 
 		// Load a mesh into the store with the given name.
-		UsePtr<Mesh> loadMesh(std::string const & name, std::string const & location = "") override;
+		Ptr<Mesh> loadMesh(std::string const & name, std::string const & location = "") override;
 
 		// Create a new mesh in the store with the given name.
-		UsePtr<Mesh> createMesh(std::string const & name) override;
+		Ptr<Mesh> createMesh(std::string const & name) override;
 
 		// List the names of all the meshes in the store.
 		std::vector<std::string> listMeshes() const override;
 
 		// Get a vertex buffer object from the store.
-		UsePtr<VertexBufferObject> getVertexBufferObject(std::string const & name) const;
+		Ptr<VertexBufferObject> getVertexBufferObject(std::string const & name) const;
 
 		// Create a vertex buffer object from an mesh in the store.
-		UsePtr<VertexBufferObject> createVertexBufferObject(std::string const & name, UsePtr<Mesh> mesh = UsePtr<Mesh>());
+		Ptr<VertexBufferObject> createVertexBufferObject(std::string const & name, Ptr<Mesh> mesh = Ptr<Mesh>());
 
 		// List the names of all the vertex buffer objects in the store.
 		std::vector<std::string> listVertexBufferObjects() const;
 
 		// Get a shader from the store.
-		UsePtr<Shader> getShader(std::string const & name) const;
+		Ptr<Shader> getShader(std::string const & name) const;
 
 		// Load a shader from a config.
-		UsePtr<Shader> loadShader(std::string const & name, Config const & config);
+		Ptr<Shader> loadShader(std::string const & name, Config const & config);
 
 		// Load a shader from a file.
-		UsePtr<Shader> loadShader(std::string const & name, std::string const & filename = "");
+		Ptr<Shader> loadShader(std::string const & name, std::string const & filename = "");
 
 		// List the names of all the shaders in the store.
 		std::vector<std::string> listShaders() const;
 
 		// Get a material from the store.
-		UsePtr<Material> getMaterial(std::string const & name) const;
+		Ptr<Material> getMaterial(std::string const & name) const;
 
 		// Load a material from a file.
-		UsePtr<Material> loadMaterial(std::string const & name, std::string const & filename = "");
+		Ptr<Material> loadMaterial(std::string const & name, std::string const & filename = "");
 
 		// Create a blank material.
-		UsePtr<Material> createMaterial(std::string const & name);
+		Ptr<Material> createMaterial(std::string const & name);
 
 		// List the names of all the materials in the store.
 		std::vector<std::string> listMaterials() const;

@@ -2,17 +2,17 @@
 
 namespace ve
 {
-	UsePtr<Image> ResourceStoreInternal::getImage(std::string const & name) const
+	Ptr<Image> ResourceStoreInternal::getImage(std::string const & name) const
 	{
 		return imageCache.get(name);
 	}
 
-	UsePtr<ImageInternal> ResourceStoreInternal::getImageInternal(std::string const & name) const
+	Ptr<ImageInternal> ResourceStoreInternal::getImageInternal(std::string const & name) const
 	{
 		return imageCache.get(name);
 	}
 
-	UsePtr<Image> ResourceStoreInternal::loadImage(std::string const & name, std::string const & location)
+	Ptr<Image> ResourceStoreInternal::loadImage(std::string const & name, std::string const & location)
 	{
 		if (location != "")
 		{
@@ -24,7 +24,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<Image> ResourceStoreInternal::createImage(std::string const & name, Vector2i size, Image::Format format)
+	Ptr<Image> ResourceStoreInternal::createImage(std::string const & name, Vector2i size, Image::Format format)
 	{
 		return imageCache.create(name, size, format);
 	}
@@ -34,27 +34,27 @@ namespace ve
 		return imageCache.getObjectNames();
 	}
 
-	UsePtr<Texture> ResourceStoreInternal::getTexture(std::string const & name) const
+	Ptr<Texture> ResourceStoreInternal::getTexture(std::string const & name) const
 	{
 		return textureCache.get(name);
 	}
 
-	UsePtr<Texture> ResourceStoreInternal::createTexture(std::string const & name, UsePtr<Image> image)
+	Ptr<Texture> ResourceStoreInternal::createTexture(std::string const & name, Ptr<Image> image)
 	{
 		return textureCache.create(name, image);
 	}
 
-	UsePtr<Mesh> ResourceStoreInternal::getMesh(std::string const & name) const
+	Ptr<Mesh> ResourceStoreInternal::getMesh(std::string const & name) const
 	{
 		return meshCache.get(name);
 	}
 
-	UsePtr<MeshInternal> ResourceStoreInternal::getMeshInternal(std::string const & name) const
+	Ptr<MeshInternal> ResourceStoreInternal::getMeshInternal(std::string const & name) const
 	{
 		return meshCache.get(name);
 	}
 
-	UsePtr<Mesh> ResourceStoreInternal::loadMesh(std::string const & name, std::string const & location)
+	Ptr<Mesh> ResourceStoreInternal::loadMesh(std::string const & name, std::string const & location)
 	{
 		if (location != "")
 		{
@@ -66,7 +66,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<Mesh> ResourceStoreInternal::createMesh(std::string const & name)
+	Ptr<Mesh> ResourceStoreInternal::createMesh(std::string const & name)
 	{
 		return meshCache.create(name);
 	}
@@ -76,12 +76,12 @@ namespace ve
 		return meshCache.getObjectNames();
 	}
 
-	UsePtr<VertexBufferObject> ResourceStoreInternal::getVertexBufferObject(std::string const & name) const
+	Ptr<VertexBufferObject> ResourceStoreInternal::getVertexBufferObject(std::string const & name) const
 	{
 		return vertexBufferObjectCache.get(name);
 	}
 
-	UsePtr<VertexBufferObject> ResourceStoreInternal::createVertexBufferObject(std::string const & name, UsePtr<Mesh> mesh)
+	Ptr<VertexBufferObject> ResourceStoreInternal::createVertexBufferObject(std::string const & name, Ptr<Mesh> mesh)
 	{
 		if (mesh.isValid())
 		{
@@ -98,17 +98,17 @@ namespace ve
 		return vertexBufferObjectCache.getObjectNames();
 	}
 
-	UsePtr<Shader> ResourceStoreInternal::getShader(std::string const & name) const
+	Ptr<Shader> ResourceStoreInternal::getShader(std::string const & name) const
 	{
 		return shaderCache.get(name);
 	}
 
-	UsePtr<Shader> ResourceStoreInternal::loadShader(std::string const & name, Config const & config)
+	Ptr<Shader> ResourceStoreInternal::loadShader(std::string const & name, Config const & config)
 	{
 		return shaderCache.create(name, config);
 	}
 
-	UsePtr<Shader> ResourceStoreInternal::loadShader(std::string const & name, std::string const & filename)
+	Ptr<Shader> ResourceStoreInternal::loadShader(std::string const & name, std::string const & filename)
 	{
 		if (filename != "")
 		{
@@ -125,12 +125,12 @@ namespace ve
 		return shaderCache.getObjectNames();
 	}
 
-	UsePtr<Material> ResourceStoreInternal::getMaterial(std::string const & name) const
+	Ptr<Material> ResourceStoreInternal::getMaterial(std::string const & name) const
 	{
 		return materialCache.get(name);
 	}
 
-	UsePtr<Material> ResourceStoreInternal::loadMaterial(std::string const & name, std::string const & filename)
+	Ptr<Material> ResourceStoreInternal::loadMaterial(std::string const & name, std::string const & filename)
 	{
 		if (filename != "")
 		{
@@ -142,7 +142,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<Material> ResourceStoreInternal::createMaterial(std::string const & name)
+	Ptr<Material> ResourceStoreInternal::createMaterial(std::string const & name)
 	{
 		return materialCache.create(name);
 	}

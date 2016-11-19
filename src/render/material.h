@@ -19,16 +19,16 @@ namespace ve
 		~Material();
 
 		// Gets the shader.
-		UsePtr<Shader> getShader() const;
+		Ptr<Shader> getShader() const;
 
 		// Sets the shader.
-		void setShader(UsePtr<Shader> shader);
+		void setShader(Ptr<Shader> shader);
 
 		// Gets a uniform of the given location. Faster than by name.
-		UsePtr<Uniform> getUniform(int location);
+		Ptr<Uniform> getUniform(int location);
 
 		// Gets a uniform of the given name.
-		UsePtr<Uniform> getUniform(std::string const & name);
+		Ptr<Uniform> getUniform(std::string const & name);
 
 		// Activates the material.
 		void activate() const;
@@ -37,12 +37,12 @@ namespace ve
 		bool operator < (Material const & material) const;
 
 	private:
-		UsePtr<Shader> shader;
+		Ptr<Shader> shader;
 		std::map<int, OwnPtr<Uniform>> uniforms;
-		std::vector<UsePtr<UniformTexture2d>> texture2dUniforms;
+		std::vector<Ptr<UniformTexture2d>> texture2dUniforms;
 		int numTextures = 0;
 	};
 
 	// Compare one material to another.
-	bool operator < (UsePtr<Material> const & lhs, UsePtr<Material> const & rhs);
+	bool operator < (Ptr<Material> const & lhs, Ptr<Material> const & rhs);
 }

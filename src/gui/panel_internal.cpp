@@ -5,7 +5,7 @@
 
 namespace ve
 {
-	PanelInternal::PanelInternal(UsePtr<Scene> scene)
+	PanelInternal::PanelInternal(Ptr<Scene> scene)
 		: WidgetInternal(scene)
 	{
 
@@ -30,23 +30,23 @@ namespace ve
 		}
 	}
 
-	UsePtr<Sprite> PanelInternal::createSprite()
+	Ptr<Sprite> PanelInternal::createSprite()
 	{
 		return createWidget<SpriteInternal>();
 	}
 
-	UsePtr<TextButton> PanelInternal::createTextButton()
+	Ptr<TextButton> PanelInternal::createTextButton()
 	{
 		return createWidget<TextButtonInternal>();
 	}
 
-	void PanelInternal::destroyWidget(UsePtr<Widget> widget)
+	void PanelInternal::destroyWidget(Ptr<Widget> widget)
 	{
 		auto it = getWidgetInfo(widget);
 		widgetInfos.queueForErase(it);
 	}
 
-	void PanelInternal::setBounds(UsePtr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
+	void PanelInternal::setBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
 	{
 		auto & widgetInfo = *getWidgetInfo(widget);
 		widgetInfo.originInPanel = originInPanel;
@@ -67,7 +67,7 @@ namespace ve
 		}
 	}
 
-	template <typename T> UsePtr<T> PanelInternal::createWidget()
+	template <typename T> Ptr<T> PanelInternal::createWidget()
 	{
 		auto widget = OwnPtr<T>::returnNew(getScene());
 		WidgetInfo widgetInfo;
@@ -77,7 +77,7 @@ namespace ve
 		return widget;
 	}
 
-	std::list<PanelInternal::WidgetInfo>::iterator PanelInternal::getWidgetInfo(UsePtr<Widget> widget)
+	std::list<PanelInternal::WidgetInfo>::iterator PanelInternal::getWidgetInfo(Ptr<Widget> widget)
 	{
 		for (auto it = widgetInfos.begin(); it != widgetInfos.end(); it++)
 		{

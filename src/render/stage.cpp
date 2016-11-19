@@ -3,12 +3,12 @@
 
 namespace ve
 {
-	void Stage::addPriorStage(UsePtr<Stage> stage)
+	void Stage::addPriorStage(Ptr<Stage> stage)
 	{
 		priorStages.insert(stage);
 	}
 
-	void Stage::removePriorStage(UsePtr<Stage> stage)
+	void Stage::removePriorStage(Ptr<Stage> stage)
 	{
 		priorStages.erase(stage);
 	}
@@ -18,7 +18,7 @@ namespace ve
 		priorStages.clear();
 	}
 
-	void Stage::setScene(UsePtr<Scene> scene_)
+	void Stage::setScene(Ptr<Scene> scene_)
 	{
 		scene = scene_;
 	}
@@ -56,7 +56,7 @@ namespace ve
 		glGenFramebuffers(1, &framebuffer);
 	}
 
-	void TextureStage::setTarget(int index, UsePtr<Texture> target)
+	void TextureStage::setTarget(int index, Ptr<Texture> target)
 	{
 		assert(0 <= index);
 		if (index >= targets.size())

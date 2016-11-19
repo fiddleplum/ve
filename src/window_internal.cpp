@@ -37,7 +37,7 @@ namespace ve
 		}
 	}
 
-	UsePtr<Gui> WindowInternal::getGui() const
+	Ptr<Gui> WindowInternal::getGui() const
 	{
 		return gui;
 	}

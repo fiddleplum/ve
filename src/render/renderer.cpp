@@ -31,14 +31,14 @@ namespace ve
 		return glContext;
 	}
 
-	UsePtr<Scene> Renderer::createScene()
+	Ptr<Scene> Renderer::createScene()
 	{
 		auto scene = OwnPtr<Scene>::returnNew();
 		scenes.insert(scene);
 		return scene;
 	}
 
-	void Renderer::destroyScene(UsePtr<Scene> scene)
+	void Renderer::destroyScene(Ptr<Scene> scene)
 	{
 		auto it = scenes.find(scene);
 		if (it == scenes.end())
@@ -48,14 +48,14 @@ namespace ve
 		scenes.erase(it);
 	}
 
-	UsePtr<TextureStage> Renderer::createTextureStage()
+	Ptr<TextureStage> Renderer::createTextureStage()
 	{
 		auto stage = OwnPtr<TextureStage>::returnNew();
 		textureStages.insert(stage);
 		return stage;
 	}
 
-	void Renderer::destroyTextureStage(UsePtr<TextureStage> stage)
+	void Renderer::destroyTextureStage(Ptr<TextureStage> stage)
 	{
 		auto it = textureStages.find(stage);
 		if (it == textureStages.end())

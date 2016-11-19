@@ -115,12 +115,12 @@ namespace ve
 		windows.queueForErase(it);
 	}
 
-	UsePtr<ResourceStore> AppInternal::getResourceStore() const
+	Ptr<ResourceStore> AppInternal::getResourceStore() const
 	{
 		return resourceStore;
 	}
 
-	UsePtr<ResourceStoreInternal> AppInternal::getResourceStoreInternal() const
+	Ptr<ResourceStoreInternal> AppInternal::getResourceStoreInternal() const
 	{
 		return resourceStore;
 	}

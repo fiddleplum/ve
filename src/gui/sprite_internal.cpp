@@ -3,7 +3,7 @@
 
 namespace ve
 {
-	SpriteInternal::SpriteInternal(UsePtr<Scene> scene)
+	SpriteInternal::SpriteInternal(Ptr<Scene> scene)
 		: WidgetInternal(scene)
 	{
 		std::string modelName = "guiUnitSquare";

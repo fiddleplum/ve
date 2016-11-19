@@ -8,7 +8,7 @@
 
 /*
 
-each window has a useptr<stage> as its root stage.
+each window has a ptr<stage> as its root stage.
 each stage has a list of dependencies:
 	addpriorstage()
 	removepriorstage()
@@ -46,7 +46,7 @@ namespace ve
 		void callCloseHandler();
 
 		// Gets the root panel element which is the gui.
-		UsePtr<Gui> getGui() const override;
+		Ptr<Gui> getGui() const override;
 
 		// Gets the SDL Window handle.
 		SDL_Window * getSDLWindow() const;

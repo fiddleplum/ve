@@ -4,14 +4,14 @@
 
 namespace ve
 {
-	UsePtr<Model> Scene::createModel()
+	Ptr<Model> Scene::createModel()
 	{
 		auto model = OwnPtr<Model>::returnNew();
 		models.insert(model);
 		return model;
 	}
 
-	void Scene::destroyModel(UsePtr<Model> & model)
+	void Scene::destroyModel(Ptr<Model> & model)
 	{
 		auto it = std::lower_bound(models.begin(), models.end(), model);
 		if (*it == model)
@@ -23,7 +23,7 @@ namespace ve
 
 	void Scene::render()
 	{
-		std::set<UsePtr<Model>> modelsSorted;
+		std::set<Ptr<Model>> modelsSorted;
 		for (auto model : models)
 		{
 			modelsSorted.insert(model);

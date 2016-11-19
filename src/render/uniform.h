@@ -202,6 +202,6 @@ namespace ve
 		int const textureSlot;
 
 		// The texture that will be sampled by the sampler.
-		UsePtr<Texture> texture;
+		Ptr<Texture> texture;
 	};
 }
