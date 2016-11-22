@@ -7,6 +7,7 @@
 #include "render/vertex_buffer_object.h"
 #include "render/shader.h"
 #include "render/material.h"
+#include "util/font.h"
 #include "util/cache.h"
 
 namespace ve
@@ -84,6 +85,15 @@ namespace ve
 		// List the names of all the materials in the store.
 		std::vector<std::string> listMaterials() const;
 
+		// Get a font from the store.
+		Ptr<Font> getFont(std::string const & name) const;
+
+		// Load a font from a file.
+		Ptr<Font> loadFont(std::string const & name, std::string const & filename = "");
+
+		// List the names of all the fonts in the store.
+		std::vector<std::string> listFonts() const;
+
 	private:
 		Cache<ImageInternal> imageCache;
 		Cache<Texture> textureCache;
@@ -91,5 +101,6 @@ namespace ve
 		Cache<VertexBufferObject> vertexBufferObjectCache;
 		Cache<Shader> shaderCache;
 		Cache<Material> materialCache;
+		Cache<Font> fontCache;
 	};
 }

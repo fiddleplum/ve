@@ -151,4 +151,26 @@ namespace ve
 	{
 		return materialCache.getObjectNames();
 	}
+
+	Ptr<Font> StoreInternal::getFont(std::string const & name) const
+	{
+		return fontCache.get(name);
+	}
+
+	Ptr<Font> StoreInternal::loadFont(std::string const & name, std::string const & filename)
+	{
+		if (filename != "")
+		{
+			return fontCache.create(name, filename);
+		}
+		else
+		{
+			return fontCache.create(name, "assets/fonts/" + name + ".ttf");
+		}
+	}
+
+	std::vector<std::string> StoreInternal::listFonts() const
+	{
+		return fontCache.getObjectNames();
+	}
 }

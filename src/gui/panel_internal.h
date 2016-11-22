@@ -27,6 +27,9 @@ namespace ve
 		// Creates a sprite contained in the panel.
 		Ptr<Sprite> createSprite() override;
 
+		// Creates a text area contained in the panel.
+		Ptr<TextArea> createTextArea() override;
+
 		// Creates a text button contained in the panel.
 		Ptr<TextButton> createTextButton() override;
 

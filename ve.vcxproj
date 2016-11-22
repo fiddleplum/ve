@@ -165,6 +165,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="api\app.h" />
+    <ClInclude Include="api\gui\text_area.h" />
     <ClInclude Include="api\util\config.h" />
     <ClInclude Include="api\std\optional.hpp" />
     <ClInclude Include="api\util\vector.h" />
@@ -179,7 +180,9 @@
     <ClInclude Include="api\gui\sprite.h" />
     <ClInclude Include="api\util\stringutil.h" />
     <ClInclude Include="src\gui\gui_internal.h" />
+    <ClInclude Include="src\gui\text_area_internal.h" />
     <ClInclude Include="src\render\mesh_internal.h" />
+    <ClInclude Include="src\util\font.h" />
     <ClInclude Include="src\util\object_map.h" />
     <ClInclude Include="src\util\object_set.h" />
     <ClInclude Include="src\render\material.h" />
@@ -216,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app_internal.cpp" />
+    <ClCompile Include="src\gui\text_area_internal.cpp" />
     <ClCompile Include="src\util\config.cpp" />
     <ClCompile Include="src\gui\gui_internal.cpp" />
     <ClCompile Include="src\gui\widget_internal.cpp" />
@@ -236,6 +240,7 @@
     <ClCompile Include="src\gui\sprite_internal.cpp" />
     <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\gui\text_button_internal.cpp" />
+    <ClCompile Include="src\util\font.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\window_internal.cpp" />
   </ItemGroup>

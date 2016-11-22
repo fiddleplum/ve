@@ -1,5 +1,6 @@
 #include "panel_internal.h"
 #include "sprite_internal.h"
+#include "text_area_internal.h"
 #include "text_button_internal.h"
 #include <algorithm>
 
@@ -38,6 +39,11 @@ namespace ve
 	Ptr<Sprite> PanelInternal::createSprite()
 	{
 		return createWidget<SpriteInternal>();
+	}
+
+	Ptr<TextArea> PanelInternal::createTextArea()
+	{
+		return createWidget<TextAreaInternal>();
 	}
 
 	Ptr<TextButton> PanelInternal::createTextButton()

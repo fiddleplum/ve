@@ -46,6 +46,9 @@
     <ClInclude Include="src\util\object_list.h" />
     <ClInclude Include="api\store.h" />
     <ClInclude Include="src\store_internal.h" />
+    <ClInclude Include="src\gui\text_area_internal.h" />
+    <ClInclude Include="api\gui\text_area.h" />
+    <ClInclude Include="src\util\font.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -75,5 +78,7 @@
     <ClCompile Include="src\render\mesh_internal.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\store_internal.cpp" />
+    <ClCompile Include="src\gui\text_area_internal.cpp" />
+    <ClCompile Include="src\util\font.cpp" />
   </ItemGroup>
 </Project>

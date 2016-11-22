@@ -3,6 +3,7 @@
 #include "util/ptr.h"
 #include "util/vector.h"
 #include "gui/sprite.h"
+#include "gui/text_area.h"
 #include "gui/text_button.h"
 
 namespace ve
@@ -12,6 +13,9 @@ namespace ve
 	public:
 		// Creates a sprite contained in the panel.
 		virtual Ptr<Sprite> createSprite() = 0;
+
+		// Creates a text area contained in the panel.
+		virtual Ptr<TextArea> createTextArea() = 0;
 
 		// Creates a text button contained in the panel.
 		virtual Ptr<TextButton> createTextButton() = 0;
