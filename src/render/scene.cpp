@@ -21,6 +21,11 @@ namespace ve
 		}
 	}
 
+	void Scene::setUniformsFunction(std::function<void(Material const &)> uniformsFunction_)
+	{
+		uniformsFunction = uniformsFunction_;
+	}
+
 	void Scene::render()
 	{
 		std::set<Ptr<Model>> modelsSorted;
@@ -28,10 +33,9 @@ namespace ve
 		{
 			modelsSorted.insert(model);
 		}
-
 		for (auto model : modelsSorted)
 		{
-			model->render();
+			model->render(uniformsFunction);
 		}
 	}
 }

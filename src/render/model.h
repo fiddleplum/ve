@@ -29,10 +29,10 @@ namespace ve
 		void setVertexBufferObject(Ptr<VertexBufferObject> vertexBufferObject);
 
 		// Sets the function to be called that sets any model-specific uniforms.
-		void setUniformsFunction(std::function<void()> uniformsFunction);
+		void setUniformsFunction(std::function<void(Material const &)> uniformsFunction);
 
 		// Renders the model.
-		void render() const;
+		void render(std::function<void(Material const &)> const & sceneUniformsFunction) const;
 
 		// Returns true if this model sorts less than the other model.
 		bool operator < (Model const & model) const;
@@ -41,7 +41,7 @@ namespace ve
 		float depth;
 		Ptr<Material> material;
 		Ptr<VertexBufferObject> vertexBufferObject;
-		std::function<void()> uniformsFunction;
+		std::function<void(Material const &)> uniformsFunction;
 	};
 
 	bool operator < (Ptr<Model> const & lhs, Ptr<Model> const & rhs);

@@ -32,20 +32,16 @@ namespace ve
 		vertexBufferObject = vertexBufferObject_;
 	}
 
-	void Model::setUniformsFunction(std::function<void()> uniformsFunction_)
+	void Model::setUniformsFunction(std::function<void(Material const &)> uniformsFunction_)
 	{
 		uniformsFunction = uniformsFunction_;
 	}
 
-	void Model::render() const
+	void Model::render(std::function<void(Material const &)> const & sceneUniformsFunction) const
 	{
 		if (material)
 		{
-			material->activate();
-		}
-		if (uniformsFunction)
-		{
-			uniformsFunction();
+			material->activate(sceneUniformsFunction, uniformsFunction);
 		}
 		if (vertexBufferObject)
 		{

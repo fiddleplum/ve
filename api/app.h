@@ -2,7 +2,7 @@
 
 #include "window.h"
 #include "util/ptr.h"
-#include "resource_store.h"
+#include "store.h"
 
 namespace ve
 {
@@ -19,7 +19,7 @@ namespace ve
 		virtual void destroyWindow(Ptr<Window> window) = 0;
 
 		// Gets the resource manager.
-		virtual Ptr<ResourceStore> getResourceStore() const = 0;
+		virtual Ptr<Store> getStore() const = 0;
 
 	protected:
 		// Virtual destructor.

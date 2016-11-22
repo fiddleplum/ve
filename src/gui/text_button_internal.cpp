@@ -18,6 +18,11 @@ namespace ve
 
 	}
 
+	Recti TextButtonInternal::getBounds() const
+	{
+		return Recti();
+	}
+
 	void TextButtonInternal::setBounds(Recti bounds_)
 	{
 

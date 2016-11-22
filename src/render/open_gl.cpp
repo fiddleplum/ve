@@ -108,6 +108,7 @@ namespace ve
 		glUseProgram = (PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram");
 		glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)SDL_GL_GetProcAddress("glGetUniformLocation");
 		glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)SDL_GL_GetProcAddress("glGetAttribLocation");
+		glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)SDL_GL_GetProcAddress("glBindAttribLocation");
 		glGetActiveUniform = (PFNGLGETACTIVEUNIFORMPROC)SDL_GL_GetProcAddress("glGetActiveUniform");
 		glGetActiveUniformsiv = (PFNGLGETACTIVEUNIFORMSIVPROC)SDL_GL_GetProcAddress("glGetActiveUniformsiv");
 		glGetActiveUniformName = (PFNGLGETACTIVEUNIFORMNAMEPROC)SDL_GL_GetProcAddress("glGetActiveUniformName");

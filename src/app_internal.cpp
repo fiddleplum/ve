@@ -9,7 +9,7 @@ namespace ve
 	{
 		looping = true;
 		secondsPerUpdate = 1.f / 24.f;
-		resourceStore.setNew();
+		store.setNew();
 
 		// Start SDL.
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
@@ -115,14 +115,14 @@ namespace ve
 		windows.queueForErase(it);
 	}
 
-	Ptr<ResourceStore> AppInternal::getResourceStore() const
+	Ptr<Store> AppInternal::getStore() const
 	{
-		return resourceStore;
+		return store;
 	}
 
-	Ptr<ResourceStoreInternal> AppInternal::getResourceStoreInternal() const
+	Ptr<StoreInternal> AppInternal::getStoreInternal() const
 	{
-		return resourceStore;
+		return store;
 	}
 
 	void AppInternal::handleSDLEvent(SDL_Event const & sdlEvent)
@@ -153,11 +153,11 @@ namespace ve
 				switch (sdlEvent.window.event)
 				{
 					case SDL_WINDOWEVENT_CLOSE:
-						window->callCloseHandler();
+						window->handleCloseEvent();
 						break;
-					//case SDL_WINDOWEVENT_SIZE_CHANGED:
-					//	window->handleResize({sdlEvent.window.data1, sdlEvent.window.data2});
-					//	break;
+					case SDL_WINDOWEVENT_SIZE_CHANGED:
+						window->handleResizeEvent({sdlEvent.window.data1, sdlEvent.window.data2});
+						break;
 					//case SDL_WINDOWEVENT_LEAVE:
 					//	window->setCursorPosition(std::nullopt);
 					//	break;

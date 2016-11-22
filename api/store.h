@@ -7,7 +7,7 @@
 
 namespace ve
 {
-	class ResourceStore
+	class Store
 	{
 	public:
 		// Get an image from the store.
@@ -36,6 +36,6 @@ namespace ve
 
 	protected:
 		// Virtual destructor.
-		virtual ~ResourceStore() = default;
+		virtual ~Store() = default;
 	};
 }

@@ -42,14 +42,20 @@ namespace ve
 		// Sets the function to be called when the window is closed by the user.
 		void setCloseHandler(std::function<void()> closeHandler) override;
 
-		// Calls the close handler. Called by App when it receives the event.
-		void callCloseHandler();
+		// Sets the function to be called when the window is resized by the user.
+		void setResizeHandler(std::function<void(Vector2i size)> resizeHandler) override;
 
 		// Gets the root panel element which is the gui.
 		Ptr<Gui> getGui() const override;
 
 		// Gets the SDL Window handle.
 		SDL_Window * getSDLWindow() const;
+
+		// Called by App when it receives the close event.
+		void handleCloseEvent();
+
+		// Called by App when it receives the resize event.
+		void handleResizeEvent(Vector2i size);
 
 		// Updates the window and the contained gui.
 		void update(float dt);
@@ -60,6 +66,7 @@ namespace ve
 	private:
 		SDL_Window * sdlWindow;
 		std::function<void()> closeHandler;
+		std::function<void(Vector2i size)> resizeHandler;
 		OwnPtr<WindowStage> stage;
 		OwnPtr<GuiInternal> gui;
 	};

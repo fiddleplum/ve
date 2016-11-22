@@ -34,19 +34,19 @@ namespace ve
 			{
 				switch (pair.second.type)
 				{
-					case Uniform::INT: uniform = OwnPtr<UniformInt>::returnNew(pair.second.location); break;
-					case Uniform::COORD_2I: uniform = OwnPtr<UniformVector2i>::returnNew(pair.second.location); break;
-					case Uniform::COORD_3I: uniform = OwnPtr<UniformVector3i>::returnNew(pair.second.location); break;
-					case Uniform::COORD_4I: uniform = OwnPtr<UniformVector4i>::returnNew(pair.second.location); break;
-					case Uniform::FLOAT: uniform = OwnPtr<UniformFloat>::returnNew(pair.second.location); break;
-					case Uniform::COORD_2F: uniform = OwnPtr<UniformVector2f>::returnNew(pair.second.location); break;
-					case Uniform::COORD_3F: uniform = OwnPtr<UniformVector3f>::returnNew(pair.second.location); break;
-					case Uniform::COORD_4F: uniform = OwnPtr<UniformVector4f>::returnNew(pair.second.location); break;
-					case Uniform::MATRIX_22F: uniform = OwnPtr<UniformMatrix22f>::returnNew(pair.second.location); break;
-					case Uniform::MATRIX_33F: uniform = OwnPtr<UniformMatrix33f>::returnNew(pair.second.location); break;
-					case Uniform::MATRIX_44F: uniform = OwnPtr<UniformMatrix44f>::returnNew(pair.second.location); break;
+					case Uniform::INT: uniform = OwnPtr<UniformInt>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::COORD_2I: uniform = OwnPtr<UniformVector2i>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::COORD_3I: uniform = OwnPtr<UniformVector3i>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::COORD_4I: uniform = OwnPtr<UniformVector4i>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::FLOAT: uniform = OwnPtr<UniformFloat>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::COORD_2F: uniform = OwnPtr<UniformVector2f>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::COORD_3F: uniform = OwnPtr<UniformVector3f>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::COORD_4F: uniform = OwnPtr<UniformVector4f>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::MATRIX_22F: uniform = OwnPtr<UniformMatrix22f>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::MATRIX_33F: uniform = OwnPtr<UniformMatrix33f>::returnNew(pair.first, pair.second.location); break;
+					case Uniform::MATRIX_44F: uniform = OwnPtr<UniformMatrix44f>::returnNew(pair.first, pair.second.location); break;
 					case Uniform::TEXTURE_2D:
-						OwnPtr<UniformTexture2d> sampler2dUniform = OwnPtr<UniformTexture2d>::returnNew(pair.second.location, numTextures);
+						OwnPtr<UniformTexture2d> sampler2dUniform = OwnPtr<UniformTexture2d>::returnNew(pair.first, pair.second.location, numTextures);
 						texture2dUniforms.push_back(sampler2dUniform);
 						uniform = sampler2dUniform;
 						numTextures++;
@@ -57,7 +57,7 @@ namespace ve
 		}
 	}
 
-	Ptr<Uniform> Material::getUniform(int location)
+	Ptr<Uniform> Material::getUniform(int location) const
 	{
 		auto iter = uniforms.find(location);
 		if (iter != uniforms.end())
@@ -70,7 +70,7 @@ namespace ve
 		}
 	}
 
-	Ptr<Uniform> Material::getUniform(std::string const & name)
+	Ptr<Uniform> Material::getUniform(std::string const & name) const
 	{
 		if (shader)
 		{
@@ -82,11 +82,19 @@ namespace ve
 		}
 	}
 
-	void Material::activate() const
+	void Material::activate(std::function<void(Material const &)> const & sceneUniformsFunction, std::function<void(Material const &)> const & modelUniformsFunction) const
 	{
 		if (shader)
 		{
 			bool newShader = shader->activate();
+			if (newShader && sceneUniformsFunction)
+			{
+				sceneUniformsFunction(*this);
+			}
+			if (modelUniformsFunction)
+			{
+				modelUniformsFunction(*this);
+			}
 			Texture::deactivateRest(numTextures);
 			for (auto pair : uniforms)
 			{

@@ -17,6 +17,9 @@ namespace ve
 		// Sets the depth.
 		void setDepth(float depth) override;
 
+		// Returns the bounds.
+		Recti getBounds() const override;
+
 		// Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 

@@ -21,6 +21,9 @@ namespace ve
 		// Returns the scene used by the gui.
 		Ptr<Scene> getScene() const;
 
+		// Handles a resize event.
+		void handleResizeEvent(Vector2i size);
+
 		// Updates the gui.
 		void update(float dt);
 

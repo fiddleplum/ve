@@ -3,6 +3,10 @@
 
 namespace ve
 {
+	Uniform::Uniform(std::string const & name, int type, int location) : name(name), type(type), location(location)
+	{
+	}
+
 	int Uniform::getLocation() const
 	{
 		return location;
@@ -13,11 +17,7 @@ namespace ve
 		return type;
 	}
 
-	Uniform::Uniform(int type, int location) : type(type), location(location)
-	{
-	}
-
-	UniformInt::UniformInt(int location) : Uniform(INT, location)
+	UniformInt::UniformInt(std::string const & name, int location) : Uniform(name, INT, location)
 	{
 	}
 
@@ -26,7 +26,7 @@ namespace ve
 		glUniform1i(getLocation(), value);
 	}
 
-	UniformVector2i::UniformVector2i(int location) : Uniform(COORD_2I, location)
+	UniformVector2i::UniformVector2i(std::string const & name, int location) : Uniform(name, COORD_2I, location)
 	{
 	}
 
@@ -35,7 +35,7 @@ namespace ve
 		glUniform2iv(getLocation(), 1, value.ptr());
 	}
 
-	UniformVector3i::UniformVector3i(int location) : Uniform(COORD_3I, location)
+	UniformVector3i::UniformVector3i(std::string const & name, int location) : Uniform(name, COORD_3I, location)
 	{
 	}
 
@@ -44,7 +44,7 @@ namespace ve
 		glUniform3iv(getLocation(), 1, value.ptr());
 	}
 
-	UniformVector4i::UniformVector4i(int location) : Uniform(COORD_4I, location)
+	UniformVector4i::UniformVector4i(std::string const & name, int location) : Uniform(name, COORD_4I, location)
 	{
 	}
 
@@ -53,7 +53,7 @@ namespace ve
 		glUniform4iv(getLocation(), 1, value.ptr());
 	}
 
-	UniformFloat::UniformFloat(int location) : Uniform(FLOAT, location)
+	UniformFloat::UniformFloat(std::string const & name, int location) : Uniform(name, FLOAT, location)
 	{
 	}
 
@@ -62,7 +62,7 @@ namespace ve
 		glUniform1f(getLocation(), value);
 	}
 
-	UniformVector2f::UniformVector2f(int location) : Uniform(COORD_2F, location)
+	UniformVector2f::UniformVector2f(std::string const & name, int location) : Uniform(name, COORD_2F, location)
 	{
 	}
 
@@ -71,7 +71,7 @@ namespace ve
 		glUniform2fv(getLocation(), 1, value.ptr());
 	}
 
-	UniformVector3f::UniformVector3f(int location) : Uniform(COORD_3F, location)
+	UniformVector3f::UniformVector3f(std::string const & name, int location) : Uniform(name, COORD_3F, location)
 	{
 	}
 
@@ -80,7 +80,7 @@ namespace ve
 		glUniform3fv(getLocation(), 1, value.ptr());
 	}
 
-	UniformVector4f::UniformVector4f(int location) : Uniform(COORD_4F, location)
+	UniformVector4f::UniformVector4f(std::string const & name, int location) : Uniform(name, COORD_4F, location)
 	{
 	}
 
@@ -89,7 +89,7 @@ namespace ve
 		glUniform4fv(getLocation(), 1, value.ptr());
 	}
 
-	UniformMatrix22f::UniformMatrix22f(int location) : Uniform(MATRIX_22F, location)
+	UniformMatrix22f::UniformMatrix22f(std::string const & name, int location) : Uniform(name, MATRIX_22F, location)
 	{
 	}
 
@@ -98,7 +98,7 @@ namespace ve
 		glUniformMatrix2fv(getLocation(), 1, false, value.ptr());
 	}
 
-	UniformMatrix33f::UniformMatrix33f(int location) : Uniform(MATRIX_33F, location)
+	UniformMatrix33f::UniformMatrix33f(std::string const & name, int location) : Uniform(name, MATRIX_33F, location)
 	{
 	}
 
@@ -107,7 +107,7 @@ namespace ve
 		glUniformMatrix3fv(getLocation(), 1, false, value.ptr());
 	}
 
-	UniformMatrix44f::UniformMatrix44f(int location) : Uniform(MATRIX_44F, location)
+	UniformMatrix44f::UniformMatrix44f(std::string const & name, int location) : Uniform(name, MATRIX_44F, location)
 	{
 	}
 
@@ -116,7 +116,7 @@ namespace ve
 		glUniformMatrix4fv(getLocation(), 1, false, value.ptr());
 	}
 
-	UniformTexture2d::UniformTexture2d(int location, int textureSlot_) : Uniform(TEXTURE_2D, location), textureSlot(textureSlot_)
+	UniformTexture2d::UniformTexture2d(std::string const & name, int location, int textureSlot_) : Uniform(name, TEXTURE_2D, location), textureSlot(textureSlot_)
 	{
 	}
 

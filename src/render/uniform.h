@@ -12,7 +12,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Uniform(int type, int location);
+		Uniform(std::string const & name, int type, int location);
 
 		// Returns the location.
 		int getLocation() const;
@@ -27,6 +27,9 @@ namespace ve
 		enum Type { INT, COORD_2I, COORD_3I, COORD_4I, FLOAT, COORD_2F, COORD_3F, COORD_4F, MATRIX_22F, MATRIX_33F, MATRIX_44F, TEXTURE_2D };
 
 	private:
+		// The name of the uniform in the shader.
+		std::string name;
+
 		// The GL location of the uniform within the shader.
 		int const location;
 
@@ -39,7 +42,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformInt(int location);
+		UniformInt(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -53,7 +56,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformVector2i(int location);
+		UniformVector2i(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -67,7 +70,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformVector3i(int location);
+		UniformVector3i(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -81,7 +84,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformVector4i(int location);
+		UniformVector4i(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -95,7 +98,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformFloat(int location);
+		UniformFloat(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -109,7 +112,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformVector2f(int location);
+		UniformVector2f(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -123,7 +126,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformVector3f(int location);
+		UniformVector3f(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -137,7 +140,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformVector4f(int location);
+		UniformVector4f(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -151,7 +154,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformMatrix22f(int location);
+		UniformMatrix22f(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -165,7 +168,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformMatrix33f(int location);
+		UniformMatrix33f(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -179,7 +182,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformMatrix44f(int location);
+		UniformMatrix44f(std::string const & name, int location);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;
@@ -193,7 +196,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		UniformTexture2d(int location, int textureSlot);
+		UniformTexture2d(std::string const & name, int location, int textureSlot);
 
 		// Send the value to the location in the currently active Shader.
 		void sendToActiveShader() const override;

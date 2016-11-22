@@ -21,6 +21,9 @@ namespace ve
 		// Sets the depth.
 		virtual void setDepth(float depth) = 0;
 
+		// Returns the bounds of the widget.
+		virtual Recti getBounds() const = 0;
+
 		// Sets the bounds of the widget.
 		virtual void setBounds(Recti bounds) = 0;
 

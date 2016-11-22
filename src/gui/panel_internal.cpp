@@ -21,6 +21,11 @@ namespace ve
 
 	}
 
+	Recti PanelInternal::getBounds() const
+	{
+		return bounds;
+	}
+
 	void PanelInternal::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
@@ -46,7 +51,7 @@ namespace ve
 		widgetInfos.queueForErase(it);
 	}
 
-	void PanelInternal::setBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
+	void PanelInternal::setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
 	{
 		auto & widgetInfo = *getWidgetInfo(widget);
 		widgetInfo.originInPanel = originInPanel;
@@ -59,12 +64,12 @@ namespace ve
 
 	void PanelInternal::update(float dt)
 	{
-		widgetInfos.processEraseQueue();
-
 		for (auto const & widgetInfo : widgetInfos)
 		{
 			widgetInfo.widget->update(dt);
 		}
+
+		widgetInfos.processEraseQueue();
 	}
 
 	template <typename T> Ptr<T> PanelInternal::createWidget()
@@ -94,6 +99,6 @@ namespace ve
 		Vector2f panelSize = Vector2f {bounds.max - bounds.min + Vector2i {1, 1}};
 		Vector2f widgetSize = panelSize.scale(widgetInfo.sizeInPanel) + Vector2f {widgetInfo.sizeOffset};
 		Vector2f widgetPosition = panelSize.scale(widgetInfo.originInPanel) - widgetSize.scale(widgetInfo.originInWidget) + Vector2f {widgetInfo.originOffset};
-		widgetInfo.widget->setBounds(Recti {Vector2i{widgetPosition}, Vector2i{widgetPosition + widgetSize}});
+		widgetInfo.widget->setBounds(Recti {Vector2i{widgetPosition}, Vector2i{widgetPosition + widgetSize - Vector2f{1, 1}}});
 	}
 }

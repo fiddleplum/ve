@@ -18,6 +18,9 @@ namespace ve
 		// Sets the depth.
 		void setDepth(float depth) override;
 
+		// Returns the bounds.
+		Recti getBounds() const override;
+
 		// Sets the bounds of the panel.
 		void setBounds(Recti bounds) override;
 
@@ -31,7 +34,7 @@ namespace ve
 		void destroyWidget(Ptr<Widget> widget) override;
 
 		// Sets the relative bounds for the widget.
-		void setBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) override;
+		void setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) override;
 
 		// Updates the panel.
 		void update(float dt) override;

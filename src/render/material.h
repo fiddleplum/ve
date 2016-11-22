@@ -25,13 +25,13 @@ namespace ve
 		void setShader(Ptr<Shader> shader);
 
 		// Gets a uniform of the given location. Faster than by name.
-		Ptr<Uniform> getUniform(int location);
+		Ptr<Uniform> getUniform(int location) const;
 
 		// Gets a uniform of the given name.
-		Ptr<Uniform> getUniform(std::string const & name);
+		Ptr<Uniform> getUniform(std::string const & name) const;
 
-		// Activates the material.
-		void activate() const;
+		// Activates the material. Applies scene uniform values if the shader has been activated.
+		void activate(std::function<void(Material const &)> const & sceneUniformsFunction, std::function<void(Material const &)> const & modelUniformsFunction) const;
 
 		// Returns true if this material sorts less than the other material.
 		bool operator < (Material const & material) const;

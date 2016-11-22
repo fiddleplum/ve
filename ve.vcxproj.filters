@@ -6,8 +6,6 @@
     <ClInclude Include="src\app_internal.h" />
     <ClInclude Include="api\window.h" />
     <ClInclude Include="src\window_internal.h" />
-    <ClInclude Include="api\resource_store.h" />
-    <ClInclude Include="src\resources_store_internal.h" />
     <ClInclude Include="src\gui\text_button_internal.h" />
     <ClInclude Include="src\gui\sprite_internal.h" />
     <ClInclude Include="src\gui\panel_internal.h" />
@@ -46,6 +44,8 @@
     <ClInclude Include="src\render\image_internal.h" />
     <ClInclude Include="src\render\mesh_internal.h" />
     <ClInclude Include="src\util\object_list.h" />
+    <ClInclude Include="api\store.h" />
+    <ClInclude Include="src\store_internal.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -54,7 +54,6 @@
   <ItemGroup>
     <ClCompile Include="src\app_internal.cpp" />
     <ClCompile Include="src\window_internal.cpp" />
-    <ClCompile Include="src\resource_store_internal.cpp" />
     <ClCompile Include="src\gui\sprite_internal.cpp" />
     <ClCompile Include="src\gui\text_button_internal.cpp" />
     <ClCompile Include="src\gui\panel_internal.cpp" />
@@ -75,5 +74,6 @@
     <ClCompile Include="src\render\image_internal.cpp" />
     <ClCompile Include="src\render\mesh_internal.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\store_internal.cpp" />
   </ItemGroup>
 </Project>

@@ -40,7 +40,7 @@ namespace ve
 					sizeOfComponent = 4; break;
 			}
 			vertexComponents.push_back({formatTypes[i], sizeOfComponent, bytesPerVertex});
-			bytesPerVertex += sizeOfComponent;
+			bytesPerVertex += sizeOfComponent * sizeof(float);
 		}
 
 		GLuint buffer;
@@ -63,7 +63,7 @@ namespace ve
 	{
 		auto const & vertices = mesh->getVertices();
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, 0, (void const *)&vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), (void const *)&vertices[0], GL_STATIC_DRAW);
 	}
 
 	void VertexBufferObject::render() const

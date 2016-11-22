@@ -1,6 +1,6 @@
 #pragma once
 
-#include "resource_store.h"
+#include "store.h"
 #include "render/image_internal.h"
 #include "render/texture.h"
 #include "render/mesh_internal.h"
@@ -12,7 +12,7 @@
 namespace ve
 {
 	// Contains objects that reference outside sources such as the GPU or file system.
-	class ResourceStoreInternal : public virtual ResourceStore
+	class StoreInternal : public virtual Store
 	{
 	public:
 		// Get an image from the store.

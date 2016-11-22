@@ -7,7 +7,7 @@ namespace ve
 		: WidgetInternal(scene)
 	{
 		std::string modelName = "guiUnitSquare";
-		auto store = getAppInternal()->getResourceStoreInternal();
+		auto store = getAppInternal()->getStoreInternal();
 		auto vbo = store->getVertexBufferObject(modelName);
 		if (!vbo)
 		{
@@ -18,7 +18,7 @@ namespace ve
 				mesh->setFormatTypes({Mesh::POSITION_2D, Mesh::UV0});
 				mesh->setNumIndicesPerPrimitive(3);
 				mesh->setVertices({0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1});
-				mesh->setIndices({0, 1, 2, 2, 3, 0});
+				mesh->setIndices({0, 1, 2, 3, 2, 0});
 			}
 			vbo = store->createVertexBufferObject(modelName, mesh);
 		}
@@ -30,23 +30,24 @@ namespace ve
 			{
 				Config shaderConfig;
 				shaderConfig.children["vertex"].text =
-					"uniform ivec2 min;"
-					"uniform ivec2 max;"
-					"uniform ivec2 guiSize;"
-					"attribute vec2 position2d;"
-					"attribute vec2 uv0;"
-					"varying vec2 v_uv0;"
-					"void main(void) {"
-					"	gl_Position = vec4((min + position2d * (max - min + 1)) / guiSize - vec2(0.5, -0.5), 0, 0);"
-					"	v_uv0 = uv0;"
-					"}";
+					"#version 400\n"
+					"uniform ivec2 min;\n"
+					"uniform ivec2 max;\n"
+					"uniform ivec2 guiSize;\n"
+					"attribute vec2 position2d;\n"
+					"attribute vec2 uv0;\n"
+					"varying vec2 v_uv0;\n"
+					"void main(void) {\n"
+					"	gl_Position = vec4(2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1), 0, 1);\n"
+					"	v_uv0 = uv0;\n"
+					"}\n";
 				shaderConfig.children["fragment"].text =
-					"varying vec2 v_uv0;"
-					"uniform sampler2D tex;"
-					"void main(void) {"
-					"	gl_FragColor = texture(tex, v_uv0);"
-						
-					"}";
+					"#version 400\n"
+					"varying vec2 v_uv0;\n"
+					"uniform sampler2D tex;\n"
+					"void main(void) {\n"
+					"	gl_FragColor = texture(tex, clamp(v_uv0, 0, 1));\n"
+					"}\n";
 				shader = store->loadShader("guiShader", shaderConfig);
 			}
 			material = store->createMaterial("guiMaterial");
@@ -57,10 +58,10 @@ namespace ve
 		model = scene->createModel();
 		model->setVertexBufferObject(vbo);
 		model->setMaterial(material);
-		model->setUniformsFunction([this]()
+		model->setUniformsFunction([this](Material const & material)
 		{
-			model->getMaterial()->getUniform(minUniformLocation).as<UniformVector2i>()->value = bounds.min;
-			model->getMaterial()->getUniform(maxUniformLocation).as<UniformVector2i>()->value = bounds.max;
+			material.getUniform(minUniformLocation).as<UniformVector2i>()->value = bounds.min;
+			material.getUniform(maxUniformLocation).as<UniformVector2i>()->value = bounds.max;
 		});
 	}
 
@@ -79,6 +80,11 @@ namespace ve
 		model->setDepth(depth);
 	}
 
+	Recti SpriteInternal::getBounds() const
+	{
+		return bounds;
+	}
+
 	void SpriteInternal::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
@@ -86,7 +92,7 @@ namespace ve
 
 	void SpriteInternal::setImage(std::string const & name)
 	{
-		auto store = getAppInternal()->getResourceStoreInternal();
+		auto store = getAppInternal()->getStoreInternal();
 		auto & texture = model->getMaterial()->getUniform("tex").as<UniformTexture2d>()->texture;
 		texture = store->getTexture(name);
 		if (!texture)

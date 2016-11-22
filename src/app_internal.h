@@ -4,7 +4,7 @@
 #include "window_internal.h"
 #include "util/ptr.h"
 #include "util/object_list.h"
-#include "resources_store_internal.h"
+#include "store_internal.h"
 #include "render/renderer.h"
 
 namespace ve
@@ -28,10 +28,10 @@ namespace ve
 		void destroyWindow(Ptr<Window> window) override;
 
 		// Gets the resource manager.
-		Ptr<ResourceStore> getResourceStore() const override;
+		Ptr<Store> getStore() const override;
 
 		// Gets the resource manager.
-		Ptr<ResourceStoreInternal> getResourceStoreInternal() const;
+		Ptr<StoreInternal> getStoreInternal() const;
 
 	private:
 		void handleSDLEvent(SDL_Event const & sdlEvent);
@@ -40,7 +40,7 @@ namespace ve
 		bool looping;
 		float secondsPerUpdate;
 		ObjectList<OwnPtr<WindowInternal>> windows;
-		OwnPtr<ResourceStoreInternal> resourceStore;
+		OwnPtr<StoreInternal> store;
 		OwnPtr<Renderer> renderer;
 	};
 

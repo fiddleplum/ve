@@ -6,15 +6,18 @@ namespace ve
 {
 	WindowInternal::WindowInternal()
 	{
-		sdlWindow = SDL_CreateWindow("Untitled", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+		Vector2i initialSize {800, 600};
+		sdlWindow = SDL_CreateWindow("Untitled", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, initialSize[0], initialSize[1], SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 		if (sdlWindow == nullptr)
 		{
 			throw std::runtime_error("Failed to create the window.");
 		}
 
 		gui.setNew();
+		gui->handleResizeEvent(initialSize);
 
 		stage.setNew();
+		stage->setWindowSize(initialSize);
 		stage->setScene(gui->getScene());
 	}
 
@@ -29,12 +32,9 @@ namespace ve
 		closeHandler = closeHandler_;
 	}
 
-	void WindowInternal::callCloseHandler()
+	void WindowInternal::setResizeHandler(std::function<void(Vector2i size)> resizeHandler_)
 	{
-		if (closeHandler)
-		{
-			closeHandler();
-		}
+		resizeHandler = resizeHandler_;
 	}
 
 	Ptr<Gui> WindowInternal::getGui() const
@@ -45,6 +45,24 @@ namespace ve
 	SDL_Window * WindowInternal::getSDLWindow() const
 	{
 		return sdlWindow;
+	}
+
+	void WindowInternal::handleCloseEvent()
+	{
+		if (closeHandler)
+		{
+			closeHandler();
+		}
+	}
+
+	void WindowInternal::handleResizeEvent(Vector2i size)
+	{
+		if (resizeHandler)
+		{
+			resizeHandler(size);
+		}
+		gui->handleResizeEvent(size);
+		stage->setWindowSize(size);
 	}
 
 	void WindowInternal::update(float dt)

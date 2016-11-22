@@ -135,6 +135,12 @@ namespace ve
 			throw;
 		}
 		program = linkShaderProgram(shaderObjects); // delete shader objects as well
+		bindAttributeLocations();
+		for (unsigned int shaderObject : shaderObjects)
+		{
+			glDetachShader(program, shaderObject);
+			glDeleteShader(shaderObject);
+		}
 		populateUniformInfos();
 	}
 
@@ -239,11 +245,6 @@ namespace ve
 			glAttachShader(program, shaderObject);
 		}
 		glLinkProgram(program);
-		for (unsigned int shaderObject : shaderObjects)
-		{
-			glDetachShader(program, shaderObject);
-			glDeleteShader(shaderObject);
-		}
 		GLint good;
 		glGetProgramiv(program, GL_LINK_STATUS, &good);
 		if (good == GL_FALSE)
@@ -285,6 +286,18 @@ namespace ve
 			}
 		}
 		glLinkProgram(program); // need to relink after attributes are bound. No checking of errors here, because it was already linked successfully once.
+		GLint good;
+		glGetProgramiv(program, GL_LINK_STATUS, &good);
+		if (good == GL_FALSE)
+		{
+			GLint logLength;
+			std::string log;
+			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+			log.resize(logLength);
+			glGetProgramInfoLog(program, logLength, 0, &log[0]);
+			glDeleteProgram(program);
+			throw std::runtime_error("Error linking shader: " + log);
+		}
 	}
 
 	void Shader::populateUniformInfos()

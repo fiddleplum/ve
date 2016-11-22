@@ -20,7 +20,7 @@ namespace ve
 		virtual void destroyWidget(Ptr<Widget> widget) = 0;
 
 		// Sets the relative bounds for the widget.
-		virtual void setBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) = 0;
+		virtual void setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) = 0;
 
 	protected:
 		// Virtual destructor.

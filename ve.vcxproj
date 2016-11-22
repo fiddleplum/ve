@@ -200,10 +200,10 @@
     <ClInclude Include="src\util\object_list.h" />
     <ClInclude Include="src\render\open_gl.h" />
     <ClInclude Include="src\gui\panel_internal.h" />
-    <ClInclude Include="api\resource_store.h" />
+    <ClInclude Include="api\store.h" />
     <ClInclude Include="src\render\uniform.h" />
     <ClInclude Include="src\render\vertex_buffer_object.h" />
-    <ClInclude Include="src\resources_store_internal.h" />
+    <ClInclude Include="src\store_internal.h" />
     <ClInclude Include="src\gui\sprite_internal.h" />
     <ClInclude Include="src\gui\text_button_internal.h" />
     <ClInclude Include="src\gui\widget_internal.h" />
@@ -232,7 +232,7 @@
     <ClCompile Include="src\render\stage.cpp" />
     <ClCompile Include="src\render\uniform.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
-    <ClCompile Include="src\resource_store_internal.cpp" />
+    <ClCompile Include="src\store_internal.cpp" />
     <ClCompile Include="src\gui\sprite_internal.cpp" />
     <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\gui\text_button_internal.cpp" />
