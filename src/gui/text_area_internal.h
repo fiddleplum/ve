@@ -2,6 +2,7 @@
 
 #include "gui/text_area.h"
 #include "gui/widget_internal.h"
+#include "util/font.h"
 
 namespace ve
 {
@@ -15,10 +16,7 @@ namespace ve
 		~TextAreaInternal();
 
 		// Sets the font.
-		void setFont(std::string const & fontName) override;
-
-		// Sets the font size.
-		void setFontSize(int fontSize) override;
+		void setFont(std::string const & fontFace, int fontSize) override;
 
 		// Sets the text.
 		void setText(std::string const & text) override;
@@ -44,5 +42,6 @@ namespace ve
 	private:
 		Recti bounds;
 		Ptr<Model> model;
+		Ptr<Font> font;
 	};
 }

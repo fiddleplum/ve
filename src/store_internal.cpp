@@ -29,6 +29,11 @@ namespace ve
 		return imageCache.create(name, size, format);
 	}
 
+	Ptr<Image> StoreInternal::createImage(std::string const & name, SDL_Surface * surface)
+	{
+		return imageCache.create(name, surface);
+	}
+
 	std::vector<std::string> StoreInternal::listImages() const
 	{
 		return imageCache.getObjectNames();
@@ -157,16 +162,9 @@ namespace ve
 		return fontCache.get(name);
 	}
 
-	Ptr<Font> StoreInternal::loadFont(std::string const & name, std::string const & filename)
+	Ptr<Font> StoreInternal::loadFont(std::string const & name, std::string const & fontFace, int size)
 	{
-		if (filename != "")
-		{
-			return fontCache.create(name, filename);
-		}
-		else
-		{
-			return fontCache.create(name, "assets/fonts/" + name + ".ttf");
-		}
+		return fontCache.create(name, "assets/fonts/" + fontFace + ".ttf", size);
 	}
 
 	std::vector<std::string> StoreInternal::listFonts() const

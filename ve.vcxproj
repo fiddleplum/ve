@@ -73,12 +73,12 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
-    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;C:\stephen\projects\_external\SDL2_ttf\include;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;C:\stephen\projects\_external\SDL2_ttf\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
@@ -87,11 +87,11 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
-    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;C:\stephen\projects\_external\SDL2_ttf\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;$(IncludePath)</IncludePath>
+    <IncludePath>api;src;C:\stephen\projects\_external\SDL2\include;C:\stephen\projects\_external\SDL2_image\include;C:\stephen\projects\_external\SDL2_ttf\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(SolutionDir)tmp\</IntDir>
   </PropertyGroup>
@@ -183,6 +183,7 @@
     <ClInclude Include="src\gui\text_area_internal.h" />
     <ClInclude Include="src\render\mesh_internal.h" />
     <ClInclude Include="src\util\font.h" />
+    <ClInclude Include="src\util\math.hpp" />
     <ClInclude Include="src\util\object_map.h" />
     <ClInclude Include="src\util\object_set.h" />
     <ClInclude Include="src\render\material.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\gui\text_button_internal.cpp" />
     <ClCompile Include="src\util\font.cpp" />
+    <ClCompile Include="src\util\math.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\window_internal.cpp" />
   </ItemGroup>

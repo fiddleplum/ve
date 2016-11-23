@@ -1,6 +1,7 @@
 #pragma once
 
 #include "render/image.h"
+#include <SDL.h>
 
 namespace ve
 {
@@ -12,6 +13,9 @@ namespace ve
 
 		// Load a PNG or JPG from a file.
 		ImageInternal(std::string const & filename);
+
+		// Load from an SDL Surface.
+		ImageInternal(SDL_Surface const * sdlSurface);
 
 		// Saves the image to a file.
 		void save(std::string const & filename) const override;
@@ -44,6 +48,8 @@ namespace ve
 		void setPixelGrayScale32(Vector2i position, uint32_t value) override;
 
 	private:
+		void loadFromSDLSurface(SDL_Surface const * sdlSurface);
+
 		Format format;
 		int bytesPerPixel;
 		Vector2i size;

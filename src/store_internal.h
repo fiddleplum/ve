@@ -28,6 +28,9 @@ namespace ve
 		// Create a new image in the store with the given name.
 		Ptr<Image> createImage(std::string const & name, Vector2i size, Image::Format format) override;
 
+		// Create an image from an SDL Surface.
+		Ptr<Image> createImage(std::string const & name, SDL_Surface * surface);
+
 		// List the names of all the images in the store.
 		std::vector<std::string> listImages() const override;
 
@@ -89,7 +92,7 @@ namespace ve
 		Ptr<Font> getFont(std::string const & name) const;
 
 		// Load a font from a file.
-		Ptr<Font> loadFont(std::string const & name, std::string const & filename = "");
+		Ptr<Font> loadFont(std::string const & name, std::string const & fontFace, int size);
 
 		// List the names of all the fonts in the store.
 		std::vector<std::string> listFonts() const;

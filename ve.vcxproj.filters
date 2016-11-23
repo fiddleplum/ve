@@ -49,6 +49,7 @@
     <ClInclude Include="src\gui\text_area_internal.h" />
     <ClInclude Include="api\gui\text_area.h" />
     <ClInclude Include="src\util\font.h" />
+    <ClInclude Include="src\util\math.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -80,5 +81,6 @@
     <ClCompile Include="src\store_internal.cpp" />
     <ClCompile Include="src\gui\text_area_internal.cpp" />
     <ClCompile Include="src\util\font.cpp" />
+    <ClCompile Include="src\util\math.cpp" />
   </ItemGroup>
 </Project>

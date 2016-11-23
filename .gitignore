@@ -5,3 +5,5 @@ tmp
 *.VC.opendb
 *.vcxproj.user
 *.VC.db
+doc/html
+doc/Doxygen.exe

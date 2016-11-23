@@ -9,10 +9,7 @@ namespace ve
 	{
 	public:
 		// Sets the font.
-		virtual void setFont(std::string const & fontName) = 0;
-
-		// Sets the font size.
-		virtual void setFontSize(int fontSize) = 0;
+		virtual void setFont(std::string const & fontName, int fontSize) = 0;
 
 		// Sets the text.
 		virtual void setText(std::string const & text) = 0;

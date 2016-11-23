@@ -3,6 +3,7 @@
 #include "render/image.h"
 #include "util/vector.h"
 #include "util/ptr.h"
+#include <SDL.h>
 
 namespace ve
 {
