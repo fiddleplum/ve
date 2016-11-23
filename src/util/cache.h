@@ -23,7 +23,10 @@ namespace ve
 		Ptr<Object> get(std::string const & name) const;
 
 		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects)
-		template <typename... Args> Ptr<Object> create(std::string const & name, Args... args);
+		template <typename ... Args> Ptr<Object> create(std::string const & name, Args const & ... args);
+
+		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects)
+		template <typename ... Args> Ptr<Object> create(std::string const & name, Args & ... args);
 
 		// Removes and destroys the objects that aren't referenced outside of the cache. O(number of objects).
 		void clean();
@@ -72,8 +75,33 @@ namespace ve
 	}
 
 	template <typename Object>
-	template <typename... Args>
-	Ptr<Object> Cache<Object>::create(std::string const & name, Args... args)
+	template <typename ... Args>
+	Ptr<Object> Cache<Object>::create(std::string const & name, Args const & ... args)
+	{
+		auto it = objects.find(name);
+		if (it == objects.end())
+		{
+			OwnPtr<Object> object;
+			try
+			{
+				object.setNew(args...);
+			}
+			catch (std::runtime_error const & e)
+			{
+				throw std::runtime_error("Error while constructing '" + name + "': " + e.what());
+			}
+			objects[name] = object;
+			return object;
+		}
+		else
+		{
+			throw std::runtime_error("'" + name + "' is already in the cache.");
+		}
+	}
+
+	template <typename Object>
+	template <typename ... Args>
+	Ptr<Object> Cache<Object>::create(std::string const & name, Args & ... args)
 	{
 		auto it = objects.find(name);
 		if (it == objects.end())

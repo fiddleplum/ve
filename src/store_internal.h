@@ -3,7 +3,7 @@
 #include "store.h"
 #include "render/image_internal.h"
 #include "render/texture.h"
-#include "render/mesh_internal.h"
+#include "render/mesh.h"
 #include "render/vertex_buffer_object.h"
 #include "render/shader.h"
 #include "render/material.h"
@@ -42,9 +42,6 @@ namespace ve
 
 		// Get a mesh from the store.
 		Ptr<Mesh> getMesh(std::string const & name) const override;
-
-		// Get a mesh from the store.
-		Ptr<MeshInternal> getMeshInternal(std::string const & name) const;
 
 		// Load a mesh into the store with the given name.
 		Ptr<Mesh> loadMesh(std::string const & name, std::string const & location = "") override;
@@ -100,7 +97,7 @@ namespace ve
 	private:
 		Cache<ImageInternal> imageCache;
 		Cache<Texture> textureCache;
-		Cache<MeshInternal> meshCache;
+		Cache<Mesh> meshCache;
 		Cache<VertexBufferObject> vertexBufferObjectCache;
 		Cache<Shader> shaderCache;
 		Cache<Material> materialCache;

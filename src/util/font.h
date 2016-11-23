@@ -26,7 +26,7 @@ namespace ve
 		~Font();
 
 		//! Returns the height of a line of text.
-		unsigned int getLineHeight() const;
+		int getLineHeight() const;
 
 		//! Get coordinate info about the glyph of a given character.
 		GlyphCoords const & getGlyphCoordsFromChar(unsigned int c);
@@ -56,6 +56,6 @@ namespace ve
 		TTF_Font * ttfFont;
 		std::map<int, Block> blocks;
 		int size;
-		unsigned int lineHeight;
+		int lineHeight;
 	};
 }

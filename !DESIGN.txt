@@ -1,3 +1,15 @@
+== API Design
+
+I've been using the interface method for my API. I struggle because it feels overly complicated and I have to go through extra hoops (store->getTexture, store->getTextureInternal, etc) to work with it internally. Overall, it feels clunky.
+
+The ideal method would be to have no inheritance, but declare certain methods as internal to the ve namespace. Alas, C++ does not have namespace-based access.
+
+I could just make all objects have no inheritance and then just use comments to declare certain methods as internal. Just say: "// Internal. ...". I have to think about what who I'm making ve for. I want someone to have a fast jumping off point to make greater things. I don't want them caught up in details, but to throw something together fast. This means it needs to be dirt simple and the inheritance heirarchy make it much less simple.
+
+I'm leaning toward no hierarchy and no pImpl either. For class member variables that are specific to a dependent library, I need to find a good way to opaquify them.
+
+
+
 == Pointers Rationale
 
 I don't like the shared_ptr/weak_ptr paradigm because weak_ptr can be turned into a shared_ptr, thereby removing the ability of an object to have complete control over any of its own shared_ptr objects. This spells doom for an API that needs to have complete control over its own objects.

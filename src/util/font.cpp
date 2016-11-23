@@ -46,7 +46,7 @@ namespace ve
 		}
 	}
 
-	unsigned int Font::getLineHeight() const
+	int Font::getLineHeight() const
 	{
 		return lineHeight;
 	}

@@ -181,7 +181,6 @@
     <ClInclude Include="api\util\stringutil.h" />
     <ClInclude Include="src\gui\gui_internal.h" />
     <ClInclude Include="src\gui\text_area_internal.h" />
-    <ClInclude Include="src\render\mesh_internal.h" />
     <ClInclude Include="src\util\font.h" />
     <ClInclude Include="src\util\math.hpp" />
     <ClInclude Include="src\util\object_map.h" />
@@ -226,7 +225,7 @@
     <ClCompile Include="src\gui\widget_internal.cpp" />
     <ClCompile Include="src\render\image_internal.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\render\mesh_internal.cpp" />
+    <ClCompile Include="src\render\mesh.cpp" />
     <ClCompile Include="src\render\material.cpp" />
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\open_gl.cpp" />

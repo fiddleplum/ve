@@ -15,10 +15,9 @@ namespace ve
 			if (!mesh)
 			{
 				mesh = store->createMesh(modelName);
-				mesh->setFormatTypes({Mesh::POSITION_2D, Mesh::UV0});
-				mesh->setNumIndicesPerPrimitive(3);
-				mesh->setVertices({0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1});
-				mesh->setIndices({0, 1, 2, 3, 2, 0});
+				mesh->formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
+				mesh->vertices = {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1};
+				mesh->indices = {0, 1, 2, 3, 2, 0};
 			}
 			vbo = store->createVertexBufferObject(modelName, mesh);
 		}
@@ -38,7 +37,8 @@ namespace ve
 					"attribute vec2 uv0;\n"
 					"varying vec2 v_uv0;\n"
 					"void main(void) {\n"
-					"	gl_Position = vec4(2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1), 0, 1);\n"
+					"   vec2 pos = 2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1);\n"
+					"	gl_Position = vec4(pos[0], 1.0 - pos[1], 0, 1);\n"
 					"	v_uv0 = uv0;\n"
 					"}\n";
 				shaderConfig.children["fragment"].text =

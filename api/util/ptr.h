@@ -74,13 +74,22 @@ namespace ve
 		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject);
 
 		// Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
-		template <typename... Args> void setNew(Args... args);
+		template <typename ... Args> void setNew(Args const & ... args);
 
 		// Change the object to a new pointer to an object of type Y with arguments. Uses the new operator for allocation. For special allocation the function setRaw().
-		template <typename Y, typename... Args> void setNew(Args... args);
+		template <typename Y, typename ... Args> void setNew(Args const & ... args);
 
 		// Returns a newly created OwnPtr using setNew above.
-		template <typename ...Args> static PtrBase<T, OWN, USE> returnNew(Args... args);
+		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args const & ... args);
+
+		// Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
+		template <typename ... Args> void setNew(Args & ... args);
+
+		// Change the object to a new pointer to an object of type Y with arguments. Uses the new operator for allocation. For special allocation the function setRaw().
+		template <typename Y, typename ... Args> void setNew(Args & ... args);
+
+		// Returns a newly created OwnPtr using setNew above.
+		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args & ... args);
 
 		// Resets this to point to null.
 		void setNull();
@@ -294,20 +303,40 @@ namespace ve
 		}
 	}
 
-	template <typename T, bool OWN, bool USE> template <typename... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args... args)
+	template <typename T, bool OWN, bool USE> template <typename ... Args>
+	void PtrBase<T, OWN, USE>::setNew(Args const & ... args)
 	{
 		setRaw(new T(args...));
 	}
 
-	template <typename T, bool OWN, bool USE> template <typename Y, typename... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args... args)
+	template <typename T, bool OWN, bool USE> template <typename Y, typename ... Args>
+	void PtrBase<T, OWN, USE>::setNew(Args const & ... args)
 	{
 		setRaw(new Y(args...));
 	}
 
-	template <typename T, bool OWN, bool USE> template <typename ...Args>
-	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args... args)
+	template <typename T, bool OWN, bool USE> template <typename ... Args>
+	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args const & ... args)
+	{
+		PtrBase<T, OWN, USE> ptr;
+		ptr.setNew(args...);
+		return ptr;
+	}
+
+	template <typename T, bool OWN, bool USE> template <typename ... Args>
+	void PtrBase<T, OWN, USE>::setNew(Args & ... args)
+	{
+		setRaw(new T(args...));
+	}
+
+	template <typename T, bool OWN, bool USE> template <typename Y, typename ... Args>
+	void PtrBase<T, OWN, USE>::setNew(Args & ... args)
+	{
+		setRaw(new Y(args...));
+	}
+
+	template <typename T, bool OWN, bool USE> template <typename ... Args>
+	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args & ... args)
 	{
 		PtrBase<T, OWN, USE> ptr;
 		ptr.setNew(args...);

@@ -9,11 +9,15 @@ namespace ve
 	class Interval
 	{
 	public:
-		// Constructs to all zeros.
+		// Constructs with all zeros.
 		Interval();
 
-		// Constructs to the other.
+		// Constructs from the other.
 		Interval(Interval<dim, T> const & other);
+
+		// Constructs from other of a different type.
+		template <typename Y>
+		explicit Interval(Interval<dim, Y> const & other);
 
 		// Constructs to min and max.
 		Interval(Vector<dim, T> min, Vector<dim, T> max);
@@ -65,6 +69,13 @@ namespace ve
 	{
 		min = other.min;
 		max = other.max;
+	}
+
+	template <int dim, typename T> template <typename Y>
+	Interval<dim, T>::Interval(Interval<dim, Y> const & other)
+	{
+		min = Vector<dim, T>(other.min);
+		max = Vector<dim, T>(other.max);
 	}
 
 	template <int dim, typename T>

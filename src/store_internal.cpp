@@ -1,4 +1,5 @@
 #include "store_internal.h"
+#include <fstream>
 
 namespace ve
 {
@@ -54,21 +55,18 @@ namespace ve
 		return meshCache.get(name);
 	}
 
-	Ptr<MeshInternal> StoreInternal::getMeshInternal(std::string const & name) const
-	{
-		return meshCache.get(name);
-	}
-
 	Ptr<Mesh> StoreInternal::loadMesh(std::string const & name, std::string const & location)
 	{
+		std::ifstream in;
 		if (location != "")
 		{
-			return meshCache.create(name, location);
+			in.open(location, std::ios::in | std::ios::binary);
 		}
 		else
 		{
-			return meshCache.create(name, "assets/meshes/" + name + ".mesh");
+			in.open("assets/meshes/" + name + ".mesh", std::ios::in | std::ios::binary);
 		}
+		return meshCache.create(name, in);
 	}
 
 	Ptr<Mesh> StoreInternal::createMesh(std::string const & name)

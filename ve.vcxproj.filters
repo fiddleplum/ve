@@ -42,7 +42,6 @@
     <ClInclude Include="api\render\mesh.h" />
     <ClInclude Include="api\util\vector.h" />
     <ClInclude Include="src\render\image_internal.h" />
-    <ClInclude Include="src\render\mesh_internal.h" />
     <ClInclude Include="src\util\object_list.h" />
     <ClInclude Include="api\store.h" />
     <ClInclude Include="src\store_internal.h" />
@@ -76,11 +75,11 @@
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\util\config.cpp" />
     <ClCompile Include="src\render\image_internal.cpp" />
-    <ClCompile Include="src\render\mesh_internal.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\store_internal.cpp" />
     <ClCompile Include="src\gui\text_area_internal.cpp" />
     <ClCompile Include="src\util\font.cpp" />
     <ClCompile Include="src\util\math.cpp" />
+    <ClCompile Include="src\render\mesh.cpp" />
   </ItemGroup>
 </Project>

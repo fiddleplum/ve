@@ -5,7 +5,7 @@ namespace ve
 {
 	VertexBufferObject::VertexBufferObject(Ptr<Mesh> mesh)
 	{
-		switch (mesh->getNumIndicesPerPrimitive())
+		switch (mesh->numIndicesPerPrimitive)
 		{
 			case 1:
 				mode = GL_POINTS; break;
@@ -17,11 +17,10 @@ namespace ve
 		}
 
 		bytesPerVertex = 0;
-		auto const & formatTypes = mesh->getFormatTypes();
-		for (int i = 0; i < formatTypes.size(); i++)
+		for (int i = 0; i < mesh->formatTypes.size(); i++)
 		{
 			unsigned int sizeOfComponent = 0;
-			switch (formatTypes[i])
+			switch (mesh->formatTypes[i])
 			{
 				case Mesh::POSITION_2D:
 				case Mesh::UV0:
@@ -39,7 +38,7 @@ namespace ve
 				case Mesh::COLOR1_RGBA:
 					sizeOfComponent = 4; break;
 			}
-			vertexComponents.push_back({formatTypes[i], sizeOfComponent, bytesPerVertex});
+			vertexComponents.push_back({mesh->formatTypes[i], sizeOfComponent, bytesPerVertex});
 			bytesPerVertex += sizeOfComponent * sizeof(float);
 		}
 
@@ -47,10 +46,8 @@ namespace ve
 		glGenBuffers(1, &buffer);
 		glGenBuffers(1, &indexBuffer);
 		updateVertices(mesh);
-		auto const & indices = mesh->getIndices();
-		numIndices = (unsigned int)indices.size();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(unsigned int), (void const *)&indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)mesh->indices.size() * sizeof(unsigned int), (void const *)&mesh->indices[0], GL_STATIC_DRAW);
 	}
 
 	VertexBufferObject::~VertexBufferObject()
@@ -61,9 +58,8 @@ namespace ve
 
 	void VertexBufferObject::updateVertices(Ptr<Mesh> mesh)
 	{
-		auto const & vertices = mesh->getVertices();
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), (void const *)&vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(float), (void const *)& mesh->vertices[0], GL_STATIC_DRAW);
 	}
 
 	void VertexBufferObject::render() const

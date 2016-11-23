@@ -41,7 +41,8 @@ namespace ve
 
 	private:
 		Recti bounds;
-		Ptr<Model> model;
+		float depth;
+		std::vector<Ptr<Model>> models;
 		Ptr<Font> font;
 	};
 }
