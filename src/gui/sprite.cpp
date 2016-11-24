@@ -38,7 +38,7 @@ namespace ve
 					"varying vec2 v_uv0;\n"
 					"void main(void) {\n"
 					"   vec2 pos = 2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1);\n"
-					"	gl_Position = vec4(pos[0], 1.0 - pos[1], 0, 1);\n"
+					"	gl_Position = vec4(pos.x, -pos.y, 0, 1);\n"
 					"	v_uv0 = uv0;\n"
 					"}\n";
 				shaderConfig.children["fragment"].text =

@@ -46,6 +46,7 @@ namespace ve
 		glGenBuffers(1, &buffer);
 		glGenBuffers(1, &indexBuffer);
 		updateVertices(mesh);
+		numIndices = (int)mesh->indices.size();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)mesh->indices.size() * sizeof(unsigned int), (void const *)&mesh->indices[0], GL_STATIC_DRAW);
 	}
