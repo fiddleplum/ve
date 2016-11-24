@@ -1,10 +1,11 @@
-#include "window_internal.h"
-#include "app_internal.h"
+#include "window.h"
+#include "app.h"
+#include <SDL.h>
 #include <stdexcept>
 
 namespace ve
 {
-	WindowInternal::WindowInternal()
+	Window::Window()
 	{
 		Vector2i initialSize {800, 600};
 		sdlWindow = SDL_CreateWindow("Untitled", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, initialSize[0], initialSize[1], SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -21,33 +22,33 @@ namespace ve
 		stage->setScene(gui->getScene());
 	}
 
-	WindowInternal::~WindowInternal()
+	Window::~Window()
 	{
 		stage.setNull();
-		SDL_DestroyWindow(sdlWindow);
+		SDL_DestroyWindow((SDL_Window *)sdlWindow);
 	}
 
-	void WindowInternal::setCloseHandler(std::function<void()> closeHandler_)
+	void Window::setCloseHandler(std::function<void()> closeHandler_)
 	{
 		closeHandler = closeHandler_;
 	}
 
-	void WindowInternal::setResizeHandler(std::function<void(Vector2i size)> resizeHandler_)
+	void Window::setResizeHandler(std::function<void(Vector2i size)> resizeHandler_)
 	{
 		resizeHandler = resizeHandler_;
 	}
 
-	Ptr<Gui> WindowInternal::getGui() const
+	Ptr<Gui> Window::getGui() const
 	{
 		return gui;
 	}
 
-	SDL_Window * WindowInternal::getSDLWindow() const
+	void * Window::getSDLWindow() const
 	{
 		return sdlWindow;
 	}
 
-	void WindowInternal::handleCloseEvent()
+	void Window::handleCloseEvent()
 	{
 		if (closeHandler)
 		{
@@ -55,7 +56,7 @@ namespace ve
 		}
 	}
 
-	void WindowInternal::handleResizeEvent(Vector2i size)
+	void Window::handleResizeEvent(Vector2i size)
 	{
 		if (resizeHandler)
 		{
@@ -65,15 +66,15 @@ namespace ve
 		stage->setWindowSize(size);
 	}
 
-	void WindowInternal::update(float dt)
+	void Window::update(float dt)
 	{
 		gui->update(dt);
 	}
 
-	void WindowInternal::render(SDL_GLContext glContext) const
+	void Window::render(SDL_GLContext glContext) const
 	{
-		SDL_GL_MakeCurrent(sdlWindow, glContext);
+		SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 		stage->render();
-		SDL_GL_SwapWindow(sdlWindow);
+		SDL_GL_SwapWindow((SDL_Window *)sdlWindow);
 	}
 }

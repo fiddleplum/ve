@@ -1,22 +1,21 @@
 #pragma once
 
-#include "gui/gui.h"
-#include "gui/panel_internal.h"
+#include "gui/panel.h"
 #include "render/scene.h"
 
 namespace ve
 {
-	class GuiInternal : public virtual Gui
+	class Gui
 	{
 	public:
 		// Constructor.
-		GuiInternal();
+		Gui();
 
 		// Destructor.
-		~GuiInternal();
+		~Gui();
 
 		// Returns the root panel used by the gui.
-		Ptr<Panel> getRootPanel() const override;
+		Ptr<Panel> getRootPanel() const;
 
 		// Returns the scene used by the gui.
 		Ptr<Scene> getScene() const;
@@ -28,7 +27,7 @@ namespace ve
 		void update(float dt);
 
 	private:
-		OwnPtr<PanelInternal> root;
+		OwnPtr<Panel> root;
 		OwnPtr<Scene> scene;
 	};
 }

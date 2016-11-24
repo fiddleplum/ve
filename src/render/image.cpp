@@ -1,9 +1,9 @@
-#include "image_internal.h"
+#include "image.h"
 #include <SDL_image.h>
 
 namespace ve
 {
-	ImageInternal::ImageInternal(Vector2i size_, Format format_)
+	Image::Image(Vector2i size_, Format format_)
 	{
 		size = size_;
 		format = format_;
@@ -22,7 +22,7 @@ namespace ve
 		pixels.resize(size[0] * size[1] * bytesPerPixel);
 	}
 
-	ImageInternal::ImageInternal(std::string const & filename)
+	Image::Image(std::string const & filename)
 	{
 		SDL_Surface * surface = IMG_Load(filename.c_str());
 		if (surface == 0)
@@ -41,12 +41,12 @@ namespace ve
 		SDL_FreeSurface(surface);
 	}
 
-	ImageInternal::ImageInternal(SDL_Surface const * sdlSurface)
+	Image::Image(void const * sdlSurface)
 	{
 		loadFromSDLSurface(sdlSurface);
 	}
 
-	void ImageInternal::save(std::string const & filename) const
+	void Image::save(std::string const & filename) const
 	{
 		if (format != RGB24 && format != RGBA32)
 		{
@@ -63,22 +63,22 @@ namespace ve
 		}
 	}
 
-	Vector2i ImageInternal::getSize() const
+	Vector2i Image::getSize() const
 	{
 		return size;
 	}
 
-	ImageInternal::Format ImageInternal::getFormat() const
+	Image::Format Image::getFormat() const
 	{
 		return format;
 	}
 
-	std::vector<uint8_t> const & ImageInternal::getPixels() const
+	std::vector<uint8_t> const & Image::getPixels() const
 	{
 		return pixels;
 	}
 
-	Vector<3, uint8_t> ImageInternal::getPixelRGB(Vector2i position) const
+	Vector<3, uint8_t> Image::getPixelRGB(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGB24)
@@ -92,7 +92,7 @@ namespace ve
 		return {pixels[offset + 0], pixels[offset + 1], pixels[offset + 2]};
 	}
 
-	Vector<4, uint8_t> ImageInternal::getPixelRGBA(Vector2i position) const
+	Vector<4, uint8_t> Image::getPixelRGBA(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGBA32)
@@ -106,7 +106,7 @@ namespace ve
 		return {pixels[offset + 0], pixels[offset + 1], pixels[offset + 2], pixels[offset + 3]};
 	}
 
-	uint32_t ImageInternal::getPixelGrayScale32(Vector2i position) const
+	uint32_t Image::getPixelGrayScale32(Vector2i position) const
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != GRAYSCALE32)
@@ -120,7 +120,7 @@ namespace ve
 		return (pixels[offset + 0] << 24) + (pixels[offset + 1] << 16) + (pixels[offset + 2] << 8) + pixels[offset + 3];
 	}
 
-	void ImageInternal::setPixelRGB24(Vector2i position, Vector<3, uint8_t> value)
+	void Image::setPixelRGB24(Vector2i position, Vector<3, uint8_t> value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGB24)
@@ -136,7 +136,7 @@ namespace ve
 		pixels[offset + 2] = value[2];
 	}
 
-	void ImageInternal::setPixelRGBA32(Vector2i position, Vector<4, uint8_t> value)
+	void Image::setPixelRGBA32(Vector2i position, Vector<4, uint8_t> value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != RGBA32)
@@ -153,7 +153,7 @@ namespace ve
 		pixels[offset + 3] = value[3];
 	}
 
-	void ImageInternal::setPixelGrayScale32(Vector2i position, uint32_t value)
+	void Image::setPixelGrayScale32(Vector2i position, uint32_t value)
 	{
 		int offset = size[0] * bytesPerPixel * position[1] + position[0];
 		if (format != GRAYSCALE32)
@@ -170,8 +170,9 @@ namespace ve
 		pixels[offset + 3] = value & 0xff;
 	}
 
-	void ImageInternal::loadFromSDLSurface(SDL_Surface const * sdlSurface)
+	void Image::loadFromSDLSurface(void const * sdlSurface_)
 	{
+		SDL_Surface const * sdlSurface = (SDL_Surface const *)sdlSurface_;
 		if (sdlSurface == 0)
 		{
 			throw std::runtime_error("Null pointer. ");

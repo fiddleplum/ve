@@ -1,11 +1,11 @@
-#include "app_internal.h"
+#include "app.h"
 #include "ve.h"
 #include "render/open_gl.h"
 #include <SDL.h>
 
 namespace ve
 {
-	AppInternal::AppInternal()
+	App::App()
 	{
 		looping = true;
 		secondsPerUpdate = 1.f / 24.f;
@@ -18,7 +18,7 @@ namespace ve
 		}
 	}
 
-	void AppInternal::loop()
+	void App::loop()
 	{
 		float lastFrameTime = SDL_GetTicks() / 1000.f;
 		float accumulator = 0.f;
@@ -89,14 +89,14 @@ namespace ve
 		}
 	}
 
-	void AppInternal::quit()
+	void App::quit()
 	{
 		looping = false;
 	}
 
-	Ptr<Window> AppInternal::createWindow()
+	Ptr<Window> App::createWindow()
 	{
-		auto window = OwnPtr<WindowInternal>::returnNew();
+		auto window = OwnPtr<Window>::returnNew();
 		if (windows.empty())
 		{
 			renderer.setNew(window->getSDLWindow());
@@ -105,7 +105,7 @@ namespace ve
 		return window;
 	}
 
-	void AppInternal::destroyWindow(Ptr<Window> window)
+	void App::destroyWindow(Ptr<Window> window)
 	{
 		auto it = std::find(windows.begin(), windows.end(), window);
 		if (it == windows.end())
@@ -115,19 +115,14 @@ namespace ve
 		windows.queueForErase(it);
 	}
 
-	Ptr<Store> AppInternal::getStore() const
+	Ptr<Store> App::getStore() const
 	{
 		return store;
 	}
 
-	Ptr<StoreInternal> AppInternal::getStoreInternal() const
+	void App::handleSDLEvent(SDL_Event const & sdlEvent)
 	{
-		return store;
-	}
-
-	void AppInternal::handleSDLEvent(SDL_Event const & sdlEvent)
-	{
-		Ptr<WindowInternal> window;
+		Ptr<Window> window;
 
 		// Certain events are associated with a window. Get that window.
 		switch (sdlEvent.type)
@@ -195,7 +190,7 @@ namespace ve
 		}
 	}
 
-	Ptr<WindowInternal> AppInternal::getWindowFromId(unsigned int id)
+	Ptr<Window> App::getWindowFromId(unsigned int id)
 	{
 		SDL_Window * sdlWindow = SDL_GetWindowFromID(id);
 		if (sdlWindow != NULL)
@@ -208,6 +203,6 @@ namespace ve
 				}
 			}
 		}
-		return Ptr<WindowInternal>();
+		return Ptr<Window>();
 	}
 }

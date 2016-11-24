@@ -1,7 +1,6 @@
 #pragma once
 
-#include "store.h"
-#include "render/image_internal.h"
+#include "render/image.h"
 #include "render/texture.h"
 #include "render/mesh.h"
 #include "render/vertex_buffer_object.h"
@@ -13,26 +12,23 @@
 namespace ve
 {
 	// Contains objects that reference outside sources such as the GPU or file system.
-	class StoreInternal : public virtual Store
+	class Store final
 	{
 	public:
 		// Get an image from the store.
-		Ptr<Image> getImage(std::string const & name) const override;
-
-		// Get an image from the store.
-		Ptr<ImageInternal> getImageInternal(std::string const & name) const;
+		Ptr<Image> getImage(std::string const & name) const;
 
 		// Load an image into the store with the given name.
-		Ptr<Image> loadImage(std::string const & name, std::string const & location = "") override;
+		Ptr<Image> loadImage(std::string const & name, std::string const & location = "");
 
 		// Create a new image in the store with the given name.
-		Ptr<Image> createImage(std::string const & name, Vector2i size, Image::Format format) override;
+		Ptr<Image> createImage(std::string const & name, Vector2i size, Image::Format format);
 
 		// Create an image from an SDL Surface.
-		Ptr<Image> createImage(std::string const & name, SDL_Surface * surface);
+		Ptr<Image> createImage(std::string const & name, void const * surface);
 
 		// List the names of all the images in the store.
-		std::vector<std::string> listImages() const override;
+		std::vector<std::string> listImages() const;
 
 		// Get a texture from the store.
 		Ptr<Texture> getTexture(std::string const & name) const;
@@ -41,16 +37,16 @@ namespace ve
 		Ptr<Texture> createTexture(std::string const & name, Ptr<Image> image);
 
 		// Get a mesh from the store.
-		Ptr<Mesh> getMesh(std::string const & name) const override;
+		Ptr<Mesh> getMesh(std::string const & name) const;
 
 		// Load a mesh into the store with the given name.
-		Ptr<Mesh> loadMesh(std::string const & name, std::string const & location = "") override;
+		Ptr<Mesh> loadMesh(std::string const & name, std::string const & location = "");
 
 		// Create a new mesh in the store with the given name.
-		Ptr<Mesh> createMesh(std::string const & name) override;
+		Ptr<Mesh> createMesh(std::string const & name);
 
 		// List the names of all the meshes in the store.
-		std::vector<std::string> listMeshes() const override;
+		std::vector<std::string> listMeshes() const;
 
 		// Get a vertex buffer object from the store.
 		Ptr<VertexBufferObject> getVertexBufferObject(std::string const & name) const;
@@ -95,7 +91,7 @@ namespace ve
 		std::vector<std::string> listFonts() const;
 
 	private:
-		Cache<ImageInternal> imageCache;
+		Cache<Image> imageCache;
 		Cache<Texture> textureCache;
 		Cache<Mesh> meshCache;
 		Cache<VertexBufferObject> vertexBufferObjectCache;

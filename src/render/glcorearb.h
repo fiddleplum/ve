@@ -2241,7 +2241,7 @@ typedef void (APIENTRYP PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC) (GLenum m
 GLAPI void APIENTRY glDrawArraysInstancedBaseInstance (GLenum mode, GLint first, GLsizei count, GLsizei instancecount, GLuint baseinstance);
 GLAPI void APIENTRY glDrawElementsInstancedBaseInstance (GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount, GLuint baseinstance);
 GLAPI void APIENTRY glDrawElementsInstancedBaseVertexBaseInstance (GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount, GLint basevertex, GLuint baseinstance);
-GLAPI void APIENTRY glGetInternalformativ (GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint *params);
+GLAPI void APIENTRY glGetformativ (GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint *params);
 GLAPI void APIENTRY glGetActiveAtomicCounterBufferiv (GLuint program, GLuint bufferIndex, GLenum pname, GLint *params);
 GLAPI void APIENTRY glBindImageTexture (GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format);
 GLAPI void APIENTRY glMemoryBarrier (GLbitfield barriers);
@@ -2565,7 +2565,7 @@ GLAPI void APIENTRY glDispatchComputeIndirect (GLintptr indirect);
 GLAPI void APIENTRY glCopyImageSubData (GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth);
 GLAPI void APIENTRY glFramebufferParameteri (GLenum target, GLenum pname, GLint param);
 GLAPI void APIENTRY glGetFramebufferParameteriv (GLenum target, GLenum pname, GLint *params);
-GLAPI void APIENTRY glGetInternalformati64v (GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint64 *params);
+GLAPI void APIENTRY glGetformati64v (GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint64 *params);
 GLAPI void APIENTRY glInvalidateTexSubImage (GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth);
 GLAPI void APIENTRY glInvalidateTexImage (GLuint texture, GLint level);
 GLAPI void APIENTRY glInvalidateBufferSubData (GLuint buffer, GLintptr offset, GLsizeiptr length);
@@ -3172,14 +3172,14 @@ GLAPI void APIENTRY glMultiDrawElementsIndirectCountARB (GLenum mode, GLenum typ
 #endif
 #endif /* GL_ARB_indirect_parameters */
 
-#ifndef GL_ARB_internalformat_query
-#define GL_ARB_internalformat_query 1
-#endif /* GL_ARB_internalformat_query */
+#ifndef GL_ARBformat_query
+#define GL_ARBformat_query 1
+#endif /* GL_ARBformat_query */
 
-#ifndef GL_ARB_internalformat_query2
-#define GL_ARB_internalformat_query2 1
+#ifndef GL_ARBformat_query2
+#define GL_ARBformat_query2 1
 #define GL_SRGB_DECODE_ARB                0x8299
-#endif /* GL_ARB_internalformat_query2 */
+#endif /* GL_ARBformat_query2 */
 
 #ifndef GL_ARB_invalidate_subdata
 #define GL_ARB_invalidate_subdata 1

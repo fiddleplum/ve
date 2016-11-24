@@ -1,33 +1,30 @@
-#include "panel_internal.h"
-#include "sprite_internal.h"
-#include "text_area_internal.h"
-#include "text_button_internal.h"
+#include "panel.h"
 #include <algorithm>
 
 namespace ve
 {
-	PanelInternal::PanelInternal(Ptr<Scene> scene)
-		: WidgetInternal(scene)
+	Panel::Panel(Ptr<Scene> scene)
+		: Widget(scene)
 	{
 
 	}
 
-	float PanelInternal::getDepth() const
+	float Panel::getDepth() const
 	{
 		return 0;
 	}
 
-	void PanelInternal::setDepth(float depth)
+	void Panel::setDepth(float depth)
 	{
 
 	}
 
-	Recti PanelInternal::getBounds() const
+	Recti Panel::getBounds() const
 	{
 		return bounds;
 	}
 
-	void PanelInternal::setBounds(Recti bounds_)
+	void Panel::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
 		for (auto const & widgetInfo : widgetInfos)
@@ -36,28 +33,28 @@ namespace ve
 		}
 	}
 
-	Ptr<Sprite> PanelInternal::createSprite()
+	Ptr<Sprite> Panel::createSprite()
 	{
-		return createWidget<SpriteInternal>();
+		return createWidget<Sprite>();
 	}
 
-	Ptr<TextArea> PanelInternal::createTextArea()
+	Ptr<TextArea> Panel::createTextArea()
 	{
-		return createWidget<TextAreaInternal>();
+		return createWidget<TextArea>();
 	}
 
-	Ptr<TextButton> PanelInternal::createTextButton()
+	Ptr<TextButton> Panel::createTextButton()
 	{
-		return createWidget<TextButtonInternal>();
+		return createWidget<TextButton>();
 	}
 
-	void PanelInternal::destroyWidget(Ptr<Widget> widget)
+	void Panel::destroyWidget(Ptr<Widget> widget)
 	{
 		auto it = getWidgetInfo(widget);
 		widgetInfos.queueForErase(it);
 	}
 
-	void PanelInternal::setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
+	void Panel::setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
 	{
 		auto & widgetInfo = *getWidgetInfo(widget);
 		widgetInfo.originInPanel = originInPanel;
@@ -68,7 +65,7 @@ namespace ve
 		updateWidgetBounds(widgetInfo);
 	}
 
-	void PanelInternal::update(float dt)
+	void Panel::update(float dt)
 	{
 		for (auto const & widgetInfo : widgetInfos)
 		{
@@ -78,7 +75,7 @@ namespace ve
 		widgetInfos.processEraseQueue();
 	}
 
-	template <typename T> Ptr<T> PanelInternal::createWidget()
+	template <typename T> Ptr<T> Panel::createWidget()
 	{
 		auto widget = OwnPtr<T>::returnNew(getScene());
 		WidgetInfo widgetInfo;
@@ -88,7 +85,7 @@ namespace ve
 		return widget;
 	}
 
-	std::list<PanelInternal::WidgetInfo>::iterator PanelInternal::getWidgetInfo(Ptr<Widget> widget)
+	std::list<Panel::WidgetInfo>::iterator Panel::getWidgetInfo(Ptr<Widget> widget)
 	{
 		for (auto it = widgetInfos.begin(); it != widgetInfos.end(); it++)
 		{
@@ -100,7 +97,7 @@ namespace ve
 		throw std::runtime_error("Widget not found. ");
 	}
 
-	void PanelInternal::updateWidgetBounds(WidgetInfo const & widgetInfo) const
+	void Panel::updateWidgetBounds(WidgetInfo const & widgetInfo) const
 	{
 		Vector2f panelSize = Vector2f {bounds.max - bounds.min + Vector2i {1, 1}};
 		Vector2f widgetSize = panelSize.scale(widgetInfo.sizeInPanel) + Vector2f {widgetInfo.sizeOffset};

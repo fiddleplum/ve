@@ -1,22 +1,22 @@
-#include "text_area_internal.h"
-#include "app_internal.h"
+#include "text_area.h"
+#include "app.h"
 #include "util/stringutil.h"
 
 namespace ve
 {
-	TextAreaInternal::TextAreaInternal(Ptr<Scene> scene)
-		: WidgetInternal(scene)
+	TextArea::TextArea(Ptr<Scene> scene)
+		: Widget(scene)
 	{
 	}
 
-	TextAreaInternal::~TextAreaInternal()
+	TextArea::~TextArea()
 	{
 
 	}
 
-	void TextAreaInternal::setFont(std::string const & fontFace, int fontSize)
+	void TextArea::setFont(std::string const & fontFace, int fontSize)
 	{
-		auto store = getAppInternal()->getStoreInternal();
+		auto store = getApp()->getStore();
 		font = store->getFont(fontFace + std::to_string(fontSize));
 		if (!font)
 		{
@@ -24,7 +24,7 @@ namespace ve
 		}
 	}
 
-	void TextAreaInternal::setText(std::string const & text)
+	void TextArea::setText(std::string const & text)
 	{
 		std::map<Ptr<Texture>, Mesh> meshes;
 
@@ -98,17 +98,17 @@ namespace ve
 		}
 	}
 
-	void TextAreaInternal::setColor(Vector4f color)
+	void TextArea::setColor(Vector4f color)
 	{
 
 	}
 
-	float TextAreaInternal::getDepth() const
+	float TextArea::getDepth() const
 	{
 		return depth;
 	}
 
-	void TextAreaInternal::setDepth(float depth_)
+	void TextArea::setDepth(float depth_)
 	{
 		depth = depth_;
 		for (auto & model : models)
@@ -117,17 +117,17 @@ namespace ve
 		}
 	}
 
-	Recti TextAreaInternal::getBounds() const
+	Recti TextArea::getBounds() const
 	{
 		return bounds;
 	}
 
-	void TextAreaInternal::setBounds(Recti bounds_)
+	void TextArea::setBounds(Recti bounds_)
 	{
 		bounds = bounds;
 	}
 
-	void TextAreaInternal::update(float dt)
+	void TextArea::update(float dt)
 	{
 
 	}

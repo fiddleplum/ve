@@ -1,20 +1,19 @@
 #pragma once
 
-#include "gui/sprite.h"
-#include "gui/widget_internal.h"
+#include "gui/widget.h"
 #include "render/model.h"
 #include "util/ptr.h"
 
 namespace ve
 {
-	class SpriteInternal : public virtual Sprite, public virtual WidgetInternal
+	class Sprite : public Widget
 	{
 	public:
 		// Constructor.
-		SpriteInternal(Ptr<Scene> scene);
+		Sprite(Ptr<Scene> scene);
 
 		// Destructor.
-		~SpriteInternal();
+		~Sprite();
 
 		// Returns the depth.
 		float getDepth() const override;
@@ -29,7 +28,7 @@ namespace ve
 		void setBounds(Recti bounds) override;
 
 		// Loads a image from the store into the sprite.
-		void setImage(std::string const & name) override;
+		void setImage(std::string const & name);
 
 		// Updates the sprite (actually does nothing).
 		void update(float dt);

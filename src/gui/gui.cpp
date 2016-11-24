@@ -1,8 +1,8 @@
-#include "gui_internal.h"
+#include "gui.h"
 
 namespace ve
 {
-	GuiInternal::GuiInternal()
+	Gui::Gui()
 	{
 		scene.setNew();
 		scene->setUniformsFunction([this](Material const & material)
@@ -13,28 +13,28 @@ namespace ve
 		root.setNew(scene);
 	}
 
-	GuiInternal::~GuiInternal()
+	Gui::~Gui()
 	{
 		root.setNull();
 		scene.setNull();
 	}
 
-	Ptr<Panel> GuiInternal::getRootPanel() const
+	Ptr<Panel> Gui::getRootPanel() const
 	{
 		return root;
 	}
 
-	Ptr<Scene> GuiInternal::getScene() const
+	Ptr<Scene> Gui::getScene() const
 	{
 		return scene;
 	}
 
-	void GuiInternal::handleResizeEvent(Vector2i size)
+	void Gui::handleResizeEvent(Vector2i size)
 	{
 		root->setBounds({{0, 0}, {size[0] - 1, size[1] - 1}});
 	}
 
-	void GuiInternal::update(float dt)
+	void Gui::update(float dt)
 	{
 		root->update(dt);
 	}

@@ -43,7 +43,7 @@ namespace ve
 		std::unordered_set<typename std::unordered_set<T, Hash>::const_iterator, IteratorHash> elementsToErase;
 	};
 
-	// Internal Implementation
+	//  Implementation
 
 	template <typename T>
 	ObjectSet<T>::ObjectSet()

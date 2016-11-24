@@ -1,12 +1,13 @@
 #include "renderer.h"
 #include "open_gl.h"
+#include <SDL.h>
 
 namespace ve
 {
-	Renderer::Renderer(SDL_Window * sdlWindow)
+	Renderer::Renderer(void * sdlWindow)
 	{
-		glContext = SDL_GL_CreateContext(sdlWindow);
-		int result = SDL_GL_MakeCurrent(sdlWindow, glContext);
+		glContext = SDL_GL_CreateContext((SDL_Window *)sdlWindow);
+		int result = SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 		glInitialize();
 		char *version = (char*)glGetString(GL_VERSION);
 

@@ -1,28 +1,27 @@
 #pragma once
 
-#include "gui/text_area.h"
-#include "gui/widget_internal.h"
+#include "gui/widget.h"
 #include "util/font.h"
 
 namespace ve
 {
-	class TextAreaInternal : public virtual TextArea, public virtual WidgetInternal
+	class TextArea : public Widget
 	{
 	public:
 		// Constructor.
-		TextAreaInternal(Ptr<Scene> scene);
+		TextArea(Ptr<Scene> scene);
 
 		// Destructor.
-		~TextAreaInternal();
+		~TextArea();
 
 		// Sets the font.
-		void setFont(std::string const & fontFace, int fontSize) override;
+		void setFont(std::string const & fontFace, int fontSize);
 
 		// Sets the text.
-		void setText(std::string const & text) override;
+		void setText(std::string const & text);
 
 		// Sets the color.
-		void setColor(Vector4f color) override;
+		void setColor(Vector4f color);
 
 		// Returns the depth.
 		float getDepth() const override;

@@ -1,10 +1,8 @@
 #pragma once
 
-#include "window.h"
-#include "gui/gui_internal.h"
+#include "gui/gui.h"
 #include "render/renderer.h"
 #include "render/stage.h"
-#include <SDL.h>
 
 /*
 
@@ -30,26 +28,26 @@ render:
 
 namespace ve
 {
-	class WindowInternal : public virtual Window
+	class Window final
 	{
 	public:
 		// Construct the window.
-		WindowInternal();
+		Window();
 
 		// Destruct the window.
-		~WindowInternal();
+		~Window();
 
 		// Sets the function to be called when the window is closed by the user.
-		void setCloseHandler(std::function<void()> closeHandler) override;
+		void setCloseHandler(std::function<void()> closeHandler);
 
 		// Sets the function to be called when the window is resized by the user.
-		void setResizeHandler(std::function<void(Vector2i size)> resizeHandler) override;
+		void setResizeHandler(std::function<void(Vector2i size)> resizeHandler);
 
 		// Gets the root panel element which is the gui.
-		Ptr<Gui> getGui() const override;
+		Ptr<Gui> getGui() const;
 
 		// Gets the SDL Window handle.
-		SDL_Window * getSDLWindow() const;
+		void * getSDLWindow() const;
 
 		// Called by App when it receives the close event.
 		void handleCloseEvent();
@@ -61,13 +59,13 @@ namespace ve
 		void update(float dt);
 
 		// Called to render the window.
-		void render(SDL_GLContext glContext) const;
+		void render(void * glContext) const;
 
 	private:
-		SDL_Window * sdlWindow;
+		void * sdlWindow;
 		std::function<void()> closeHandler;
 		std::function<void(Vector2i size)> resizeHandler;
 		OwnPtr<WindowStage> stage;
-		OwnPtr<GuiInternal> gui;
+		OwnPtr<Gui> gui;
 	};
 }

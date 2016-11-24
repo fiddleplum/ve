@@ -1,13 +1,13 @@
-#include "gui/sprite_internal.h"
-#include "app_internal.h"
+#include "gui/sprite.h"
+#include "app.h"
 
 namespace ve
 {
-	SpriteInternal::SpriteInternal(Ptr<Scene> scene)
-		: WidgetInternal(scene)
+	Sprite::Sprite(Ptr<Scene> scene)
+		: Widget(scene)
 	{
 		std::string modelName = "guiUnitSquare";
-		auto store = getAppInternal()->getStoreInternal();
+		auto store = getApp()->getStore();
 		auto vbo = store->getVertexBufferObject(modelName);
 		if (!vbo)
 		{
@@ -65,34 +65,34 @@ namespace ve
 		});
 	}
 
-	SpriteInternal::~SpriteInternal()
+	Sprite::~Sprite()
 	{
 		getScene()->destroyModel(model);
 	}
 
-	float SpriteInternal::getDepth() const
+	float Sprite::getDepth() const
 	{
 		return model->getDepth();
 	}
 
-	void SpriteInternal::setDepth(float depth)
+	void Sprite::setDepth(float depth)
 	{
 		model->setDepth(depth);
 	}
 
-	Recti SpriteInternal::getBounds() const
+	Recti Sprite::getBounds() const
 	{
 		return bounds;
 	}
 
-	void SpriteInternal::setBounds(Recti bounds_)
+	void Sprite::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
 	}
 
-	void SpriteInternal::setImage(std::string const & name)
+	void Sprite::setImage(std::string const & name)
 	{
-		auto store = getAppInternal()->getStoreInternal();
+		auto store = getApp()->getStore();
 		auto & texture = model->getMaterial()->getUniform("tex").as<UniformTexture2d>()->texture;
 		texture = store->getTexture(name);
 		if (!texture)
@@ -106,7 +106,7 @@ namespace ve
 		}	 
 	}
 
-	void SpriteInternal::update(float dt)
+	void Sprite::update(float dt)
 	{
 	}
 }

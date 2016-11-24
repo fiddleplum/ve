@@ -50,7 +50,7 @@ namespace ve
 		std::unordered_set<typename std::map<K, V>::const_iterator, IteratorHash> elementsToErase;
 	};
 
-	// Internal Implementation
+	//  Implementation
 
 	template <typename K, typename V>
 	ObjectMap<K, V>::ObjectMap()

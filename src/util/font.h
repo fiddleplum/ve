@@ -3,7 +3,6 @@
 #include "render/texture.h"
 #include "util/ptr.h"
 #include "util/rect.h"
-#include <SDL_ttf.h>
 #include <string>
 #include <map>
 
@@ -53,7 +52,7 @@ namespace ve
 		static unsigned int numCharsInRow;
 		static unsigned int numCharsInCol;
 		int cellSize;
-		TTF_Font * ttfFont;
+		void * ttfFont;
 		std::map<int, Block> blocks;
 		int size;
 		int lineHeight;

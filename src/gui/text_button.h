@@ -1,15 +1,15 @@
 #pragma once
 
-#include "gui/text_button.h"
-#include "gui/widget_internal.h"
+#include "gui/widget.h"
+#include "util/ptr.h"
 
 namespace ve
 {
-	class TextButtonInternal : public virtual TextButton, public virtual WidgetInternal
+	class TextButton : public Widget
 	{
 	public:
 		// Constructor.
-		TextButtonInternal(Ptr<Scene> scene);
+		TextButton(Ptr<Scene> scene);
 
 		// Returns the depth.
 		float getDepth() const override;
@@ -27,6 +27,6 @@ namespace ve
 		void update(float dt);
 
 		// Virtual destructor.
-		~TextButtonInternal();
+		~TextButton();
 	};
 }

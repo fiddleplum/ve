@@ -1,16 +1,18 @@
 #pragma once
 
-#include "gui/panel.h"
-#include "gui/widget_internal.h"
+#include "gui/widget.h"
 #include "util/object_list.h"
+#include "sprite.h"
+#include "text_area.h"
+#include "text_button.h"
 
 namespace ve
 {
-	class PanelInternal : public virtual Panel, public virtual WidgetInternal
+	class Panel : public Widget
 	{
 	public:
 		// Constructor.
-		PanelInternal(Ptr<Scene> scene);
+		Panel(Ptr<Scene> scene);
 
 		// Returns the depth.
 		float getDepth() const override;
@@ -25,19 +27,19 @@ namespace ve
 		void setBounds(Recti bounds) override;
 
 		// Creates a sprite contained in the panel.
-		Ptr<Sprite> createSprite() override;
+		Ptr<Sprite> createSprite();
 
 		// Creates a text area contained in the panel.
-		Ptr<TextArea> createTextArea() override;
+		Ptr<TextArea> createTextArea();
 
 		// Creates a text button contained in the panel.
-		Ptr<TextButton> createTextButton() override;
+		Ptr<TextButton> createTextButton();
 
 		// Destroys a widget.
-		void destroyWidget(Ptr<Widget> widget) override;
+		void destroyWidget(Ptr<Widget> widget);
 
 		// Sets the relative bounds for the widget.
-		void setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset) override;
+		void setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset);
 
 		// Updates the panel.
 		void update(float dt) override;
@@ -45,7 +47,7 @@ namespace ve
 	private:
 		struct WidgetInfo
 		{
-			OwnPtr<WidgetInternal> widget;
+			OwnPtr<Widget> widget;
 			Vector2f originInPanel;
 			Vector2f originInWidget;
 			Vector2i originOffset;
@@ -54,7 +56,7 @@ namespace ve
 		};
 
 		template <typename T> Ptr<T> createWidget();
-		std::list<WidgetInfo>::iterator PanelInternal::getWidgetInfo(Ptr<Widget> widget);
+		std::list<WidgetInfo>::iterator Panel::getWidgetInfo(Ptr<Widget> widget);
 		void updateWidgetBounds(WidgetInfo const & widgetInfo) const;
 
 		Recti bounds;

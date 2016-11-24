@@ -1,6 +1,7 @@
 #include "font.h"
 #include "math.hpp"
-#include "app_internal.h"
+#include "app.h"
+#include <SDL_ttf.h>
 
 namespace ve
 {
@@ -31,14 +32,14 @@ namespace ve
 		}
 		numFontsLoaded++;
 
-		lineHeight = TTF_FontLineSkip(ttfFont);
+		lineHeight = TTF_FontLineSkip((TTF_Font *)ttfFont);
 
 		loadBlock(0);
 	}
 
 	Font::~Font()
 	{
-		TTF_CloseFont(ttfFont);
+		TTF_CloseFont((TTF_Font *)ttfFont);
 		numFontsLoaded--;
 		if (numFontsLoaded == 0)
 		{
@@ -85,11 +86,11 @@ namespace ve
 		SDL_Surface * surface = SDL_CreateRGBSurface(0, cellSize * numCharsInRow, cellSize * numCharsInCol, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 		for (unsigned int i = 0; i < numCharsInBlock; i++)
 		{
-			SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(ttfFont, blockStart + i, white);
+			SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended((TTF_Font *)ttfFont, blockStart + i, white);
 			int minX, maxY, advance;
-			TTF_GlyphMetrics(ttfFont, blockStart + i, &minX, nullptr, nullptr, &maxY, &advance);
+			TTF_GlyphMetrics((TTF_Font *)ttfFont, blockStart + i, &minX, nullptr, nullptr, &maxY, &advance);
 			int lineHeight;
-			lineHeight = TTF_FontLineSkip(ttfFont);
+			lineHeight = TTF_FontLineSkip((TTF_Font *)ttfFont);
 			if (glyphSurface != nullptr)
 			{
 				auto & coords = block.glyphCoords[i];
@@ -104,8 +105,8 @@ namespace ve
 				SDL_FreeSurface(glyphSurface);
 			}
 		}
-		std::string resourceName = TTF_FontFaceFamilyName(ttfFont) + std::to_string(blockStart);
-		auto store = getAppInternal()->getStoreInternal();
+		std::string resourceName = TTF_FontFaceFamilyName((TTF_Font *)ttfFont) + std::to_string(blockStart);
+		auto store = getApp()->getStore();
 		auto image = store->createImage(resourceName, surface);
 		SDL_FreeSurface(surface);
 		block.start = blockStart;

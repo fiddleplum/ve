@@ -1,19 +1,18 @@
 #pragma once
 
-#include "gui/widget.h"
 #include "util/rect.h"
 #include "render/scene.h"
 
 namespace ve
 {
-	class WidgetInternal : public virtual Widget
+	class Widget
 	{
 	public:
 		// Constructor.
-		WidgetInternal(Ptr<Scene> scene);
+		Widget(Ptr<Scene> scene);
 
 		// Virtual destructor.
-		virtual ~WidgetInternal() = default;
+		virtual ~Widget() = default;
 
 		// Returns the depth.
 		virtual float getDepth() const = 0;

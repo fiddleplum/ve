@@ -1,18 +1,13 @@
 #include "ve.h"
-#include "app_internal.h"
+#include "app.h"
 #include "util/ptr.h"
 #include <SDL.h>
 #include <vector>
 #include <string>
 
-ve::OwnPtr<ve::AppInternal> app;
+ve::OwnPtr<ve::App> app;
 
 ve::Ptr<ve::App> ve::getApp()
-{
-	return app;
-}
-
-ve::Ptr<ve::AppInternal> ve::getAppInternal()
 {
 	return app;
 }

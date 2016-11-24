@@ -54,7 +54,7 @@ namespace ve
 		std::unordered_set<typename std::list<T>::const_iterator, IteratorHash> eraseQueue;
 	};
 
-	// Internal Implementation
+	//  Implementation
 
 	template <typename T>
 	ObjectList<T>::ObjectList()

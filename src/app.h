@@ -1,49 +1,47 @@
 #pragma once
 
-#include "app.h"
-#include "window_internal.h"
+#include "window.h"
 #include "util/ptr.h"
 #include "util/object_list.h"
-#include "store_internal.h"
+#include "store.h"
 #include "render/renderer.h"
+
+union SDL_Event;
 
 namespace ve
 {
-	class AppInternal : public virtual App
+	class App final
 	{
 	public:
 		// Constructor;
-		AppInternal();
+		App();
 
 		// Starts the application loop. The loop will continue until quit() is called.
 		void loop();
 
 		// Stops the application loop. The application will quit.
-		void quit() override;
+		void quit();
 
 		// Creates a window.
-		Ptr<Window> createWindow() override;
+		Ptr<Window> createWindow();
 
 		// Destroys a window.
-		void destroyWindow(Ptr<Window> window) override;
+		void destroyWindow(Ptr<Window> window);
 
 		// Gets the resource manager.
-		Ptr<Store> getStore() const override;
-
-		// Gets the resource manager.
-		Ptr<StoreInternal> getStoreInternal() const;
+		Ptr<Store> getStore() const;
 
 	private:
 		void handleSDLEvent(SDL_Event const & sdlEvent);
-		Ptr<WindowInternal> getWindowFromId(unsigned int id);
+		Ptr<Window> getWindowFromId(unsigned int id);
 
 		bool looping;
 		float secondsPerUpdate;
-		ObjectList<OwnPtr<WindowInternal>> windows;
-		OwnPtr<StoreInternal> store;
+		ObjectList<OwnPtr<Window>> windows;
+		OwnPtr<Store> store;
 		OwnPtr<Renderer> renderer;
 	};
 
 	// Called to get the single instance of the app.
-	Ptr<AppInternal> getAppInternal();
+	Ptr<App> getApp();
 }
