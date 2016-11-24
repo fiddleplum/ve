@@ -1,6 +1,6 @@
-#include "text_area.h"
+#include "text_area.hpp"
 #include "store.hpp"
-#include "util/stringutil.h"
+#include "util/stringutil.hpp"
 
 namespace ve
 {

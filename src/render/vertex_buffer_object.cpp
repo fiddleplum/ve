@@ -1,5 +1,5 @@
-#include "vertex_buffer_object.h"
-#include "open_gl.h"
+#include "vertex_buffer_object.hpp"
+#include "open_gl.hpp"
 
 namespace ve
 {

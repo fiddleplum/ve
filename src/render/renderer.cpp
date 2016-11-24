@@ -1,5 +1,5 @@
-#include "renderer.h"
-#include "open_gl.h"
+#include "renderer.hpp"
+#include "open_gl.hpp"
 #include <SDL.h>
 
 namespace ve

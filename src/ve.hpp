@@ -1,8 +1,8 @@
 #pragma once
 
-#include "window.h"
+#include "window.hpp"
 #include "store.hpp"
-#include "util/ptr.h"
+#include "util/ptr.hpp"
 
 namespace veUser
 {

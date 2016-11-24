@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gui/panel.h"
-#include "render/scene.h"
+#include "gui/panel.hpp"
+#include "render/scene.hpp"
 
 namespace ve
 {

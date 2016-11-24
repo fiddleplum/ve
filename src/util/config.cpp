@@ -1,5 +1,5 @@
-#include "util/config.h"
-#include "util/stringutil.h"
+#include "util/config.hpp"
+#include "util/stringutil.hpp"
 
 namespace ve
 {

@@ -1,4 +1,4 @@
-#include "gui/sprite.h"
+#include "gui/sprite.hpp"
 #include "store.hpp"
 
 namespace ve

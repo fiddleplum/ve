@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gui/widget.h"
-#include "render/font.h"
+#include "gui/widget.hpp"
+#include "render/font.hpp"
 
 namespace ve
 {

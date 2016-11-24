@@ -1,7 +1,7 @@
 #pragma once
 
-#include "util/vector.h"
-#include "render/mesh.h"
+#include "util/vector.hpp"
+#include "render/mesh.hpp"
 
 namespace ve
 {

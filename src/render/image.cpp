@@ -1,4 +1,4 @@
-#include "image.h"
+#include "image.hpp"
 #include <SDL_image.h>
 
 namespace ve

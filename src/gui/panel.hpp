@@ -1,10 +1,10 @@
 #pragma once
 
-#include "gui/widget.h"
-#include "util/object_list.h"
-#include "sprite.h"
-#include "text_area.h"
-#include "text_button.h"
+#include "gui/widget.hpp"
+#include "util/object_list.hpp"
+#include "sprite.hpp"
+#include "text_area.hpp"
+#include "text_button.hpp"
 
 namespace ve
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "material.h"
-#include "vertex_buffer_object.h"
+#include "material.hpp"
+#include "vertex_buffer_object.hpp"
 #include <functional>
 
 namespace ve

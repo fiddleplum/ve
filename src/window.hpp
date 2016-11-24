@@ -1,8 +1,8 @@
 #pragma once
 
-#include "gui/gui.h"
-#include "render/renderer.h"
-#include "render/stage.h"
+#include "gui/gui.hpp"
+#include "render/renderer.hpp"
+#include "render/stage.hpp"
 
 /*
 

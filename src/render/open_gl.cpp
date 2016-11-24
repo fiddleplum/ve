@@ -1,5 +1,5 @@
-#include "render/open_gl.h"
-#include "util/rect.h"
+#include "render/open_gl.hpp"
+#include "util/rect.hpp"
 #include <stack>
 #include <SDL.h>
 

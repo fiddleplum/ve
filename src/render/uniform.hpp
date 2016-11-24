@@ -1,9 +1,9 @@
 #pragma once
 
-#include "render/texture.h"
-#include "util/vector.h"
-#include "util/matrix.h"
-#include "util/ptr.h"
+#include "render/texture.hpp"
+#include "util/vector.hpp"
+#include "util/matrix.hpp"
+#include "util/ptr.hpp"
 
 namespace ve
 {

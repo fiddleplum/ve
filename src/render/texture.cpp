@@ -1,5 +1,5 @@
-#include "texture.h"
-#include "open_gl.h"
+#include "texture.hpp"
+#include "open_gl.hpp"
 
 namespace ve
 {

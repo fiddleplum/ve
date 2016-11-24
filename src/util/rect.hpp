@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interval.h"
+#include "interval.hpp"
 
 namespace ve
 {

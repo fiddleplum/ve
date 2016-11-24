@@ -1,8 +1,8 @@
 #pragma once
 
-#include "util/ptr.h"
-#include "render/scene.h"
-#include "render/stage.h"
+#include "util/ptr.hpp"
+#include "render/scene.hpp"
+#include "render/stage.hpp"
 #include <set>
 
 namespace ve

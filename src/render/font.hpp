@@ -1,8 +1,8 @@
 #pragma once
 
-#include "render/texture.h"
-#include "util/ptr.h"
-#include "util/rect.h"
+#include "render/texture.hpp"
+#include "util/ptr.hpp"
+#include "util/rect.hpp"
 #include <string>
 #include <map>
 

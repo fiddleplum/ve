@@ -1,4 +1,4 @@
-#include "render/font.h"
+#include "render/font.hpp"
 #include "util/math.hpp"
 #include "store.hpp"
 #include <SDL_ttf.h>

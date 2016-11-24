@@ -1,5 +1,5 @@
-#include "uniform.h"
-#include "open_gl.h"
+#include "uniform.hpp"
+#include "open_gl.hpp"
 
 namespace ve
 {

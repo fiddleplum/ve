@@ -1,7 +1,7 @@
 #pragma once
 
-#include "util/rect.h"
-#include "render/scene.h"
+#include "util/rect.hpp"
+#include "render/scene.hpp"
 
 namespace ve
 {

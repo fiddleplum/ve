@@ -1,5 +1,5 @@
-#include "stage.h"
-#include "open_gl.h"
+#include "stage.hpp"
+#include "open_gl.hpp"
 
 namespace ve
 {

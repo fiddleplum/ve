@@ -1,12 +1,12 @@
 #pragma once
 
-#include "render/model.h"
-#include "render/texture.h"
-#include "render/vertex_buffer_object.h"
-#include "render/shader.h"
-#include "render/material.h"
-#include "render/font.h"
-#include "util/cache.h"
+#include "render/model.hpp"
+#include "render/texture.hpp"
+#include "render/vertex_buffer_object.hpp"
+#include "render/shader.hpp"
+#include "render/material.hpp"
+#include "render/font.hpp"
+#include "util/cache.hpp"
 #include <unordered_set>
 
 namespace ve

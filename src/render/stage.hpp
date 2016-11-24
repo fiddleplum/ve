@@ -1,9 +1,9 @@
 #pragma once
 
-#include "render/texture.h"
-#include "render/scene.h"
-#include "util/rect.h"
-#include "util/ptr.h"
+#include "render/texture.hpp"
+#include "render/scene.hpp"
+#include "util/rect.hpp"
+#include "util/ptr.hpp"
 #include <set>
 
 namespace ve

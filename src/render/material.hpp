@@ -1,7 +1,7 @@
 #pragma once
 
-#include "shader.h"
-#include "uniform.h"
+#include "shader.hpp"
+#include "uniform.hpp"
 
 namespace ve
 {
