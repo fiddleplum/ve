@@ -4,32 +4,18 @@
 
 namespace ve
 {
-	Renderer::Renderer(void * sdlWindow)
+	Renderer::Renderer()
 	{
-		glContext = SDL_GL_CreateContext((SDL_Window *)sdlWindow);
-		int result = SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
-		glInitialize();
 		char *version = (char*)glGetString(GL_VERSION);
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-		GLuint gProgramID = glCreateProgram();
-		GLuint buffer;
-		glGenBuffers(1, &buffer);
 	}
 
 	Renderer::~Renderer()
 	{
-		SDL_GL_DeleteContext(glContext);
-		glContext = 0;
-	}
-
-	SDL_GLContext Renderer::getGlContext() const
-	{
-		return glContext;
 	}
 
 	Ptr<Scene> Renderer::createScene()

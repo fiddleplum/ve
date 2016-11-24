@@ -1,7 +1,6 @@
 #pragma once
 
 #include "gui/gui.hpp"
-#include "render/renderer.hpp"
 #include "render/stage.hpp"
 
 /*
@@ -59,7 +58,7 @@ namespace ve
 		void update(float dt);
 
 		// Called to render the window.
-		void render(void * glContext) const;
+		void render() const;
 
 	private:
 		void * sdlWindow;

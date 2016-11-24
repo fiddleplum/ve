@@ -27,6 +27,8 @@ namespace ve
 		void update(float dt);
 
 	private:
+		void createResources();
+
 		OwnPtr<Panel> root;
 		OwnPtr<Scene> scene;
 	};

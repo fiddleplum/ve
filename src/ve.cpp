@@ -6,7 +6,6 @@ namespace ve
 	bool looping = true;
 	float secondsPerUpdate = 1.f / 24.f;
 	ObjectList<OwnPtr<Window>> windows;
-	OwnPtr<Renderer> renderer;
 	Store store;
 
 	// SDL has its own window IDs for SDL_Events. This gets the right window associated with that ID. Returns null if none found.
@@ -152,7 +151,7 @@ namespace ve
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
-				window->render(renderer->getGlContext());
+				window->render();
 			}
 
 			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
@@ -162,10 +161,6 @@ namespace ve
 
 			// Do frame cleanup.
 			windows.processEraseQueue();
-			if (windows.empty())
-			{
-				renderer.setNull();
-			}
 		}
 	}
 
@@ -177,10 +172,6 @@ namespace ve
 	Ptr<Window> createWindow()
 	{
 		auto window = OwnPtr<Window>::returnNew();
-		if (windows.empty())
-		{
-			renderer.setNew(window->getSDLWindow());
-		}
 		windows.push_back(window);
 		return window;
 	}
