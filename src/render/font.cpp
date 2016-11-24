@@ -1,6 +1,6 @@
 #include "render/font.h"
 #include "util/math.hpp"
-#include "app.h"
+#include "store.hpp"
 #include <SDL_ttf.h>
 
 namespace ve
@@ -106,11 +106,10 @@ namespace ve
 			}
 		}
 		std::string resourceName = TTF_FontFaceFamilyName((TTF_Font *)ttfFont) + std::to_string(blockStart);
-		auto store = getApp()->getStore();
-		auto image = store->images.create(resourceName, surface);
+		auto image = store.images.create(resourceName, surface);
 		SDL_FreeSurface(surface);
 		block.start = blockStart;
-		block.texture = store->textures.create(resourceName, image);
+		block.texture = store.textures.create(resourceName, image);
 		blocks[blockStart] = block;
 	}
 

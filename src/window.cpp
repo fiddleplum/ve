@@ -1,5 +1,4 @@
 #include "window.h"
-#include "app.h"
 #include <SDL.h>
 #include <stdexcept>
 

@@ -1,5 +1,5 @@
 #include "gui/sprite.h"
-#include "app.h"
+#include "store.hpp"
 
 namespace ve
 {
@@ -7,24 +7,23 @@ namespace ve
 		: Widget(scene)
 	{
 		std::string modelName = "guiUnitSquare";
-		auto store = getApp()->getStore();
-		auto vbo = store->vertexBufferObjects.get(modelName);
+		auto vbo = store.vertexBufferObjects.get(modelName);
 		if (!vbo)
 		{
-			auto mesh = store->meshes.get(modelName);
+			auto mesh = store.meshes.get(modelName);
 			if (!mesh)
 			{
-				mesh = store->meshes.create(modelName);
+				mesh = store.meshes.create(modelName);
 				mesh->formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
 				mesh->vertices = {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1};
 				mesh->indices = {0, 1, 2, 3, 2, 0};
 			}
-			vbo = store->vertexBufferObjects.create(modelName, mesh);
+			vbo = store.vertexBufferObjects.create(modelName, mesh);
 		}
-		auto material = store->materials.get("guiMaterial");
+		auto material = store.materials.get("guiMaterial");
 		if (!material)
 		{
-			auto shader = store->shaders.get("guiShader");
+			auto shader = store.shaders.get("guiShader");
 			if (!shader)
 			{
 				Config shaderConfig;
@@ -48,9 +47,9 @@ namespace ve
 					"void main(void) {\n"
 					"	gl_FragColor = texture(tex, clamp(v_uv0, 0, 1));\n"
 					"}\n";
-				shader = store->shaders.create("guiShader", shaderConfig);
+				shader = store.shaders.create("guiShader", shaderConfig);
 			}
-			material = store->materials.create("guiMaterial");
+			material = store.materials.create("guiMaterial");
 			material->setShader(shader);
 			minUniformLocation = material->getUniform("min")->getLocation();
 			maxUniformLocation = material->getUniform("max")->getLocation();
@@ -92,17 +91,16 @@ namespace ve
 
 	void Sprite::setImage(std::string const & name)
 	{
-		auto store = getApp()->getStore();
 		auto & texture = model->getMaterial()->getUniform("tex").as<UniformTexture2d>()->texture;
-		texture = store->textures.get(name);
+		texture = store.textures.get(name);
 		if (!texture)
 		{
-			auto image = store->images.get(name);
+			auto image = store.images.get(name);
 			if (!image)
 			{
 				throw std::runtime_error("Image name '" + name + "' not found. ");
 			}
-			texture = store->textures.create(name, image);
+			texture = store.textures.create(name, image);
 		}	 
 	}
 

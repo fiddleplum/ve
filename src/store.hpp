@@ -23,4 +23,6 @@ namespace ve
 		Cache<Material> materials;
 		Cache<Font> fonts;
 	};
+
+	extern Store store;
 }

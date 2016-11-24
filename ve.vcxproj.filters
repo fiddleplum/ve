@@ -27,7 +27,6 @@
     <ClInclude Include="src\util\rect.h" />
     <ClInclude Include="src\util\stringutil.h" />
     <ClInclude Include="src\util\vector.h" />
-    <ClInclude Include="src\ve.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\gui\panel.h" />
     <ClInclude Include="src\gui\sprite.h" />
@@ -35,10 +34,10 @@
     <ClInclude Include="src\gui\text_button.h" />
     <ClInclude Include="src\gui\widget.h" />
     <ClInclude Include="src\render\image.h" />
-    <ClInclude Include="src\app.h" />
     <ClInclude Include="src\window.h" />
     <ClInclude Include="src\render\font.h" />
-    <ClInclude Include="src\store.h" />
+    <ClInclude Include="src\ve.hpp" />
+    <ClInclude Include="src\store.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -57,7 +56,6 @@
     <ClCompile Include="src\render\stage.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\util\config.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\util\math.cpp" />
     <ClCompile Include="src\render\mesh.cpp" />
     <ClCompile Include="src\gui\gui.cpp" />
@@ -67,8 +65,8 @@
     <ClCompile Include="src\gui\text_button.cpp" />
     <ClCompile Include="src\gui\widget.cpp" />
     <ClCompile Include="src\render\image.cpp" />
-    <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\window.cpp" />
     <ClCompile Include="src\render\font.cpp" />
+    <ClCompile Include="src\ve.cpp" />
   </ItemGroup>
 </Project>

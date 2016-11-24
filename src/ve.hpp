@@ -1,11 +1,10 @@
 #pragma once
 
-#include "app.h"
+#include "window.h"
+#include "store.hpp"
 #include "util/ptr.h"
-#include <string>
-#include <vector>
 
-namespace ve
+namespace veUser
 {
 	// Called just after the application opens. Implemented by the user.
 	void startup(std::vector<std::string> const & params);
@@ -15,4 +14,16 @@ namespace ve
 
 	// Called once a frame. Implemented by the user.
 	void update(float dt);
+}
+
+namespace ve
+{
+	// Stops the application loop at the end of the frame. The application will quit.
+	void quit();
+
+	// Creates a window.
+	Ptr<Window> createWindow();
+
+	// Destroys a window.
+	void destroyWindow(Ptr<Window> window);
 }

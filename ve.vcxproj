@@ -164,7 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\store.h" />
+    <ClInclude Include="src\store.hpp" />
     <ClInclude Include="src\util\config.h" />
     <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\util\vector.h" />
@@ -187,8 +187,7 @@
     <ClInclude Include="src\render\shader.h" />
     <ClInclude Include="src\render\stage.h" />
     <ClInclude Include="src\render\texture.h" />
-    <ClInclude Include="src\ve.h" />
-    <ClInclude Include="src\app.h" />
+    <ClInclude Include="src\ve.hpp" />
     <ClInclude Include="src\util\cache.h" />
     <ClInclude Include="src\render\glcorearb.h" />
     <ClInclude Include="src\render\image.h" />
@@ -208,13 +207,12 @@
     <Text Include="src\!DESIGN.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\app.cpp" />
+    <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\text_area.cpp" />
     <ClCompile Include="src\util\config.cpp" />
     <ClCompile Include="src\gui\gui.cpp" />
     <ClCompile Include="src\gui\widget.cpp" />
     <ClCompile Include="src\render\image.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render\mesh.cpp" />
     <ClCompile Include="src\render\material.cpp" />
     <ClCompile Include="src\render\model.cpp" />
