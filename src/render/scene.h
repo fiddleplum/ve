@@ -1,7 +1,12 @@
 #pragma once
 
 #include "render/model.h"
-#include "util/ptr.h"
+#include "render/texture.h"
+#include "render/vertex_buffer_object.h"
+#include "render/shader.h"
+#include "render/material.h"
+#include "render/font.h"
+#include "util/cache.h"
 #include <unordered_set>
 
 namespace ve
@@ -24,5 +29,6 @@ namespace ve
 	private:
 		std::function<void(Material const &)> uniformsFunction;
 		std::unordered_set<OwnPtr<Model>> models;
+
 	};
 }

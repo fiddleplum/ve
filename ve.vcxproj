@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\store.h" />
     <ClInclude Include="src\util\config.h" />
     <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\util\vector.h" />
@@ -175,7 +176,7 @@
     <ClInclude Include="src\util\stringutil.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\gui\text_area.h" />
-    <ClInclude Include="src\util\font.h" />
+    <ClInclude Include="src\render\font.h" />
     <ClInclude Include="src\util\math.hpp" />
     <ClInclude Include="src\util\object_map.h" />
     <ClInclude Include="src\util\object_set.h" />
@@ -196,7 +197,6 @@
     <ClInclude Include="src\gui\panel.h" />
     <ClInclude Include="src\render\uniform.h" />
     <ClInclude Include="src\render\vertex_buffer_object.h" />
-    <ClInclude Include="src\store.h" />
     <ClInclude Include="src\gui\sprite.h" />
     <ClInclude Include="src\gui\text_button.h" />
     <ClInclude Include="src\gui\widget.h" />
@@ -226,11 +226,10 @@
     <ClCompile Include="src\render\stage.cpp" />
     <ClCompile Include="src\render\uniform.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
-    <ClCompile Include="src\store.cpp" />
     <ClCompile Include="src\gui\sprite.cpp" />
     <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\gui\text_button.cpp" />
-    <ClCompile Include="src\util\font.cpp" />
+    <ClCompile Include="src\render\font.cpp" />
     <ClCompile Include="src\util\math.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\window.cpp" />

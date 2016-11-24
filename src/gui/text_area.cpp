@@ -17,10 +17,10 @@ namespace ve
 	void TextArea::setFont(std::string const & fontFace, int fontSize)
 	{
 		auto store = getApp()->getStore();
-		font = store->getFont(fontFace + std::to_string(fontSize));
+		font = store->fonts.get(fontFace + std::to_string(fontSize));
 		if (!font)
 		{
-			font = store->loadFont(fontFace + std::to_string(fontSize), fontFace, fontSize);
+			font = store->fonts.create(fontFace + std::to_string(fontSize), fontFace, fontSize);
 		}
 	}
 

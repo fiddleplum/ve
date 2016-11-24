@@ -1,45 +1,24 @@
 #pragma once
 
+#include <memory>
 #include <exception>
 
 namespace ve
 {
-	// Forward declaration
-	class _PtrCounter;
-
 	// This is a function that can be passed to OwnPtr to delete arrays properly.
-	template <typename T>
-	void deleteArray(T * p)
-	{
-		delete[] p;
-	}
+	template <typename T> void deleteArray(T * p);
 
 	// This is the standard delete function. It just calls the delete operator.
-	template <typename T>
-	void deleteObject(T * p)
-	{
-		delete p;
-	}
+	template <typename T> void deleteObject(T * p);
 
 	// An exception for accessing objects that don't exist (null pointers, bad pointers, etc).
-	class badptr_exception : public std::exception
-	{
-	public:
-		char const * what() const override
-		{
-			return "Null pointer exception. ";
-		}
-	};
+	class badptr_exception;
 
 	// An exception for when an OwnPtr destructs but there are still UsePtrs left.
-	class bad_destroy_exception : public std::exception
-	{
-	public:
-		char const * what() const override
-		{
-			return "Bad OwnPtr destruction exception. ";
-		}
-	};
+	class bad_destroy_exception;
+
+	// Forward declaration for internal counting class.
+	class _PtrCounter;
 
 	// The base class for OwnPtr and UsePtr.
 	template <typename T, bool OWN, bool USE>
@@ -74,22 +53,13 @@ namespace ve
 		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject);
 
 		// Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
-		template <typename ... Args> void setNew(Args const & ... args);
+		template <typename ... Args> void setNew(Args && ... args);
 
 		// Change the object to a new pointer to an object of type Y with arguments. Uses the new operator for allocation. For special allocation the function setRaw().
-		template <typename Y, typename ... Args> void setNew(Args const & ... args);
+		template <typename Y, typename ... Args> void setNew(Args && ... args);
 
 		// Returns a newly created OwnPtr using setNew above.
-		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args const & ... args);
-
-		// Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
-		template <typename ... Args> void setNew(Args & ... args);
-
-		// Change the object to a new pointer to an object of type Y with arguments. Uses the new operator for allocation. For special allocation the function setRaw().
-		template <typename Y, typename ... Args> void setNew(Args & ... args);
-
-		// Returns a newly created OwnPtr using setNew above.
-		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args & ... args);
+		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args && ... args);
 
 		// Resets this to point to null.
 		void setNull();
@@ -134,7 +104,37 @@ namespace ve
 	template <typename T>
 	using Ptr = PtrBase<T, false, false>;
 
-	// Template Implementation.
+// Template Implementation.
+
+	template <typename T>
+	void deleteArray(T * p)
+	{
+		delete[] p;
+	}
+
+	template <typename T>
+	void deleteObject(T * p)
+	{
+		delete p;
+	}
+
+	class badptr_exception : public std::exception
+	{
+	public:
+		char const * what() const override
+		{
+			return "Null pointer exception. ";
+		}
+	};
+
+	class bad_destroy_exception : public std::exception
+	{
+	public:
+		char const * what() const override
+		{
+			return "Bad OwnPtr destruction exception. ";
+		}
+	};
 
 	// Needs to be a separate class (not an inner class) because otherwise it would be templated and not compatible with other templates.
 	class _PtrCounter
@@ -304,42 +304,22 @@ namespace ve
 	}
 
 	template <typename T, bool OWN, bool USE> template <typename ... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args const & ... args)
+	void PtrBase<T, OWN, USE>::setNew(Args && ... args)
 	{
-		setRaw(new T(args...));
+		setRaw(new T(std::forward<Args>(args)...));
 	}
 
 	template <typename T, bool OWN, bool USE> template <typename Y, typename ... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args const & ... args)
+	void PtrBase<T, OWN, USE>::setNew(Args && ... args)
 	{
-		setRaw(new Y(args...));
+		setRaw(new Y(std::forward<Args>(args)...));
 	}
 
 	template <typename T, bool OWN, bool USE> template <typename ... Args>
-	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args const & ... args)
+	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args && ... args)
 	{
 		PtrBase<T, OWN, USE> ptr;
-		ptr.setNew(args...);
-		return ptr;
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename ... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args & ... args)
-	{
-		setRaw(new T(args...));
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename Y, typename ... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args & ... args)
-	{
-		setRaw(new Y(args...));
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename ... Args>
-	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args & ... args)
-	{
-		PtrBase<T, OWN, USE> ptr;
-		ptr.setNew(args...);
+		ptr.setNew(std::forward<Args>(args)...);
 		return ptr;
 	}
 

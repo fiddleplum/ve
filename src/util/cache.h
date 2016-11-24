@@ -8,8 +8,8 @@
 
 namespace ve
 {
-	// Generic resource cache.
-	template <typename Object>
+	// Generic object cache.
+	template <typename T>
 	class Cache
 	{
 	public:
@@ -20,33 +20,30 @@ namespace ve
 		~Cache();
 
 		// Returns the named object or null if it is not found. O(log number of objects)
-		Ptr<Object> get(std::string const & name) const;
+		Ptr<T> get(std::string const & name) const;
 
-		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects)
-		template <typename ... Args> Ptr<Object> create(std::string const & name, Args const & ... args);
-
-		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects)
-		template <typename ... Args> Ptr<Object> create(std::string const & name, Args & ... args);
+		// Constructs and returns the named object. If it already exists, an exception is thrown. O(log number of objects) + O(constructor)
+		template <typename ... Args> Ptr<T> create(std::string const & name, Args && ... args);
 
 		// Removes and destroys the objects that aren't referenced outside of the cache. O(number of objects).
 		void clean();
 
-		// Gets a list of objects in the cache by name.
-		std::vector<std::string> getObjectNames() const;
+		// Returns a list of objects in the cache by name.
+		std::vector<std::string> list() const;
 
 	private:
-		std::map<std::string, OwnPtr<Object>> objects;
+		std::map<std::string, OwnPtr<T>> objects;
 	};
 
 	// Template Implementations
 
-	template <typename Object>
-	Cache<Object>::Cache()
+	template <typename T>
+	Cache<T>::Cache()
 	{
 	}
 
-	template <typename Object>
-	Cache<Object>::~Cache()
+	template <typename T>
+	Cache<T>::~Cache()
 	{
 		clean();
 		if (!objects.empty())
@@ -60,8 +57,8 @@ namespace ve
 		}
 	}
 
-	template <typename Object>
-	Ptr<Object> Cache<Object>::get(std::string const & name) const
+	template <typename T>
+	Ptr<T> Cache<T>::get(std::string const & name) const
 	{
 		auto it = objects.find(name);
 		if (it != objects.end())
@@ -70,21 +67,20 @@ namespace ve
 		}
 		else
 		{
-			return Ptr<Object>();
+			return Ptr<T>();
 		}
 	}
 
-	template <typename Object>
-	template <typename ... Args>
-	Ptr<Object> Cache<Object>::create(std::string const & name, Args const & ... args)
+	template <typename T> template <typename ... Args>
+	Ptr<T> Cache<T>::create(std::string const & name, Args && ... args)
 	{
 		auto it = objects.find(name);
 		if (it == objects.end())
 		{
-			OwnPtr<Object> object;
+			OwnPtr<T> object;
 			try
 			{
-				object.setNew(args...);
+				object.setNew(std::forward<Args>(args)...);
 			}
 			catch (std::runtime_error const & e)
 			{
@@ -99,33 +95,8 @@ namespace ve
 		}
 	}
 
-	template <typename Object>
-	template <typename ... Args>
-	Ptr<Object> Cache<Object>::create(std::string const & name, Args & ... args)
-	{
-		auto it = objects.find(name);
-		if (it == objects.end())
-		{
-			OwnPtr<Object> object;
-			try
-			{
-				object.setNew(args...);
-			}
-			catch (std::runtime_error const & e)
-			{
-				throw std::runtime_error("Error while constructing '" + name + "': " + e.what());
-			}
-			objects[name] = object;
-			return object;
-		}
-		else
-		{
-			throw std::runtime_error("'" + name + "' is already in the cache.");
-		}
-	}
-
-	template <typename Object>
-	void Cache<Object>::clean()
+	template <typename T>
+	void Cache<T>::clean()
 	{
 		for (auto it = objects.begin(); it != objects.end();)
 		{
@@ -140,8 +111,8 @@ namespace ve
 		}
 	}
 
-	template <typename Object>
-	std::vector<std::string> Cache<Object>::getObjectNames() const
+	template <typename T>
+	std::vector<std::string> Cache<T>::list() const
 	{
 		std::vector<std::string> names;
 		for (auto const & pair : objects)

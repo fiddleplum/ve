@@ -11,6 +11,13 @@ namespace ve
 	class Shader
 	{
 	public:
+		// Uniform information for use by Materials.
+		struct UniformInfo
+		{
+			int location;
+			int type;
+		};
+
 		// Constructs a shader from a config.
 		Shader(Config const & config);
 
@@ -20,19 +27,13 @@ namespace ve
 		// Destructor.
 		~Shader();
 
-		// Uniform information for use by Materials.
-		struct UniformInfo
-		{
-			int location;
-			int type;
-		};
-
 		// Returns information on all of the uniforms.
 		std::map<std::string, UniformInfo> const & getUniformInfos() const;
 
 		// Returns the information on a uniform given the name.
 		UniformInfo getUniformInfo(std::string const & name) const;
 
+		// Returns the location of an attribute given the name.
 		int getAttributeLocation(std::string const & name) const;
 
 		// Activates the current shader and returns true. If it was already activated, returns false.
