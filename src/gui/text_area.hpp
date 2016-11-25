@@ -20,6 +20,9 @@ namespace ve
 		// Sets the text.
 		void setText(std::string const & text);
 
+		// Returns the color.
+		Vector4f getColor() const;
+
 		// Sets the color.
 		void setColor(Vector4f color);
 
@@ -41,6 +44,7 @@ namespace ve
 	private:
 		Recti bounds;
 		float depth;
+		Vector4f color;
 		std::vector<OwnPtr<VertexBufferObject>> vbos;
 		std::vector<Ptr<Model>> models;
 		Ptr<Font> font;
@@ -48,5 +52,6 @@ namespace ve
 		unsigned int originUniformLocation;
 		unsigned int texSizeUniformLocation;
 		unsigned int texUniformLocation;
+		unsigned int colorUniformLocation;
 	};
 }

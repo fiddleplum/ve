@@ -131,6 +131,14 @@ namespace ve
 
 	bool operator < (Ptr<Material> const & lhs, Ptr<Material> const & rhs)
 	{
+		if (!lhs.isValid() && rhs.isValid())
+		{
+			return true;
+		}
+		if (!rhs.isValid())
+		{
+			return false;
+		}
 		return *lhs < *rhs;
 	}
 }

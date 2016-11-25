@@ -3,9 +3,9 @@
 
 namespace ve
 {
-	VertexBufferObject::VertexBufferObject(Ptr<Mesh> mesh)
+	VertexBufferObject::VertexBufferObject(Mesh const & mesh)
 	{
-		switch (mesh->numIndicesPerPrimitive)
+		switch (mesh.numIndicesPerPrimitive)
 		{
 			case 1:
 				mode = GL_POINTS; break;
@@ -17,10 +17,10 @@ namespace ve
 		}
 
 		bytesPerVertex = 0;
-		for (int i = 0; i < mesh->formatTypes.size(); i++)
+		for (int i = 0; i < mesh.formatTypes.size(); i++)
 		{
 			unsigned int sizeOfComponent = 0;
-			switch (mesh->formatTypes[i])
+			switch (mesh.formatTypes[i])
 			{
 				case Mesh::POSITION_2D:
 				case Mesh::UV0:
@@ -38,17 +38,16 @@ namespace ve
 				case Mesh::COLOR1_RGBA:
 					sizeOfComponent = 4; break;
 			}
-			vertexComponents.push_back({mesh->formatTypes[i], sizeOfComponent, bytesPerVertex});
+			vertexComponents.push_back({mesh.formatTypes[i], sizeOfComponent, bytesPerVertex});
 			bytesPerVertex += sizeOfComponent * sizeof(float);
 		}
 
-		GLuint buffer;
-		glGenBuffers(1, &buffer);
+		glGenBuffers(1, &vertexBuffer);
 		glGenBuffers(1, &indexBuffer);
-		updateVertices(mesh);
-		numIndices = (int)mesh->indices.size();
+		updateVertices(mesh.vertices);
+		numIndices = (int)mesh.indices.size();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)mesh->indices.size() * sizeof(unsigned int), (void const *)&mesh->indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)mesh.indices.size() * sizeof(unsigned int), (void const *)&mesh.indices[0], GL_STATIC_DRAW);
 	}
 
 	VertexBufferObject::~VertexBufferObject()
@@ -57,10 +56,10 @@ namespace ve
 		glDeleteBuffers(1, &vertexBuffer);
 	}
 
-	void VertexBufferObject::updateVertices(Ptr<Mesh> mesh)
+	void VertexBufferObject::updateVertices(std::vector<float> const & vertices)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(float), (void const *)& mesh->vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), (void const *)&vertices[0], GL_STATIC_DRAW);
 	}
 
 	void VertexBufferObject::render() const

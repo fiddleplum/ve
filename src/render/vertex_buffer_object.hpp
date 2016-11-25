@@ -9,13 +9,13 @@ namespace ve
 	{
 	public:
 		// Constructs the VBO from a mesh.
-		VertexBufferObject(Ptr<Mesh> mesh);
+		VertexBufferObject(Mesh const & mesh);
 
 		// Destructs the VBO.
 		~VertexBufferObject();
 
-		// Updates the vertices with a mesh's vertices. Does not update anything else from the mesh.
-		void updateVertices(Ptr<Mesh> mesh);
+		// Updates the vertices.
+		void updateVertices(std::vector<float> const & vertices);
 
 		// Renders the VBO.
 		void render() const;

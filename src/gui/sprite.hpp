@@ -46,10 +46,10 @@ namespace ve
 		Vector2i textureCoords;
 		Ptr<Model> model;
 		Ptr<Texture> texture;
-		OwnPtr<Mesh> mesh;
 		OwnPtr<VertexBufferObject> vbo;
 		int originUniformLocation;
 		int texSizeUniformLocation;
 		int texUniformLocation;
+		int colorUniformLocation;
 	};
 }

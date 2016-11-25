@@ -6,16 +6,18 @@ namespace ve
 	Sprite::Sprite(Ptr<Scene> scene)
 		: Widget(scene)
 	{
-		mesh.setNew();
-		mesh->formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
-		mesh->vertices = {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1};
-		mesh->indices = {0, 1, 2, 2, 3, 0};
+		Mesh mesh;
+		mesh.formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
+		mesh.vertices = {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1};
+		mesh.indices = {0, 1, 2, 2, 3, 0};
 		vbo.setNew(mesh);
 
 		auto material = store.materials.get("gui");
 		originUniformLocation = material->getShader()->getUniformInfo("origin").location;
 		texSizeUniformLocation = material->getShader()->getUniformInfo("texSize").location;
 		texUniformLocation = material->getShader()->getUniformInfo("tex").location;
+		colorUniformLocation = material->getShader()->getUniformInfo("color").location;
+
 		model = scene->createModel();
 		model->setVertexBufferObject(vbo);
 		model->setMaterial(material);
@@ -24,6 +26,7 @@ namespace ve
 			material.getUniform(originUniformLocation).as<UniformVector2f>()->value = (Vector2f)bounds.min;
 			material.getUniform(texSizeUniformLocation).as<UniformVector2f>()->value = (Vector2f)texture->getSize();
 			material.getUniform(texUniformLocation).as<UniformTexture2d>()->texture = texture;
+			material.getUniform(colorUniformLocation).as<UniformVector4f>()->value = Vector4f::filled(1);
 		});
 	}
 
@@ -84,12 +87,12 @@ namespace ve
 
 	void Sprite::updateVbo()
 	{
-		mesh->vertices = {
+		std::vector<float> vertices = {
 			0, 0, (float)textureCoords[0], (float)textureCoords[1],
 			(float)bounds.getSize()[0], 0, (float)textureCoords[0] + bounds.getSize()[0], (float)textureCoords[1],
 			(float)bounds.getSize()[0], (float)bounds.getSize()[1], (float)textureCoords[0] + bounds.getSize()[0], (float)textureCoords[1] + bounds.getSize()[1],
 			0, (float)bounds.getSize()[1], (float)textureCoords[0], (float)textureCoords[1] + bounds.getSize()[1]
 		};
-		vbo->updateVertices(mesh);
+		vbo->updateVertices(vertices);
 	}
 }

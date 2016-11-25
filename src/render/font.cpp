@@ -33,6 +33,7 @@ namespace ve
 		numFontsLoaded++;
 
 		lineHeight = TTF_FontLineSkip((TTF_Font *)ttfFont);
+		ascent = TTF_FontAscent((TTF_Font *)ttfFont);
 
 		loadBlock(0);
 	}
@@ -66,7 +67,7 @@ namespace ve
 
 	Font::Block const & Font::getBlock(unsigned int c)
 	{
-		auto blockStart = c / (numCharsInCol * numCharsInRow);
+		auto blockStart = c / (numCharsInCol * numCharsInRow) * (numCharsInCol * numCharsInRow);
 		auto blockIt = blocks.find(blockStart);
 		if (blockIt == blocks.end())
 		{
@@ -86,15 +87,14 @@ namespace ve
 		SDL_Surface * surface = SDL_CreateRGBSurface(0, cellSize * numCharsInRow, cellSize * numCharsInCol, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 		for (unsigned int i = 0; i < numCharsInBlock; i++)
 		{
+			int available = TTF_GlyphIsProvided((TTF_Font *)ttfFont, blockStart + i);
 			SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended((TTF_Font *)ttfFont, blockStart + i, white);
-			int minX, maxY, advance;
-			TTF_GlyphMetrics((TTF_Font *)ttfFont, blockStart + i, &minX, nullptr, nullptr, &maxY, &advance);
-			int lineHeight;
-			lineHeight = TTF_FontLineSkip((TTF_Font *)ttfFont);
+			int minX, maxY, advance, minY;
+			TTF_GlyphMetrics((TTF_Font *)ttfFont, blockStart + i, &minX, nullptr, &minY, &maxY, &advance);
 			if (glyphSurface != nullptr)
 			{
 				auto & coords = block.glyphCoords[i];
-				coords.offset = {minX, -maxY};
+				coords.offset = {0, -ascent};
 				coords.uvBounds.min = {(int)((i % numCharsInRow) * cellSize),(int)((i / numCharsInRow) * cellSize)};
 				coords.uvBounds.setSize({glyphSurface->w, glyphSurface->h});
 				coords.advance = advance;
@@ -107,6 +107,7 @@ namespace ve
 		}
 		std::string resourceName = TTF_FontFaceFamilyName((TTF_Font *)ttfFont) + std::to_string(blockStart);
 		auto image = store.images.create(resourceName, surface);
+		image->save("test.png");
 		SDL_FreeSurface(surface);
 		block.start = blockStart;
 		block.texture = store.textures.create(resourceName, image);

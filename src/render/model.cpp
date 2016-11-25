@@ -51,7 +51,11 @@ namespace ve
 
 	bool Model::operator < (Model const & model) const
 	{
-		return material < model.material;
+		if (material != model.material)
+		{
+			return material < model.material;
+		}
+		return vertexBufferObject < model.vertexBufferObject;
 	}
 
 	bool operator < (Ptr<Model> const & lhs, Ptr<Model> const & rhs)

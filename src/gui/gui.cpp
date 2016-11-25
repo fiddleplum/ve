@@ -57,17 +57,16 @@ namespace ve
 				"attribute vec2 uv0;\n"
 				"varying vec2 v_uv0;\n"
 				"void main(void) {\n"
-				//"   vec2 pos = 2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1);\n"
-				//"	gl_Position = vec4(pos.x, -pos.y, 0, 1);\n"
 				"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, -2 * (origin.y + position2d.y) / guiSize.y + 1, 0, 1);\n"
 				"	v_uv0 = vec2(uv0.x / texSize.x, uv0.y / texSize.y);\n"
 				"}\n";
 			shaderConfig.children["fragment"].text =
 				"#version 400\n"
 				"varying vec2 v_uv0;\n"
+				"uniform vec4 color;\n"
 				"uniform sampler2D tex;\n"
 				"void main(void) {\n"
-				"	gl_FragColor = texture(tex, clamp(v_uv0, 0, 1));\n"
+				"	gl_FragColor = color * texture(tex, clamp(v_uv0, 0, 1));\n"
 				"}\n";
 			shader = store.shaders.create("gui", shaderConfig);
 		}

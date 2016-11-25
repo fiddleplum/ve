@@ -7,10 +7,11 @@ namespace ve
 	TextArea::TextArea(Ptr<Scene> scene)
 		: Widget(scene)
 	{
-		auto material = store.materials.get("gui");
+		material = store.materials.get("gui");
 		originUniformLocation = material->getShader()->getUniformInfo("origin").location;
 		texSizeUniformLocation = material->getShader()->getUniformInfo("texSize").location;
 		texUniformLocation = material->getShader()->getUniformInfo("tex").location;
+		colorUniformLocation = material->getShader()->getUniformInfo("color").location;
 	}
 
 	TextArea::~TextArea()
@@ -72,6 +73,7 @@ namespace ve
 			glyphBounds.min = Vector2f(cursor + glyphCoords.offset);
 			glyphBounds.setSize(Vector2f(glyphCoords.uvBounds.getSize()));
 			Rectf glyphUVBounds = Rectf(glyphCoords.uvBounds);
+			glyphUVBounds.max += Vector2f {1, 1};
 			int startingIndex = (int)mesh.vertices.size() / 4;
 			mesh.vertices.push_back(glyphBounds.min[0]);
 			mesh.vertices.push_back(glyphBounds.min[1]);
@@ -95,28 +97,37 @@ namespace ve
 			mesh.indices.push_back(startingIndex + 2);
 			mesh.indices.push_back(startingIndex + 3);
 			mesh.indices.push_back(startingIndex + 0);
+			cursor[0] += glyphCoords.advance;
 		}
 
 		// Construct the models form the text.
 		for (auto const & pair : meshes)
 		{
+			auto texture = pair.first;
 			auto model = getScene()->createModel();
 			auto vbo = OwnPtr<VertexBufferObject>::returnNew(pair.second);
 			vbos.push_back(vbo);
 			model->setVertexBufferObject(vbo);
 			model->setMaterial(material);
-			model->setUniformsFunction([this](Material const & material)
+			model->setUniformsFunction([this, texture](Material const & material)
 			{
 				material.getUniform(originUniformLocation).as<UniformVector2f>()->value = (Vector2f)bounds.min;
 				material.getUniform(texSizeUniformLocation).as<UniformVector2f>()->value = (Vector2f)texture->getSize();
 				material.getUniform(texUniformLocation).as<UniformTexture2d>()->texture = texture;
+				material.getUniform(colorUniformLocation).as<UniformVector4f>()->value = color;
 			});
+			models.push_back(model);
 		}
 	}
 
-	void TextArea::setColor(Vector4f color)
+	Vector4f TextArea::getColor() const
 	{
+		return color;
+	}
 
+	void TextArea::setColor(Vector4f color_)
+	{
+		color = color_;
 	}
 
 	float TextArea::getDepth() const
@@ -140,7 +151,7 @@ namespace ve
 
 	void TextArea::setBounds(Recti bounds_)
 	{
-		bounds = bounds;
+		bounds = bounds_;
 	}
 
 	void TextArea::update(float dt)

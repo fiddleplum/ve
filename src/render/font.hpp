@@ -56,5 +56,6 @@ namespace ve
 		std::map<int, Block> blocks;
 		int size;
 		int lineHeight;
+		int ascent;
 	};
 }
