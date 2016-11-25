@@ -11,7 +11,7 @@ namespace ve
 		scene->setUniformsFunction([this](Material const & material)
 		{
 			Recti bounds = this->getRootPanel()->getBounds();
-			material.getUniform("guiSize").as<UniformVector2i>()->value = bounds.max - bounds.min + Vector2i {1, 1};
+			material.getUniform("guiSize").as<UniformVector2f>()->value = (Vector2f)(bounds.max - bounds.min + Vector2i {1, 1});
 		});
 		root.setNew(scene);
 	}
@@ -44,22 +44,23 @@ namespace ve
 
 	void Gui::createResources()
 	{
-		auto shader = store.shaders.get("guiShader");
+		auto shader = store.shaders.get("gui");
 		if (!shader)
 		{
 			Config shaderConfig;
 			shaderConfig.children["vertex"].text =
 				"#version 400\n"
-				"uniform ivec2 min;\n"
-				"uniform ivec2 max;\n"
-				"uniform ivec2 guiSize;\n"
+				"uniform vec2 origin;\n"
+				"uniform vec2 texSize;\n"
+				"uniform vec2 guiSize;\n"
 				"attribute vec2 position2d;\n"
 				"attribute vec2 uv0;\n"
 				"varying vec2 v_uv0;\n"
 				"void main(void) {\n"
-				"   vec2 pos = 2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1);\n"
-				"	gl_Position = vec4(pos.x, -pos.y, 0, 1);\n"
-				"	v_uv0 = uv0;\n"
+				//"   vec2 pos = 2.0 * (min + position2d * (max - min + 1)) / guiSize + vec2(-1, -1);\n"
+				//"	gl_Position = vec4(pos.x, -pos.y, 0, 1);\n"
+				"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, -2 * (origin.y + position2d.y) / guiSize.y + 1, 0, 1);\n"
+				"	v_uv0 = vec2(uv0.x / texSize.x, uv0.y / texSize.y);\n"
 				"}\n";
 			shaderConfig.children["fragment"].text =
 				"#version 400\n"
@@ -68,27 +69,13 @@ namespace ve
 				"void main(void) {\n"
 				"	gl_FragColor = texture(tex, clamp(v_uv0, 0, 1));\n"
 				"}\n";
-			shader = store.shaders.create("guiShader", shaderConfig);
+			shader = store.shaders.create("gui", shaderConfig);
 		}
-		auto material = store.materials.get("guiMaterial");
+		auto material = store.materials.get("gui");
 		if (!material)
 		{
-			material = store.materials.create("guiMaterial");
+			material = store.materials.create("gui");
 			material->setShader(shader);
-		}
-
-		auto vbo = store.vertexBufferObjects.get("guiUnitSquare");
-		if (!vbo)
-		{
-			auto mesh = store.meshes.get("guiUnitSquare");
-			if (!mesh)
-			{
-				mesh = store.meshes.create("guiUnitSquare");
-				mesh->formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
-				mesh->vertices = {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1};
-				mesh->indices = {0, 1, 2, 2, 3, 0};
-			}
-			vbo = store.vertexBufferObjects.create("guiUnitSquare", mesh);
 		}
 	}
 }

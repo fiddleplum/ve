@@ -7,6 +7,10 @@ namespace ve
 	TextArea::TextArea(Ptr<Scene> scene)
 		: Widget(scene)
 	{
+		auto material = store.materials.get("gui");
+		originUniformLocation = material->getShader()->getUniformInfo("origin").location;
+		texSizeUniformLocation = material->getShader()->getUniformInfo("texSize").location;
+		texUniformLocation = material->getShader()->getUniformInfo("tex").location;
 	}
 
 	TextArea::~TextArea()
@@ -25,8 +29,10 @@ namespace ve
 
 	void TextArea::setText(std::string const & text)
 	{
-		std::map<Ptr<Texture>, Mesh> meshes;
+		models.clear();
+		vbos.clear();
 
+		std::map<Ptr<Texture>, Mesh> meshes;
 		Vector2i cursor {0, font->getLineHeight()};
 		for (size_t i = 0; i < text.size();)
 		{
@@ -94,6 +100,17 @@ namespace ve
 		// Construct the models form the text.
 		for (auto const & pair : meshes)
 		{
+			auto model = getScene()->createModel();
+			auto vbo = OwnPtr<VertexBufferObject>::returnNew(pair.second);
+			vbos.push_back(vbo);
+			model->setVertexBufferObject(vbo);
+			model->setMaterial(material);
+			model->setUniformsFunction([this](Material const & material)
+			{
+				material.getUniform(originUniformLocation).as<UniformVector2f>()->value = (Vector2f)bounds.min;
+				material.getUniform(texSizeUniformLocation).as<UniformVector2f>()->value = (Vector2f)texture->getSize();
+				material.getUniform(texUniformLocation).as<UniformTexture2d>()->texture = texture;
+			});
 		}
 	}
 

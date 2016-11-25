@@ -41,7 +41,12 @@ namespace ve
 	private:
 		Recti bounds;
 		float depth;
+		std::vector<OwnPtr<VertexBufferObject>> vbos;
 		std::vector<Ptr<Model>> models;
 		Ptr<Font> font;
+		Ptr<Material> material;
+		unsigned int originUniformLocation;
+		unsigned int texSizeUniformLocation;
+		unsigned int texUniformLocation;
 	};
 }

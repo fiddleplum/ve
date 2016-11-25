@@ -27,6 +27,12 @@ namespace ve
 		// Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 
+		// Returns the texture coordinates.
+		Vector2i getTextureCoords() const;
+
+		// Sets the texture coordinates.
+		void setTextureCoords(Vector2i coords);
+
 		// Loads a image from the store into the sprite.
 		void setImage(std::string const & name);
 
@@ -34,10 +40,16 @@ namespace ve
 		void update(float dt);
 
 	private:
+		void updateVbo();
+
 		Recti bounds;
+		Vector2i textureCoords;
 		Ptr<Model> model;
-		int minUniformLocation;
-		int maxUniformLocation;
-		int textureLocation;
+		Ptr<Texture> texture;
+		OwnPtr<Mesh> mesh;
+		OwnPtr<VertexBufferObject> vbo;
+		int originUniformLocation;
+		int texSizeUniformLocation;
+		int texUniformLocation;
 	};
 }

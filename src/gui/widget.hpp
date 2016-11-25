@@ -23,7 +23,7 @@ namespace ve
 		// Returns the bounds of the widget.
 		virtual Recti getBounds() const = 0;
 
-		// Sets the bounds of the widget.
+		// Sets the bounds of the widget. If the widget is inside a Panel, this will be overwritten in the update.
 		virtual void setBounds(Recti bounds) = 0;
 
 		// Updates the widget.
