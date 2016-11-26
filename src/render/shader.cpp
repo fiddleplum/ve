@@ -335,4 +335,59 @@ namespace ve
 			uniformInfos[name] = UniformInfo {location, type};
 		}
 	}
+
+	template <> void Shader::setUniformValue(int location, int const & value)
+	{
+		glUniform1i(location, value);
+	}
+
+	template <> void Shader::setUniformValue(int location, float const & value)
+	{
+		glUniform1f(location, value);
+	}
+
+	template <> void Shader::setUniformValue(int location, Vector2i const & value)
+	{
+		glUniform2iv(location, 1, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Vector3i const & value)
+	{
+		glUniform3iv(location, 1, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Vector4i const & value)
+	{
+		glUniform4iv(location, 1, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Vector2f const & value)
+	{
+		glUniform2fv(location, 1, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Vector3f const & value)
+	{
+		glUniform3fv(location, 1, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Vector4f const & value)
+	{
+		glUniform4fv(location, 1, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Matrix22f const & value)
+	{
+		glUniformMatrix2fv(location, 1, false, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Matrix33f const & value)
+	{
+		glUniformMatrix3fv(location, 1, false, value.ptr());
+	}
+
+	template <> void Shader::setUniformValue(int location, Matrix44f const & value)
+	{
+		glUniformMatrix4fv(location, 1, false, value.ptr());
+	}
 }

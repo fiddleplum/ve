@@ -33,6 +33,9 @@ namespace ve
 		// Returns the information on a uniform given the name.
 		UniformInfo getUniformInfo(std::string const & name) const;
 
+		// Sets a uniform value of the currently active shader. Value types for T are below this class definition.
+		template <typename T> static void setUniformValue(int location, T const & value);
+
 		// Returns the location of an attribute given the name.
 		int getAttributeLocation(std::string const & name) const;
 
@@ -57,4 +60,16 @@ namespace ve
 
 		unsigned int program;
 	};
+
+	template <> void Shader::setUniformValue(int location, int const & value);
+	template <> void Shader::setUniformValue(int location, float const & value);
+	template <> void Shader::setUniformValue(int location, Vector2i const & value);
+	template <> void Shader::setUniformValue(int location, Vector3i const & value);
+	template <> void Shader::setUniformValue(int location, Vector4i const & value);
+	template <> void Shader::setUniformValue(int location, Vector2f const & value);
+	template <> void Shader::setUniformValue(int location, Vector3f const & value);
+	template <> void Shader::setUniformValue(int location, Vector4f const & value);
+	template <> void Shader::setUniformValue(int location, Matrix22f const & value);
+	template <> void Shader::setUniformValue(int location, Matrix33f const & value);
+	template <> void Shader::setUniformValue(int location, Matrix44f const & value);
 }
