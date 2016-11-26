@@ -24,7 +24,7 @@ namespace ve
 		virtual void sendToActiveShader() const = 0;
 
 		// The available types.
-		enum Type { INT, COORD_2I, COORD_3I, COORD_4I, FLOAT, COORD_2F, COORD_3F, COORD_4F, MATRIX_22F, MATRIX_33F, MATRIX_44F, TEXTURE_2D };
+		enum Type { INT, COORD_2I, COORD_3I, COORD_4I, FLOAT, COORD_2F, COORD_3F, COORD_4F, MATRIX_22F, MATRIX_33F, MATRIX_44F, TEXTURE_2D, TEMPLATE };
 
 	private:
 		// The name of the uniform in the shader.
@@ -36,6 +36,32 @@ namespace ve
 		// The type of the variable.
 		int const type;
 	};
+
+	template <typename T>
+	class UniformT : public Uniform
+	{
+		// Constructor.
+		UniformT(std::string const & name, int location);
+
+		// Send the value to the location in the currently active Shader.
+		void sendToActiveShader() const override;
+
+		// The value to be sent to the Shader.
+		T value;
+	};
+
+	// Constructor.
+	template <typename T> UniformT<T>::UniformT(std::string const & name, int location)
+		: Uniform(name, TEMPLATE, location)
+	{
+
+	}
+
+	// Send the value to the location in the currently active Shader.
+	template <typename T> void UniformT<T>::sendToActiveShader() const
+	{
+		Shader::setUniformValue(getLocation(), value);
+	}
 
 	// An OpenGL uniform used by Shader and Material.
 	class UniformInt : public Uniform
