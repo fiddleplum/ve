@@ -28,7 +28,7 @@ namespace ve
 
 	void Scene::render()
 	{
-		std::set<Ptr<Model>> modelsSorted;
+		std::multiset<Ptr<Model>> modelsSorted;
 		for (auto model : models)
 		{
 			modelsSorted.insert(model);

@@ -77,7 +77,12 @@ namespace ve
 			widgetInfo.widget->update(dt);
 		}
 
-		widgetInfos.processEraseQueue();
+		if (!widgetInfos.eraseQueueIsEmpty())
+		{
+			widgetInfos.processEraseQueue();
+			float widgetDepth = depth;
+			setDepth(widgetDepth);
+		}
 	}
 
 	template <typename T> Ptr<T> Panel::createWidget()
@@ -87,6 +92,8 @@ namespace ve
 		widgetInfo.widget = widget;
 		widgetInfos.push_back(widgetInfo);
 		updateWidgetBounds(widgetInfo);
+		float widgetDepth = depth;
+		setDepth(widgetDepth);
 		return widget;
 	}
 

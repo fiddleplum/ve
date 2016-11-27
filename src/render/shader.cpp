@@ -22,7 +22,8 @@
 
 namespace ve
 {
-	unsigned int currentProgram = 0; // maintains current open gl state
+	unsigned int currentProgram = 0; // the current open gl shader program
+	Shader::Blending currentBlending = Shader::Blending::NONE; // the current blending state
 	std::map<std::string, int> attributeLocations = { // mapping from attribute names as strings to their corresponding bound locations
 		{"position3d", Mesh::POSITION_3D},
 		{"position2d", Mesh::POSITION_2D},
@@ -125,6 +126,20 @@ namespace ve
 			{
 				throw std::runtime_error("Shader definition does not have a fragment section. ");
 			}
+
+			blending = Blending::NONE;
+			auto blendingOptValue = config["blending"];
+			if (blendingOptValue && blendingOptValue->type == Config::String)
+			{
+				if (blendingOptValue->text == "additive")
+				{
+					blending = Blending::ADDITIVE;
+				}
+				else if (blendingOptValue->text == "alpha")
+				{
+					blending = Blending::ALPHA;
+				}
+			}
 		}
 		catch (...)
 		{
@@ -182,8 +197,37 @@ namespace ve
 		return it->second;
 	}
 
+	Shader::Blending Shader::getBlending() const
+	{
+		return blending;
+	}
+
+	// Sets the blending state.
+	void Shader::setBlending(Blending blending_)
+	{
+		blending = blending_;
+	}
+
 	bool Shader::activate()
 	{
+		if (currentBlending != blending)
+		{
+			if (blending == Blending::NONE)
+			{
+				glDisable(GL_BLEND);
+			}
+			else if (blending == Blending::ADDITIVE)
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			}
+			else if (blending == Blending::ALPHA)
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+			currentBlending = blending;
+		}
 		if (currentProgram != program)
 		{
 			currentProgram = program;

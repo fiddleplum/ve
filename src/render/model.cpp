@@ -86,26 +86,49 @@ namespace ve
 
 	bool Model::operator < (Model const & model) const
 	{
-		if (shader != model.shader)
+		if (!shader && model.shader)
 		{
-			return shader < model.shader;
+			return true;
 		}
-		for (unsigned int slot = 0; slot < textures.size() && slot < model.textures.size(); slot++)
+		if (!shader || !model.shader)
 		{
-			if (slot == textures.size() && slot < model.textures.size())
-			{
-				return true;
-			}
-			if (slot == model.textures.size())
-			{
-				return false;
-			}
-			if (textures[slot] != model.textures[slot])
-			{
-				return textures[slot] < model.textures[slot];
-			}
+			return false;
 		}
-		return vertexBufferObject < model.vertexBufferObject;
+		if (shader->getBlending() == Shader::Blending::NONE && model.shader->getBlending() != Shader::Blending::NONE)
+		{
+			return true;
+		}
+		if (shader->getBlending() != Shader::Blending::NONE && model.shader->getBlending() == Shader::Blending::NONE)
+		{
+			return false;
+		}
+		else if (shader->getBlending() == Shader::Blending::NONE)
+		{
+			if (shader != model.shader)
+			{
+				return shader < model.shader;
+			}
+			for (unsigned int slot = 0; slot < textures.size() && slot < model.textures.size(); slot++)
+			{
+				if (slot == textures.size() && slot < model.textures.size())
+				{
+					return true;
+				}
+				if (slot == model.textures.size())
+				{
+					return false;
+				}
+				if (textures[slot] != model.textures[slot])
+				{
+					return textures[slot] < model.textures[slot];
+				}
+			}
+			return vertexBufferObject < model.vertexBufferObject;
+		}
+		else // some blending, sort by depth
+		{
+			return getDepth() < model.getDepth();
+		}
 	}
 
 	bool operator < (Ptr<Model> const & lhs, Ptr<Model> const & rhs)

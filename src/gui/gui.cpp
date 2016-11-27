@@ -14,6 +14,8 @@ namespace ve
 			shader->setUniformValue<Vector2f>("guiSize", (Vector2f)(bounds.max - bounds.min + Vector2i {1, 1}));
 		});
 		root.setNew(scene);
+		float depth = 0;
+		root->setDepth(depth);
 	}
 
 	Gui::~Gui()
@@ -68,6 +70,7 @@ namespace ve
 				"void main(void) {\n"
 				"	gl_FragColor = color * texture(tex, clamp(v_uv0, 0, 1));\n"
 				"}\n";
+			shaderConfig.children["blending"].text = "alpha";
 			shader = store.shaders.create("gui", shaderConfig);
 		}
 	}

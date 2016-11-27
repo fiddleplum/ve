@@ -28,6 +28,9 @@ namespace ve
 		// Removes all elements.
 		void queueAllForErase();
 
+		// Returns true if there are no elements queued for erasure.
+		bool eraseQueueIsEmpty() const;
+
 		// Processes any erased elements that have accumulated since the last call.
 		void processEraseQueue();
 
@@ -93,6 +96,12 @@ namespace ve
 		{
 			eraseQueue.insert(it);
 		}
+	}
+
+	template <typename T>
+	bool ObjectList<T>::eraseQueueIsEmpty() const
+	{
+		return eraseQueue.empty();
 	}
 
 	template <typename T>

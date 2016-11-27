@@ -42,6 +42,15 @@ namespace ve
 		// Returns the location of an attribute given the name.
 		int getAttributeLocation(std::string const & name) const;
 
+		// Blending options. This will get more complicated as time goes on.
+		enum Blending { NONE, ADDITIVE, ALPHA };
+
+		// Returns the blending state.
+		Blending getBlending() const;
+
+		// Sets the blending state.
+		void setBlending(Blending blending);
+
 		// Activates the current shader and returns true. If it was already activated, returns false.
 		bool activate();
 
@@ -62,6 +71,8 @@ namespace ve
 		std::map<std::string, UniformInfo> uniformInfos;
 
 		unsigned int program;
+
+		Blending blending;
 	};
 
 	template <> void Shader::setUniformValue(int location, int const & value);

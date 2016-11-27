@@ -120,6 +120,7 @@ namespace ve
 				shader->setUniformValue<int>(texUniformLocation, 0);
 				shader->setUniformValue<Vector4f>(colorUniformLocation, color);
 			});
+			model->setDepth(depth);
 			models.push_back(model);
 		}
 	}
