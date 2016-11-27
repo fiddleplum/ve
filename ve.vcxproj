@@ -180,7 +180,6 @@
     <ClInclude Include="src\util\math.hpp" />
     <ClInclude Include="src\util\object_map.hpp" />
     <ClInclude Include="src\util\object_set.hpp" />
-    <ClInclude Include="src\render\material.hpp" />
     <ClInclude Include="src\render\model.hpp" />
     <ClInclude Include="src\render\renderer.hpp" />
     <ClInclude Include="src\render\scene.hpp" />
@@ -194,7 +193,6 @@
     <ClInclude Include="src\util\object_list.hpp" />
     <ClInclude Include="src\render\open_gl.hpp" />
     <ClInclude Include="src\gui\panel.hpp" />
-    <ClInclude Include="src\render\uniform.hpp" />
     <ClInclude Include="src\render\vertex_buffer_object.hpp" />
     <ClInclude Include="src\gui\sprite.hpp" />
     <ClInclude Include="src\gui\text_button.hpp" />
@@ -214,7 +212,6 @@
     <ClCompile Include="src\gui\widget.cpp" />
     <ClCompile Include="src\render\image.cpp" />
     <ClCompile Include="src\render\mesh.cpp" />
-    <ClCompile Include="src\render\material.cpp" />
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\open_gl.cpp" />
     <ClCompile Include="src\gui\panel.cpp" />
@@ -222,7 +219,6 @@
     <ClCompile Include="src\render\scene.cpp" />
     <ClCompile Include="src\render\shader.cpp" />
     <ClCompile Include="src\render\stage.cpp" />
-    <ClCompile Include="src\render\uniform.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
     <ClCompile Include="src\gui\sprite.cpp" />
     <ClCompile Include="src\render\texture.cpp" />

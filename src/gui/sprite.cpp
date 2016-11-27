@@ -12,21 +12,22 @@ namespace ve
 		mesh.indices = {0, 1, 2, 2, 3, 0};
 		vbo.setNew(mesh);
 
-		auto material = store.materials.get("gui");
-		originUniformLocation = material->getShader()->getUniformInfo("origin").location;
-		texSizeUniformLocation = material->getShader()->getUniformInfo("texSize").location;
-		texUniformLocation = material->getShader()->getUniformInfo("tex").location;
-		colorUniformLocation = material->getShader()->getUniformInfo("color").location;
+		auto shader = store.shaders.get("gui");
+		originUniformLocation = shader->getUniformInfo("origin").location;
+		texSizeUniformLocation = shader->getUniformInfo("texSize").location;
+		texUniformLocation = shader->getUniformInfo("tex").location;
+		colorUniformLocation = shader->getUniformInfo("color").location;
 
 		model = scene->createModel();
 		model->setVertexBufferObject(vbo);
-		model->setMaterial(material);
-		model->setUniformsFunction([this](Material const & material)
+		model->setShader(shader);
+		model->setTextureAtSlot(texture, 0);
+		model->setUniformsFunction([this](Ptr<Shader> const & shader)
 		{
-			material.getUniform(originUniformLocation).as<UniformVector2f>()->value = (Vector2f)bounds.min;
-			material.getUniform(texSizeUniformLocation).as<UniformVector2f>()->value = (Vector2f)texture->getSize();
-			material.getUniform(texUniformLocation).as<UniformTexture2d>()->texture = texture;
-			material.getUniform(colorUniformLocation).as<UniformVector4f>()->value = Vector4f::filled(1);
+			shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
+			shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());
+			shader->setUniformValue<int>(texUniformLocation, 0);
+			shader->setUniformValue<Vector4f>(colorUniformLocation, Vector4f::filled(1));
 		});
 	}
 
@@ -79,6 +80,7 @@ namespace ve
 			}
 			texture = store.textures.create(name, image);
 		}
+		model->setTextureAtSlot(texture, 0);
 	}
 
 	void Sprite::update(float dt)

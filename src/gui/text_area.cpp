@@ -7,11 +7,11 @@ namespace ve
 	TextArea::TextArea(Ptr<Scene> scene)
 		: Widget(scene)
 	{
-		material = store.materials.get("gui");
-		originUniformLocation = material->getShader()->getUniformInfo("origin").location;
-		texSizeUniformLocation = material->getShader()->getUniformInfo("texSize").location;
-		texUniformLocation = material->getShader()->getUniformInfo("tex").location;
-		colorUniformLocation = material->getShader()->getUniformInfo("color").location;
+		shader = store.shaders.get("gui");
+		originUniformLocation = shader->getUniformInfo("origin").location;
+		texSizeUniformLocation = shader->getUniformInfo("texSize").location;
+		texUniformLocation = shader->getUniformInfo("tex").location;
+		colorUniformLocation = shader->getUniformInfo("color").location;
 	}
 
 	TextArea::~TextArea()
@@ -30,8 +30,11 @@ namespace ve
 
 	void TextArea::setText(std::string const & text)
 	{
+		for (auto & model : models)
+		{
+			getScene()->destroyModel(model);
+		}
 		models.clear();
-		vbos.clear();
 
 		std::map<Ptr<Texture>, Mesh> meshes;
 		Vector2i cursor {0, font->getLineHeight()};
@@ -108,13 +111,14 @@ namespace ve
 			auto vbo = OwnPtr<VertexBufferObject>::returnNew(pair.second);
 			vbos.push_back(vbo);
 			model->setVertexBufferObject(vbo);
-			model->setMaterial(material);
-			model->setUniformsFunction([this, texture](Material const & material)
+			model->setShader(shader);
+			model->setTextureAtSlot(texture, 0);
+			model->setUniformsFunction([this, texture](Ptr<Shader> const & shader)
 			{
-				material.getUniform(originUniformLocation).as<UniformVector2f>()->value = (Vector2f)bounds.min;
-				material.getUniform(texSizeUniformLocation).as<UniformVector2f>()->value = (Vector2f)texture->getSize();
-				material.getUniform(texUniformLocation).as<UniformTexture2d>()->texture = texture;
-				material.getUniform(colorUniformLocation).as<UniformVector4f>()->value = color;
+				shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
+				shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());
+				shader->setUniformValue<int>(texUniformLocation, 0);
+				shader->setUniformValue<Vector4f>(colorUniformLocation, color);
 			});
 			models.push_back(model);
 		}

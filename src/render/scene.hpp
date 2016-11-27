@@ -21,13 +21,13 @@ namespace ve
 		void destroyModel(Ptr<Model> & model);
 
 		// Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
-		void setUniformsFunction(std::function<void(Material const &)> uniformsFunction);
+		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction);
 
 		// Renders the scene.
 		void render();
 
 	private:
-		std::function<void(Material const &)> uniformsFunction;
+		std::function<void(Ptr<Shader> const &)> uniformsFunction;
 		std::unordered_set<OwnPtr<Model>> models;
 
 	};

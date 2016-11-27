@@ -12,48 +12,98 @@ namespace ve
 		depth = depth_;
 	}
 
-	Ptr<Material> Model::getMaterial() const
-	{
-		return material;
-	}
-
-	void Model::setMaterial(Ptr<Material> material_)
-	{
-		material = material_;
-	}
-
 	Ptr<VertexBufferObject> Model::getVertexBufferObject() const
 	{
 		return vertexBufferObject;
 	}
 
-	void Model::setVertexBufferObject(Ptr<VertexBufferObject> vertexBufferObject_)
+	void Model::setVertexBufferObject(Ptr<VertexBufferObject> const & vertexBufferObject_)
 	{
 		vertexBufferObject = vertexBufferObject_;
 	}
 
-	void Model::setUniformsFunction(std::function<void(Material const &)> uniformsFunction_)
+	Ptr<Shader> Model::getShader() const
+	{
+		return shader;
+	}
+
+	void Model::setShader(Ptr<Shader> const & shader_)
+	{
+		shader = shader_;
+	}
+	
+	Ptr<Texture> Model::getTextureAtSlot(unsigned int slot) const
+	{
+		if (slot >= textures.size())
+		{
+			return Ptr<Texture>();
+		}
+		else
+		{
+			return textures[slot];
+		}
+	}
+
+	void Model::setTextureAtSlot(Ptr<Texture> const & texture, unsigned int slot)
+	{
+		if (slot >= textures.size())
+		{
+			textures.resize(slot + 1);
+		}
+		textures[slot] = texture;
+	}
+
+	void Model::setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction_)
 	{
 		uniformsFunction = uniformsFunction_;
 	}
 
-	void Model::render(std::function<void(Material const &)> const & sceneUniformsFunction) const
+	void Model::render(std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const
 	{
-		if (material)
+		if (!shader || !vertexBufferObject)
 		{
-			material->activate(sceneUniformsFunction, uniformsFunction);
+			return;
 		}
-		if (vertexBufferObject)
+		bool newShader = shader->activate();
+		if (newShader && sceneUniformsFunction)
 		{
-			vertexBufferObject->render();
+			sceneUniformsFunction(shader);
 		}
+		if (uniformsFunction)
+		{
+			uniformsFunction(shader);
+		}
+		for (unsigned int slot = 0; slot < textures.size(); slot++)
+		{
+			if (textures[slot].isValid())
+			{
+				textures[slot]->activate(slot);
+			}
+		}
+		Texture::deactivateRest((unsigned int)textures.size());
+		vertexBufferObject->render();
 	}
 
 	bool Model::operator < (Model const & model) const
 	{
-		if (material != model.material)
+		if (shader != model.shader)
 		{
-			return material < model.material;
+			return shader < model.shader;
+		}
+		for (unsigned int slot = 0; slot < textures.size() && slot < model.textures.size(); slot++)
+		{
+			if (slot == textures.size() && slot < model.textures.size())
+			{
+				return true;
+			}
+			if (slot == model.textures.size())
+			{
+				return false;
+			}
+			if (textures[slot] != model.textures[slot])
+			{
+				return textures[slot] < model.textures[slot];
+			}
 		}
 		return vertexBufferObject < model.vertexBufferObject;
 	}

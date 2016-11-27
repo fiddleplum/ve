@@ -20,7 +20,6 @@ namespace ve
 		Cache<Mesh> meshes;
 		Cache<VertexBufferObject> vertexBufferObjects;
 		Cache<Shader> shaders;
-		Cache<Material> materials;
 		Cache<Font> fonts;
 	};
 

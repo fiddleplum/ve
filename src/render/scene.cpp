@@ -21,7 +21,7 @@ namespace ve
 		}
 	}
 
-	void Scene::setUniformsFunction(std::function<void(Material const &)> uniformsFunction_)
+	void Scene::setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction_)
 	{
 		uniformsFunction = uniformsFunction_;
 	}

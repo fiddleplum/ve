@@ -36,6 +36,9 @@ namespace ve
 		// Sets a uniform value of the currently active shader. Value types for T are below this class definition.
 		template <typename T> static void setUniformValue(int location, T const & value);
 
+		// Sets a uniform value of the currently active shader. Value types for T are below this class definition. Slower than using the location because of the string lookup.
+		template <typename T> void setUniformValue(char const * name, T const & value);
+
 		// Returns the location of an attribute given the name.
 		int getAttributeLocation(std::string const & name) const;
 
@@ -72,4 +75,16 @@ namespace ve
 	template <> void Shader::setUniformValue(int location, Matrix22f const & value);
 	template <> void Shader::setUniformValue(int location, Matrix33f const & value);
 	template <> void Shader::setUniformValue(int location, Matrix44f const & value);
+
+	template <> void Shader::setUniformValue(char const * location, int const & value);
+	template <> void Shader::setUniformValue(char const * location, float const & value);
+	template <> void Shader::setUniformValue(char const * location, Vector2i const & value);
+	template <> void Shader::setUniformValue(char const * location, Vector3i const & value);
+	template <> void Shader::setUniformValue(char const * location, Vector4i const & value);
+	template <> void Shader::setUniformValue(char const * location, Vector2f const & value);
+	template <> void Shader::setUniformValue(char const * location, Vector3f const & value);
+	template <> void Shader::setUniformValue(char const * location, Vector4f const & value);
+	template <> void Shader::setUniformValue(char const * location, Matrix22f const & value);
+	template <> void Shader::setUniformValue(char const * location, Matrix33f const & value);
+	template <> void Shader::setUniformValue(char const * location, Matrix44f const & value);
 }

@@ -48,7 +48,7 @@ namespace ve
 		std::vector<OwnPtr<VertexBufferObject>> vbos;
 		std::vector<Ptr<Model>> models;
 		Ptr<Font> font;
-		Ptr<Material> material;
+		Ptr<Shader> shader;
 		unsigned int originUniformLocation;
 		unsigned int texSizeUniformLocation;
 		unsigned int texUniformLocation;

@@ -390,4 +390,103 @@ namespace ve
 	{
 		glUniformMatrix4fv(location, 1, false, value.ptr());
 	}
+
+	template <> void Shader::setUniformValue(char const * location, int const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, float const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Vector2i const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Vector3i const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Vector4i const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Vector2f const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Vector3f const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Vector4f const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Matrix22f const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Matrix33f const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
+
+	template <> void Shader::setUniformValue(char const * location, Matrix44f const & value)
+	{
+		auto it = uniformInfos.find(location);
+		if (it != uniformInfos.end())
+		{
+			setUniformValue(it->second.location, value);
+		}
+	}
 }

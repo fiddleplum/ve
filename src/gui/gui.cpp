@@ -8,10 +8,10 @@ namespace ve
 		createResources();
 
 		scene.setNew();
-		scene->setUniformsFunction([this](Material const & material)
+		scene->setUniformsFunction([this](Ptr<Shader> const & shader)
 		{
 			Recti bounds = this->getRootPanel()->getBounds();
-			material.getUniform("guiSize").as<UniformVector2f>()->value = (Vector2f)(bounds.max - bounds.min + Vector2i {1, 1});
+			shader->setUniformValue<Vector2f>("guiSize", (Vector2f)(bounds.max - bounds.min + Vector2i {1, 1}));
 		});
 		root.setNew(scene);
 	}
@@ -69,12 +69,6 @@ namespace ve
 				"	gl_FragColor = color * texture(tex, clamp(v_uv0, 0, 1));\n"
 				"}\n";
 			shader = store.shaders.create("gui", shaderConfig);
-		}
-		auto material = store.materials.get("gui");
-		if (!material)
-		{
-			material = store.materials.create("gui");
-			material->setShader(shader);
 		}
 	}
 }

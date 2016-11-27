@@ -37,7 +37,6 @@ namespace ve
 		bool operator < (Material const & material) const;
 
 	private:
-		Ptr<Shader> shader;
 		std::map<int, OwnPtr<Uniform>> uniforms;
 		std::vector<Ptr<UniformTexture2d>> texture2dUniforms;
 		int numTextures = 0;
