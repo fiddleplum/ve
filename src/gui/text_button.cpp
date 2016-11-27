@@ -13,9 +13,9 @@ namespace ve
 		return 0;
 	}
 
-	void TextButton::setDepth(float depth)
+	void TextButton::setDepth(float & depth)
 	{
-
+		depth++;
 	}
 
 	Recti TextButton::getBounds() const

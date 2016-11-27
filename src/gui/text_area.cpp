@@ -139,13 +139,14 @@ namespace ve
 		return depth;
 	}
 
-	void TextArea::setDepth(float depth_)
+	void TextArea::setDepth(float & depth_)
 	{
 		depth = depth_;
 		for (auto & model : models)
 		{
 			model->setDepth(depth);
 		}
+		depth_++;
 	}
 
 	Recti TextArea::getBounds() const

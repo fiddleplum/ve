@@ -41,9 +41,10 @@ namespace ve
 		return model->getDepth();
 	}
 
-	void Sprite::setDepth(float depth)
+	void Sprite::setDepth(float & depth)
 	{
 		model->setDepth(depth);
+		depth++;
 	}
 
 	Recti Sprite::getBounds() const

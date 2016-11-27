@@ -18,7 +18,7 @@ namespace ve
 		float getDepth() const override;
 
 		// Sets the depth.
-		void setDepth(float depth) override;
+		void setDepth(float & depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;
@@ -60,6 +60,7 @@ namespace ve
 		void updateWidgetBounds(WidgetInfo const & widgetInfo) const;
 
 		Recti bounds;
+		float depth;
 		ObjectList<WidgetInfo> widgetInfos;
 	};
 }

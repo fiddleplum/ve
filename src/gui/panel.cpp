@@ -14,9 +14,14 @@ namespace ve
 		return 0;
 	}
 
-	void Panel::setDepth(float depth)
+	void Panel::setDepth(float & depth_)
 	{
-
+		depth = depth_;
+		for (auto const & widgetInfo : widgetInfos)
+		{
+			widgetInfo.widget->setDepth(depth_);
+		}
+		depth_++;
 	}
 
 	Recti Panel::getBounds() const

@@ -17,8 +17,8 @@ namespace ve
 		// Returns the depth.
 		virtual float getDepth() const = 0;
 
-		// Sets the depth.
-		virtual void setDepth(float depth) = 0;
+		// Sets the depth. Increments depth for others like panel to set their successive widgets depth correctly.
+		virtual void setDepth(float & depth) = 0;
 
 		// Returns the bounds of the widget.
 		virtual Recti getBounds() const = 0;
