@@ -36,6 +36,7 @@
     <ClInclude Include="src\util\stringutil.hpp" />
     <ClInclude Include="src\util\vector.hpp" />
     <ClInclude Include="src\window.hpp" />
+    <ClInclude Include="src\gui\viewport.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -64,5 +65,6 @@
     <ClCompile Include="src\window.cpp" />
     <ClCompile Include="src\render\font.cpp" />
     <ClCompile Include="src\ve.cpp" />
+    <ClCompile Include="src\gui\viewport.cpp" />
   </ItemGroup>
 </Project>

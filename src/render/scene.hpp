@@ -18,7 +18,7 @@ namespace ve
 		Ptr<Model> createModel();
 
 		// Removes a model.
-		void destroyModel(Ptr<Model> & model);
+		void destroyModel(Ptr<Model> model);
 
 		// Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
 		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction);

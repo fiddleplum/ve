@@ -5,6 +5,7 @@
 #include "sprite.hpp"
 #include "text_area.hpp"
 #include "text_button.hpp"
+#include "viewport.hpp"
 
 namespace ve
 {
@@ -34,6 +35,9 @@ namespace ve
 
 		// Creates a text button contained in the panel.
 		Ptr<TextButton> createTextButton();
+
+		// Creates a viewport contained in the panel.
+		Ptr<Viewport> createViewport();
 
 		// Destroys a widget.
 		void destroyWidget(Ptr<Widget> widget);

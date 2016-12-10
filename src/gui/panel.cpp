@@ -53,6 +53,11 @@ namespace ve
 		return createWidget<TextButton>();
 	}
 
+	Ptr<Viewport> Panel::createViewport()
+	{
+		return createWidget<Viewport>();
+	}
+
 	void Panel::destroyWidget(Ptr<Widget> widget)
 	{
 		auto it = getWidgetInfo(widget);

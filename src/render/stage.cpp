@@ -25,19 +25,6 @@ namespace ve
 
 	void Stage::render() const
 	{
-		setupTarget();
-
-		scene->render();
-	}
-
-	void WindowStage::setWindowSize(Vector2i windowSize_)
-	{
-		windowSize = windowSize_;
-	}
-
-	void WindowStage::setupTarget() const
-	{
-		glViewport(0, 0, windowSize[0], windowSize[1]);
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -46,6 +33,24 @@ namespace ve
 		glClearColor(0, 0, 0, 1);
 		glClearDepth(-1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		scene->render();
+	}
+
+	Vector2i WindowStage::getWindowSize() const
+	{
+		return viewportSize;
+	}
+
+	void WindowStage::setWindowSize(Vector2i size)
+	{
+		viewportSize = size;
+	}
+
+	void WindowStage::setupTarget() const
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, viewportSize[0], viewportSize[1]);
 	}
 
 	TextureStage::TextureStage()
@@ -58,26 +63,31 @@ namespace ve
 		glDeleteFramebuffers(1, &framebuffer);
 	}
 
-	void TextureStage::clearTargets()
+	Ptr<Texture> TextureStage::getColorTarget(unsigned int index) const
 	{
-		glDeleteFramebuffers(1, &framebuffer);
-		glGenFramebuffers(1, &framebuffer);
+		if (index < colorTargets.size())
+		{
+			return colorTargets[index];
+		}
+		else
+		{
+			return Ptr<Texture>();
+		}
 	}
 
-	void TextureStage::setTarget(int index, Ptr<Texture> target)
+	void TextureStage::setColorTarget(unsigned int index, Ptr<Texture> target)
 	{
-		assert(0 <= index);
-		if (index >= targets.size())
+		if (index >= colorTargets.size())
 		{
-			targets.resize(index + 1);
+			colorTargets.resize(index + 1);
 		}
-		targets[index] = target;
+		colorTargets[index] = target;
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, target->getGLId(), 0);
 		std::vector<unsigned int> indices;
-		for (int i = 0; i < targets.size(); i++)
+		for (int i = 0; i < colorTargets.size(); i++)
 		{
-			if (targets[i])
+			if (colorTargets[i])
 			{
 				indices[i] = GL_COLOR_ATTACHMENT0 + i;
 			}
@@ -89,13 +99,44 @@ namespace ve
 		glDrawBuffers((int)indices.size(), &indices[0]);
 	}
 
+	Ptr<Texture> TextureStage::getDepthTarget() const
+	{
+		return depthTarget;
+	}
+
+	void TextureStage::setDepthTarget(Ptr<Texture> target)
+	{
+		depthTarget = target;
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, target->getGLId(), 0);
+	}
+
+	Ptr<Texture> TextureStage::getStencilTarget() const
+	{
+		return stencilTarget;
+	}
+
+	void TextureStage::setStencilTarget(Ptr<Texture> target)
+	{
+		stencilTarget = target;
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, target->getGLId(), 0);
+	}
+
+	void TextureStage::clearAllTargets()
+	{
+		colorTargets.clear();
+		depthTarget.setNull();
+		stencilTarget.setNull();
+	}
+
 	void TextureStage::setupTarget() const
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		if (!targets.empty())
+		if (colorTargets.empty() || !colorTargets[0].isValid())
 		{
-			Vector2i size = targets[0]->getSize(); // Use the first target as the viewport size. All targets should be the same size.
-			glViewport(0, 0, size[0], size[1]);
+			throw std::runtime_error("The color target at index 0 needs to be valid. ");
 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glViewport(0, 0, colorTargets[0]->getSize()[0], colorTargets[0]->getSize()[1]);
 	}
 }

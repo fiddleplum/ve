@@ -16,7 +16,10 @@ namespace ve
 
 	TextArea::~TextArea()
 	{
-
+		for (auto model : models)
+		{
+			getScene()->destroyModel(model);
+		}
 	}
 
 	void TextArea::setFont(std::string const & fontFace, int fontSize)

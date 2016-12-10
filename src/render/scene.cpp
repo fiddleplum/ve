@@ -11,12 +11,16 @@ namespace ve
 		return model;
 	}
 
-	void Scene::destroyModel(Ptr<Model> & model)
+	void Scene::destroyModel(Ptr<Model> model)
 	{
-		auto it = std::lower_bound(models.begin(), models.end(), model);
-		if (*it == model)
+		auto it = std::find(models.begin(), models.end(), model);
+		if (it == models.end())
 		{
-			model.setNull();
+			assert(false);
+			throw std::runtime_error("WHAT");
+		}
+		else
+		{
 			models.erase(it);
 		}
 	}

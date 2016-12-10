@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\gui\viewport.hpp" />
     <ClInclude Include="src\store.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\std\optional.hpp" />
@@ -205,6 +206,7 @@
     <Text Include="src\!DESIGN.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gui\viewport.cpp" />
     <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\text_area.cpp" />
     <ClCompile Include="src\util\config.cpp" />

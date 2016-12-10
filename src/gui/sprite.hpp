@@ -33,8 +33,14 @@ namespace ve
 		// Sets the texture coordinates.
 		void setTextureCoords(Vector2i coords);
 
-		// Loads a image from the store into the sprite.
+		// Loads an image from the store into the sprite.
 		void setImage(std::string const & name);
+
+		// Loads a texture from the store into the sprite.
+		void setTexture(std::string const & name);
+
+		// Loads a texture into the sprite.
+		void setTexture(Ptr<Texture> texture);
 
 		// Updates the sprite (actually does nothing).
 		void update(float dt);

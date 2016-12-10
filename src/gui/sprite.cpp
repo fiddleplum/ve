@@ -24,10 +24,13 @@ namespace ve
 		model->setTextureAtSlot(texture, 0);
 		model->setUniformsFunction([this](Ptr<Shader> const & shader)
 		{
-			shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
-			shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());
-			shader->setUniformValue<int>(texUniformLocation, 0);
-			shader->setUniformValue<Vector4f>(colorUniformLocation, Vector4f::filled(1));
+			if (texture.isValid())
+			{
+				shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
+				shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());
+				shader->setUniformValue<int>(texUniformLocation, 0);
+				shader->setUniformValue<Vector4f>(colorUniformLocation, Vector4f::filled(1));
+			}
 		});
 	}
 
@@ -71,7 +74,7 @@ namespace ve
 
 	void Sprite::setImage(std::string const & name)
 	{
-		texture = store.textures.get(name);
+		auto texture = store.textures.get(name);
 		if (!texture)
 		{
 			auto image = store.images.get(name);
@@ -81,6 +84,22 @@ namespace ve
 			}
 			texture = store.textures.create(name, image);
 		}
+		setTexture(texture);
+	}
+
+	void Sprite::setTexture(std::string const & name)
+	{
+		auto texture = store.textures.get(name);
+		if (!texture)
+		{
+			throw std::runtime_error("Texture name '" + name + "' not found. ");
+		}
+		setTexture(texture);
+	}
+
+	void Sprite::setTexture(Ptr<Texture> texture_)
+	{
+		texture = texture_;
 		model->setTextureAtSlot(texture, 0);
 	}
 
