@@ -5,14 +5,15 @@
 #include "render/model.hpp"
 #include "util/ptr.hpp"
 #include "render/stage.hpp"
+#include "world3d/world.hpp"
 
 namespace ve
 {
 	class Viewport : public Widget
 	{
 	public:
-		// Constructor.
-		Viewport(Ptr<Scene> scene);
+		// Constructor. This scene is the gui scene, not a world scene.
+		Viewport(Ptr<Stage> guiStage, Ptr<Scene> scene);
 
 		// Destructor.
 		~Viewport();
@@ -33,15 +34,16 @@ namespace ve
 		Ptr<TextureStage> getStage() const;
 
 		// Sets the currently used texture stage.
-		void setStage(Ptr<TextureStage> stage);
+		void setWorld(Ptr<world3d::World> const & world);
 
 		// Updates the viewport.
 		void update(float dt);
 
 	private:
 		void updateVbo();
-
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
-		Ptr<TextureStage> stage;
+		OwnPtr<TextureStage> stage;
+		Ptr<Stage> guiStage;
+		Ptr<world3d::World> world;
 	};
 }

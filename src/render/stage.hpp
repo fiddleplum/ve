@@ -11,6 +11,10 @@ namespace ve
 	class Stage
 	{
 	public:
+		// Constructor.
+		Stage();
+
+		// Virtual default destructor for inheritance.
 		virtual ~Stage() {}
 
 		// Adds a stage that this stage depends on.
@@ -22,11 +26,17 @@ namespace ve
 		// Clears all stages that this stage depends on.
 		void clearPriorStages();
 
+		// Returns the scene that this stage will render.
+		Ptr<Scene> getScene() const;
+
 		// Sets the scene that this stage will render.
 		void setScene(Ptr<Scene> scene);
 
+		// Signals that the stage has not rendered this frame. Recursive into prior stages.
+		void clearRenderFlag();
+
 		// Renders the scene to the target. First renders all unrendered prior stages.
-		void render() const;
+		void render();
 
 		// Prepares the target surface for rendering.
 		virtual void setupTarget() const = 0;
@@ -34,6 +44,7 @@ namespace ve
 	private:
 		std::set<Ptr<Stage>> priorStages;
 		Ptr<Scene> scene;
+		bool renderedThisFrame;
 	};
 
 	class WindowStage : public Stage

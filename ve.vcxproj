@@ -168,6 +168,8 @@
     <ClInclude Include="src\store.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\std\optional.hpp" />
+    <ClInclude Include="src\util\quaternion.hpp" />
+    <ClInclude Include="src\util\ray.hpp" />
     <ClInclude Include="src\util\vector.hpp" />
     <ClInclude Include="src\util\interval.hpp" />
     <ClInclude Include="src\util\matrix.hpp" />
@@ -200,6 +202,11 @@
     <ClInclude Include="src\gui\widget.hpp" />
     <ClInclude Include="src\util\serialize.hpp" />
     <ClInclude Include="src\window.hpp" />
+    <ClInclude Include="src\world3d\camera.hpp" />
+    <ClInclude Include="src\world3d\entity.hpp" />
+    <ClInclude Include="src\world3d\light.hpp" />
+    <ClInclude Include="src\world3d\object.hpp" />
+    <ClInclude Include="src\world3d\world.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="_notes.txt" />
@@ -229,6 +236,11 @@
     <ClCompile Include="src\util\math.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\window.cpp" />
+    <ClCompile Include="src\world3d\camera.cpp" />
+    <ClCompile Include="src\world3d\entity.cpp" />
+    <ClCompile Include="src\world3d\light.cpp" />
+    <ClCompile Include="src\world3d\object.cpp" />
+    <ClCompile Include="src\world3d\world.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

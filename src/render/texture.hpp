@@ -18,6 +18,9 @@ namespace ve
 		// Returns the size of the texture.
 		Vector2i getSize() const;
 
+		// Resize the texture. When shrinking, crops the bottom left.
+		void setSize(Vector2i size);
+
 		// Updates the pixels from the image.
 		void updatePixels(Ptr<Image> image);
 

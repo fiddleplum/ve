@@ -37,6 +37,13 @@
     <ClInclude Include="src\util\vector.hpp" />
     <ClInclude Include="src\window.hpp" />
     <ClInclude Include="src\gui\viewport.hpp" />
+    <ClInclude Include="src\world3d\camera.hpp" />
+    <ClInclude Include="src\world3d\entity.hpp" />
+    <ClInclude Include="src\world3d\light.hpp" />
+    <ClInclude Include="src\world3d\object.hpp" />
+    <ClInclude Include="src\world3d\world.hpp" />
+    <ClInclude Include="src\util\quaternion.hpp" />
+    <ClInclude Include="src\util\ray.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\!DESIGN.txt" />
@@ -66,5 +73,10 @@
     <ClCompile Include="src\render\font.cpp" />
     <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\viewport.cpp" />
+    <ClCompile Include="src\world3d\camera.cpp" />
+    <ClCompile Include="src\world3d\entity.cpp" />
+    <ClCompile Include="src\world3d\light.cpp" />
+    <ClCompile Include="src\world3d\object.cpp" />
+    <ClCompile Include="src\world3d\world.cpp" />
   </ItemGroup>
 </Project>

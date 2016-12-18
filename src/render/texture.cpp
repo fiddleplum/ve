@@ -21,6 +21,15 @@ namespace ve
 		return size;
 	}
 
+	void Texture::setSize(Vector2i size_)
+	{
+		size = size_;
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, pixels);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+
 	void Texture::updatePixels(Ptr<Image> image)
 	{
 		setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);

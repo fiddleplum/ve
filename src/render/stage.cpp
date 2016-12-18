@@ -3,6 +3,11 @@
 
 namespace ve
 {
+	Stage::Stage()
+	{
+		renderedThisFrame = false;
+	}
+
 	void Stage::addPriorStage(Ptr<Stage> stage)
 	{
 		priorStages.insert(stage);
@@ -18,13 +23,40 @@ namespace ve
 		priorStages.clear();
 	}
 
+	Ptr<Scene> Stage::getScene() const
+	{
+		return scene;
+	}
+
 	void Stage::setScene(Ptr<Scene> scene_)
 	{
 		scene = scene_;
 	}
 
-	void Stage::render() const
+	void Stage::clearRenderFlag()
 	{
+		for (auto && priorStage : priorStages)
+		{
+			if (priorStage->renderedThisFrame)
+			{
+				priorStage->clearRenderFlag();
+			}
+		}
+		renderedThisFrame = false;
+	}
+
+	void Stage::render()
+	{
+		for (auto && priorStage : priorStages)
+		{
+			if (!priorStage->renderedThisFrame)
+			{
+				priorStage->render();
+			}
+		}
+
+		setupTarget();
+
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -35,6 +67,8 @@ namespace ve
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		scene->render();
+
+		renderedThisFrame = true;
 	}
 
 	Vector2i WindowStage::getWindowSize() const

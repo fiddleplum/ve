@@ -3,6 +3,7 @@
 #include "material.hpp"
 #include "vertex_buffer_object.hpp"
 #include <functional>
+#include <unordered_map>
 
 namespace ve
 {
@@ -38,7 +39,7 @@ namespace ve
 		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction);
 
 		// Renders the model.
-		void render(std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const;
+		void render(std::unordered_map<int, std::function<void(Ptr<Shader> const &)>> const & sceneUniformsFunctions) const;
 
 		// Returns true if this model sorts less than the other model.
 		bool operator < (Model const & model) const;

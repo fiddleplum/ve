@@ -25,9 +25,14 @@ namespace ve
 		}
 	}
 
-	void Scene::setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction_)
+	void Scene::addUniformsFunction(int id, std::function<void(Ptr<Shader> const &)> uniformsFunction)
 	{
-		uniformsFunction = uniformsFunction_;
+		uniformsFunctions[id] = uniformsFunction;
+	}
+
+	void Scene::removeUniformsFunction(int id)
+	{
+		uniformsFunctions.erase(id);
 	}
 
 	void Scene::render()
@@ -39,7 +44,7 @@ namespace ve
 		}
 		for (auto model : modelsSorted)
 		{
-			model->render(uniformsFunction);
+			model->render(uniformsFunctions);
 		}
 	}
 }

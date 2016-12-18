@@ -58,16 +58,19 @@ namespace ve
 		uniformsFunction = uniformsFunction_;
 	}
 
-	void Model::render(std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const
+	void Model::render(std::unordered_map<int, std::function<void(Ptr<Shader> const &)>> const & sceneUniformsFunctions) const
 	{
 		if (!shader || !vertexBufferObject)
 		{
 			return;
 		}
 		bool newShader = shader->activate();
-		if (newShader && sceneUniformsFunction)
+		if (newShader)
 		{
-			sceneUniformsFunction(shader);
+			for (auto && sceneUniformsFunctionPair : sceneUniformsFunctions)
+			{
+				sceneUniformsFunctionPair.second(shader);
+			}
 		}
 		if (uniformsFunction)
 		{

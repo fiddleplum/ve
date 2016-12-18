@@ -8,6 +8,7 @@
 #include "render/font.hpp"
 #include "util/cache.hpp"
 #include <unordered_set>
+#include <unordered_map>
 
 namespace ve
 {
@@ -20,14 +21,17 @@ namespace ve
 		// Removes a model.
 		void destroyModel(Ptr<Model> model);
 
-		// Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
-		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction);
+		// Adds a function to be called that sets any model-specific uniforms. Called every time the shader is changed. The id is used only for removal.
+		void addUniformsFunction(int id, std::function<void(Ptr<Shader> const &)> uniformsFunction);
+
+		// Removes the function above, using the id provided.
+		void removeUniformsFunction(int id);
 
 		// Renders the scene.
 		void render();
 
 	private:
-		std::function<void(Ptr<Shader> const &)> uniformsFunction;
+		std::unordered_map<int, std::function<void(Ptr<Shader> const &)>> uniformsFunctions;
 		std::unordered_set<OwnPtr<Model>> models;
 
 	};
