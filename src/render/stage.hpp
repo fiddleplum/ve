@@ -17,23 +17,11 @@ namespace ve
 		// Virtual default destructor for inheritance.
 		virtual ~Stage() {}
 
-		// Adds a stage that this stage depends on.
-		void addPriorStage(Ptr<Stage> stage);
-
-		// Removes a stage that this no longer depends on.
-		void removePriorStage(Ptr<Stage> stage);
-
-		// Clears all stages that this stage depends on.
-		void clearPriorStages();
-
 		// Returns the scene that this stage will render.
 		Ptr<Scene> getScene() const;
 
 		// Sets the scene that this stage will render.
 		void setScene(Ptr<Scene> scene);
-
-		// Signals that the stage has not rendered this frame. Recursive into prior stages.
-		void clearRenderFlag();
 
 		// Renders the scene to the target. First renders all unrendered prior stages.
 		void render();
@@ -42,9 +30,7 @@ namespace ve
 		virtual void setupTarget() const = 0;
 
 	private:
-		std::set<Ptr<Stage>> priorStages;
 		Ptr<Scene> scene;
-		bool renderedThisFrame;
 	};
 
 	class WindowStage : public Stage

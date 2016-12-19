@@ -4,6 +4,16 @@
 
 namespace ve
 {
+	void Scene::addDependentStage(Ptr<Stage> stage)
+	{
+		dependentStages.insert(stage);
+	}
+
+	void Scene::removeDependentStage(Ptr<Stage> stage)
+	{
+		dependentStages.erase(stage);
+	}
+
 	Ptr<Model> Scene::createModel()
 	{
 		auto model = OwnPtr<Model>::returnNew();

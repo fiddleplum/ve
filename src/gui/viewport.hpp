@@ -13,7 +13,7 @@ namespace ve
 	{
 	public:
 		// Constructor. This scene is the gui scene, not a world scene.
-		Viewport(Ptr<Stage> guiStage, Ptr<Scene> scene);
+		Viewport(Ptr<Scene> scene);
 
 		// Destructor.
 		~Viewport();
@@ -43,7 +43,6 @@ namespace ve
 		void updateVbo();
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
 		OwnPtr<TextureStage> stage;
-		Ptr<Stage> guiStage;
 		Ptr<world3d::World> world;
 	};
 }

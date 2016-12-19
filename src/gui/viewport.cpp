@@ -2,19 +2,18 @@
 
 namespace ve
 {
-	Viewport::Viewport(Ptr<Stage> guiStage_, Ptr<Scene> scene)
+	Viewport::Viewport(Ptr<Scene> scene)
 		: Widget(scene)
 	{
-		guiStage = guiStage_;
 		sprite.setNew(scene);
 		stage.setNew();
-		guiStage->addPriorStage(stage);
+		scene->addDependentStage(stage);
 		sprite->setTexture(stage->getColorTarget(0));
 	}
 
 	Viewport::~Viewport()
 	{
-		guiStage->removePriorStage(stage);
+		getScene()->removeDependentStage(stage);
 	}
 
 	float Viewport::getDepth() const
