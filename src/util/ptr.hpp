@@ -5,87 +5,87 @@
 
 namespace ve
 {
-	// This is a function that can be passed to OwnPtr to delete arrays properly.
+	//! This is a function that can be passed to OwnPtr to delete arrays properly.
 	template <typename T> void deleteArray(T * p);
 
-	// This is the standard delete function. It just calls the delete operator.
+	//! This is the standard delete function. It just calls the delete operator.
 	template <typename T> void deleteObject(T * p);
 
-	// An exception for accessing objects that don't exist (null pointers, bad pointers, etc).
-	class badptr_exception;
+	//! An exception for accessing objects that don't exist (null pointers, bad pointers, etc).
+	class bad_dereference_exception;
 
-	// An exception for when an OwnPtr destructs but there are still UsePtrs left.
+	//! An exception for when an OwnPtr destructs but there are still UsePtrs left.
 	class bad_destroy_exception;
 
 	// Forward declaration for internal counting class.
 	class _PtrCounter;
 
-	// The base class for OwnPtr and UsePtr.
+	//! The base class for OwnPtr, UsePtr, and Ptr. OwnPtr declares ownership of a referenced object, and UsePtr and Ptr declare use of a referenced object. UsePtr guarantees that the referenced object has not been destroyed, whereas Ptr has no such guarantee. If a Ptr class referencing a destroyed object is dereferenced, it will throw a bad_dereference_exception. If an OwnPtr tries to destruct its referenced object (because it is the last reference to that object) but a UsePtr still references the object, it will throw a bad_destroy_exception.
 	template <typename T, bool OWN, bool USE>
 	class PtrBase final
 	{
 	public:
-		// Default constructor. Initializes this to point to null.
+		//! Default constructor. Initializes this to point to null.
 		PtrBase();
 
-		// Default copy constructor. Needed otherwise C++ will create its own.
+		//! Default copy constructor. Needed otherwise C++ will create its own.
 		PtrBase(PtrBase<T, OWN, USE> const & ptr);
 
-		// Templated copy constructor. It can take a PtrBase that has a type that is a subclass of T. An OwnPtr cannot be copy-constructed from a UsePtr.
+		//! Templated copy constructor. It can take a PtrBase that has a type that is a subclass of T. An OwnPtr cannot be copy-constructed from a UsePtr.
 		template <typename Y, bool OWNY, bool USEY> PtrBase(PtrBase<Y, OWNY, USEY> const & ptr);
 
-		// Destructor. If this is an OwnPtr and is the last reference to the object, either delete is called or the destroy function is called if it is specified. There must be no UsePtrs pointing to the object.
+		//! Destructor. If this is an OwnPtr and is the last reference to the object, either delete is called or the destroy function is called if it is specified. There must be no UsePtrs pointing to the object.
 		~PtrBase();
 
-		// Default assignment operator. Needed otherwise C++ will create its own.
+		//! Default assignment operator. Needed otherwise C++ will create its own.
 		PtrBase<T, OWN, USE> & operator = (PtrBase<T, OWN, USE> const & ptr);
 
-		// Templated assignment operator. This can take a BasePtr that has a type that is a subclass of T. A UsePtr cannot be assigned to an OwnPtr.
+		//! Templated assignment operator. This can take a BasePtr that has a type that is a subclass of T. A UsePtr cannot be assigned to an OwnPtr.
 		template <typename Y, bool OWNY, bool USEY> PtrBase<T, OWN, USE> & operator = (PtrBase<Y, OWNY, USEY> const & ptr);
 
-		// Returns true if this points to something non-null.
+		//! Returns true if this points to something non-null.
 		bool isValid() const;
 
-		// Returns true if there is at least one UsePtr that points to the object this points to.
+		//! Returns true if there is at least one UsePtr that points to the object this points to.
 		bool isInUse() const;
 
-		// Point the pointer to newP, which can have a type that is subclass of T. Only pass in something that looks like 'new T()' to ensure that the raw pointer isn't used elsewhere.
+		//! Point the pointer to newP, which can have a type that is subclass of T. Only pass in something that looks like 'new T()' to ensure that the raw pointer isn't used elsewhere.
 		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject);
 
-		// Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
+		//! Change the object to a new pointer to an object of type T with arguments. Uses the new operator for allocation. For special allocation use the function setRaw().
 		template <typename ... Args> void setNew(Args && ... args);
 
-		// Change the object to a new pointer to an object of type Y with arguments. Uses the new operator for allocation. For special allocation the function setRaw().
+		//! Change the object to a new pointer to an object of type Y with arguments. Uses the new operator for allocation. For special allocation the function setRaw().
 		template <typename Y, typename ... Args> void setNew(Args && ... args);
 
-		// Returns a newly created OwnPtr using setNew above.
+		//! Returns a newly created OwnPtr using setNew above.
 		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args && ... args);
 
-		// Resets this to point to null.
+		//! Resets this to point to null.
 		void setNull();
 
-		// Provides access to the pointed-to object's members.
+		//! Provides access to the pointed-to object's members.
 		T * operator -> () const;
 
-		// Provides access to the element located at index. Warning: this provides no index out-of-bounds checking.
+		//! Provides access to the element located at index. Warning: this provides no index out-of-bounds checking.
 		T & operator [] (int index) const;
 
-		// Provides reference access to the pointed-to object's members.
+		//! Provides reference access to the pointed-to object's members.
 		T & operator * () const;
 
-		// Only to be used for functions that require a raw pointer to the object. Be careful how you use this.
+		//! Only to be used for functions that require a raw pointer to the object. Be careful how you use this.
 		T * raw() const;
 
-		// Get the unsigned integer value of the address of the pointed-to object.
+		//! Get the unsigned integer value of the address of the pointed-to object.
 		operator intptr_t() const;
 
-		// Returns a PtrBase dynamically casted to Y.
+		//! Returns a PtrBase dynamically casted to Y.
 		template <typename Y> PtrBase<Y, OWN, USE> as() const;
 
-		// Returns true if the address of this's object is less than the address of ptr's object.
+		//! Returns true if the address of this's object is less than the address of ptr's object.
 		template <typename Y, bool OWNY, bool USEY> bool operator < (PtrBase<Y, OWNY, USEY> const & ptr) const;
 
-		// Returns true if the address of this's object is equal to the address of ptr's object.
+		//! Returns true if the address of this's object is equal to the address of ptr's object.
 		template <typename Y, bool OWNY, bool USEY> bool operator == (PtrBase<Y, OWNY, USEY> const & ptr) const;
 
 	private:
@@ -95,16 +95,19 @@ namespace ve
 		template<typename Y, bool OWNY, bool USEY> friend class PtrBase;
 	};
 
+	//! A smart pointer for owning an object. It can be copied around for multiple ownership.
 	template <typename T>
 	using OwnPtr = PtrBase<T, true, false>;
 
+	//! A smart pointer for using an object with a guarantee of the object being valid.
 	template <typename T>
 	using UsePtr = PtrBase<T, false, true>;
 
+	//! A smart pointer for using an object with no guarantee of the object being valid.
 	template <typename T>
 	using Ptr = PtrBase<T, false, false>;
 
-// Template Implementation.
+	// Template Implementation.
 
 	template <typename T>
 	void deleteArray(T * p)
@@ -118,7 +121,7 @@ namespace ve
 		delete p;
 	}
 
-	class badptr_exception : public std::exception
+	class bad_dereference_exception : public std::exception
 	{
 	public:
 		char const * what() const override
@@ -359,7 +362,7 @@ namespace ve
 	{
 		if (c == nullptr || c->oc == 0)
 		{
-			throw badptr_exception(); // This points to null or to a destroyed object.
+			throw bad_dereference_exception(); // This points to null or to a destroyed object.
 		}
 		return p;
 	}
@@ -369,7 +372,7 @@ namespace ve
 	{
 		if (c == nullptr || c->oc == 0)
 		{
-			throw badptr_exception(); // This points to null or to a destroyed object.
+			throw bad_dereference_exception(); // This points to null or to a destroyed object.
 		}
 		return p[index];
 	}
@@ -379,7 +382,7 @@ namespace ve
 	{
 		if (c == nullptr || c->oc == 0)
 		{
-			throw badptr_exception(); // This points to null or to a destroyed object.
+			throw bad_dereference_exception(); // This points to null or to a destroyed object.
 		}
 		return *p;
 	}
