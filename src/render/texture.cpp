@@ -5,10 +5,20 @@ namespace ve
 {
 	std::vector<unsigned int> currentTextures; // Current Textures in the OpenGL state.
 
-	Texture::Texture(Ptr<Image> image)
+	Texture::Texture(Vector2i size, Image::Format format)
 	{
 		glGenTextures(1, &id);
-		setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
+		set(size, format, nullptr);
+	}
+
+	Texture::Texture(Ptr<Image> image)
+	{
+		if (!image.isValid())
+		{
+			throw std::runtime_error("Null image. ");
+		}
+		glGenTextures(1, &id);
+		set(image->getSize(), image->getFormat(), &image->getPixels()[0]);
 	}
 
 	Texture::~Texture()
@@ -21,18 +31,24 @@ namespace ve
 		return size;
 	}
 
-	void Texture::setSize(Vector2i size_)
+	Image::Format Texture::getFormat() const
 	{
-		size = size_;
-		glBindTexture(GL_TEXTURE_2D, id);
-		glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, pixels);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		return format;
 	}
 
-	void Texture::updatePixels(Ptr<Image> image)
+	void Texture::setSize(Vector2i size)
 	{
-		setPixels(image->getSize(), image->getFormat(), &image->getPixels()[0]);
+		set(size, format, nullptr);
+	}
+
+	void Texture::setFormat(Image::Format format)
+	{
+		set(size, format, nullptr);
+	}
+
+	void Texture::set(Ptr<Image> const & image)
+	{
+		set(image->getSize(), image->getFormat(), &image->getPixels()[0]);
 	}
 
 	void Texture::activate(unsigned int slot) const
@@ -68,9 +84,10 @@ namespace ve
 		return id;
 	}
 
-	void Texture::setPixels(Vector2i size_, Image::Format format, uint8_t const * pixels)
+	void Texture::set(Vector2i size_, Image::Format format_, uint8_t const * pixels)
 	{
 		size = size_;
+		format = format_;
 
 		int glInternalFormat;
 		int glFormat;

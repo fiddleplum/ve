@@ -22,7 +22,7 @@ namespace ve
 			ndcToLocalTransform(1, 3) = 1;
 			ndcToLocalTransform(2, 2) = 0;
 			transformsNeedUpdate = true;
-			scene->setUniformsFunction([this](Ptr<Shader> const & shader)
+			scene->addUniformsFunction((int)(uintptr_t)this, [this](Ptr<Shader> const & shader)
 			{
 				shader->setUniformValue("worldToCameraTramsform", getWorldToLocalTransform());
 				shader->setUniformValue("cameraToNdcTransform", getLocalToNdcTransform());

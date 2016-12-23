@@ -8,7 +8,7 @@ namespace ve
 		createResources();
 
 		scene.setNew();
-		scene->setUniformsFunction([this](Ptr<Shader> const & shader)
+		scene->addUniformsFunction((int)(uint64_t)this, [this](Ptr<Shader> const & shader)
 		{
 			Recti bounds = this->getRootPanel()->getBounds();
 			shader->setUniformValue<Vector2f>("guiSize", (Vector2f)(bounds.max - bounds.min + Vector2i {1, 1}));

@@ -7,7 +7,7 @@ namespace ve
 		World::World()
 		{
 			scene.setNew();
-			scene->setUniformsFunction([this](Ptr<Shader> const & shader)
+			scene->addUniformsFunction((int)(intptr_t)this, [this](Ptr<Shader> const & shader)
 			{
 				// How do I set the currently rendering camera?
 				// Where is the active camera stored?
