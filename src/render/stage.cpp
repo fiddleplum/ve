@@ -17,6 +17,11 @@ namespace ve
 		scene = scene_;
 	}
 
+	void Stage::setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction_)
+	{
+		uniformsFunction = uniformsFunction_;
+	}
+
 	void Stage::render()
 	{
 		if (!scene.isValid())
@@ -40,7 +45,7 @@ namespace ve
 		glClearDepth(-1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		scene->render();
+		scene->render(uniformsFunction);
 	}
 
 	Vector2i WindowStage::getWindowSize() const

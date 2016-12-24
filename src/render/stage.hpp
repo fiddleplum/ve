@@ -23,14 +23,19 @@ namespace ve
 		// Sets the scene that this stage will render.
 		void setScene(Ptr<Scene> scene);
 
+		//! Adds a function to be called that sets any stage-specific uniforms. Called every time the shader is changed.
+		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
+
 		// Renders the scene to the target. First renders all unrendered prior stages.
 		void render();
 
+	protected:
 		// Prepares the target surface for rendering.
 		virtual void setupTarget() const = 0;
 
 	private:
 		Ptr<Scene> scene;
+		std::function<void(Ptr<Shader> const &)> uniformsFunction;
 	};
 
 	class WindowStage : public Stage

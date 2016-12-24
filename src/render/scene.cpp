@@ -40,17 +40,12 @@ namespace ve
 		}
 	}
 
-	void Scene::addUniformsFunction(int id, std::function<void(Ptr<Shader> const &)> uniformsFunction)
+	void Scene::setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction_)
 	{
-		uniformsFunctions[id] = uniformsFunction;
+		uniformsFunction = uniformsFunction_;
 	}
 
-	void Scene::removeUniformsFunction(int id)
-	{
-		uniformsFunctions.erase(id);
-	}
-
-	void Scene::render()
+	void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction)
 	{
 		std::multiset<Ptr<Model>> modelsSorted;
 		for (auto model : models)
@@ -59,7 +54,7 @@ namespace ve
 		}
 		for (auto model : modelsSorted)
 		{
-			model->render(uniformsFunctions);
+			model->render(stageUniformsFunction, uniformsFunction);
 		}
 	}
 }

@@ -36,10 +36,10 @@ namespace ve
 		void setTextureAtSlot(Ptr<Texture> const & texture, unsigned int slot);
 
 		// Sets the function to be called that sets any model-specific uniforms.
-		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction);
+		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
 		// Renders the model.
-		void render(std::unordered_map<int, std::function<void(Ptr<Shader> const &)>> const & sceneUniformsFunctions) const;
+		void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const;
 
 		// Returns true if this model sorts less than the other model.
 		bool operator < (Model const & model) const;

@@ -12,7 +12,7 @@ namespace ve
 		{
 		public:
 			// Constructs a camera in perspective mode, with an aspect ratio of 1, a near of .1, a far of 1000, an an fovY of 90 degrees.
-			Camera(Ptr<Scene> scene);
+			Camera();
 
 			// Returns the aspect ratio.
 			float getAspectRatio() const;
@@ -59,7 +59,6 @@ namespace ve
 		private:
 			void checkTransforms() const;
 
-			Ptr<Scene> scene;
 			float aspectRatio;
 			float near;
 			float far;

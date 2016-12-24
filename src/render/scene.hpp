@@ -33,18 +33,15 @@ namespace ve
 		//! Removes a model.
 		void destroyModel(Ptr<Model> model);
 
-		//! Adds a function to be called that sets any model-specific uniforms. Called every time the shader is changed. The id is used only for removal.
-		void addUniformsFunction(int id, std::function<void(Ptr<Shader> const &)> uniformsFunction);
-
-		//! Removes the function above, using the id provided.
-		void removeUniformsFunction(int id);
+		//! Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
+		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
 		//! Renders the scene.
-		void render();
+		void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction);
 
 	private:
 		std::set<Ptr<Stage>> dependentStages;
-		std::unordered_map<int, std::function<void(Ptr<Shader> const &)>> uniformsFunctions;
+		std::function<void(Ptr<Shader> const &)> uniformsFunction;
 		std::unordered_set<OwnPtr<Model>> models;
 	};
 }

@@ -4,9 +4,8 @@ namespace ve
 {
 	namespace world3d
 	{
-		Camera::Camera(Ptr<Scene> scene_)
+		Camera::Camera()
 		{
-			scene = scene_;
 			aspectRatio = 1.0f;
 			near = 0.1f;
 			far = 1000.0f;
@@ -22,11 +21,6 @@ namespace ve
 			ndcToLocalTransform(1, 3) = 1;
 			ndcToLocalTransform(2, 2) = 0;
 			transformsNeedUpdate = true;
-			scene->addUniformsFunction((int)(uintptr_t)this, [this](Ptr<Shader> const & shader)
-			{
-				shader->setUniformValue("worldToCameraTramsform", getWorldToLocalTransform());
-				shader->setUniformValue("cameraToNdcTransform", getLocalToNdcTransform());
-			});
 		}
 
 		float Camera::getAspectRatio() const

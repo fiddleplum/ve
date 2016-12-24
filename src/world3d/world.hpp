@@ -4,6 +4,7 @@
 #include "light.hpp"
 #include "object.hpp"
 #include "../render/scene.hpp"
+#include "../render/stage.hpp"
 
 namespace ve
 {
@@ -13,6 +14,8 @@ namespace ve
 		{
 		public:
 			World();
+
+			void setupStage(Ptr<Stage> const & stage, Ptr<Camera> const & camera);
 
 			Ptr<Scene> getScene() const;
 

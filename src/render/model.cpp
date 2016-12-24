@@ -53,12 +53,12 @@ namespace ve
 		textures[slot] = texture;
 	}
 
-	void Model::setUniformsFunction(std::function<void(Ptr<Shader> const &)> uniformsFunction_)
+	void Model::setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction_)
 	{
 		uniformsFunction = uniformsFunction_;
 	}
 
-	void Model::render(std::unordered_map<int, std::function<void(Ptr<Shader> const &)>> const & sceneUniformsFunctions) const
+	void Model::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const
 	{
 		if (!shader || !vertexBufferObject)
 		{
@@ -67,9 +67,13 @@ namespace ve
 		bool newShader = shader->activate();
 		if (newShader)
 		{
-			for (auto && sceneUniformsFunctionPair : sceneUniformsFunctions)
+			if(stageUniformsFunction)
 			{
-				sceneUniformsFunctionPair.second(shader);
+				stageUniformsFunction(shader);
+			}
+			if (sceneUniformsFunction)
+			{
+				sceneUniformsFunction(shader);
 			}
 		}
 		if (uniformsFunction)

@@ -7,11 +7,15 @@ namespace ve
 		World::World()
 		{
 			scene.setNew();
-			scene->addUniformsFunction((int)(intptr_t)this, [this](Ptr<Shader> const & shader)
+		}
+
+		void World::setupStage(Ptr<Stage> const & stage, Ptr<Camera> const & camera)
+		{
+			stage->setScene(scene);
+			stage->setUniformsFunction([camera](Ptr<Shader> const & shader)
 			{
-				//shader->setUniformValue("uW2VMatrix", )
-				// How do I set the currently rendering camera?
-				// Where is the active camera stored?
+				shader->setUniformValue("worldToCameraTramsform", camera->getWorldToLocalTransform());
+				shader->setUniformValue("cameraToNdcTransform", camera->getLocalToNdcTransform());
 			});
 		}
 
@@ -22,7 +26,7 @@ namespace ve
 
 		Ptr<Camera> World::createCamera()
 		{
-			auto camera = OwnPtr<Camera>::returnNew(scene);
+			auto camera = OwnPtr<Camera>::returnNew();
 			cameras.insert(camera);
 			return camera;
 		}
