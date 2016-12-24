@@ -17,6 +17,7 @@ namespace ve
 		private:
 			Ptr<Scene> scene;
 			Ptr<Model> model;
+			OwnPtr<VertexBufferObject> vbo;
 			int localToWorldTransformLocation;
 		};
 	}

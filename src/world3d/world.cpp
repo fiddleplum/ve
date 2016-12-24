@@ -9,6 +9,7 @@ namespace ve
 			scene.setNew();
 			scene->addUniformsFunction((int)(intptr_t)this, [this](Ptr<Shader> const & shader)
 			{
+				//shader->setUniformValue("uW2VMatrix", )
 				// How do I set the currently rendering camera?
 				// Where is the active camera stored?
 			});

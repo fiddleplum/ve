@@ -95,11 +95,11 @@ namespace ve
 		{
 			if (colorTargets[i])
 			{
-				indices[i] = GL_COLOR_ATTACHMENT0 + i;
+				indices.push_back(GL_COLOR_ATTACHMENT0 + i);
 			}
 			else
 			{
-				indices[i] = GL_NONE;
+				indices.push_back(GL_NONE);
 			}
 		}
 		glDrawBuffers((int)indices.size(), &indices[0]);

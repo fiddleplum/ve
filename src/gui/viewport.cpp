@@ -1,4 +1,5 @@
 #include "viewport.hpp"
+#include "store.hpp"
 
 namespace ve
 {
@@ -6,7 +7,10 @@ namespace ve
 		: Widget(scene)
 	{
 		sprite.setNew(scene);
+		renderTarget.setNew(getBounds().getSize(), Image::RGB24);
+		sprite->setTexture(renderTarget);
 		stage.setNew();
+		stage->setColorTarget(0, renderTarget);
 		scene->addDependentStage(stage);
 		sprite->setTexture(stage->getColorTarget(0));
 	}
@@ -34,6 +38,7 @@ namespace ve
 	void Viewport::setBounds(Recti bounds)
 	{
 		sprite->setBounds(bounds);
+		renderTarget->setSize(bounds.getSize());
 	}
 
 	Ptr<TextureStage> Viewport::getStage() const
@@ -45,12 +50,12 @@ namespace ve
 	{
 		if (stage->getScene().isValid())
 		{
-			stage->getScene()->removeUniformsFunction((int)this);
+			stage->getScene()->removeUniformsFunction((int)(uintptr_t)this);
 		}
 		stage->setScene(world->getScene());
 		if (stage->getScene().isValid())
 		{
-			stage->getScene()->addUniformsFunction((int)this, [this](Ptr<Shader> const & shader)
+			stage->getScene()->addUniformsFunction((int)(uintptr_t)this, [this](Ptr<Shader> const & shader)
 			{
 
 			});

@@ -69,7 +69,7 @@ namespace ve
 				else if (vertexValueOpt->type == Config::String)
 				{
 					std::string code;
-					if (endsWith(vertexValueOpt->text, ".frag"))
+					if (endsWith(vertexValueOpt->text, ".vert"))
 					{
 						auto filename = vertexValueOpt->text;
 						code = readFile(filename);

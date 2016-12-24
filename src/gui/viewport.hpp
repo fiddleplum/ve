@@ -41,6 +41,7 @@ namespace ve
 
 	private:
 		void updateVbo();
+		OwnPtr<Texture> renderTarget;
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
 		OwnPtr<TextureStage> stage;
 		Ptr<world3d::World> world;

@@ -204,7 +204,7 @@ namespace ve
 		{
 			iNext = content.size();
 		}
-		std::string ret = content.substr(i, iNext);
+		std::string ret = content.substr(i, iNext - i);
 		i = iNext;
 		return ret;
 	}
@@ -216,7 +216,7 @@ namespace ve
 		{
 			iNext = content.size();
 		}
-		std::string ret = content.substr(i, iNext);
+		std::string ret = content.substr(i, iNext - i);
 		i = iNext;
 		return ret;
 	}

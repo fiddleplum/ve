@@ -8,10 +8,15 @@ namespace ve
 	{
 		dependentStages.insert(stage);
 	}
-
+	
 	void Scene::removeDependentStage(Ptr<Stage> stage)
 	{
 		dependentStages.erase(stage);
+	}
+
+	std::set<Ptr<Stage>> const & Scene::getDependentStages() const
+	{
+		return dependentStages;
 	}
 
 	Ptr<Model> Scene::createModel()

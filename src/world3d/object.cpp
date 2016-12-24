@@ -1,4 +1,5 @@
 #include "object.hpp"
+#include "../store.hpp"
 
 namespace ve
 {
@@ -12,6 +13,15 @@ namespace ve
 			{
 				shader->setUniformValue(localToWorldTransformLocation, getLocalToWorldTransform());
 			});
+			Ptr<Shader> shader = store.shaders.create("shader", "shaders/basic.shader");
+			localToWorldTransformLocation = shader->getUniformInfo("uL2WMatrix").location;
+			model->setShader(shader);
+			Mesh mesh;
+			mesh.formatTypes = {Mesh::POSITION_3D};
+			mesh.vertices = {0, 0, 0, 1, 0, 0, 0, 1, 0};
+			mesh.indices = {0, 1, 2};
+			vbo.setNew(mesh);
+			model->setVertexBufferObject(vbo);
 		}
 
 		Object::~Object()
