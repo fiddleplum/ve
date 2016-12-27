@@ -26,7 +26,7 @@ namespace ve
 		public:
 			unsigned int index;
 			unsigned int size;
-			intptr_t offset;
+			unsigned int offset;
 		};
 		unsigned int vertexBuffer = 1;
 		unsigned int indexBuffer = 2;

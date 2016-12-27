@@ -96,7 +96,7 @@ namespace ve
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, target->getGLId(), 0);
 		std::vector<unsigned int> indices;
-		for (int i = 0; i < colorTargets.size(); i++)
+		for (unsigned int i = 0; i < colorTargets.size(); i++)
 		{
 			if (colorTargets[i])
 			{

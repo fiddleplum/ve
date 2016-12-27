@@ -17,7 +17,7 @@ namespace ve
 		}
 
 		bytesPerVertex = 0;
-		for (int i = 0; i < mesh.formatTypes.size(); i++)
+		for (unsigned int i = 0; i < mesh.formatTypes.size(); i++)
 		{
 			unsigned int sizeOfComponent = 0;
 			switch (mesh.formatTypes[i])
@@ -68,7 +68,7 @@ namespace ve
 		for (VertexComponent const & vertexComponent : vertexComponents)
 		{
 			glEnableVertexAttribArray(vertexComponent.index);
-			glVertexAttribPointer(vertexComponent.index, vertexComponent.size, GL_FLOAT, GL_FALSE, bytesPerVertex, (void const *)vertexComponent.offset);
+			glVertexAttribPointer(vertexComponent.index, vertexComponent.size, GL_FLOAT, GL_FALSE, bytesPerVertex, (void const *)(uintptr_t)vertexComponent.offset);
 		}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		glDrawElements(mode, numIndices, GL_UNSIGNED_INT, 0);
