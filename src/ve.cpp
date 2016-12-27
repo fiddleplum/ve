@@ -3,8 +3,10 @@
 
 namespace ve
 {
-	bool looping = true;
+	bool initialized = false;
+	bool looping = false;
 	float secondsPerUpdate = 1.f / 24.f;
+	std::function<void(float dt)> updateFunction;
 	ObjectList<OwnPtr<Window>> windows;
 	Store store;
 
@@ -96,11 +98,33 @@ namespace ve
 		}
 	}
 
+	void initialize()
+	{
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+		{
+			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
+		}
+
+		initialized = true;
+	}
+
+	void finalize()
+	{
+		initialized = false;
+
+		SDL_Quit();
+	}
+
 	// This is the main application loop. It keeps going until looping is false.
 	void loop()
 	{
+		if (!initialized)
+		{
+			throw std::runtime_error("VE must first be initialized.");
+		}
 		float lastFrameTime = SDL_GetTicks() / 1000.f;
 		float accumulator = 0.f;
+		looping = true;
 		while (looping)
 		{
 			float currentFrameTime = SDL_GetTicks() / 1000.f;
@@ -128,7 +152,10 @@ namespace ve
 			// Update
 			while (accumulator >= secondsPerUpdate)
 			{
-				veUser::update(secondsPerUpdate);
+				if (updateFunction)
+				{
+					updateFunction(secondsPerUpdate);
+				}
 
 				for (auto & window : windows)
 				{
@@ -169,9 +196,19 @@ namespace ve
 		looping = false;
 	}
 
+	void setUpdateFunction(std::function<void(float dt)> const & function)
+	{
+
+	}
+
 	Ptr<Window> createWindow()
 	{
+		if (!initialized)
+		{
+			throw std::runtime_error("VE must first be initialized.");
+		}
 		auto window = OwnPtr<Window>::returnNew();
+		window->setCloseHandler(quit);
 		windows.push_back(window);
 		return window;
 	}
@@ -184,45 +221,49 @@ namespace ve
 			throw std::runtime_error("Window not found. ");
 		}
 		windows.queueForErase(it);
+		if (!looping) // not looping so we're safe to just erase it.
+		{
+			windows.processEraseQueue();
+		}
 	}
 }
 
 // Called by SDL to run the entire app.
-int main(int argc, char *argv[])
-{
-#undef main
-	std::vector<std::string> args;
-	try
-	{
-		// Grab the params. Don't include the 0th arg, because it is the program name.
-		for (int i = 1; i < argc; ++i)
-		{
-			args.push_back(std::string(argv[i]));
-		}
-
-		// Start SDL.
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-		{
-			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
-		}
-
-		// Call user-defined start.
-		veUser::startup(args);
-
-		// Start the loop. Stays in here until looping is false.
-		ve::loop();
-
-		// Call user-defined shutdown.
-		veUser::shutdown();
-
-		// Stop SDL.
-		SDL_Quit();
-	}
-	catch (std::exception const & e)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", e.what(), nullptr);
-		veUser::shutdown();
-		return -1;
-	}
-	return 0;
-}
+//int main(int argc, char *argv[])
+//{
+//#undef main
+//	std::vector<std::string> args;
+//	try
+//	{
+//		// Grab the params. Don't include the 0th arg, because it is the program name.
+//		for (int i = 1; i < argc; ++i)
+//		{
+//			args.push_back(std::string(argv[i]));
+//		}
+//
+//		//// Start SDL.
+//		//if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+//		//{
+//		//	throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
+//		//}
+//
+//		// Call user-defined start.
+//		veUser::startup(args);
+//
+//		// Start the loop. Stays in here until looping is false.
+//		ve::loop();
+//
+//		// Call user-defined shutdown.
+//		veUser::shutdown();
+//
+//		// Stop SDL.
+//		//SDL_Quit();
+//	}
+//	catch (std::exception const & e)
+//	{
+//		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", e.what(), nullptr);
+//		veUser::shutdown();
+//		return -1;
+//	}
+//	return 0;
+//}

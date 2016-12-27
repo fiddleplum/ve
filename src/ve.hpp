@@ -4,26 +4,35 @@
 #include "store.hpp"
 #include "util/ptr.hpp"
 
-namespace veUser
-{
-	// Called just after the application opens. Implemented by the user.
-	void startup(std::vector<std::string> const & params);
-
-	// Called just before the application quits. Implemented by the user.
-	void shutdown();
-
-	// Called once a frame. Implemented by the user.
-	void update(float dt);
-}
+//! The user needs to implement the standard int main().
 
 namespace ve
 {
-	// Stops the application loop at the end of the frame. The application will quit.
+	//! Initializes ve. Must be called before all other functions.
+	void initialize();
+
+	//! Finalizes ve. Should be called after all other functions.
+	void finalize();
+
+	//! Starts the ve loop.
+	void loop();
+
+	//! Stops the ve loop at the end of the current frame.
 	void quit();
 
-	// Creates a window.
+	//! Sets a function to be called on every update.
+	void setUpdateFunction(std::function<void(float dt)> const & function);
+
+	//! Creates a window.
 	Ptr<Window> createWindow();
 
-	// Destroys a window.
+	//! Destroys a window.
 	void destroyWindow(Ptr<Window> window);
 }
+
+// Required for SDL main macro strangeness. This allows the user to just use regular main.
+#ifdef __cplusplus
+extern "C"
+#endif
+#define main SDL_main
+
