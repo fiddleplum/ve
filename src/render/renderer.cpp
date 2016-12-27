@@ -4,8 +4,12 @@
 
 namespace ve
 {
-	Renderer::Renderer()
+	Renderer::Renderer(void * sdlWindow)
 	{
+		glContext = SDL_GL_CreateContext((SDL_Window *)sdlWindow);
+		SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
+		glInitialize();
+
 		char *version = (char*)glGetString(GL_VERSION);
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -16,6 +20,7 @@ namespace ve
 
 	Renderer::~Renderer()
 	{
+		SDL_GL_DeleteContext(glContext);
 	}
 
 	Ptr<Scene> Renderer::createScene()

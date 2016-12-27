@@ -10,8 +10,8 @@ namespace ve
 	class Renderer
 	{
 	public:
-		// Constructor. Takes any SDL window to create a context.
-		Renderer();
+		// Constructor.
+		Renderer(void * sdlWindow);
 
 		// Destructor.
 		~Renderer();
@@ -29,6 +29,7 @@ namespace ve
 		void destroyTextureStage(Ptr<TextureStage> stage);
 
 	private:
+		void * glContext;
 		std::set<OwnPtr<Scene>, std::less<>> scenes;
 		std::set<OwnPtr<TextureStage>, std::less<>> textureStages;
 	};

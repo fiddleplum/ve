@@ -5,9 +5,6 @@
 
 namespace ve
 {
-	int numSDLWindows = 0;
-	void * glContext = 0;
-
 	Window::Window()
 	{
 		Vector2i initialSize {800, 600};
@@ -16,19 +13,12 @@ namespace ve
 		{
 			throw std::runtime_error("Failed to create the window.");
 		}
-		numSDLWindows++;
-		if (numSDLWindows == 1) // first window created, so we need to create the glContext.
-		{
-			glContext = SDL_GL_CreateContext((SDL_Window *)sdlWindow);
-			SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
-			glInitialize();
-		}
+
+		stage.setNew(sdlWindow);
+		stage->setWindowSize(initialSize);
 
 		gui.setNew();
 		gui->handleResizeEvent(initialSize);
-
-		stage.setNew();
-		stage->setWindowSize(initialSize);
 		stage->setScene(gui->getScene());
 	}
 
@@ -36,12 +26,6 @@ namespace ve
 	{
 		stage.setNull();
 		SDL_DestroyWindow((SDL_Window *)sdlWindow);
-		numSDLWindows--;
-		if (numSDLWindows == 0)
-		{
-			SDL_GL_DeleteContext(glContext);
-			glContext = 0;
-		}
 	}
 
 	void Window::setCloseHandler(std::function<void()> closeHandler_)
@@ -89,8 +73,6 @@ namespace ve
 
 	void Window::render() const
 	{
-		SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 		stage->render();
-		SDL_GL_SwapWindow((SDL_Window *)sdlWindow);
 	}
 }

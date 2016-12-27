@@ -8,30 +8,35 @@
 
 namespace ve
 {
+	class GL;
+
 	class Stage
 	{
 	public:
-		// Constructor.
+		//! Constructor.
 		Stage();
 
-		// Virtual default destructor for inheritance.
+		//! Virtual default destructor for inheritance.
 		virtual ~Stage() {}
 
-		// Returns the scene that this stage will render.
+		//! Returns the scene that this stage will render.
 		Ptr<Scene> getScene() const;
 
-		// Sets the scene that this stage will render.
+		//! Sets the scene that this stage will render.
 		void setScene(Ptr<Scene> scene);
 
 		//! Adds a function to be called that sets any stage-specific uniforms. Called every time the shader is changed.
 		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
-		// Renders the scene to the target. First renders all unrendered prior stages.
-		void render();
+		//! Renders the scene to the target. First renders all unrendered prior stages.
+		void render() const;
 
 	protected:
-		// Prepares the target surface for rendering.
-		virtual void setupTarget() const = 0;
+		// Called just before rendering the scene.
+		virtual void preRender() const = 0;
+
+		// Called just after rendering the scene.
+		virtual void postRender() const = 0;
 
 	private:
 		Ptr<Scene> scene;
@@ -41,17 +46,31 @@ namespace ve
 	class WindowStage : public Stage
 	{
 	public:
-		// Returns the window used in rendering.
+		//! Constructs the window stage.
+		WindowStage(void * sdlWindow);
+
+		//! Destructs the window stage.
+		~WindowStage();
+
+		//! Returns the window used in rendering.
 		Vector2i getWindowSize() const;
 
-		// Sets the window used in rendering.
+		//! Sets the window used in rendering.
 		void setWindowSize(Vector2i size);
 
-		// Prepares the target surface for rendering.
-		void setupTarget() const override;
+	protected:
+		// Called just before rendering the scene.
+		void preRender() const override;
+
+		// Called just after rendering the scene.
+		void postRender() const override;
 
 	private:
+		static unsigned int numWindowStages;
+		static void * glContext;
+		void * sdlWindow;
 		Vector2i viewportSize;
+		OwnPtr<GL> gl;
 	};
 
 	class TextureStage : public Stage
@@ -84,8 +103,12 @@ namespace ve
 		// Clears the color, depth and stencil targets.
 		void clearAllTargets();
 
-		// Prepares the target surface for rendering.
-		void setupTarget() const override;
+	protected:
+		// Called just before rendering the scene.
+		void preRender() const override;
+
+		// Called just after rendering the scene.
+		void postRender() const override;
 
 	private:
 		std::vector<Ptr<Texture>> colorTargets;
