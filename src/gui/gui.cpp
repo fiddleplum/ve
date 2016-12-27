@@ -34,7 +34,7 @@ namespace ve
 		return scene;
 	}
 
-	void Gui::handleResizeEvent(Vector2i size)
+	void Gui::setSize(Vector2i size)
 	{
 		root->setBounds({{0, 0}, {size[0] - 1, size[1] - 1}});
 	}

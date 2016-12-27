@@ -18,7 +18,7 @@ namespace ve
 		stage->setWindowSize(initialSize);
 
 		gui.setNew();
-		gui->handleResizeEvent(initialSize);
+		gui->setSize(initialSize);
 		stage->setScene(gui->getScene());
 	}
 
@@ -62,7 +62,7 @@ namespace ve
 		{
 			resizeHandler(size);
 		}
-		gui->handleResizeEvent(size);
+		gui->setSize(size);
 		stage->setWindowSize(size);
 	}
 
