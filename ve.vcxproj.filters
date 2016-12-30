@@ -44,6 +44,7 @@
     <ClInclude Include="src\world3d\world.hpp" />
     <ClInclude Include="src\util\quaternion.hpp" />
     <ClInclude Include="src\util\ray.hpp" />
+    <ClInclude Include="src\world3d\model.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\texture.cpp" />
@@ -74,5 +75,6 @@
     <ClCompile Include="src\world3d\light.cpp" />
     <ClCompile Include="src\world3d\object.cpp" />
     <ClCompile Include="src\world3d\world.cpp" />
+    <ClCompile Include="src\world3d\model.cpp" />
   </ItemGroup>
 </Project>

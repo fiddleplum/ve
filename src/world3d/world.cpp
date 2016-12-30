@@ -7,6 +7,16 @@ namespace ve
 		World::World()
 		{
 			scene.setNew();
+			scene->setUniformsFunction([this](Ptr<Shader> const & shader)
+			{
+				unsigned int lightIndex = 0;
+				for (auto && light : lights)
+				{
+					shader->setUniformValue(("light" + std::to_string(lightIndex) + "Position").c_str(), light->getPosition());
+					shader->setUniformValue(("light" + std::to_string(lightIndex) + "Color").c_str(), light->getColor());
+					lightIndex++;
+				}
+			});
 		}
 
 		void World::setupStage(Ptr<Stage> const & stage, Ptr<Camera> const & camera)

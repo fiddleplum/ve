@@ -61,30 +61,35 @@ namespace ve
 	// Deserialize a bool.
 	inline void deserialize(std::istream & in, bool & v)
 	{
+		v = 0;
 		deserialize(in, (void *)&v, 1);
 	}
 
 	// Deserialize an int.
 	inline void deserialize(std::istream & in, int & v)
 	{
+		v = 0;
 		deserialize(in, (void *)&v, 4);
 	}
 
 	// Deserialize an unsigned int.
 	inline void deserialize(std::istream & in, unsigned int & v)
 	{
+		v = 0;
 		deserialize(in, (void *)&v, 4);
 	}
 
 	// Deserialize a float.
 	inline void deserialize(std::istream & in, float & v)
 	{
+		v = 0;
 		deserialize(in, (void *)&v, 4);
 	}
 
 	// Deserialize a double.
 	inline void deserialize(std::istream & in, double & v)
 	{
+		v = 0;
 		deserialize(in, (void *)&v, 8);
 	}
 

@@ -11,6 +11,9 @@ namespace ve
 	class Model
 	{
 	public:
+		// Default constructor.
+		Model();
+
 		// Returns the depth.
 		float getDepth() const;
 

@@ -2,6 +2,10 @@
 
 namespace ve
 {
+	Model::Model()
+	{
+	}
+
 	float Model::getDepth() const
 	{
 		return depth;

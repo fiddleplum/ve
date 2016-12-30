@@ -46,30 +46,6 @@ namespace ve
 		return stage;
 	}
 
-	//void Viewport::setWorld(Ptr<world3d::World> const & world)
-	//{
-	//	if (stage->getScene().isValid())
-	//	{
-	//		stage->getScene()->removeUniformsFunction((int)(uintptr_t)this);
-	//	}
-	//	stage->setScene(world->getScene());
-	//	if (stage->getScene().isValid())
-	//	{
-	//		stage->getScene()->addUniformsFunction((int)(uintptr_t)this, [this](Ptr<Shader> const & shader)
-	//		{
-
-	//		});
-	//	}
-	//}
-
-	//void Viewport::setCamera(Ptr<world3d::Camera> const & camera)
-	//{
-	//	stage->getScene()->addUniformsFunction((int)(uintptr_t)this, [camera](Ptr<Shader> const & shader)
-	//	{
-
-	//	});
-	//}
-
 	void Viewport::update(float dt)
 	{
 	}

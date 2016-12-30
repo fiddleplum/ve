@@ -39,7 +39,7 @@ namespace ve
 }
 
 /*
-* Notes on the Mesh file format. All ints and floats are 32-bit.
+* Notes on the Mesh binary format. All ints and floats are 32-bit.
 *
 * unsigned int numIndicesPerPrimitive
 * unsigned int numVerticesPerFrame

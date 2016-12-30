@@ -11,6 +11,9 @@ namespace ve
 	class Shader
 	{
 	public:
+		// Blending options. This will get more complicated as time goes on.
+		enum Blending { NONE, ADDITIVE, ALPHA };
+
 		// Uniform information for use by Materials.
 		struct UniformInfo
 		{
@@ -18,8 +21,18 @@ namespace ve
 			int type;
 		};
 
+		struct Config
+		{
+			std::string vertexCode;
+			std::string fragmentCode;
+			Blending blending;
+		};
+
+		//! Constructs a shader from a shader config.
+		Shader(Config const & shaderConfig);
+
 		// Constructs a shader from a config.
-		Shader(Config const & config);
+		Shader(ve::Config const & config);
 
 		// Constructs a shader from the name.
 		Shader(std::string const & filename);
@@ -41,9 +54,6 @@ namespace ve
 
 		// Returns the location of an attribute given the name.
 		int getAttributeLocation(std::string const & name) const;
-
-		// Blending options. This will get more complicated as time goes on.
-		enum Blending { NONE, ADDITIVE, ALPHA };
 
 		// Returns the blending state.
 		Blending getBlending() const;

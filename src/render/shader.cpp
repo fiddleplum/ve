@@ -39,8 +39,23 @@ namespace ve
 		{"uv0", Mesh::UV3}
 	};
 
-	Shader::Shader(Config const & config)
+	Shader::Shader(Config const & shaderConfig)
 	{
+		unsigned int vertexObject = compileShaderObject(Vertex, shaderConfig.vertexCode);
+		unsigned int fragmentObject = compileShaderObject(Vertex, shaderConfig.fragmentCode);
+		blending = shaderConfig.blending;
+		program = linkShaderProgram({vertexObject, fragmentObject});
+		bindAttributeLocations();
+		glDetachShader(program, vertexObject);
+		glDeleteShader(vertexObject);
+		glDetachShader(program, fragmentObject);
+		glDeleteShader(fragmentObject);
+		populateUniformInfos();
+	}
+
+	Shader::Shader(ve::Config const & config)
+	{
+		Config shaderConfig;
 		std::vector<unsigned int> shaderObjects;
 
 		try
@@ -48,7 +63,7 @@ namespace ve
 			auto vertexValueOpt = config["vertex"];
 			if (vertexValueOpt)
 			{
-				if (vertexValueOpt->type == Config::List)
+				if (vertexValueOpt->type == ve::Config::List)
 				{
 					auto vertexValue = vertexValueOpt.value();
 					for (auto pair : vertexValue.children)
@@ -66,7 +81,7 @@ namespace ve
 						shaderObjects.push_back(compileShaderObject(Vertex, code));
 					}
 				}
-				else if (vertexValueOpt->type == Config::String)
+				else if (vertexValueOpt->type == ve::Config::String)
 				{
 					std::string code;
 					if (endsWith(vertexValueOpt->text, ".vert"))
@@ -89,7 +104,7 @@ namespace ve
 			auto fragmentValueOpt = config["fragment"];
 			if (fragmentValueOpt)
 			{
-				if (fragmentValueOpt->type == Config::List)
+				if (fragmentValueOpt->type == ve::Config::List)
 				{
 					auto fragmentValue = fragmentValueOpt.value();
 					for (auto pair : fragmentValue.children)
@@ -107,7 +122,7 @@ namespace ve
 						shaderObjects.push_back(compileShaderObject(Fragment, code));
 					}
 				}
-				else if (fragmentValueOpt->type == Config::String)
+				else if (fragmentValueOpt->type == ve::Config::String)
 				{
 					std::string code;
 					if (endsWith(fragmentValueOpt->text, ".frag"))
@@ -129,7 +144,7 @@ namespace ve
 
 			blending = Blending::NONE;
 			auto blendingOptValue = config["blending"];
-			if (blendingOptValue && blendingOptValue->type == Config::String)
+			if (blendingOptValue && blendingOptValue->type == ve::Config::String)
 			{
 				if (blendingOptValue->text == "additive")
 				{
@@ -160,7 +175,7 @@ namespace ve
 	}
 
 	Shader::Shader(std::string const & filename)
-		: Shader(Config {filename})
+		: Shader(ve::Config {filename})
 	{
 	}
 

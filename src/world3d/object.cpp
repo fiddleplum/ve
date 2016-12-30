@@ -1,11 +1,12 @@
 #include "object.hpp"
 #include "../store.hpp"
+#include <fstream>
 
 namespace ve
 {
 	namespace world3d
 	{
-		Object::Object(Ptr<Scene> scene_)
+		Object::Object(Ptr<Scene> const & scene_)
 		{
 			scene = scene_;
 			model = scene->createModel();
@@ -13,13 +14,14 @@ namespace ve
 			{
 				shader->setUniformValue(localToWorldTransformLocation, getLocalToWorldTransform());
 			});
-			Ptr<Shader> shader = store.shaders.create("shader", "shaders/basic.shader");
-			localToWorldTransformLocation = shader->getUniformInfo("uL2WMatrix").location;
-			model->setShader(shader);
-			Mesh mesh;
-			mesh.formatTypes = {Mesh::POSITION_3D};
-			mesh.vertices = {0, 0, 0, 1, 0, 0, 0, 1, 0};
-			mesh.indices = {0, 1, 2};
+			updateShader();
+		}
+
+		Object::Object(Ptr<Scene> const & scene, std::string const & filename)
+			: Object(scene)
+		{
+			std::ifstream ifs {filename, std::ios::binary};
+			Mesh mesh {ifs};
 			vbo.setNew(mesh);
 			model->setVertexBufferObject(vbo);
 		}
@@ -27,6 +29,38 @@ namespace ve
 		Object::~Object()
 		{
 			scene->destroyModel(model);
+		}
+
+		Ptr<Model> Object::getModel() const
+		{
+			return model;
+		}
+
+		void Object::updateShader()
+		{
+			Ptr<Shader> shader = store.shaders.get("object");
+			if (!shader)
+			{
+				Shader::Config shaderConfig;
+				shaderConfig.vertexCode =
+					"attribute vec3 position3d;\n"
+					"uniform mat4 localToWorldTransform;\n"
+					"uniform mat4 worldToCameraTramsform;\n"
+					"uniform mat4 cameraToNdcTransform;\n"
+					"void main(void)\n"
+					"{\n"
+					"	gl_Position = cameraToNdcTransform * worldToCameraTramsform * localToWorldTransform * vec4(position3d, 1.0);\n"
+					"}\n";
+				shaderConfig.fragmentCode =
+					"void main(void)\n"
+					"{\n"
+					"	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+					"}\n";
+				shaderConfig.blending = Shader::Blending::NONE;
+				shader = store.shaders.create("object", shaderConfig);
+			}
+			localToWorldTransformLocation = shader->getUniformInfo("localToWorldTransform").location;
+			model->setShader(shader);
 		}
 	}
 }

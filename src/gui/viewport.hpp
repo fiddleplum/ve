@@ -33,12 +33,6 @@ namespace ve
 		// Returns the currently used texture stage.
 		Ptr<TextureStage> getStage() const;
 
-		//// Sets the currently used texture stage.
-		//void setWorld(Ptr<world3d::World> const & world);
-
-		//// Sets the camera used in the stage.
-		//void setCamera(Ptr<world3d::Camera> const & camera);
-
 		// Updates the viewport.
 		void update(float dt);
 
