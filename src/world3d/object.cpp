@@ -14,7 +14,7 @@ namespace ve
 			{
 				shader->setUniformValue(localToWorldTransformLocation, getLocalToWorldTransform());
 			});
-			updateShader();
+			//updateShader();
 		}
 
 		Object::Object(Ptr<render::Scene> const & scene, std::string const & filename)

@@ -4,18 +4,13 @@
 #include "store.hpp"
 #include "util/ptr.hpp"
 
-//! The user needs to implement the standard int main().
-
 namespace ve
 {
-	//! Initializes ve. Must be called before all other functions.
-	void initialize();
+	//! Starts after the application starts, but before the game loop has started. The user needs to implement this.
+	void setup(std::vector<std::string> const & args);
 
-	//! Finalizes ve. Should be called after all other functions.
-	void finalize();
-
-	//! Starts the ve loop.
-	void loop();
+	//! Starts after the game loop has started, but before the application has stopped. The user needs to implement this.
+	void teardown();
 
 	//! Stops the ve loop at the end of the current frame.
 	void quit();
@@ -32,10 +27,3 @@ namespace ve
 	//! Shows a message window.
 	void showMessage(std::string const & message);
 }
-
-// Required for SDL main macro strangeness. This allows the user to just use regular main.
-#ifdef __cplusplus
-extern "C"
-#endif
-#define main SDL_main
-

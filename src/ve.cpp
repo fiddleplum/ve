@@ -1,9 +1,9 @@
+#include "util/object_list.hpp"
 #include "ve.hpp"
 #include <SDL.h>
 
 namespace ve
 {
-	bool initialized = false;
 	bool looping = false;
 	float secondsPerUpdate = 1.f / 24.f;
 	std::function<void(float dt)> updateFunction;
@@ -98,30 +98,9 @@ namespace ve
 		}
 	}
 
-	void initialize()
-	{
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-		{
-			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
-		}
-
-		initialized = true;
-	}
-
-	void finalize()
-	{
-		initialized = false;
-
-		SDL_Quit();
-	}
-
 	// This is the main application loop. It keeps going until looping is false.
 	void loop()
 	{
-		if (!initialized)
-		{
-			throw std::runtime_error("VE must first be initialized.");
-		}
 		float lastFrameTime = SDL_GetTicks() / 1000.f;
 		float accumulator = 0.f;
 		looping = true;
@@ -203,10 +182,6 @@ namespace ve
 
 	Ptr<Window> createWindow()
 	{
-		if (!initialized)
-		{
-			throw std::runtime_error("VE must first be initialized.");
-		}
 		auto window = OwnPtr<Window>::returnNew();
 		window->setCloseHandler(quit);
 		windows.push_back(window);
@@ -234,41 +209,40 @@ namespace ve
 }
 
 // Called by SDL to run the entire app.
-//int main(int argc, char *argv[])
-//{
-//#undef main
-//	std::vector<std::string> args;
-//	try
-//	{
-//		// Grab the params. Don't include the 0th arg, because it is the program name.
-//		for (int i = 1; i < argc; ++i)
-//		{
-//			args.push_back(std::string(argv[i]));
-//		}
-//
-//		//// Start SDL.
-//		//if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-//		//{
-//		//	throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
-//		//}
-//
-//		// Call user-defined start.
-//		veUser::startup(args);
-//
-//		// Start the loop. Stays in here until looping is false.
-//		ve::loop();
-//
-//		// Call user-defined shutdown.
-//		veUser::shutdown();
-//
-//		// Stop SDL.
-//		//SDL_Quit();
-//	}
-//	catch (std::exception const & e)
-//	{
-//		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", e.what(), nullptr);
-//		veUser::shutdown();
-//		return -1;
-//	}
-//	return 0;
-//}
+int main(int argc, char *argv[])
+{
+	try
+	{
+		// Grab the params. Don't include the 0th arg, because it is the program name.
+		std::vector<std::string> args;
+		for (int i = 1; i < argc; ++i)
+		{
+			args.push_back(std::string(argv[i]));
+		}
+
+		// Initialize SDL.
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+		{
+			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
+		}
+
+		// Call the setup.
+		ve::setup(args);
+
+		// Start the loop.
+		ve::loop();
+
+		// Call the teardown.
+		ve::teardown();
+
+		SDL_Quit();
+
+		return 0;
+	}
+	catch (std::exception const & e)
+	{
+		ve::showMessage(e.what());
+		return -1;
+	}
+}
+

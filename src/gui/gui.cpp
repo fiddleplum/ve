@@ -1,4 +1,4 @@
-#include "gui.hpp"
+#include "gui/gui.hpp"
 #include "store.hpp"
 
 namespace ve

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gui/gui.hpp"
 #include "render/stage.hpp"
 
 /*
@@ -42,8 +41,8 @@ namespace ve
 		// Sets the function to be called when the window is resized by the user.
 		void setResizeHandler(std::function<void(Vector2i size)> resizeHandler);
 
-		// Gets the root panel element which is the gui.
-		Ptr<Gui> getGui() const;
+		// Sets the scene to render in this window.
+		void setScene(Ptr<render::Scene> const & scene);
 
 		// Gets the SDL Window handle.
 		void * getSDLWindow() const;
@@ -65,6 +64,5 @@ namespace ve
 		std::function<void()> closeHandler;
 		std::function<void(Vector2i size)> resizeHandler;
 		OwnPtr<render::WindowStage> stage;
-		OwnPtr<Gui> gui;
 	};
 }

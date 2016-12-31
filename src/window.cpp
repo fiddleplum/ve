@@ -1,5 +1,4 @@
 #include "window.hpp"
-#include "render/open_gl.hpp"
 #include <SDL.h>
 #include <stdexcept>
 
@@ -16,10 +15,6 @@ namespace ve
 
 		stage.setNew(sdlWindow);
 		stage->setWindowSize(initialSize);
-
-		gui.setNew();
-		gui->setSize(initialSize);
-		stage->setScene(gui->getScene());
 	}
 
 	Window::~Window()
@@ -38,9 +33,9 @@ namespace ve
 		resizeHandler = resizeHandler_;
 	}
 
-	Ptr<Gui> Window::getGui() const
+	void Window::setScene(Ptr<render::Scene> const & scene)
 	{
-		return gui;
+		stage->setScene(scene);
 	}
 
 	void * Window::getSDLWindow() const
@@ -62,13 +57,11 @@ namespace ve
 		{
 			resizeHandler(size);
 		}
-		gui->setSize(size);
 		stage->setWindowSize(size);
 	}
 
 	void Window::update(float dt)
 	{
-		gui->update(dt);
 	}
 
 	void Window::render() const

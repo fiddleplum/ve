@@ -204,7 +204,6 @@
     <ClInclude Include="src\util\object_map.hpp" />
     <ClInclude Include="src\util\object_set.hpp" />
     <ClInclude Include="src\render\model.hpp" />
-    <ClInclude Include="src\render\renderer.hpp" />
     <ClInclude Include="src\render\scene.hpp" />
     <ClInclude Include="src\render\shader.hpp" />
     <ClInclude Include="src\render\stage.hpp" />
@@ -241,7 +240,6 @@
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\open_gl.cpp" />
     <ClCompile Include="src\gui\panel.cpp" />
-    <ClCompile Include="src\render\renderer.cpp" />
     <ClCompile Include="src\render\scene.cpp" />
     <ClCompile Include="src\render\shader.cpp" />
     <ClCompile Include="src\render\stage.cpp" />
