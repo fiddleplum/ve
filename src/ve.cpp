@@ -226,6 +226,11 @@ namespace ve
 			windows.processEraseQueue();
 		}
 	}
+
+	void showMessage(std::string const & message)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", message.c_str(), nullptr);
+	}
 }
 
 // Called by SDL to run the entire app.

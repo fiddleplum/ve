@@ -28,6 +28,9 @@ namespace ve
 
 	//! Destroys a window.
 	void destroyWindow(Ptr<Window> window);
+
+	//! Shows a message window.
+	void showMessage(std::string const & message);
 }
 
 // Required for SDL main macro strangeness. This allows the user to just use regular main.
