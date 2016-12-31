@@ -14,18 +14,20 @@ namespace ve
 		// Blending options. This will get more complicated as time goes on.
 		enum Blending { NONE, ADDITIVE, ALPHA };
 
+		enum UniformType { INT, COORD_2I, COORD_3I, COORD_4I, FLOAT, COORD_2F, COORD_3F, COORD_4F, MATRIX_22F, MATRIX_33F, MATRIX_44F, TEXTURE_2D, TEMPLATE };
+
 		// Uniform information for use by Materials.
 		struct UniformInfo
 		{
 			int location;
-			int type;
+			UniformType type;
 		};
 
 		struct Config
 		{
 			std::string vertexCode;
 			std::string fragmentCode;
-			Blending blending;
+			Blending blending = Blending::NONE;
 		};
 
 		//! Constructs a shader from a shader config.

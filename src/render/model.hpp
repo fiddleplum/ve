@@ -1,7 +1,8 @@
 #pragma once
 
-#include "material.hpp"
-#include "vertex_buffer_object.hpp"
+#include "render/vertex_buffer_object.hpp"
+#include "render/texture.hpp"
+#include "render/shader.hpp"
 #include <functional>
 #include <unordered_map>
 

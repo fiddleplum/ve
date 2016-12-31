@@ -1,6 +1,6 @@
 #pragma once
 
-#include "render/image.hpp"
+#include "util/image.hpp"
 #include "util/vector.hpp"
 #include "util/ptr.hpp"
 

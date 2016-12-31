@@ -1,12 +1,11 @@
 #pragma once
 
-#include "render/image.hpp"
 #include "render/texture.hpp"
-#include "render/mesh.hpp"
 #include "render/vertex_buffer_object.hpp"
 #include "render/shader.hpp"
-#include "render/material.hpp"
 #include "render/font.hpp"
+#include "util/mesh.hpp"
+#include "util/image.hpp"
 #include "util/cache.hpp"
 
 namespace ve

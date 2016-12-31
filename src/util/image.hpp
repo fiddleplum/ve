@@ -1,7 +1,8 @@
 #pragma once
 
 #include "util/vector.hpp"
-#include "render/mesh.hpp"
+#include <string>
+#include <vector>
 
 namespace ve
 {

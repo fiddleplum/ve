@@ -1,7 +1,6 @@
 #include "render/shader.hpp"
 #include "render/open_gl.hpp"
-#include "render/uniform.hpp"
-#include "render/mesh.hpp"
+#include "util/mesh.hpp"
 #include "util/stringutil.hpp"
 
 // TODO: Make the shader use specific attribute locations chosen by an enum based on the attribute names.
@@ -375,20 +374,20 @@ namespace ve
 			glGetActiveUniform(program, i, maxNameSize, &nameSize, &glSize, &glType, &name[0]);
 			name.resize(nameSize);
 			int location = glGetUniformLocation(program, name.c_str());
-			int type = 0;
+			UniformType type;
 			switch (glType)
 			{
-				case GL_INT: type = Uniform::INT; break;
-				case GL_FLOAT: type = Uniform::FLOAT; break;
-				case GL_INT_VEC2: type = Uniform::COORD_2I; break;
-				case GL_FLOAT_VEC2: type = Uniform::COORD_2F; break;
-				case GL_INT_VEC3: type = Uniform::COORD_3I; break;
-				case GL_FLOAT_VEC3: type = Uniform::COORD_3F; break;
-				case GL_INT_VEC4: type = Uniform::COORD_4I; break;
-				case GL_FLOAT_VEC4: type = Uniform::COORD_4F; break;
-				case GL_FLOAT_MAT3: type = Uniform::MATRIX_33F; break;
-				case GL_FLOAT_MAT4: type = Uniform::MATRIX_44F; break;
-				case GL_SAMPLER_2D: type = Uniform::TEXTURE_2D; break;
+				case GL_INT: type = UniformType::INT; break;
+				case GL_FLOAT: type = UniformType::FLOAT; break;
+				case GL_INT_VEC2: type = UniformType::COORD_2I; break;
+				case GL_FLOAT_VEC2: type = UniformType::COORD_2F; break;
+				case GL_INT_VEC3: type = UniformType::COORD_3I; break;
+				case GL_FLOAT_VEC3: type = UniformType::COORD_3F; break;
+				case GL_INT_VEC4: type = UniformType::COORD_4I; break;
+				case GL_FLOAT_VEC4: type = UniformType::COORD_4F; break;
+				case GL_FLOAT_MAT3: type = UniformType::MATRIX_33F; break;
+				case GL_FLOAT_MAT4: type = UniformType::MATRIX_44F; break;
+				case GL_SAMPLER_2D: type = UniformType::TEXTURE_2D; break;
 				default: throw std::runtime_error("Invalid type of uniform for '" + name + "'. "); break;
 			}
 			uniformInfos[name] = UniformInfo {location, type};
