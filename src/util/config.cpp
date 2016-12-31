@@ -89,6 +89,13 @@ namespace ve
 				
 				key = trim(readUntilAny(content, i, " \t\n\r:"));
 
+				skipWhiteSpace(content, i);
+				c = getChar(content, i);
+				if (c != ':')
+				{
+					throw std::runtime_error("Expected colon after character");
+				}
+
 				children[key].parse(content, i);
 			}
 		}
@@ -112,22 +119,21 @@ namespace ve
 		else // String
 		{
 			type = String;
-			auto nextC = getChar(content, i);
-
 			std::string quoteStart;
-			if (nextC == '"' || nextC == '\'' || nextC == '`') // Quote, grab all of same characters.
+			if (c == '"' || c == '\'' || c == '`') // Quote, grab all of same characters.
 			{
-				auto quoteC = nextC;
+				auto quoteC = c;
 				do
 				{
-					quoteStart += getStringFromChar(nextC);
-					nextC = getChar(content, i);
-				} while (nextC == quoteC);
+					quoteStart += getStringFromChar(c);
+					c = getChar(content, i);
+				} while (c == quoteC);
 			}
-			text += getStringFromChar(nextC);
+			text += getStringFromChar(c);
 			if (!quoteStart.empty())
 			{
 				text = readUntil(content, i, quoteStart);
+				i += quoteStart.size();
 			}
 			else
 			{
