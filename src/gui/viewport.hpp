@@ -13,7 +13,7 @@ namespace ve
 	{
 	public:
 		// Constructor. This scene is the gui scene, not a world scene.
-		Viewport(Ptr<Scene> scene);
+		Viewport(Ptr<render::Scene> scene);
 
 		// Destructor.
 		~Viewport();
@@ -31,14 +31,14 @@ namespace ve
 		void setBounds(Recti bounds) override;
 
 		// Returns the currently used texture stage.
-		Ptr<TextureStage> getStage() const;
+		Ptr<render::TextureStage> getStage() const;
 
 		// Updates the viewport.
 		void update(float dt);
 
 	private:
-		OwnPtr<Texture> renderTarget;
+		OwnPtr<render::Texture> renderTarget;
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
-		OwnPtr<TextureStage> stage;
+		OwnPtr<render::TextureStage> stage;
 	};
 }

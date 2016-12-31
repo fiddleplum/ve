@@ -1,11 +1,11 @@
 #pragma once
 
-#include "gui/widget.hpp"
 #include "util/object_list.hpp"
-#include "sprite.hpp"
-#include "text_area.hpp"
-#include "text_button.hpp"
-#include "viewport.hpp"
+#include "gui/widget.hpp"
+#include "gui/sprite.hpp"
+#include "gui/text_area.hpp"
+#include "gui/text_button.hpp"
+#include "gui/viewport.hpp"
 
 namespace ve
 {
@@ -13,7 +13,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Panel(Ptr<Scene> scene);
+		Panel(Ptr<render::Scene> scene);
 
 		// Returns the depth.
 		float getDepth() const override;

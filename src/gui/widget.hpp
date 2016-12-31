@@ -9,7 +9,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Widget(Ptr<Scene> scene);
+		Widget(Ptr<render::Scene> scene);
 
 		// Virtual destructor.
 		virtual ~Widget() = default;
@@ -31,9 +31,9 @@ namespace ve
 
 	protected:
 		// Returns the scene used by the widget (and its parent gui).
-		Ptr<Scene> getScene() const;
+		Ptr<render::Scene> getScene() const;
 
 	private:
-		Ptr<Scene> scene;
+		Ptr<render::Scene> scene;
 	};
 }

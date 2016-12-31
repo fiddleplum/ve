@@ -2,12 +2,12 @@
 
 namespace ve
 {
-	Widget::Widget(Ptr<Scene> scene_)
+	Widget::Widget(Ptr<render::Scene> scene_)
 	{
 		scene = scene_;
 	}
 
-	Ptr<Scene> Widget::getScene() const
+	Ptr<render::Scene> Widget::getScene() const
 	{
 		return scene;
 	}

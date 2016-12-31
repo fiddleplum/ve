@@ -9,7 +9,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		TextButton(Ptr<Scene> scene);
+		TextButton(Ptr<render::Scene> scene);
 
 		// Returns the depth.
 		float getDepth() const override;

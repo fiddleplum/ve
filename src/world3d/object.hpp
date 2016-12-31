@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entity.hpp"
-#include "../render/scene.hpp"
+#include "render/scene.hpp"
 
 namespace ve
 {
@@ -10,20 +10,20 @@ namespace ve
 		class Object : public Entity
 		{
 		public:
-			Object(Ptr<Scene> const & scene);
+			Object(Ptr<render::Scene> const & scene);
 
-			Object(Ptr<Scene> const & scene, std::string const & filename);
+			Object(Ptr<render::Scene> const & scene, std::string const & filename);
 
 			~Object();
 
-			Ptr<Model> getModel() const;
+			Ptr<render::Model> getModel() const;
 
 		private:
 			void updateShader();
 
-			Ptr<Scene> scene;
-			Ptr<Model> model;
-			OwnPtr<VertexBufferObject> vbo;
+			Ptr<render::Scene> scene;
+			Ptr<render::Model> model;
+			OwnPtr<render::VertexBufferObject> vbo;
 			int localToWorldTransformLocation;
 		};
 	}

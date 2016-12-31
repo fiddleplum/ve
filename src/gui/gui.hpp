@@ -18,7 +18,7 @@ namespace ve
 		Ptr<Panel> getRootPanel() const;
 
 		// Returns the scene used by the gui.
-		Ptr<Scene> getScene() const;
+		Ptr<render::Scene> getScene() const;
 
 		// Sets the size of the gui.
 		void setSize(Vector2i size);
@@ -30,6 +30,6 @@ namespace ve
 		void createResources();
 
 		OwnPtr<Panel> root;
-		OwnPtr<Scene> scene;
+		OwnPtr<render::Scene> scene;
 	};
 }

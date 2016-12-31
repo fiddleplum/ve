@@ -1,9 +1,9 @@
-#include "panel.hpp"
+#include "gui/panel.hpp"
 #include <algorithm>
 
 namespace ve
 {
-	Panel::Panel(Ptr<Scene> scene)
+	Panel::Panel(Ptr<render::Scene> scene)
 		: Widget(scene)
 	{
 

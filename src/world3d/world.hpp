@@ -1,10 +1,10 @@
 #pragma once
 
-#include "camera.hpp"
-#include "light.hpp"
-#include "object.hpp"
-#include "../render/scene.hpp"
-#include "../render/stage.hpp"
+#include "world3d/camera.hpp"
+#include "world3d/light.hpp"
+#include "world3d/object.hpp"
+#include "render/scene.hpp"
+#include "render/stage.hpp"
 
 namespace ve
 {
@@ -15,9 +15,9 @@ namespace ve
 		public:
 			World();
 
-			void setupStage(Ptr<Stage> const & stage, Ptr<Camera> const & camera);
+			void setupStage(Ptr<render::Stage> const & stage, Ptr<Camera> const & camera);
 
-			Ptr<Scene> getScene() const;
+			Ptr<render::Scene> getScene() const;
 
 			Ptr<Camera> createCamera();
 
@@ -32,7 +32,7 @@ namespace ve
 			void destroyobject(Ptr<Object> const & object);
 
 		private:
-			OwnPtr<Scene> scene;
+			OwnPtr<render::Scene> scene;
 			std::unordered_set<OwnPtr<Camera>> cameras;
 			std::unordered_set<OwnPtr<Light>> lights;
 			std::unordered_set<OwnPtr<Object>> objects;

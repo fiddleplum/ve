@@ -12,35 +12,38 @@
 
 namespace ve
 {
-	class Stage;
-
-	class Scene
+	namespace render
 	{
-	public:
-		//! Adds a stage that this scene depends on.
-		void addDependentStage(Ptr<Stage> stage);
+		class Stage;
 
-		//! Removes a stage that this scene no longer depends on.
-		void removeDependentStage(Ptr<Stage> stage);
+		class Scene
+		{
+		public:
+			//! Adds a stage that this scene depends on.
+			void addDependentStage(Ptr<Stage> stage);
 
-		//! Returns the set of stages that this scene depends on.
-		std::set<Ptr<Stage>> const & getDependentStages() const;
+			//! Removes a stage that this scene no longer depends on.
+			void removeDependentStage(Ptr<Stage> stage);
 
-		//! Creates a new model and returns it.
-		Ptr<Model> createModel();
+			//! Returns the set of stages that this scene depends on.
+			std::set<Ptr<Stage>> const & getDependentStages() const;
 
-		//! Removes a model.
-		void destroyModel(Ptr<Model> model);
+			//! Creates a new model and returns it.
+			Ptr<Model> createModel();
 
-		//! Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
-		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
+			//! Removes a model.
+			void destroyModel(Ptr<Model> model);
 
-		//! Renders the scene.
-		void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction);
+			//! Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
+			void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
-	private:
-		std::set<Ptr<Stage>> dependentStages;
-		std::function<void(Ptr<Shader> const &)> uniformsFunction;
-		std::unordered_set<OwnPtr<Model>> models;
-	};
+			//! Renders the scene.
+			void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction);
+
+		private:
+			std::set<Ptr<Stage>> dependentStages;
+			std::function<void(Ptr<Shader> const &)> uniformsFunction;
+			std::unordered_set<OwnPtr<Model>> models;
+		};
+	}
 }

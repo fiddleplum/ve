@@ -1,76 +1,79 @@
-#include "vertex_buffer_object.hpp"
-#include "open_gl.hpp"
+#include "render/vertex_buffer_object.hpp"
+#include "render/open_gl.hpp"
 
 namespace ve
 {
-	VertexBufferObject::VertexBufferObject(Mesh const & mesh)
+	namespace render
 	{
-		switch (mesh.numIndicesPerPrimitive)
+		VertexBufferObject::VertexBufferObject(Mesh const & mesh)
 		{
-			case 1:
-				mode = GL_POINTS; break;
-			case 2:
-				mode = GL_LINES; break;
-			case 3:
-			default:
-				mode = GL_TRIANGLES; break;
-		}
-
-		bytesPerVertex = 0;
-		for (unsigned int i = 0; i < mesh.formatTypes.size(); i++)
-		{
-			unsigned int sizeOfComponent = 0;
-			switch (mesh.formatTypes[i])
+			switch (mesh.numIndicesPerPrimitive)
 			{
-				case Mesh::POSITION_2D:
-				case Mesh::UV0:
-				case Mesh::UV1:
-				case Mesh::UV2:
-				case Mesh::UV3:
-					sizeOfComponent = 2; break;
-				case Mesh::POSITION_3D:
-				case Mesh::NORMAL:
-				case Mesh::TANGENT:
-				case Mesh::COLOR0_RGB:
-				case Mesh::COLOR1_RGB:
-					sizeOfComponent = 3; break;
-				case Mesh::COLOR0_RGBA:
-				case Mesh::COLOR1_RGBA:
-					sizeOfComponent = 4; break;
+				case 1:
+					mode = GL_POINTS; break;
+				case 2:
+					mode = GL_LINES; break;
+				case 3:
+				default:
+					mode = GL_TRIANGLES; break;
 			}
-			vertexComponents.push_back({mesh.formatTypes[i], sizeOfComponent, bytesPerVertex});
-			bytesPerVertex += sizeOfComponent * sizeof(float);
+
+			bytesPerVertex = 0;
+			for (unsigned int i = 0; i < mesh.formatTypes.size(); i++)
+			{
+				unsigned int sizeOfComponent = 0;
+				switch (mesh.formatTypes[i])
+				{
+					case Mesh::POSITION_2D:
+					case Mesh::UV0:
+					case Mesh::UV1:
+					case Mesh::UV2:
+					case Mesh::UV3:
+						sizeOfComponent = 2; break;
+					case Mesh::POSITION_3D:
+					case Mesh::NORMAL:
+					case Mesh::TANGENT:
+					case Mesh::COLOR0_RGB:
+					case Mesh::COLOR1_RGB:
+						sizeOfComponent = 3; break;
+					case Mesh::COLOR0_RGBA:
+					case Mesh::COLOR1_RGBA:
+						sizeOfComponent = 4; break;
+				}
+				vertexComponents.push_back({mesh.formatTypes[i], sizeOfComponent, bytesPerVertex});
+				bytesPerVertex += sizeOfComponent * sizeof(float);
+			}
+
+			glGenBuffers(1, &vertexBuffer);
+			glGenBuffers(1, &indexBuffer);
+			updateVertices(mesh.vertices);
+			numIndices = (int)mesh.indices.size();
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)mesh.indices.size() * sizeof(unsigned int), (void const *)&mesh.indices[0], GL_STATIC_DRAW);
 		}
 
-		glGenBuffers(1, &vertexBuffer);
-		glGenBuffers(1, &indexBuffer);
-		updateVertices(mesh.vertices);
-		numIndices = (int)mesh.indices.size();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)mesh.indices.size() * sizeof(unsigned int), (void const *)&mesh.indices[0], GL_STATIC_DRAW);
-	}
-
-	VertexBufferObject::~VertexBufferObject()
-	{
-		glDeleteBuffers(1, &indexBuffer);
-		glDeleteBuffers(1, &vertexBuffer);
-	}
-
-	void VertexBufferObject::updateVertices(std::vector<float> const & vertices)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), (void const *)&vertices[0], GL_STATIC_DRAW);
-	}
-
-	void VertexBufferObject::render() const
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-		for (VertexComponent const & vertexComponent : vertexComponents)
+		VertexBufferObject::~VertexBufferObject()
 		{
-			glEnableVertexAttribArray(vertexComponent.index);
-			glVertexAttribPointer(vertexComponent.index, vertexComponent.size, GL_FLOAT, GL_FALSE, bytesPerVertex, (void const *)(uintptr_t)vertexComponent.offset);
+			glDeleteBuffers(1, &indexBuffer);
+			glDeleteBuffers(1, &vertexBuffer);
 		}
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		glDrawElements(mode, numIndices, GL_UNSIGNED_INT, 0);
+
+		void VertexBufferObject::updateVertices(std::vector<float> const & vertices)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), (void const *)&vertices[0], GL_STATIC_DRAW);
+		}
+
+		void VertexBufferObject::render() const
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+			for (VertexComponent const & vertexComponent : vertexComponents)
+			{
+				glEnableVertexAttribArray(vertexComponent.index);
+				glVertexAttribPointer(vertexComponent.index, vertexComponent.size, GL_FLOAT, GL_FALSE, bytesPerVertex, (void const *)(uintptr_t)vertexComponent.offset);
+			}
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+			glDrawElements(mode, numIndices, GL_UNSIGNED_INT, 0);
+		}
 	}
 }

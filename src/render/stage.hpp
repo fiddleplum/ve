@@ -8,112 +8,115 @@
 
 namespace ve
 {
-	class GL;
-
-	class Stage
+	namespace render
 	{
-	public:
-		//! Constructor.
-		Stage();
+		class GL;
 
-		//! Virtual default destructor for inheritance.
-		virtual ~Stage() {}
+		class Stage
+		{
+		public:
+			//! Constructor.
+			Stage();
 
-		//! Returns the scene that this stage will render.
-		Ptr<Scene> getScene() const;
+			//! Virtual default destructor for inheritance.
+			virtual ~Stage() {}
 
-		//! Sets the scene that this stage will render.
-		void setScene(Ptr<Scene> scene);
+			//! Returns the scene that this stage will render.
+			Ptr<Scene> getScene() const;
 
-		//! Adds a function to be called that sets any stage-specific uniforms. Called every time the shader is changed.
-		void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
+			//! Sets the scene that this stage will render.
+			void setScene(Ptr<Scene> scene);
 
-		//! Renders the scene to the target. First renders all unrendered prior stages.
-		void render() const;
+			//! Adds a function to be called that sets any stage-specific uniforms. Called every time the shader is changed.
+			void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
-	protected:
-		// Called just before rendering the scene.
-		virtual void preRender() const = 0;
+			//! Renders the scene to the target. First renders all unrendered prior stages.
+			void render() const;
 
-		// Called just after rendering the scene.
-		virtual void postRender() const = 0;
+		protected:
+			// Called just before rendering the scene.
+			virtual void preRender() const = 0;
 
-	private:
-		Ptr<Scene> scene;
-		std::function<void(Ptr<Shader> const &)> uniformsFunction;
-	};
+			// Called just after rendering the scene.
+			virtual void postRender() const = 0;
 
-	class WindowStage : public Stage
-	{
-	public:
-		//! Constructs the window stage.
-		WindowStage(void * sdlWindow);
+		private:
+			Ptr<Scene> scene;
+			std::function<void(Ptr<Shader> const &)> uniformsFunction;
+		};
 
-		//! Destructs the window stage.
-		~WindowStage();
+		class WindowStage : public Stage
+		{
+		public:
+			//! Constructs the window stage.
+			WindowStage(void * sdlWindow);
 
-		//! Returns the window used in rendering.
-		Vector2i getWindowSize() const;
+			//! Destructs the window stage.
+			~WindowStage();
 
-		//! Sets the window used in rendering.
-		void setWindowSize(Vector2i size);
+			//! Returns the window used in rendering.
+			Vector2i getWindowSize() const;
 
-	protected:
-		// Called just before rendering the scene.
-		void preRender() const override;
+			//! Sets the window used in rendering.
+			void setWindowSize(Vector2i size);
 
-		// Called just after rendering the scene.
-		void postRender() const override;
+		protected:
+			// Called just before rendering the scene.
+			void preRender() const override;
 
-	private:
-		static unsigned int numWindowStages;
-		static void * glContext;
-		void * sdlWindow;
-		Vector2i viewportSize;
-		OwnPtr<GL> gl;
-	};
+			// Called just after rendering the scene.
+			void postRender() const override;
 
-	class TextureStage : public Stage
-	{
-	public:
-		// Constructor. If window is true, this stage is rendering directly to the window.
-		TextureStage();
+		private:
+			static unsigned int numWindowStages;
+			static void * glContext;
+			void * sdlWindow;
+			Vector2i viewportSize;
+			OwnPtr<GL> gl;
+		};
 
-		// Destructor.
-		~TextureStage();
+		class TextureStage : public Stage
+		{
+		public:
+			// Constructor. If window is true, this stage is rendering directly to the window.
+			TextureStage();
 
-		// Returns the texture at the specified index.
-		Ptr<Texture> getColorTarget(unsigned int index) const;
+			// Destructor.
+			~TextureStage();
 
-		// Sets a texture as a color render target at the specified index.
-		void setColorTarget(unsigned int index, Ptr<Texture> target);
+			// Returns the texture at the specified index.
+			Ptr<Texture> getColorTarget(unsigned int index) const;
 
-		// Returns the depth texture render target.
-		Ptr<Texture> getDepthTarget() const;
+			// Sets a texture as a color render target at the specified index.
+			void setColorTarget(unsigned int index, Ptr<Texture> target);
 
-		// Sets a texture as a depth render target.
-		void setDepthTarget(Ptr<Texture> target);
+			// Returns the depth texture render target.
+			Ptr<Texture> getDepthTarget() const;
 
-		// Returns the stencil texture render target.
-		Ptr<Texture> getStencilTarget() const;
+			// Sets a texture as a depth render target.
+			void setDepthTarget(Ptr<Texture> target);
 
-		// Sets a texture as a stencil render target.
-		void setStencilTarget(Ptr<Texture> target);
+			// Returns the stencil texture render target.
+			Ptr<Texture> getStencilTarget() const;
 
-		// Clears the color, depth and stencil targets.
-		void clearAllTargets();
+			// Sets a texture as a stencil render target.
+			void setStencilTarget(Ptr<Texture> target);
 
-	protected:
-		// Called just before rendering the scene.
-		void preRender() const override;
+			// Clears the color, depth and stencil targets.
+			void clearAllTargets();
 
-		// Called just after rendering the scene.
-		void postRender() const override;
+		protected:
+			// Called just before rendering the scene.
+			void preRender() const override;
 
-	private:
-		std::vector<Ptr<Texture>> colorTargets;
-		Ptr<Texture> depthTarget;
-		Ptr<Texture> stencilTarget;
-		unsigned int framebuffer;
-	};
+			// Called just after rendering the scene.
+			void postRender() const override;
+
+		private:
+			std::vector<Ptr<Texture>> colorTargets;
+			Ptr<Texture> depthTarget;
+			Ptr<Texture> stencilTarget;
+			unsigned int framebuffer;
+		};
+	}
 }

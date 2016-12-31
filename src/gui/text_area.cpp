@@ -1,10 +1,10 @@
-#include "text_area.hpp"
+#include "gui/text_area.hpp"
 #include "store.hpp"
 #include "util/stringutil.hpp"
 
 namespace ve
 {
-	TextArea::TextArea(Ptr<Scene> scene)
+	TextArea::TextArea(Ptr<render::Scene> scene)
 		: Widget(scene)
 	{
 		shader = store.shaders.get("gui");
@@ -39,7 +39,7 @@ namespace ve
 		}
 		models.clear();
 
-		std::map<Ptr<Texture>, Mesh> meshes;
+		std::map<Ptr<render::Texture>, Mesh> meshes;
 		Vector2i cursor {0, font->getLineHeight()};
 		for (size_t i = 0; i < text.size();)
 		{
@@ -63,8 +63,8 @@ namespace ve
 			}
 
 			// Get the font information for the next character.
-			Font::GlyphCoords const & glyphCoords = font->getGlyphCoordsFromChar(c);
-			Ptr<Texture> glyphTexture = font->getTextureFromChar(c);
+			render::Font::GlyphCoords const & glyphCoords = font->getGlyphCoordsFromChar(c);
+			Ptr<render::Texture> glyphTexture = font->getTextureFromChar(c);
 
 			// Find which model to append, or create new model.
 			auto it = meshes.find(glyphTexture);
@@ -111,12 +111,12 @@ namespace ve
 		{
 			auto texture = pair.first;
 			auto model = getScene()->createModel();
-			auto vbo = OwnPtr<VertexBufferObject>::returnNew(pair.second);
+			auto vbo = OwnPtr<render::VertexBufferObject>::returnNew(pair.second);
 			vbos.push_back(vbo);
 			model->setVertexBufferObject(vbo);
 			model->setShader(shader);
 			model->setTextureAtSlot(texture, 0);
-			model->setUniformsFunction([this, texture](Ptr<Shader> const & shader)
+			model->setUniformsFunction([this, texture](Ptr<render::Shader> const & shader)
 			{
 				shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
 				shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());

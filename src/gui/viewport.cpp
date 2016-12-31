@@ -3,7 +3,7 @@
 
 namespace ve
 {
-	Viewport::Viewport(Ptr<Scene> scene)
+	Viewport::Viewport(Ptr<render::Scene> scene)
 		: Widget(scene)
 	{
 		sprite.setNew(scene);
@@ -41,7 +41,7 @@ namespace ve
 		renderTarget->setSize(bounds.getSize());
 	}
 
-	Ptr<TextureStage> Viewport::getStage() const
+	Ptr<render::TextureStage> Viewport::getStage() const
 	{
 		return stage;
 	}

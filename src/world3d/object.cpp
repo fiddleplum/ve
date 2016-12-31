@@ -6,18 +6,18 @@ namespace ve
 {
 	namespace world3d
 	{
-		Object::Object(Ptr<Scene> const & scene_)
+		Object::Object(Ptr<render::Scene> const & scene_)
 		{
 			scene = scene_;
 			model = scene->createModel();
-			model->setUniformsFunction([this](Ptr<Shader> const & shader)
+			model->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 			{
 				shader->setUniformValue(localToWorldTransformLocation, getLocalToWorldTransform());
 			});
 			updateShader();
 		}
 
-		Object::Object(Ptr<Scene> const & scene, std::string const & filename)
+		Object::Object(Ptr<render::Scene> const & scene, std::string const & filename)
 			: Object(scene)
 		{
 			std::ifstream ifs {filename, std::ios::binary};
@@ -31,17 +31,17 @@ namespace ve
 			scene->destroyModel(model);
 		}
 
-		Ptr<Model> Object::getModel() const
+		Ptr<render::Model> Object::getModel() const
 		{
 			return model;
 		}
 
 		void Object::updateShader()
 		{
-			Ptr<Shader> shader = store.shaders.get("object");
+			Ptr<render::Shader> shader = store.shaders.get("object");
 			if (!shader)
 			{
-				Shader::Config shaderConfig;
+				render::Shader::Config shaderConfig;
 				shaderConfig.vertexCode =
 					"attribute vec3 position3d;\n"
 					"uniform mat4 localToWorldTransform;\n"
@@ -56,7 +56,7 @@ namespace ve
 					"{\n"
 					"	gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
 					"}\n";
-				shaderConfig.blending = Shader::Blending::NONE;
+				shaderConfig.blending = render::Shader::Blending::NONE;
 				shader = store.shaders.create("object", shaderConfig);
 			}
 			localToWorldTransformLocation = shader->getUniformInfo("localToWorldTransform").location;

@@ -16,7 +16,7 @@ namespace ve
 			~Model();
 
 		private:
-			OwnPtr<ve::Model> model;
+			OwnPtr<ve::render::Model> model;
 		};
 	}
 }

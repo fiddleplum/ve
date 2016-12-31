@@ -7,30 +7,33 @@
 
 namespace ve
 {
-	class Renderer
+	namespace render
 	{
-	public:
-		// Constructor.
-		Renderer(void * sdlWindow);
+		class Renderer
+		{
+		public:
+			// Constructor.
+			Renderer(void * sdlWindow);
 
-		// Destructor.
-		~Renderer();
+			// Destructor.
+			~Renderer();
 
-		// Create a new scene.
-		Ptr<Scene> createScene();
+			// Create a new scene.
+			Ptr<Scene> createScene();
 
-		// Destroy a scene.
-		void destroyScene(Ptr<Scene> scene);
+			// Destroy a scene.
+			void destroyScene(Ptr<Scene> scene);
 
-		// Creates a new stage.
-		Ptr<TextureStage> createTextureStage();
+			// Creates a new stage.
+			Ptr<TextureStage> createTextureStage();
 
-		// Destroys a stage.
-		void destroyTextureStage(Ptr<TextureStage> stage);
+			// Destroys a stage.
+			void destroyTextureStage(Ptr<TextureStage> stage);
 
-	private:
-		void * glContext;
-		std::set<OwnPtr<Scene>, std::less<>> scenes;
-		std::set<OwnPtr<TextureStage>, std::less<>> textureStages;
-	};
+		private:
+			void * glContext;
+			std::set<OwnPtr<Scene>, std::less<>> scenes;
+			std::set<OwnPtr<TextureStage>, std::less<>> textureStages;
+		};
+	}
 }

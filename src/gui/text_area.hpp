@@ -9,7 +9,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		TextArea(Ptr<Scene> scene);
+		TextArea(Ptr<render::Scene> scene);
 
 		// Destructor.
 		~TextArea();
@@ -45,10 +45,10 @@ namespace ve
 		Recti bounds;
 		float depth;
 		Vector4f color;
-		std::vector<OwnPtr<VertexBufferObject>> vbos;
-		std::vector<Ptr<Model>> models;
-		Ptr<Font> font;
-		Ptr<Shader> shader;
+		std::vector<OwnPtr<render::VertexBufferObject>> vbos;
+		std::vector<Ptr<render::Model>> models;
+		Ptr<render::Font> font;
+		Ptr<render::Shader> shader;
 		unsigned int originUniformLocation;
 		unsigned int texSizeUniformLocation;
 		unsigned int texUniformLocation;

@@ -1,4 +1,4 @@
-#include "world.hpp"
+#include "world3d/world.hpp"
 
 namespace ve
 {
@@ -7,7 +7,7 @@ namespace ve
 		World::World()
 		{
 			scene.setNew();
-			scene->setUniformsFunction([this](Ptr<Shader> const & shader)
+			scene->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 			{
 				unsigned int lightIndex = 0;
 				for (auto && light : lights)
@@ -19,17 +19,17 @@ namespace ve
 			});
 		}
 
-		void World::setupStage(Ptr<Stage> const & stage, Ptr<Camera> const & camera)
+		void World::setupStage(Ptr<render::Stage> const & stage, Ptr<Camera> const & camera)
 		{
 			stage->setScene(scene);
-			stage->setUniformsFunction([camera](Ptr<Shader> const & shader)
+			stage->setUniformsFunction([camera](Ptr<render::Shader> const & shader)
 			{
 				shader->setUniformValue("worldToCameraTramsform", camera->getWorldToLocalTransform());
 				shader->setUniformValue("cameraToNdcTransform", camera->getLocalToNdcTransform());
 			});
 		}
 
-		Ptr<Scene> World::getScene() const
+		Ptr<render::Scene> World::getScene() const
 		{
 			return scene;
 		}

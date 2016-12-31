@@ -1,60 +1,63 @@
-#include "scene.hpp"
+#include "render/scene.hpp"
 #include <set>
 #include <algorithm>
 
 namespace ve
 {
-	void Scene::addDependentStage(Ptr<Stage> stage)
+	namespace render
 	{
-		dependentStages.insert(stage);
-	}
-	
-	void Scene::removeDependentStage(Ptr<Stage> stage)
-	{
-		dependentStages.erase(stage);
-	}
-
-	std::set<Ptr<Stage>> const & Scene::getDependentStages() const
-	{
-		return dependentStages;
-	}
-
-	Ptr<Model> Scene::createModel()
-	{
-		auto model = OwnPtr<Model>::returnNew();
-		models.insert(model);
-		return model;
-	}
-
-	void Scene::destroyModel(Ptr<Model> model)
-	{
-		auto it = std::find(models.begin(), models.end(), model);
-		if (it == models.end())
+		void Scene::addDependentStage(Ptr<Stage> stage)
 		{
-			assert(false);
-			throw std::runtime_error("WHAT");
+			dependentStages.insert(stage);
 		}
-		else
-		{
-			models.erase(it);
-		}
-	}
 
-	void Scene::setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction_)
-	{
-		uniformsFunction = uniformsFunction_;
-	}
-
-	void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction)
-	{
-		std::multiset<Ptr<Model>> modelsSorted;
-		for (auto model : models)
+		void Scene::removeDependentStage(Ptr<Stage> stage)
 		{
-			modelsSorted.insert(model);
+			dependentStages.erase(stage);
 		}
-		for (auto model : modelsSorted)
+
+		std::set<Ptr<Stage>> const & Scene::getDependentStages() const
 		{
-			model->render(stageUniformsFunction, uniformsFunction);
+			return dependentStages;
+		}
+
+		Ptr<Model> Scene::createModel()
+		{
+			auto model = OwnPtr<Model>::returnNew();
+			models.insert(model);
+			return model;
+		}
+
+		void Scene::destroyModel(Ptr<Model> model)
+		{
+			auto it = std::find(models.begin(), models.end(), model);
+			if (it == models.end())
+			{
+				assert(false);
+				throw std::runtime_error("WHAT");
+			}
+			else
+			{
+				models.erase(it);
+			}
+		}
+
+		void Scene::setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction_)
+		{
+			uniformsFunction = uniformsFunction_;
+		}
+
+		void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction)
+		{
+			std::multiset<Ptr<Model>> modelsSorted;
+			for (auto model : models)
+			{
+				modelsSorted.insert(model);
+			}
+			for (auto model : modelsSorted)
+			{
+				model->render(stageUniformsFunction, uniformsFunction);
+			}
 		}
 	}
 }

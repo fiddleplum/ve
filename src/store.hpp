@@ -15,11 +15,11 @@ namespace ve
 	{
 	public:
 		Cache<Image> images;
-		Cache<Texture> textures;
 		Cache<Mesh> meshes;
-		Cache<VertexBufferObject> vertexBufferObjects;
-		Cache<Shader> shaders;
-		Cache<Font> fonts;
+		Cache<render::Texture> textures;
+		Cache<render::VertexBufferObject> vertexBufferObjects;
+		Cache<render::Shader> shaders;
+		Cache<render::Font> fonts;
 	};
 
 	extern Store store;

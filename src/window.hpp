@@ -64,7 +64,7 @@ namespace ve
 		void * sdlWindow;
 		std::function<void()> closeHandler;
 		std::function<void(Vector2i size)> resizeHandler;
-		OwnPtr<WindowStage> stage;
+		OwnPtr<render::WindowStage> stage;
 		OwnPtr<Gui> gui;
 	};
 }

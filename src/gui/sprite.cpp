@@ -3,7 +3,7 @@
 
 namespace ve
 {
-	Sprite::Sprite(Ptr<Scene> scene)
+	Sprite::Sprite(Ptr<render::Scene> scene)
 		: Widget(scene)
 	{
 		Mesh mesh;
@@ -22,7 +22,7 @@ namespace ve
 		model->setVertexBufferObject(vbo);
 		model->setShader(shader);
 		model->setTextureAtSlot(texture, 0);
-		model->setUniformsFunction([this](Ptr<Shader> const & shader)
+		model->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 		{
 			if (texture.isValid())
 			{
@@ -97,7 +97,7 @@ namespace ve
 		setTexture(texture);
 	}
 
-	void Sprite::setTexture(Ptr<Texture> texture_)
+	void Sprite::setTexture(Ptr<render::Texture> texture_)
 	{
 		texture = texture_;
 		model->setTextureAtSlot(texture, 0);

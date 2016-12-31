@@ -2,7 +2,7 @@
 
 namespace ve
 {
-	TextButton::TextButton(Ptr<Scene> scene)
+	TextButton::TextButton(Ptr<render::Scene> scene)
 		: Widget(scene)
 	{
 

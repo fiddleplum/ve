@@ -5,13 +5,16 @@
 
 namespace ve
 {
-	void glInitialize();
+	namespace render
+	{
+		void glInitialize();
 
-	float glGetGLSLVersion();
+		float glGetGLSLVersion();
 
-	void glScissorPush(GLint x, GLint y, GLsizei width, GLsizei height);
+		void glScissorPush(GLint x, GLint y, GLsizei width, GLsizei height);
 
-	void glScissorPop();
+		void glScissorPop();
+	}
 }
 
 extern PFNGLENABLEPROC glEnable;

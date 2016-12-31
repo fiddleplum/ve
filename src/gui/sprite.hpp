@@ -10,7 +10,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Sprite(Ptr<Scene> scene);
+		Sprite(Ptr<render::Scene> scene);
 
 		// Destructor.
 		~Sprite();
@@ -40,7 +40,7 @@ namespace ve
 		void setTexture(std::string const & name);
 
 		// Loads a texture into the sprite.
-		void setTexture(Ptr<Texture> texture);
+		void setTexture(Ptr<render::Texture> texture);
 
 		// Updates the sprite (actually does nothing).
 		void update(float dt);
@@ -50,9 +50,9 @@ namespace ve
 
 		Recti bounds;
 		Vector2i textureCoords;
-		Ptr<Model> model;
-		Ptr<Texture> texture;
-		OwnPtr<VertexBufferObject> vbo;
+		Ptr<render::Model> model;
+		Ptr<render::Texture> texture;
+		OwnPtr<render::VertexBufferObject> vbo;
 		int originUniformLocation;
 		int texSizeUniformLocation;
 		int texUniformLocation;
