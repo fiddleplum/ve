@@ -163,6 +163,11 @@ namespace ve
 		bounds = bounds_;
 	}
 
+	void TextArea::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
+
+	}
+
 	void TextArea::update(float dt)
 	{
 

@@ -226,24 +226,24 @@ namespace ve
 
 		bool Shader::activate()
 		{
-			if (currentBlending != blending)
-			{
-				if (blending == Blending::NONE)
-				{
-					glDisable(GL_BLEND);
-				}
-				else if (blending == Blending::ADDITIVE)
-				{
-					glEnable(GL_BLEND);
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				}
-				else if (blending == Blending::ALPHA)
-				{
-					glEnable(GL_BLEND);
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				}
-				currentBlending = blending;
-			}
+			//if (currentBlending != blending)
+			//{
+			//	if (blending == Blending::NONE)
+			//	{
+			//		glDisable(GL_BLEND);
+			//	}
+			//	else if (blending == Blending::ADDITIVE)
+			//	{
+			//		glEnable(GL_BLEND);
+			//		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			//	}
+			//	else if (blending == Blending::ALPHA)
+			//	{
+			//		glEnable(GL_BLEND);
+			//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			//	}
+			//	currentBlending = blending;
+			//}
 			if (currentProgram != program)
 			{
 				currentProgram = program;

@@ -17,9 +17,9 @@ namespace ve
 	void Panel::setDepth(float & depth_)
 	{
 		depth = depth_;
-		for (auto const & widgetInfo : widgetInfos)
+		for (auto const && widget : widgets)
 		{
-			widgetInfo.widget->setDepth(depth_);
+			widget->setDepth(depth_);
 		}
 		depth_++;
 	}
@@ -32,9 +32,9 @@ namespace ve
 	void Panel::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
-		for (auto const & widgetInfo : widgetInfos)
+		for (auto const && widget : widgets)
 		{
-			updateWidgetBounds(widgetInfo);
+			updateWidgetBounds(widget);
 		}
 	}
 
@@ -58,67 +58,68 @@ namespace ve
 		return createWidget<Viewport>();
 	}
 
-	void Panel::destroyWidget(Ptr<Widget> widget)
+	void Panel::destroyWidget(Ptr<Widget> const & widget)
 	{
-		auto it = getWidgetInfo(widget);
-		widgetInfos.queueForErase(it);
+		for (auto iter = widgets.begin(); iter != widgets.end(); iter++)
+		{
+			if (*iter == widget)
+			{
+				widgets.queueForErase(iter);
+				widgetInfos.erase(*iter);
+				break;
+			}
+		}
 	}
 
-	void Panel::setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
+	void Panel::setWidgetBounds(Ptr<Widget> const & widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset)
 	{
-		auto & widgetInfo = *getWidgetInfo(widget);
+		auto & widgetInfo = widgetInfos[widget];
 		widgetInfo.originInPanel = originInPanel;
 		widgetInfo.originInWidget = originInWidget;
 		widgetInfo.originOffset = originOffset;
 		widgetInfo.sizeInPanel = sizeInPanel;
 		widgetInfo.sizeOffset = sizeOffset;
-		updateWidgetBounds(widgetInfo);
+		updateWidgetBounds(widget);
+	}
+
+	void Panel::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
+		for (auto const && widget : widgets)
+		{
+			auto widgetCursorPosition = cursorPosition;
+			if (widgetCursorPosition && !widget->getBounds().contains(*widgetCursorPosition))
+			{
+				widgetCursorPosition = std::nullopt;
+			}
+			widget->onCursorPositionChanged(widgetCursorPosition);
+		}
+		widgets.processEraseQueue();
 	}
 
 	void Panel::update(float dt)
 	{
-		for (auto const & widgetInfo : widgetInfos)
+		for (auto const && widget : widgets)
 		{
-			widgetInfo.widget->update(dt);
+			widget->update(dt);
 		}
-
-		if (!widgetInfos.eraseQueueIsEmpty())
-		{
-			widgetInfos.processEraseQueue();
-			float widgetDepth = depth;
-			setDepth(widgetDepth);
-		}
+		widgets.processEraseQueue();
 	}
 
 	template <typename T> Ptr<T> Panel::createWidget()
 	{
-		auto widget = OwnPtr<T>::returnNew(getScene());
-		WidgetInfo widgetInfo;
-		widgetInfo.widget = widget;
-		widgetInfos.push_back(widgetInfo);
-		updateWidgetBounds(widgetInfo);
-		float widgetDepth = depth;
-		setDepth(widgetDepth);
+		Ptr<T> widget = widgets.appendNew<T>(getScene());
+		widget->setDepth(depth);
+		widgetInfos.insert({widget, WidgetInfo()});
+		updateWidgetBounds(widget);
 		return widget;
 	}
 
-	std::list<Panel::WidgetInfo>::iterator Panel::getWidgetInfo(Ptr<Widget> widget)
+	void Panel::updateWidgetBounds(Ptr<Widget> const & widget) const
 	{
-		for (auto it = widgetInfos.begin(); it != widgetInfos.end(); it++)
-		{
-			if (it->widget == widget)
-			{
-				return it;
-			}
-		}
-		throw std::runtime_error("Widget not found. ");
-	}
-
-	void Panel::updateWidgetBounds(WidgetInfo const & widgetInfo) const
-	{
+		auto & widgetInfo = widgetInfos.at(widget);
 		Vector2f panelSize = Vector2f {bounds.max - bounds.min + Vector2i {1, 1}};
 		Vector2f widgetSize = panelSize.scale(widgetInfo.sizeInPanel) + Vector2f {widgetInfo.sizeOffset};
 		Vector2f widgetPosition = panelSize.scale(widgetInfo.originInPanel) - widgetSize.scale(widgetInfo.originInWidget) + Vector2f {widgetInfo.originOffset};
-		widgetInfo.widget->setBounds(Recti {Vector2i{widgetPosition}, Vector2i{widgetPosition + widgetSize - Vector2f{1, 1}}});
+		widget->setBounds(Recti {Vector2i{widgetPosition}, Vector2i{widgetPosition + widgetSize - Vector2f{1, 1}}});
 	}
 }

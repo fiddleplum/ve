@@ -6,6 +6,7 @@ namespace ve
 {
 	Window::Window()
 	{
+		// Initialize SDL.
 		Vector2i initialSize {800, 600};
 		sdlWindow = SDL_CreateWindow("Untitled", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, initialSize[0], initialSize[1], SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 		if (sdlWindow == nullptr)
@@ -13,29 +14,31 @@ namespace ve
 			throw std::runtime_error("Failed to create the window.");
 		}
 
-		stage.setNew(sdlWindow);
-		stage->setWindowSize(initialSize);
+		// Create a new window target.
+		target.setNew(sdlWindow);
+		target->setWindowSize(initialSize);
+
+		// Create the gui and connect it to the window target.
+		gui.setNew();
+		gui->setSize(initialSize);
+		target->setScene(gui->getScene());
 	}
 
 	Window::~Window()
 	{
-		stage.setNull();
+		gui.setNull();
+		target.setNull();
 		SDL_DestroyWindow((SDL_Window *)sdlWindow);
 	}
 
-	void Window::setCloseHandler(std::function<void()> closeHandler_)
+	Ptr<Gui> Window::getGui() const
 	{
-		closeHandler = closeHandler_;
+		return gui;
 	}
 
-	void Window::setResizeHandler(std::function<void(Vector2i size)> resizeHandler_)
+	void Window::setCloseRequestedHandler(std::function<void()> closeRequestedHandler_)
 	{
-		resizeHandler = resizeHandler_;
-	}
-
-	void Window::setScene(Ptr<render::Scene> const & scene)
-	{
-		stage->setScene(scene);
+		closeRequestedHandler = closeRequestedHandler_;
 	}
 
 	void * Window::getSDLWindow() const
@@ -43,29 +46,33 @@ namespace ve
 		return sdlWindow;
 	}
 
-	void Window::handleCloseEvent()
+	void Window::onCloseRequested()
 	{
-		if (closeHandler)
+		if (closeRequestedHandler)
 		{
-			closeHandler();
+			closeRequestedHandler();
 		}
 	}
 
-	void Window::handleResizeEvent(Vector2i size)
+	void Window::onResized(Vector2i size)
 	{
-		if (resizeHandler)
-		{
-			resizeHandler(size);
-		}
-		stage->setWindowSize(size);
+		target->setWindowSize(size);
+		gui->setSize(size);
+	}
+
+	void Window::onCursorPositionChanged(std::optional<Vector2i> cursorPosition_)
+	{
+		cursorPosition = cursorPosition_;
+		gui->onCursorPositionChanged(cursorPosition);
 	}
 
 	void Window::update(float dt)
 	{
+		gui->update(dt);
 	}
 
 	void Window::render() const
 	{
-		stage->render();
+		target->render();
 	}
 }

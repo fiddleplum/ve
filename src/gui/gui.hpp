@@ -5,7 +5,7 @@
 
 namespace ve
 {
-	class Gui
+	class Gui final
 	{
 	public:
 		// Constructor.
@@ -23,7 +23,10 @@ namespace ve
 		// Sets the size of the gui.
 		void setSize(Vector2i size);
 
-		// Updates the gui.
+		// Internal. Called when the user moves the cursor within the gui or out of the gui.
+		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition);
+
+		// Internal. Updates the gui.
 		void update(float dt);
 
 	private:

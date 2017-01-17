@@ -1,4 +1,6 @@
-#include "util/object_list.hpp"
+#include "util/ptr_list.hpp"
+#include "util/ptr_set.hpp"
+#include "store.hpp"
 #include "ve.hpp"
 #include <SDL.h>
 
@@ -7,7 +9,8 @@ namespace ve
 	bool looping = false;
 	float secondsPerUpdate = 1.f / 24.f;
 	std::function<void(float dt)> updateFunction;
-	ObjectList<OwnPtr<Window>> windows;
+	PtrSet<Window> windows;
+	PtrSet<world::World> worlds;
 	Store store;
 
 	// SDL has its own window IDs for SDL_Events. This gets the right window associated with that ID. Returns null if none found.
@@ -48,22 +51,25 @@ namespace ve
 					return;
 				}
 		}
+
+		// Handle the events.
 		switch (sdlEvent.type)
 		{
 			case SDL_QUIT:
+				userRequestQuit();
 				break;
 			case SDL_WINDOWEVENT:
 				switch (sdlEvent.window.event)
 				{
 					case SDL_WINDOWEVENT_CLOSE:
-						window->handleCloseEvent();
+						window->onCloseRequested();
 						break;
 					case SDL_WINDOWEVENT_SIZE_CHANGED:
-						window->handleResizeEvent({sdlEvent.window.data1, sdlEvent.window.data2});
+						window->onResized({sdlEvent.window.data1, sdlEvent.window.data2});
 						break;
-						//case SDL_WINDOWEVENT_LEAVE:
-						//	window->setCursorPosition(std::nullopt);
-						//	break;
+					case SDL_WINDOWEVENT_LEAVE:
+						window->onCursorPositionChanged(std::nullopt);
+						break;
 				}
 				//case SDL_KEYDOWN:
 				//case SDL_KEYUP:
@@ -131,10 +137,7 @@ namespace ve
 			// Update
 			while (accumulator >= secondsPerUpdate)
 			{
-				if (updateFunction)
-				{
-					updateFunction(secondsPerUpdate);
-				}
+				userUpdate(secondsPerUpdate);
 
 				for (auto & window : windows)
 				{
@@ -182,24 +185,28 @@ namespace ve
 
 	Ptr<Window> createWindow()
 	{
-		auto window = OwnPtr<Window>::returnNew();
-		window->setCloseHandler(quit);
-		windows.push_back(window);
+		auto window = *windows.insertNew();
+		window->setCloseRequestedHandler(quit);
 		return window;
 	}
 
-	void destroyWindow(Ptr<Window> window)
+	void destroyWindow(Ptr<Window> const & window)
 	{
-		auto it = std::find(windows.begin(), windows.end(), window);
-		if (it == windows.end())
-		{
-			throw std::runtime_error("Window not found. ");
-		}
-		windows.queueForErase(it);
+		windows.queueForErase(window);
 		if (!looping) // not looping so we're safe to just erase it.
 		{
 			windows.processEraseQueue();
 		}
+	}
+
+	Ptr<world::World> createWorld()
+	{
+		return *worlds.insertNew();
+	}
+
+	void destroyWorld(Ptr<world::World> const & world)
+	{
+		worlds.queueForErase(world);
 	}
 
 	void showMessage(std::string const & message)
@@ -227,13 +234,16 @@ int main(int argc, char *argv[])
 		}
 
 		// Call the setup.
-		ve::setup(args);
+		ve::userStart(args);
 
 		// Start the loop.
 		ve::loop();
 
 		// Call the teardown.
-		ve::teardown();
+		ve::userStop();
+
+		ve::windows.queueAllForErase();
+		ve::windows.processEraseQueue();
 
 		SDL_Quit();
 

@@ -39,6 +39,11 @@ namespace ve
 		root->setBounds({{0, 0}, {size[0] - 1, size[1] - 1}});
 	}
 
+	void Gui::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
+		root->onCursorPositionChanged(cursorPosition);
+	}
+
 	void Gui::update(float dt)
 	{
 		root->update(dt);
@@ -51,7 +56,7 @@ namespace ve
 		{
 			Config shaderConfig;
 			shaderConfig.children["vertex"].text =
-				"#version 400\n"
+				"#version 430\n"
 				"uniform vec2 origin;\n"
 				"uniform vec2 texSize;\n"
 				"uniform vec2 guiSize;\n"
@@ -63,7 +68,7 @@ namespace ve
 				"	v_uv0 = vec2(uv0.x / texSize.x, uv0.y / texSize.y);\n"
 				"}\n";
 			shaderConfig.children["fragment"].text =
-				"#version 400\n"
+				"#version 430\n"
 				"varying vec2 v_uv0;\n"
 				"uniform vec4 color;\n"
 				"uniform sampler2D tex;\n"

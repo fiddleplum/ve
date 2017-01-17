@@ -6,19 +6,19 @@ namespace ve
 {
 	namespace render
 	{
-		void Scene::addDependentStage(Ptr<Stage> stage)
+		void Scene::addDependentTarget(Ptr<Target> target)
 		{
-			dependentStages.insert(stage);
+			dependentTargets.insert(target);
 		}
 
-		void Scene::removeDependentStage(Ptr<Stage> stage)
+		void Scene::removeDependentTarget(Ptr<Target> target)
 		{
-			dependentStages.erase(stage);
+			dependentTargets.erase(target);
 		}
 
-		std::set<Ptr<Stage>> const & Scene::getDependentStages() const
+		std::set<Ptr<Target>> const & Scene::getDependentTargets() const
 		{
-			return dependentStages;
+			return dependentTargets;
 		}
 
 		Ptr<Model> Scene::createModel()

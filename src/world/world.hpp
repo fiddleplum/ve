@@ -1,21 +1,21 @@
 #pragma once
 
-#include "world3d/camera.hpp"
-#include "world3d/light.hpp"
-#include "world3d/object.hpp"
+#include "world/camera.hpp"
+#include "world/light.hpp"
+#include "world/object.hpp"
 #include "render/scene.hpp"
-#include "render/stage.hpp"
+#include "render/target.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		class World final
 		{
 		public:
 			World();
 
-			void setupStage(Ptr<render::Stage> const & stage, Ptr<Camera> const & camera);
+			void setupTarget(Ptr<render::Target> const & target, Ptr<Camera> const & camera);
 
 			Ptr<render::Scene> getScene() const;
 

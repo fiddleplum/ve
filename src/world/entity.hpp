@@ -6,7 +6,7 @@
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		class Entity
 		{

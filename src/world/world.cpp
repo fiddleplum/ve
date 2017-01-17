@@ -1,8 +1,8 @@
-#include "world3d/world.hpp"
+#include "world/world.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		World::World()
 		{
@@ -19,10 +19,10 @@ namespace ve
 			});
 		}
 
-		void World::setupStage(Ptr<render::Stage> const & stage, Ptr<Camera> const & camera)
+		void World::setupTarget(Ptr<render::Target> const & target, Ptr<Camera> const & camera)
 		{
-			stage->setScene(scene);
-			stage->setUniformsFunction([camera](Ptr<render::Shader> const & shader)
+			target->setScene(scene);
+			target->setUniformsFunction([camera](Ptr<render::Shader> const & shader)
 			{
 				shader->setUniformValue("worldToCameraTramsform", camera->getWorldToLocalTransform());
 				shader->setUniformValue("cameraToNdcTransform", camera->getLocalToNdcTransform());

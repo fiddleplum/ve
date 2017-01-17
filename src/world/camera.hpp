@@ -1,12 +1,12 @@
 #pragma once
 
-#include "entity.hpp"
+#include "world/entity.hpp"
+#include "render/scene.hpp"
 #include "util/ray.hpp"
-#include "../render/scene.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		class Camera : public Entity
 		{

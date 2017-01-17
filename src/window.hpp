@@ -1,31 +1,13 @@
 #pragma once
 
-#include "render/stage.hpp"
-
-/*
-
-each window has a ptr<stage> as its root stage.
-each stage has a list of dependencies:
-	addpriorstage()
-	removepriorstage()
-	clearpriorstages()
-
-render:
-	go through all stages and clear the 'rendered' flag
-	for each window, render its top level stage
-		do a depth first rendering of each stage
-			if the 'rendered' flag isn't set
-				render
-				set 'rendered' flag
-			else
-				skip stage
-
-	each stage has a scene and target
-		how can i get cameras and lights into the stage? stage shouldn't know about anything 3d
-*/
+#include "render/target.hpp"
+#include "gui/gui.hpp"
 
 namespace ve
 {
+	class render::Target;
+	class Gui;
+
 	class Window final
 	{
 	public:
@@ -35,34 +17,35 @@ namespace ve
 		// Destruct the window.
 		~Window();
 
-		// Sets the function to be called when the window is closed by the user.
-		void setCloseHandler(std::function<void()> closeHandler);
+		// Returns the gui.
+		Ptr<Gui> getGui() const;
 
-		// Sets the function to be called when the window is resized by the user.
-		void setResizeHandler(std::function<void(Vector2i size)> resizeHandler);
+		// Sets the function to be called when the user has requested to close the window.
+		void setCloseRequestedHandler(std::function<void()> closeRequestedHandler);
 
-		// Sets the scene to render in this window.
-		void setScene(Ptr<render::Scene> const & scene);
-
-		// Gets the SDL Window handle.
+		// Internal. Gets the SDL Window handle.
 		void * getSDLWindow() const;
 
-		// Called by App when it receives the close event.
-		void handleCloseEvent();
+		// Internal. Called when the user clicks the close button on the window or equivalent shortcut.
+		void onCloseRequested();
 
-		// Called by App when it receives the resize event.
-		void handleResizeEvent(Vector2i size);
+		// Internal. Called when the user resizes the window.
+		void onResized(Vector2i size);
 
-		// Updates the window and the contained gui.
+		// Internal. Called when the user moves the cursor within the window or out of the window.
+		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition);
+
+		// Internal. Updates the window and the contained gui.
 		void update(float dt);
 
-		// Called to render the window.
+		// Internal. Called to render the window.
 		void render() const;
 
 	private:
 		void * sdlWindow;
-		std::function<void()> closeHandler;
-		std::function<void(Vector2i size)> resizeHandler;
-		OwnPtr<render::WindowStage> stage;
+		std::function<void()> closeRequestedHandler;
+		OwnPtr<render::WindowTarget> target;
+		std::optional<Vector2i> cursorPosition;
+		OwnPtr<Gui> gui;
 	};
 }

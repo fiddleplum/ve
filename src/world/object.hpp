@@ -1,11 +1,11 @@
 #pragma once
 
-#include "entity.hpp"
+#include "world/entity.hpp"
 #include "render/scene.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		class Object : public Entity
 		{

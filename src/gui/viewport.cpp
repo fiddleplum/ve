@@ -7,17 +7,16 @@ namespace ve
 		: Widget(scene)
 	{
 		sprite.setNew(scene);
-		renderTarget.setNew(getBounds().getSize(), Image::RGB24);
-		sprite->setTexture(renderTarget);
-		stage.setNew();
-		stage->setColorTarget(0, renderTarget);
-		scene->addDependentStage(stage);
-		sprite->setTexture(stage->getColorTarget(0));
+		renderTexture.setNew(getBounds().getSize(), Image::RGB24);
+		sprite->setTexture(renderTexture);
+		target.setNew();
+		target->setColorTexture(0, renderTexture);
+		scene->addDependentTarget(target);
 	}
 
 	Viewport::~Viewport()
 	{
-		getScene()->removeDependentStage(stage);
+		getScene()->removeDependentTarget(target);
 	}
 
 	float Viewport::getDepth() const
@@ -38,12 +37,16 @@ namespace ve
 	void Viewport::setBounds(Recti bounds)
 	{
 		sprite->setBounds(bounds);
-		renderTarget->setSize(bounds.getSize());
+		renderTexture->setSize(bounds.getSize());
 	}
 
-	Ptr<render::TextureStage> Viewport::getStage() const
+	Ptr<render::TextureTarget> Viewport::getTarget() const
 	{
-		return stage;
+		return target;
+	}
+
+	void Viewport::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
 	}
 
 	void Viewport::update(float dt)

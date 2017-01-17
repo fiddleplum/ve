@@ -17,16 +17,13 @@
     <ClInclude Include="src\render\open_gl.hpp" />
     <ClInclude Include="src\render\scene.hpp" />
     <ClInclude Include="src\render\shader.hpp" />
-    <ClInclude Include="src\render\stage.hpp" />
     <ClInclude Include="src\render\texture.hpp" />
     <ClInclude Include="src\render\vertex_buffer_object.hpp" />
     <ClInclude Include="src\util\cache.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\util\interval.hpp" />
     <ClInclude Include="src\util\matrix.hpp" />
-    <ClInclude Include="src\util\object_list.hpp" />
     <ClInclude Include="src\util\object_map.hpp" />
-    <ClInclude Include="src\util\object_set.hpp" />
     <ClInclude Include="src\util\ptr.hpp" />
     <ClInclude Include="src\util\rect.hpp" />
     <ClInclude Include="src\util\serialize.hpp" />
@@ -34,16 +31,18 @@
     <ClInclude Include="src\util\vector.hpp" />
     <ClInclude Include="src\window.hpp" />
     <ClInclude Include="src\gui\viewport.hpp" />
-    <ClInclude Include="src\world3d\camera.hpp" />
-    <ClInclude Include="src\world3d\entity.hpp" />
-    <ClInclude Include="src\world3d\light.hpp" />
-    <ClInclude Include="src\world3d\object.hpp" />
-    <ClInclude Include="src\world3d\world.hpp" />
     <ClInclude Include="src\util\quaternion.hpp" />
     <ClInclude Include="src\util\ray.hpp" />
-    <ClInclude Include="src\world3d\model.hpp" />
     <ClInclude Include="src\util\mesh.hpp" />
     <ClInclude Include="src\util\image.hpp" />
+    <ClInclude Include="src\render\target.hpp" />
+    <ClInclude Include="src\world\camera.hpp" />
+    <ClInclude Include="src\world\entity.hpp" />
+    <ClInclude Include="src\world\light.hpp" />
+    <ClInclude Include="src\world\object.hpp" />
+    <ClInclude Include="src\world\world.hpp" />
+    <ClInclude Include="src\util\ptr_list.hpp" />
+    <ClInclude Include="src\util\ptr_set.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\texture.cpp" />
@@ -52,7 +51,6 @@
     <ClCompile Include="src\render\shader.cpp" />
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\scene.cpp" />
-    <ClCompile Include="src\render\stage.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\util\config.cpp" />
     <ClCompile Include="src\util\math.cpp" />
@@ -66,13 +64,13 @@
     <ClCompile Include="src\render\font.cpp" />
     <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\viewport.cpp" />
-    <ClCompile Include="src\world3d\camera.cpp" />
-    <ClCompile Include="src\world3d\entity.cpp" />
-    <ClCompile Include="src\world3d\light.cpp" />
-    <ClCompile Include="src\world3d\object.cpp" />
-    <ClCompile Include="src\world3d\world.cpp" />
-    <ClCompile Include="src\world3d\model.cpp" />
     <ClCompile Include="src\util\mesh.cpp" />
     <ClCompile Include="src\util\image.cpp" />
+    <ClCompile Include="src\render\target.cpp" />
+    <ClCompile Include="src\world\camera.cpp" />
+    <ClCompile Include="src\world\entity.cpp" />
+    <ClCompile Include="src\world\light.cpp" />
+    <ClCompile Include="src\world\object.cpp" />
+    <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "entity.hpp"
+#include "world/entity.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		class Light : public Entity
 		{

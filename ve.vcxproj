@@ -202,17 +202,17 @@
     <ClInclude Include="src\render\font.hpp" />
     <ClInclude Include="src\util\math.hpp" />
     <ClInclude Include="src\util\object_map.hpp" />
-    <ClInclude Include="src\util\object_set.hpp" />
+    <ClInclude Include="src\util\ptr_set.hpp" />
     <ClInclude Include="src\render\model.hpp" />
     <ClInclude Include="src\render\scene.hpp" />
     <ClInclude Include="src\render\shader.hpp" />
-    <ClInclude Include="src\render\stage.hpp" />
+    <ClInclude Include="src\render\target.hpp" />
     <ClInclude Include="src\render\texture.hpp" />
     <ClInclude Include="src\ve.hpp" />
     <ClInclude Include="src\util\cache.hpp" />
     <ClInclude Include="src\render\glcorearb.h" />
     <ClInclude Include="src\util\image.hpp" />
-    <ClInclude Include="src\util\object_list.hpp" />
+    <ClInclude Include="src\util\ptr_list.hpp" />
     <ClInclude Include="src\render\open_gl.hpp" />
     <ClInclude Include="src\gui\panel.hpp" />
     <ClInclude Include="src\render\vertex_buffer_object.hpp" />
@@ -221,12 +221,11 @@
     <ClInclude Include="src\gui\widget.hpp" />
     <ClInclude Include="src\util\serialize.hpp" />
     <ClInclude Include="src\window.hpp" />
-    <ClInclude Include="src\world3d\camera.hpp" />
-    <ClInclude Include="src\world3d\entity.hpp" />
-    <ClInclude Include="src\world3d\light.hpp" />
-    <ClInclude Include="src\world3d\model.hpp" />
-    <ClInclude Include="src\world3d\object.hpp" />
-    <ClInclude Include="src\world3d\world.hpp" />
+    <ClInclude Include="src\world\camera.hpp" />
+    <ClInclude Include="src\world\entity.hpp" />
+    <ClInclude Include="src\world\light.hpp" />
+    <ClInclude Include="src\world\object.hpp" />
+    <ClInclude Include="src\world\world.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gui\viewport.cpp" />
@@ -242,7 +241,7 @@
     <ClCompile Include="src\gui\panel.cpp" />
     <ClCompile Include="src\render\scene.cpp" />
     <ClCompile Include="src\render\shader.cpp" />
-    <ClCompile Include="src\render\stage.cpp" />
+    <ClCompile Include="src\render\target.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
     <ClCompile Include="src\gui\sprite.cpp" />
     <ClCompile Include="src\render\texture.cpp" />
@@ -251,12 +250,11 @@
     <ClCompile Include="src\util\math.cpp" />
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\window.cpp" />
-    <ClCompile Include="src\world3d\camera.cpp" />
-    <ClCompile Include="src\world3d\entity.cpp" />
-    <ClCompile Include="src\world3d\light.cpp" />
-    <ClCompile Include="src\world3d\model.cpp" />
-    <ClCompile Include="src\world3d\object.cpp" />
-    <ClCompile Include="src\world3d\world.cpp" />
+    <ClCompile Include="src\world\camera.cpp" />
+    <ClCompile Include="src\world\entity.cpp" />
+    <ClCompile Include="src\world\light.cpp" />
+    <ClCompile Include="src\world\object.cpp" />
+    <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

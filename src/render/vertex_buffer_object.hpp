@@ -30,12 +30,13 @@ namespace ve
 				unsigned int size;
 				unsigned int offset;
 			};
-			unsigned int vertexBuffer = 1;
-			unsigned int indexBuffer = 2;
+			std::string vertexFormat;
+			unsigned int vertexArrayObject = 0;
+			unsigned int vertexBuffer = 0;
+			unsigned int indexBuffer = 0;
 			unsigned int mode;
 			unsigned int numIndices;
 			unsigned int bytesPerVertex;
-			std::vector<VertexComponent> vertexComponents;
 		};
 	}
 }

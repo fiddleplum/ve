@@ -1,8 +1,8 @@
-#include "camera.hpp"
+#include "world/camera.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		Camera::Camera()
 		{

@@ -4,8 +4,7 @@
 #include "gui/sprite.hpp"
 #include "render/model.hpp"
 #include "util/ptr.hpp"
-#include "render/stage.hpp"
-#include "world3d/world.hpp"
+#include "render/target.hpp"
 
 namespace ve
 {
@@ -18,27 +17,30 @@ namespace ve
 		// Destructor.
 		~Viewport();
 
-		// Returns the depth.
+		// Internal to gui. Returns the depth.
 		float getDepth() const override;
 
-		// Sets the depth.
+		// Internal to gui. Sets the depth.
 		void setDepth(float & depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;
 
-		// Sets the bounds of the sprite.
+		// Internal to gui. Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 
-		// Returns the currently used texture stage.
-		Ptr<render::TextureStage> getStage() const;
+		// Returns the texture target that the viewport uses.
+		Ptr<render::TextureTarget> getTarget() const;
 
-		// Updates the viewport.
+		// Internal to gui. Called when the user moves the cursor within the widget or out of the widget.
+		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition) override;
+
+		// Internal to gui. Updates the viewport.
 		void update(float dt);
 
 	private:
-		OwnPtr<render::Texture> renderTarget;
+		OwnPtr<render::Texture> renderTexture;
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
-		OwnPtr<render::TextureStage> stage;
+		OwnPtr<render::TextureTarget> target;
 	};
 }

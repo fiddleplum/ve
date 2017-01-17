@@ -28,6 +28,11 @@ namespace ve
 
 	}
 
+	void TextButton::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
+
+	}
+
 	void TextButton::update(float dt)
 	{
 

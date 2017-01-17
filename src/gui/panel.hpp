@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util/object_list.hpp"
+#include "util/ptr_list.hpp"
 #include "gui/widget.hpp"
 #include "gui/sprite.hpp"
 #include "gui/text_area.hpp"
@@ -15,16 +15,16 @@ namespace ve
 		// Constructor.
 		Panel(Ptr<render::Scene> scene);
 
-		// Returns the depth.
+		// Internal to gui. Returns the depth.
 		float getDepth() const override;
 
-		// Sets the depth.
+		// Internal to gui. Sets the depth.
 		void setDepth(float & depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;
 
-		// Sets the bounds of the panel.
+		// Internal to gui. Sets the bounds of the panel.
 		void setBounds(Recti bounds) override;
 
 		// Creates a sprite contained in the panel.
@@ -40,18 +40,20 @@ namespace ve
 		Ptr<Viewport> createViewport();
 
 		// Destroys a widget.
-		void destroyWidget(Ptr<Widget> widget);
+		void destroyWidget(Ptr<Widget> const & widget);
 
 		// Sets the relative bounds for the widget.
-		void setWidgetBounds(Ptr<Widget> widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset);
+		void setWidgetBounds(Ptr<Widget> const & widget, Vector2f originInPanel, Vector2f originInWidget, Vector2i originOffset, Vector2f sizeInPanel, Vector2i sizeOffset);
 
-		// Updates the panel.
+		// Internal to gui. Called when the user moves the cursor within the widget or out of the widget.
+		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition) override;
+
+		// Internal to gui. Updates the panel.
 		void update(float dt) override;
 
 	private:
 		struct WidgetInfo
 		{
-			OwnPtr<Widget> widget;
 			Vector2f originInPanel;
 			Vector2f originInWidget;
 			Vector2i originOffset;
@@ -60,11 +62,11 @@ namespace ve
 		};
 
 		template <typename T> Ptr<T> createWidget();
-		std::list<WidgetInfo>::iterator Panel::getWidgetInfo(Ptr<Widget> widget);
-		void updateWidgetBounds(WidgetInfo const & widgetInfo) const;
+		void updateWidgetBounds(Ptr<Widget> const & widget) const;
 
 		Recti bounds;
 		float depth;
-		ObjectList<WidgetInfo> widgetInfos;
+		PtrList<Widget> widgets;
+		std::map<Ptr<Widget>, WidgetInfo> widgetInfos;
 	};
 }

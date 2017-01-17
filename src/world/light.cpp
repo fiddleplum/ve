@@ -1,8 +1,8 @@
-#include "light.hpp"
+#include "world/light.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		Light::Light()
 		{

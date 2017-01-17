@@ -1,8 +1,8 @@
-#include "entity.hpp"
+#include "world/entity.hpp"
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		Entity::Entity()
 		{

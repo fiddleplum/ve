@@ -15,16 +15,16 @@ namespace ve
 		// Destructor.
 		~Sprite();
 
-		// Returns the depth.
+		// Internal to gui. Returns the depth.
 		float getDepth() const override;
 
-		// Sets the depth.
+		// Internal to gui. Sets the depth.
 		void setDepth(float & depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;
 
-		// Sets the bounds of the sprite.
+		// Internal to gui. Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 
 		// Returns the texture coordinates.
@@ -42,7 +42,10 @@ namespace ve
 		// Loads a texture into the sprite.
 		void setTexture(Ptr<render::Texture> texture);
 
-		// Updates the sprite (actually does nothing).
+		// Internal to gui. Called when the user moves the cursor within the widget or out of the widget.
+		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition) override;
+
+		// Internal to gui. Updates the sprite (actually does nothing).
 		void update(float dt);
 
 	private:

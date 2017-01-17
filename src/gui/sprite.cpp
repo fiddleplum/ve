@@ -103,6 +103,10 @@ namespace ve
 		model->setTextureAtSlot(texture, 0);
 	}
 
+	void Sprite::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
+	}
+
 	void Sprite::update(float dt)
 	{
 	}

@@ -1,10 +1,10 @@
-#include "object.hpp"
-#include "../store.hpp"
+#include "world/object.hpp"
+#include "store.hpp"
 #include <fstream>
 
 namespace ve
 {
-	namespace world3d
+	namespace world
 	{
 		Object::Object(Ptr<render::Scene> const & scene_)
 		{
