@@ -108,11 +108,11 @@ namespace ve
 				}
 			}
 			std::string resourceName = TTF_FontFaceFamilyName((TTF_Font *)ttfFont) + std::to_string(blockStart);
-			auto image = store.images.create(resourceName, surface);
+			auto image = getStore()->images.create(resourceName, surface);
 			image->save("test.png");
 			SDL_FreeSurface(surface);
 			block.start = blockStart;
-			block.texture = store.textures.create(resourceName, image);
+			block.texture = getStore()->textures.create(resourceName, image);
 			blocks[blockStart] = block;
 		}
 

@@ -12,7 +12,7 @@ namespace ve
 		mesh.indices = {0, 1, 2, 2, 3, 0};
 		vbo.setNew(mesh);
 
-		auto shader = store.shaders.get("gui");
+		auto shader = getStore()->shaders.get("gui");
 		originUniformLocation = shader->getUniformInfo("origin").location;
 		texSizeUniformLocation = shader->getUniformInfo("texSize").location;
 		texUniformLocation = shader->getUniformInfo("tex").location;
@@ -74,22 +74,22 @@ namespace ve
 
 	void Sprite::setImage(std::string const & name)
 	{
-		auto texture = store.textures.get(name);
+		auto texture = getStore()->textures.get(name);
 		if (!texture)
 		{
-			auto image = store.images.get(name);
+			auto image = getStore()->images.get(name);
 			if (!image)
 			{
 				throw std::runtime_error("Image name '" + name + "' not found. ");
 			}
-			texture = store.textures.create(name, image);
+			texture = getStore()->textures.create(name, image);
 		}
 		setTexture(texture);
 	}
 
 	void Sprite::setTexture(std::string const & name)
 	{
-		auto texture = store.textures.get(name);
+		auto texture = getStore()->textures.get(name);
 		if (!texture)
 		{
 			throw std::runtime_error("Texture name '" + name + "' not found. ");

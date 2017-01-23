@@ -7,7 +7,7 @@ namespace ve
 	TextArea::TextArea(Ptr<render::Scene> scene)
 		: Widget(scene)
 	{
-		shader = store.shaders.get("gui");
+		shader = getStore()->shaders.get("gui");
 		originUniformLocation = shader->getUniformInfo("origin").location;
 		texSizeUniformLocation = shader->getUniformInfo("texSize").location;
 		texUniformLocation = shader->getUniformInfo("tex").location;
@@ -24,10 +24,10 @@ namespace ve
 
 	void TextArea::setFont(std::string const & fontFace, int fontSize)
 	{
-		font = store.fonts.get(fontFace + std::to_string(fontSize));
+		font = getStore()->fonts.get(fontFace + std::to_string(fontSize));
 		if (!font)
 		{
-			font = store.fonts.create(fontFace + std::to_string(fontSize), fontFace, fontSize);
+			font = getStore()->fonts.create(fontFace + std::to_string(fontSize), fontFace, fontSize);
 		}
 	}
 

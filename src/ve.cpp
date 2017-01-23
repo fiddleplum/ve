@@ -1,5 +1,3 @@
-#include "util/ptr_list.hpp"
-#include "util/ptr_set.hpp"
 #include "store.hpp"
 #include "ve.hpp"
 #include <SDL.h>
@@ -8,10 +6,12 @@ namespace ve
 {
 	bool looping = false;
 	float secondsPerUpdate = 1.f / 24.f;
-	std::function<void(float dt)> updateFunction;
+	std::function<void(float dt)> updateCallback;
+	// std::function<void(InputEvent const & inputEvent)> inputEventCallback;
+	std::function<void()> requestQuitCallback;
 	PtrSet<Window> windows;
 	PtrSet<world::World> worlds;
-	Store store;
+	OwnPtr<Store> store;
 
 	// SDL has its own window IDs for SDL_Events. This gets the right window associated with that ID. Returns null if none found.
 	Ptr<Window> getWindowFromId(unsigned int id)
@@ -56,7 +56,10 @@ namespace ve
 		switch (sdlEvent.type)
 		{
 			case SDL_QUIT:
-				userRequestQuit();
+				if (requestQuitCallback)
+				{
+					requestQuitCallback();
+				}
 				break;
 			case SDL_WINDOWEVENT:
 				switch (sdlEvent.window.event)
@@ -104,7 +107,6 @@ namespace ve
 		}
 	}
 
-	// This is the main application loop. It keeps going until looping is false.
 	void loop()
 	{
 		float lastFrameTime = SDL_GetTicks() / 1000.f;
@@ -137,7 +139,10 @@ namespace ve
 			// Update
 			while (accumulator >= secondsPerUpdate)
 			{
-				userUpdate(secondsPerUpdate);
+				if (updateCallback)
+				{
+					updateCallback(secondsPerUpdate);
+				}
 
 				for (auto & window : windows)
 				{
@@ -178,15 +183,10 @@ namespace ve
 		looping = false;
 	}
 
-	void setUpdateFunction(std::function<void(float dt)> const & function)
-	{
-
-	}
-
 	Ptr<Window> createWindow()
 	{
 		auto window = *windows.insertNew();
-		window->setCloseRequestedHandler(quit);
+		window->setCloseRequestedHandler(&quit);
 		return window;
 	}
 
@@ -213,6 +213,21 @@ namespace ve
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", message.c_str(), nullptr);
 	}
+
+	void setUpateCallback(std::function<void(float dt)> const & callback)
+	{
+		updateCallback = callback;
+	}
+
+	//void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback)
+	//{
+	//	inputEventCallback = callback;
+	//}
+
+	void setRequestQuitCallback(std::function<void()> const & callback)
+	{
+		requestQuitCallback = callback;
+	}
 }
 
 // Called by SDL to run the entire app.
@@ -233,17 +248,16 @@ int main(int argc, char *argv[])
 			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
 		}
 
-		// Call the setup.
-		ve::userStart(args);
+		ve::store.setNew();
 
-		// Start the loop.
-		ve::loop();
-
-		// Call the teardown.
-		ve::userStop();
+		entry(args);
 
 		ve::windows.queueAllForErase();
 		ve::windows.processEraseQueue();
+		ve::worlds.queueAllForErase();
+		ve::worlds.processEraseQueue();
+
+		ve::store.setNull();
 
 		SDL_Quit();
 
@@ -251,7 +265,7 @@ int main(int argc, char *argv[])
 	}
 	catch (std::exception const & e)
 	{
-		ve::showMessage(e.what());
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error! Uncaught exception: ", e.what(), nullptr);
 		return -1;
 	}
 }

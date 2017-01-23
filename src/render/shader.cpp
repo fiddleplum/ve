@@ -43,7 +43,7 @@ namespace ve
 		Shader::Shader(Config const & shaderConfig)
 		{
 			unsigned int vertexObject = compileShaderObject(Vertex, shaderConfig.vertexCode);
-			unsigned int fragmentObject = compileShaderObject(Vertex, shaderConfig.fragmentCode);
+			unsigned int fragmentObject = compileShaderObject(Fragment, shaderConfig.fragmentCode);
 			blending = shaderConfig.blending;
 			program = linkShaderProgram({vertexObject, fragmentObject});
 			bindAttributeLocations();

@@ -51,7 +51,7 @@ namespace ve
 
 	void Gui::createResources()
 	{
-		auto shader = store.shaders.get("gui");
+		auto shader = getStore()->shaders.get("gui");
 		if (!shader)
 		{
 			Config shaderConfig;
@@ -76,7 +76,7 @@ namespace ve
 				"	gl_FragColor = color * texture(tex, clamp(v_uv0, 0, 1));\n"
 				"}\n";
 			shaderConfig.children["blending"].text = "alpha";
-			shader = store.shaders.create("gui", shaderConfig);
+			shader = getStore()->shaders.create("gui", shaderConfig);
 		}
 	}
 }

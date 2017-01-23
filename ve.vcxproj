@@ -229,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gui\viewport.cpp" />
+    <ClCompile Include="src\store.cpp" />
     <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\text_area.cpp" />
     <ClCompile Include="src\util\config.cpp" />

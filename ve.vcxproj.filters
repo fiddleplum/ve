@@ -72,5 +72,6 @@
     <ClCompile Include="src\world\light.cpp" />
     <ClCompile Include="src\world\object.cpp" />
     <ClCompile Include="src\world\world.cpp" />
+    <ClCompile Include="src\store.cpp" />
   </ItemGroup>
 </Project>

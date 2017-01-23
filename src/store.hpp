@@ -22,5 +22,6 @@ namespace ve
 		Cache<render::Font> fonts;
 	};
 
-	extern Store store;
+	Ptr<Store> getStore();
 }
+
