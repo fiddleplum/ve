@@ -38,25 +38,25 @@ namespace ve
 			shader = shader_;
 		}
 
-		Ptr<Texture> Model::getTextureAtSlot(unsigned int slot) const
+		Ptr<Image> Model::getImageAtSlot(unsigned int slot) const
 		{
-			if (slot >= textures.size())
+			if (slot >= images.size())
 			{
-				return Ptr<Texture>();
+				return Ptr<Image>();
 			}
 			else
 			{
-				return textures[slot];
+				return images[slot];
 			}
 		}
 
-		void Model::setTextureAtSlot(Ptr<Texture> const & texture, unsigned int slot)
+		void Model::setImageAtSlot(Ptr<Image> const & image, unsigned int slot)
 		{
-			if (slot >= textures.size())
+			if (slot >= images.size())
 			{
-				textures.resize(slot + 1);
+				images.resize(slot + 1);
 			}
-			textures[slot] = texture;
+			images[slot] = image;
 		}
 
 		void Model::setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction_)
@@ -86,14 +86,14 @@ namespace ve
 			{
 				uniformsFunction(shader);
 			}
-			for (unsigned int slot = 0; slot < textures.size(); slot++)
+			for (unsigned int slot = 0; slot < images.size(); slot++)
 			{
-				if (textures[slot].isValid())
+				if (images[slot].isValid())
 				{
-					textures[slot]->activate(slot);
+					images[slot]->activate(slot);
 				}
 			}
-			Texture::deactivateRest((unsigned int)textures.size());
+			Image::deactivateRest((unsigned int)images.size());
 			vertexBufferObject->render();
 		}
 
@@ -121,19 +121,19 @@ namespace ve
 				{
 					return shader < model.shader;
 				}
-				for (unsigned int slot = 0; slot < textures.size() && slot < model.textures.size(); slot++)
+				for (unsigned int slot = 0; slot < images.size() && slot < model.images.size(); slot++)
 				{
-					if (slot == textures.size() && slot < model.textures.size())
+					if (slot == images.size() && slot < model.images.size())
 					{
 						return true;
 					}
-					if (slot == model.textures.size())
+					if (slot == model.images.size())
 					{
 						return false;
 					}
-					if (textures[slot] != model.textures[slot])
+					if (images[slot] != model.images[slot])
 					{
-						return textures[slot] < model.textures[slot];
+						return images[slot] < model.images[slot];
 					}
 				}
 				return vertexBufferObject < model.vertexBufferObject;

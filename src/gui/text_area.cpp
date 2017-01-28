@@ -1,16 +1,14 @@
 #include "gui/text_area.hpp"
-#include "store.hpp"
 #include "util/stringutil.hpp"
 
 namespace ve
 {
-	TextArea::TextArea(Ptr<render::Scene> scene)
-		: Widget(scene)
+	TextArea::TextArea(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader)
+		: Widget(scene, shader)
 	{
-		shader = getStore()->shaders.get("gui");
 		originUniformLocation = shader->getUniformInfo("origin").location;
-		texSizeUniformLocation = shader->getUniformInfo("texSize").location;
-		texUniformLocation = shader->getUniformInfo("tex").location;
+		imageSizeUniformLocation = shader->getUniformInfo("imageSize").location;
+		imageUniformLocation = shader->getUniformInfo("image").location;
 		colorUniformLocation = shader->getUniformInfo("color").location;
 	}
 
@@ -22,16 +20,63 @@ namespace ve
 		}
 	}
 
-	void TextArea::setFont(std::string const & fontFace, int fontSize)
+	void TextArea::setFont(Ptr<render::Font> const & font_)
 	{
-		font = getStore()->fonts.get(fontFace + std::to_string(fontSize));
-		if (!font)
+		font = font_;
+		updateModels();
+	}
+
+	void TextArea::setText(std::string const & text_)
+	{
+		text = text_;
+		updateModels();
+	}
+
+	Vector4f TextArea::getColor() const
+	{
+		return color;
+	}
+
+	void TextArea::setColor(Vector4f color_)
+	{
+		color = color_;
+	}
+
+	float TextArea::getDepth() const
+	{
+		return depth;
+	}
+
+	void TextArea::setDepth(float depth_)
+	{
+		depth = depth_;
+		for (auto & model : models)
 		{
-			font = getStore()->fonts.create(fontFace + std::to_string(fontSize), fontFace, fontSize);
+			model->setDepth(depth);
 		}
 	}
 
-	void TextArea::setText(std::string const & text)
+	Recti TextArea::getBounds() const
+	{
+		return bounds;
+	}
+
+	void TextArea::setBounds(Recti bounds_)
+	{
+		bounds = bounds_;
+	}
+
+	void TextArea::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
+	{
+
+	}
+
+	void TextArea::update(float dt)
+	{
+
+	}
+
+	void TextArea::updateModels()
 	{
 		for (auto & model : models)
 		{
@@ -39,7 +84,7 @@ namespace ve
 		}
 		models.clear();
 
-		std::map<Ptr<render::Texture>, Mesh> meshes;
+		std::map<Ptr<render::Image>, Mesh> meshes;
 		Vector2i cursor {0, font->getLineHeight()};
 		for (size_t i = 0; i < text.size();)
 		{
@@ -64,14 +109,14 @@ namespace ve
 
 			// Get the font information for the next character.
 			render::Font::GlyphCoords const & glyphCoords = font->getGlyphCoordsFromChar(c);
-			Ptr<render::Texture> glyphTexture = font->getTextureFromChar(c);
+			Ptr<render::Image> glyphImage = font->getImageFromChar(c);
 
 			// Find which model to append, or create new model.
-			auto it = meshes.find(glyphTexture);
+			auto it = meshes.find(glyphImage);
 			if (it == meshes.end())
 			{
-				meshes.insert({glyphTexture, Mesh()});
-				it = meshes.find(glyphTexture);
+				meshes.insert({glyphImage, Mesh()});
+				it = meshes.find(glyphImage);
 				it->second.formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
 			}
 			Mesh & mesh = it->second;
@@ -109,67 +154,22 @@ namespace ve
 		// Construct the models form the text.
 		for (auto const & pair : meshes)
 		{
-			auto texture = pair.first;
+			auto image = pair.first;
 			auto model = getScene()->createModel();
 			auto vbo = OwnPtr<render::VertexBufferObject>::returnNew(pair.second);
 			vbos.push_back(vbo);
 			model->setVertexBufferObject(vbo);
 			model->setShader(shader);
-			model->setTextureAtSlot(texture, 0);
-			model->setUniformsFunction([this, texture](Ptr<render::Shader> const & shader)
+			model->setImageAtSlot(image, 0);
+			model->setUniformsFunction([this, image](Ptr<render::Shader> const & shader)
 			{
 				shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
-				shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());
-				shader->setUniformValue<int>(texUniformLocation, 0);
+				shader->setUniformValue<Vector2f>(imageSizeUniformLocation, (Vector2f)image->getSize());
+				shader->setUniformValue<int>(imageUniformLocation, 0);
 				shader->setUniformValue<Vector4f>(colorUniformLocation, color);
 			});
 			model->setDepth(depth);
 			models.push_back(model);
 		}
-	}
-
-	Vector4f TextArea::getColor() const
-	{
-		return color;
-	}
-
-	void TextArea::setColor(Vector4f color_)
-	{
-		color = color_;
-	}
-
-	float TextArea::getDepth() const
-	{
-		return depth;
-	}
-
-	void TextArea::setDepth(float & depth_)
-	{
-		depth = depth_;
-		for (auto & model : models)
-		{
-			model->setDepth(depth);
-		}
-		depth_++;
-	}
-
-	Recti TextArea::getBounds() const
-	{
-		return bounds;
-	}
-
-	void TextArea::setBounds(Recti bounds_)
-	{
-		bounds = bounds_;
-	}
-
-	void TextArea::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
-	{
-
-	}
-
-	void TextArea::update(float dt)
-	{
-
 	}
 }

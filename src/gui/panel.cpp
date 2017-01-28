@@ -3,8 +3,8 @@
 
 namespace ve
 {
-	Panel::Panel(Ptr<render::Scene> scene)
-		: Widget(scene)
+	Panel::Panel(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader)
+		: Widget(scene, shader)
 	{
 
 	}
@@ -14,14 +14,13 @@ namespace ve
 		return 0;
 	}
 
-	void Panel::setDepth(float & depth_)
+	void Panel::setDepth(float depth_)
 	{
 		depth = depth_;
 		for (auto const && widget : widgets)
 		{
-			widget->setDepth(depth_);
+			widget->setDepth(depth + 1);
 		}
-		depth_++;
 	}
 
 	Recti Panel::getBounds() const
@@ -107,8 +106,8 @@ namespace ve
 
 	template <typename T> Ptr<T> Panel::createWidget()
 	{
-		Ptr<T> widget = widgets.appendNew<T>(getScene());
-		widget->setDepth(depth);
+		Ptr<T> widget = widgets.appendNew<T>(getScene(), getShader());
+		widget->setDepth(depth + 1);
 		widgetInfos.insert({widget, WidgetInfo()});
 		updateWidgetBounds(widget);
 		return widget;

@@ -30,9 +30,10 @@ namespace ve
 		void update(float dt);
 
 	private:
-		void createResources();
+		void createShader();
 
 		OwnPtr<Panel> root;
 		OwnPtr<render::Scene> scene;
+		OwnPtr<render::Shader> shader;
 	};
 }

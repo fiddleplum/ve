@@ -9,13 +9,13 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		TextArea(Ptr<render::Scene> scene);
+		TextArea(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader);
 
 		// Destructor.
 		~TextArea();
 
 		// Sets the font.
-		void setFont(std::string const & fontFace, int fontSize);
+		void setFont(Ptr<render::Font> const & font);
 
 		// Sets the text.
 		void setText(std::string const & text);
@@ -30,7 +30,7 @@ namespace ve
 		float getDepth() const override;
 
 		// Internal to gui. Sets the depth.
-		void setDepth(float & depth) override;
+		void setDepth(float depth) override;
 
 		// Returns the bounds of the widget.
 		Recti getBounds() const override;
@@ -45,16 +45,19 @@ namespace ve
 		void update(float dt) override;
 
 	private:
+		void updateModels();
+
 		Recti bounds;
 		float depth;
 		Vector4f color;
+		std::string text;
 		std::vector<OwnPtr<render::VertexBufferObject>> vbos;
 		std::vector<Ptr<render::Model>> models;
 		Ptr<render::Font> font;
 		Ptr<render::Shader> shader;
 		unsigned int originUniformLocation;
-		unsigned int texSizeUniformLocation;
-		unsigned int texUniformLocation;
+		unsigned int imageSizeUniformLocation;
+		unsigned int imageUniformLocation;
 		unsigned int colorUniformLocation;
 	};
 }

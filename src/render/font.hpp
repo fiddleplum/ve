@@ -1,6 +1,6 @@
 #pragma once
 
-#include "render/texture.hpp"
+#include "render/image.hpp"
 #include "util/ptr.hpp"
 #include "util/rect.hpp"
 #include <string>
@@ -16,7 +16,7 @@ namespace ve
 			struct GlyphCoords
 			{
 				Vector2i offset; //< The offset to add when placing the character so that the position is the origin.
-				Recti uvBounds; //< The texture coordinates for the character's glyph.
+				Recti uvBounds; //< The image coordinates for the character's glyph.
 				int advance; //< The amount to move forward when writing text.
 			};
 
@@ -32,8 +32,8 @@ namespace ve
 			//! Get coordinate info about the glyph of a given character.
 			GlyphCoords const & getGlyphCoordsFromChar(unsigned int c);
 
-			//! Get texture containing the character's glyph.
-			Ptr<Texture> getTextureFromChar(unsigned int c);
+			//! Get image containing the character's glyph.
+			Ptr<Image> getImageFromChar(unsigned int c);
 
 			//! Creates a series of models for rendering the given text and calculates the text size.
 			//void getModelsFromText(std::string const & text, std::vector<Ptr<Model>> & models, Vector2i & textSize);
@@ -42,7 +42,7 @@ namespace ve
 			struct Block
 			{
 				unsigned int start;
-				Ptr<Texture> texture;
+				OwnPtr<Image> image;
 				std::vector<GlyphCoords> glyphCoords;
 			};
 

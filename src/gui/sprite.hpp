@@ -10,7 +10,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Sprite(Ptr<render::Scene> scene);
+		Sprite(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader);
 
 		// Destructor.
 		~Sprite();
@@ -19,7 +19,7 @@ namespace ve
 		float getDepth() const override;
 
 		// Internal to gui. Sets the depth.
-		void setDepth(float & depth) override;
+		void setDepth(float depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;
@@ -27,20 +27,14 @@ namespace ve
 		// Internal to gui. Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 
-		// Returns the texture coordinates.
-		Vector2i getTextureCoords() const;
+		// Returns the pixel offset within the image.
+		Vector2i getImageOffset() const;
 
-		// Sets the texture coordinates.
-		void setTextureCoords(Vector2i coords);
+		// Sets the pixel offset within the image.
+		void setImageOffset(Vector2i offset);
 
-		// Loads an image from the store into the sprite.
-		void setImage(std::string const & name);
-
-		// Loads a texture from the store into the sprite.
-		void setTexture(std::string const & name);
-
-		// Loads a texture into the sprite.
-		void setTexture(Ptr<render::Texture> texture);
+		// Sets an image for the sprite.
+		void setImage(Ptr<render::Image> const & image);
 
 		// Internal to gui. Called when the user moves the cursor within the widget or out of the widget.
 		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition) override;
@@ -52,13 +46,13 @@ namespace ve
 		void updateVbo();
 
 		Recti bounds;
-		Vector2i textureCoords;
+		Vector2i imageOffset;
 		Ptr<render::Model> model;
-		Ptr<render::Texture> texture;
+		Ptr<render::Image> image;
 		OwnPtr<render::VertexBufferObject> vbo;
 		int originUniformLocation;
-		int texSizeUniformLocation;
-		int texUniformLocation;
+		int imageSizeUniformLocation;
+		int imageUniformLocation;
 		int colorUniformLocation;
 	};
 }

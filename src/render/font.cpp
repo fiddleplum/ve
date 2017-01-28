@@ -1,7 +1,7 @@
 #include "render/font.hpp"
 #include "util/math.hpp"
-#include "store.hpp"
 #include <SDL_ttf.h>
+#include <SDL.h>
 
 namespace ve
 {
@@ -61,10 +61,10 @@ namespace ve
 			return block.glyphCoords[c - block.start];
 		}
 
-		Ptr<Texture> Font::getTextureFromChar(unsigned int c)
+		Ptr<Image> Font::getImageFromChar(unsigned int c)
 		{
 			Block const & block = getBlock(c);
-			return block.texture;
+			return block.image;
 		}
 
 		Font::Block const & Font::getBlock(unsigned int c)
@@ -81,7 +81,7 @@ namespace ve
 
 		void Font::loadBlock(int blockStart)
 		{
-			// Create a texture for a block of characters starting with the blockStart.
+			// Create a image for a block of characters starting with the blockStart.
 			Block block;
 			unsigned int numCharsInBlock = numCharsInRow * numCharsInCol;
 			block.glyphCoords.resize(numCharsInBlock);
@@ -108,11 +108,12 @@ namespace ve
 				}
 			}
 			std::string resourceName = TTF_FontFaceFamilyName((TTF_Font *)ttfFont) + std::to_string(blockStart);
-			auto image = getStore()->images.create(resourceName, surface);
-			image->save("test.png");
+			block.image = OwnPtr<Image>::returnNew(Vector2i{surface->w, surface->h}, Image::RGBA32);
+			std::vector<uint8_t> pixels {&((uint8_t *)surface->pixels)[0], &((uint8_t *)surface->pixels)[surface->pitch * surface->h]};
+			block.image->setPixels(pixels);
+			block.image->save("test.png");
 			SDL_FreeSurface(surface);
 			block.start = blockStart;
-			block.texture = getStore()->textures.create(resourceName, image);
 			blocks[blockStart] = block;
 		}
 
@@ -139,8 +140,8 @@ namespace ve
 		//		blockIt = blocks.find(blockStart);
 		//	}
 		//	auto block = blockIt->second;
-		//	// Set the texture.
-		//	texture = block.texture;
+		//	// Set the image.
+		//	image = block.image;
 		//	// Set the bounds and uvBounds.
 		//	bounds.min = {pos[0] - (int)(block.cellSize - block.widths[c - blockStart]) / 2, pos[1] - (int)(block.cellSize - heightOfChar) / 2};
 		//	bounds.max = bounds.min + Coord2i {(int)block.cellSize, (int)block.cellSize};
@@ -154,7 +155,7 @@ namespace ve
 		//{
 		//	models.clear();
 		//	textSize = {0, 0};
-		//	std::map<Ptr<Texture>, int> texturesToModels;
+		//	std::map<Ptr<Image>, int> imagesToModels;
 		//	std::vector<std::vector<GuiModel::Vertex>> vertices;
 		//	std::vector<std::vector<unsigned int>> indices;
 		//	Coord2i pos;
@@ -162,25 +163,25 @@ namespace ve
 		//	{
 		//		Recti bounds;
 		//		Recti uvBounds;
-		//		Ptr<Texture> texture;
-		//		bool hasInfo = getInfoFromChar(c, pos, bounds, uvBounds, texture);
+		//		Ptr<Image> image;
+		//		bool hasInfo = getInfoFromChar(c, pos, bounds, uvBounds, image);
 		//		if (!hasInfo)
 		//		{
 		//			continue;
 		//		}
 		//		// Get the model (or setup a new one)
 		//		int modelIndex = 0;
-		//		auto texturesToModelsIt = texturesToModels.find(texture);
-		//		if (texturesToModelsIt == texturesToModels.end()) // Create a new model for new texture.
+		//		auto imagesToModelsIt = imagesToModels.find(image);
+		//		if (imagesToModelsIt == imagesToModels.end()) // Create a new model for new image.
 		//		{
 		//			OwnPtr<GuiModel> model;
 		//			model.setNew();
-		//			model->setTexture(texture);
+		//			model->setImage(image);
 		//			models.push_back(model);
 		//			vertices.push_back(std::vector<GuiModel::Vertex>());
 		//			indices.push_back(std::vector<unsigned int>());
 		//			modelIndex = models.size() - 1;
-		//			texturesToModels[texture] = modelIndex;
+		//			imagesToModels[image] = modelIndex;
 		//		}
 		//		// Do the vertices
 		//		indices[modelIndex].push_back(vertices[modelIndex].size() + 0);

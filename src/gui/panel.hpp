@@ -13,13 +13,13 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Panel(Ptr<render::Scene> scene);
+		Panel(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader);
 
 		// Internal to gui. Returns the depth.
 		float getDepth() const override;
 
 		// Internal to gui. Sets the depth.
-		void setDepth(float & depth) override;
+		void setDepth(float depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;

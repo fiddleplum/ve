@@ -1,6 +1,6 @@
 #pragma once
 
-#include "render/texture.hpp"
+#include "render/image.hpp"
 #include "render/scene.hpp"
 #include "util/rect.hpp"
 #include "util/ptr.hpp"
@@ -72,35 +72,35 @@ namespace ve
 			Vector2i viewportSize;
 		};
 
-		class TextureTarget : public Target
+		class ImageTarget : public Target
 		{
 		public:
 			// Constructor. If window is true, this stage is rendering directly to the window.
-			TextureTarget();
+			ImageTarget();
 
 			// Destructor.
-			~TextureTarget();
+			~ImageTarget();
 
-			// Returns the texture at the specified index.
-			Ptr<Texture> getColorTexture(unsigned int index) const;
+			// Returns the image at the specified index.
+			Ptr<Image> getColorImage(unsigned int index) const;
 
-			// Sets a color texture at the specified index.
-			void setColorTexture(unsigned int index, Ptr<Texture> target);
+			// Sets a color image at the specified index.
+			void setColorImage(unsigned int index, Ptr<Image> target);
 
-			// Returns the depth texture.
-			Ptr<Texture> getDepthTexture() const;
+			// Returns the depth image.
+			Ptr<Image> getDepthImage() const;
 
-			// Sets a depth texture.
-			void setDepthTexture(Ptr<Texture> target);
+			// Sets a depth image.
+			void setDepthImage(Ptr<Image> target);
 
-			// Returns the stencil texture.
-			Ptr<Texture> getStencilTexture() const;
+			// Returns the stencil image.
+			Ptr<Image> getStencilImage() const;
 
-			// Sets a stencil texture.
-			void setStencilTexture(Ptr<Texture> target);
+			// Sets a stencil image.
+			void setStencilImage(Ptr<Image> target);
 
-			// Clears the color, depth and stencil textures.
-			void clearAllTextures();
+			// Clears the color, depth and stencil images.
+			void clearAllImages();
 
 		protected:
 			// Called just before rendering the scene.
@@ -110,9 +110,9 @@ namespace ve
 			void postRender() const override;
 
 		private:
-			std::vector<Ptr<Texture>> colorTextures;
-			Ptr<Texture> depthTexture;
-			Ptr<Texture> stencilTexture;
+			std::vector<Ptr<Image>> colorImages;
+			Ptr<Image> depthImage;
+			Ptr<Image> stencilImage;
 			unsigned int framebuffer;
 		};
 	}

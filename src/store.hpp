@@ -1,11 +1,10 @@
 #pragma once
 
-#include "render/texture.hpp"
 #include "render/vertex_buffer_object.hpp"
 #include "render/shader.hpp"
 #include "render/font.hpp"
+#include "render/image.hpp"
 #include "util/mesh.hpp"
-#include "util/image.hpp"
 #include "util/cache.hpp"
 
 namespace ve
@@ -14,9 +13,8 @@ namespace ve
 	class Store final
 	{
 	public:
-		Cache<Image> images;
+		Cache<render::Image> images;
 		Cache<Mesh> meshes;
-		Cache<render::Texture> textures;
 		Cache<render::VertexBufferObject> vertexBufferObjects;
 		Cache<render::Shader> shaders;
 		Cache<render::Font> fonts;

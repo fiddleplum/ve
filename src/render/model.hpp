@@ -1,7 +1,7 @@
 #pragma once
 
 #include "render/vertex_buffer_object.hpp"
-#include "render/texture.hpp"
+#include "render/image.hpp"
 #include "render/shader.hpp"
 #include <functional>
 #include <unordered_map>
@@ -35,11 +35,11 @@ namespace ve
 			// Sets the shader.
 			void setShader(Ptr<Shader> const & shader);
 
-			// Returns the texture used at the given slot
-			Ptr<Texture> getTextureAtSlot(unsigned int slot) const;
+			// Returns the image used at the given slot
+			Ptr<Image> getImageAtSlot(unsigned int slot) const;
 
-			// Sets the texture used at the given slot.
-			void setTextureAtSlot(Ptr<Texture> const & texture, unsigned int slot);
+			// Sets the image used at the given slot.
+			void setImageAtSlot(Ptr<Image> const & image, unsigned int slot);
 
 			// Sets the function to be called that sets any model-specific uniforms.
 			void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
@@ -52,7 +52,7 @@ namespace ve
 
 		private:
 			float depth;
-			std::vector<Ptr<Texture>> textures;
+			std::vector<Ptr<Image>> images;
 			Ptr<Shader> shader;
 			Ptr<VertexBufferObject> vertexBufferObject;
 			std::function<void(Ptr<Shader> const &)> uniformsFunction;

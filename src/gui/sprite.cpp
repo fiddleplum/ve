@@ -1,10 +1,9 @@
 #include "gui/sprite.hpp"
-#include "store.hpp"
 
 namespace ve
 {
-	Sprite::Sprite(Ptr<render::Scene> scene)
-		: Widget(scene)
+	Sprite::Sprite(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader)
+		: Widget(scene, shader)
 	{
 		Mesh mesh;
 		mesh.formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
@@ -12,23 +11,22 @@ namespace ve
 		mesh.indices = {0, 1, 2, 2, 3, 0};
 		vbo.setNew(mesh);
 
-		auto shader = getStore()->shaders.get("gui");
 		originUniformLocation = shader->getUniformInfo("origin").location;
-		texSizeUniformLocation = shader->getUniformInfo("texSize").location;
-		texUniformLocation = shader->getUniformInfo("tex").location;
+		imageSizeUniformLocation = shader->getUniformInfo("imageSize").location;
+		imageUniformLocation = shader->getUniformInfo("image").location;
 		colorUniformLocation = shader->getUniformInfo("color").location;
 
 		model = scene->createModel();
 		model->setVertexBufferObject(vbo);
 		model->setShader(shader);
-		model->setTextureAtSlot(texture, 0);
+		model->setImageAtSlot(image, 0);
 		model->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 		{
-			if (texture.isValid())
+			if (image.isValid())
 			{
 				shader->setUniformValue<Vector2f>(originUniformLocation, (Vector2f)bounds.min);
-				shader->setUniformValue<Vector2f>(texSizeUniformLocation, (Vector2f)texture->getSize());
-				shader->setUniformValue<int>(texUniformLocation, 0);
+				shader->setUniformValue<Vector2f>(imageSizeUniformLocation, (Vector2f)image->getSize());
+				shader->setUniformValue<int>(imageUniformLocation, 0);
 				shader->setUniformValue<Vector4f>(colorUniformLocation, Vector4f::filled(1));
 			}
 		});
@@ -44,10 +42,9 @@ namespace ve
 		return model->getDepth();
 	}
 
-	void Sprite::setDepth(float & depth)
+	void Sprite::setDepth(float depth)
 	{
 		model->setDepth(depth);
-		depth++;
 	}
 
 	Recti Sprite::getBounds() const
@@ -61,46 +58,21 @@ namespace ve
 		updateVbo();
 	}
 
-	Vector2i Sprite::getTextureCoords() const
+	Vector2i Sprite::getImageOffset() const
 	{
-		return textureCoords;
+		return imageOffset;
 	}
 
-	void Sprite::setTextureCoords(Vector2i coords)
+	void Sprite::setImageOffset(Vector2i offset)
 	{
-		textureCoords = coords;
+		imageOffset = offset;
 		updateVbo();
 	}
 
-	void Sprite::setImage(std::string const & name)
+	void Sprite::setImage(Ptr<render::Image> const & image_)
 	{
-		auto texture = getStore()->textures.get(name);
-		if (!texture)
-		{
-			auto image = getStore()->images.get(name);
-			if (!image)
-			{
-				throw std::runtime_error("Image name '" + name + "' not found. ");
-			}
-			texture = getStore()->textures.create(name, image);
-		}
-		setTexture(texture);
-	}
-
-	void Sprite::setTexture(std::string const & name)
-	{
-		auto texture = getStore()->textures.get(name);
-		if (!texture)
-		{
-			throw std::runtime_error("Texture name '" + name + "' not found. ");
-		}
-		setTexture(texture);
-	}
-
-	void Sprite::setTexture(Ptr<render::Texture> texture_)
-	{
-		texture = texture_;
-		model->setTextureAtSlot(texture, 0);
+		image = image_;
+		model->setImageAtSlot(image, 0);
 	}
 
 	void Sprite::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)
@@ -114,10 +86,10 @@ namespace ve
 	void Sprite::updateVbo()
 	{
 		std::vector<float> vertices = {
-			0, 0, (float)textureCoords[0], (float)textureCoords[1],
-			(float)bounds.getSize()[0], 0, (float)textureCoords[0] + bounds.getSize()[0], (float)textureCoords[1],
-			(float)bounds.getSize()[0], (float)bounds.getSize()[1], (float)textureCoords[0] + bounds.getSize()[0], (float)textureCoords[1] + bounds.getSize()[1],
-			0, (float)bounds.getSize()[1], (float)textureCoords[0], (float)textureCoords[1] + bounds.getSize()[1]
+			0, 0, (float)imageOffset[0], (float)imageOffset[1],
+			(float)bounds.getSize()[0], 0, (float)imageOffset[0] + bounds.getSize()[0], (float)imageOffset[1],
+			(float)bounds.getSize()[0], (float)bounds.getSize()[1], (float)imageOffset[0] + bounds.getSize()[0], (float)imageOffset[1] + bounds.getSize()[1],
+			0, (float)bounds.getSize()[1], (float)imageOffset[0], (float)imageOffset[1] + bounds.getSize()[1]
 		};
 		vbo->updateVertices(vertices);
 	}

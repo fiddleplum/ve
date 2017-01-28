@@ -207,11 +207,10 @@
     <ClInclude Include="src\render\scene.hpp" />
     <ClInclude Include="src\render\shader.hpp" />
     <ClInclude Include="src\render\target.hpp" />
-    <ClInclude Include="src\render\texture.hpp" />
     <ClInclude Include="src\ve.hpp" />
     <ClInclude Include="src\util\cache.hpp" />
     <ClInclude Include="src\render\glcorearb.h" />
-    <ClInclude Include="src\util\image.hpp" />
+    <ClInclude Include="src\render\image.hpp" />
     <ClInclude Include="src\util\ptr_list.hpp" />
     <ClInclude Include="src\render\open_gl.hpp" />
     <ClInclude Include="src\gui\panel.hpp" />
@@ -235,7 +234,7 @@
     <ClCompile Include="src\util\config.cpp" />
     <ClCompile Include="src\gui\gui.cpp" />
     <ClCompile Include="src\gui\widget.cpp" />
-    <ClCompile Include="src\util\image.cpp" />
+    <ClCompile Include="src\render\image.cpp" />
     <ClCompile Include="src\util\mesh.cpp" />
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\open_gl.cpp" />
@@ -245,7 +244,6 @@
     <ClCompile Include="src\render\target.cpp" />
     <ClCompile Include="src\render\vertex_buffer_object.cpp" />
     <ClCompile Include="src\gui\sprite.cpp" />
-    <ClCompile Include="src\render\texture.cpp" />
     <ClCompile Include="src\gui\text_button.cpp" />
     <ClCompile Include="src\render\font.cpp" />
     <ClCompile Include="src\util\math.cpp" />

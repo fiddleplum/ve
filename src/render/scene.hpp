@@ -1,11 +1,6 @@
 #pragma once
 
 #include "render/model.hpp"
-#include "render/texture.hpp"
-#include "render/vertex_buffer_object.hpp"
-#include "render/shader.hpp"
-#include "render/font.hpp"
-#include "util/cache.hpp"
 #include <unordered_set>
 #include <unordered_map>
 #include <set>

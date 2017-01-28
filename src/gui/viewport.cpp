@@ -1,16 +1,15 @@
 #include "viewport.hpp"
-#include "store.hpp"
 
 namespace ve
 {
-	Viewport::Viewport(Ptr<render::Scene> scene)
-		: Widget(scene)
+	Viewport::Viewport(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader)
+		: Widget(scene, shader)
 	{
-		sprite.setNew(scene);
-		renderTexture.setNew(getBounds().getSize(), Image::RGB24);
-		sprite->setTexture(renderTexture);
+		sprite.setNew(scene, shader);
+		renderImage.setNew(getBounds().getSize(), render::Image::RGB24);
+		sprite->setImage(renderImage);
 		target.setNew();
-		target->setColorTexture(0, renderTexture);
+		target->setColorImage(0, renderImage);
 		scene->addDependentTarget(target);
 	}
 
@@ -24,7 +23,7 @@ namespace ve
 		return sprite->getDepth();
 	}
 
-	void Viewport::setDepth(float & depth)
+	void Viewport::setDepth(float depth)
 	{
 		sprite->setDepth(depth);
 	}
@@ -37,10 +36,10 @@ namespace ve
 	void Viewport::setBounds(Recti bounds)
 	{
 		sprite->setBounds(bounds);
-		renderTexture->setSize(bounds.getSize());
+		renderImage->setSize(bounds.getSize());
 	}
 
-	Ptr<render::TextureTarget> Viewport::getTarget() const
+	Ptr<render::ImageTarget> Viewport::getTarget() const
 	{
 		return target;
 	}

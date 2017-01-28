@@ -12,7 +12,7 @@ namespace ve
 	{
 	public:
 		// Constructor. This scene is the gui scene, not a world scene.
-		Viewport(Ptr<render::Scene> scene);
+		Viewport(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader);
 
 		// Destructor.
 		~Viewport();
@@ -21,7 +21,7 @@ namespace ve
 		float getDepth() const override;
 
 		// Internal to gui. Sets the depth.
-		void setDepth(float & depth) override;
+		void setDepth(float depth) override;
 
 		// Returns the bounds.
 		Recti getBounds() const override;
@@ -29,8 +29,8 @@ namespace ve
 		// Internal to gui. Sets the bounds of the sprite.
 		void setBounds(Recti bounds) override;
 
-		// Returns the texture target that the viewport uses.
-		Ptr<render::TextureTarget> getTarget() const;
+		// Returns the image target that the viewport uses.
+		Ptr<render::ImageTarget> getTarget() const;
 
 		// Internal to gui. Called when the user moves the cursor within the widget or out of the widget.
 		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition) override;
@@ -39,8 +39,8 @@ namespace ve
 		void update(float dt);
 
 	private:
-		OwnPtr<render::Texture> renderTexture;
+		OwnPtr<render::Image> renderImage;
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
-		OwnPtr<render::TextureTarget> target;
+		OwnPtr<render::ImageTarget> target;
 	};
 }

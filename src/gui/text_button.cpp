@@ -2,8 +2,8 @@
 
 namespace ve
 {
-	TextButton::TextButton(Ptr<render::Scene> scene)
-		: Widget(scene)
+	TextButton::TextButton(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader)
+		: Widget(scene, shader)
 	{
 
 	}
@@ -13,9 +13,8 @@ namespace ve
 		return 0;
 	}
 
-	void TextButton::setDepth(float & depth)
+	void TextButton::setDepth(float depth)
 	{
-		depth++;
 	}
 
 	Recti TextButton::getBounds() const

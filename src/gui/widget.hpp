@@ -9,7 +9,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Widget(Ptr<render::Scene> scene);
+		Widget(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader);
 
 		// Virtual destructor.
 		virtual ~Widget() = default;
@@ -18,7 +18,7 @@ namespace ve
 		virtual float getDepth() const = 0;
 
 		// Internal to gui. Sets the depth. Increments depth for others like panel to set their successive widgets depth correctly.
-		virtual void setDepth(float & depth) = 0;
+		virtual void setDepth(float depth) = 0;
 
 		// Internal to gui. Returns the bounds of the widget.
 		virtual Recti getBounds() const = 0;
@@ -36,7 +36,11 @@ namespace ve
 		// Returns the scene used by the widget (and its parent gui).
 		Ptr<render::Scene> getScene() const;
 
+		// Returns the shader used by the widget. Will be the same for all widgets.
+		Ptr<render::Shader> getShader() const;
+
 	private:
 		Ptr<render::Scene> scene;
+		Ptr<render::Shader> shader;
 	};
 }

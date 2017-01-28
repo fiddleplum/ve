@@ -30,6 +30,10 @@ namespace ve
 
 		void Target::render() const
 		{
+			// Clear out the shaders and textures.
+			Shader::deactivate();
+			Image::deactivateRest(0);
+
 			if (!scene.isValid())
 			{
 				return;
@@ -45,9 +49,9 @@ namespace ve
 			//glDisable(GL_DEPTH_TEST);
 			glDisable(GL_CULL_FACE);
 			//glCullFace(GL_BACK);
-			//glEnable(GL_TEXTURE_2D);
+			glEnable(GL_TEXTURE_2D);
 			//glDisable(GL_BLEND);
-			glClearColor(0, 0, 0, 1);
+			glClearColor(1, 0, 0, 1);
 			glClearDepth(1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -106,41 +110,41 @@ namespace ve
 			SDL_GL_SwapWindow((SDL_Window *)sdlWindow);
 		}
 
-		TextureTarget::TextureTarget()
+		ImageTarget::ImageTarget()
 		{
 			glGenFramebuffers(1, &framebuffer);
 		}
 
-		TextureTarget::~TextureTarget()
+		ImageTarget::~ImageTarget()
 		{
 			glDeleteFramebuffers(1, &framebuffer);
 		}
 
-		Ptr<Texture> TextureTarget::getColorTexture(unsigned int index) const
+		Ptr<Image> ImageTarget::getColorImage(unsigned int index) const
 		{
-			if (index < colorTextures.size())
+			if (index < colorImages.size())
 			{
-				return colorTextures[index];
+				return colorImages[index];
 			}
 			else
 			{
-				return Ptr<Texture>();
+				return Ptr<Image>();
 			}
 		}
 
-		void TextureTarget::setColorTexture(unsigned int index, Ptr<Texture> texture)
+		void ImageTarget::setColorImage(unsigned int index, Ptr<Image> image)
 		{
-			if (index >= colorTextures.size())
+			if (index >= colorImages.size())
 			{
-				colorTextures.resize(index + 1);
+				colorImages.resize(index + 1);
 			}
-			colorTextures[index] = texture;
+			colorImages[index] = image;
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, texture->getGLId(), 0);
+			image->attachToFrameBuffer(GL_COLOR_ATTACHMENT0 + index);
 			std::vector<unsigned int> indices;
-			for (unsigned int i = 0; i < colorTextures.size(); i++)
+			for (unsigned int i = 0; i < colorImages.size(); i++)
 			{
-				if (colorTextures[i])
+				if (colorImages[i])
 				{
 					indices.push_back(GL_COLOR_ATTACHMENT0 + i);
 				}
@@ -152,48 +156,48 @@ namespace ve
 			glDrawBuffers((int)indices.size(), &indices[0]);
 		}
 
-		Ptr<Texture> TextureTarget::getDepthTexture() const
+		Ptr<Image> ImageTarget::getDepthImage() const
 		{
-			return depthTexture;
+			return depthImage;
 		}
 
-		void TextureTarget::setDepthTexture(Ptr<Texture> texture)
+		void ImageTarget::setDepthImage(Ptr<Image> image)
 		{
-			depthTexture = texture;
+			depthImage = image;
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture->getGLId(), 0);
+			image->attachToFrameBuffer(GL_DEPTH_ATTACHMENT);
 		}
 
-		Ptr<Texture> TextureTarget::getStencilTexture() const
+		Ptr<Image> ImageTarget::getStencilImage() const
 		{
-			return stencilTexture;
+			return stencilImage;
 		}
 
-		void TextureTarget::setStencilTexture(Ptr<Texture> texture)
+		void ImageTarget::setStencilImage(Ptr<Image> image)
 		{
-			stencilTexture = texture;
+			stencilImage = image;
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, texture->getGLId(), 0);
+			image->attachToFrameBuffer(GL_STENCIL_ATTACHMENT);
 		}
 
-		void TextureTarget::clearAllTextures()
+		void ImageTarget::clearAllImages()
 		{
-			colorTextures.clear();
-			depthTexture.setNull();
-			stencilTexture.setNull();
+			colorImages.clear();
+			depthImage.setNull();
+			stencilImage.setNull();
 		}
 
-		void TextureTarget::preRender() const
+		void ImageTarget::preRender() const
 		{
-			if (colorTextures.empty() || !colorTextures[0].isValid())
+			if (colorImages.empty() || !colorImages[0].isValid())
 			{
-				throw std::runtime_error("The color texture at index 0 needs to be valid. ");
+				throw std::runtime_error("The color image at index 0 needs to be valid. ");
 			}
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glViewport(0, 0, colorTextures[0]->getSize()[0], colorTextures[0]->getSize()[1]);
+			glViewport(0, 0, colorImages[0]->getSize()[0], colorImages[0]->getSize()[1]);
 		}
 
-		void TextureTarget::postRender() const
+		void ImageTarget::postRender() const
 		{
 		}
 	}
