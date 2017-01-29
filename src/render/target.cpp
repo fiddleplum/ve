@@ -46,12 +46,11 @@ namespace ve
 
 			preRender();
 
-			//glDisable(GL_DEPTH_TEST);
-			glDisable(GL_CULL_FACE);
-			//glCullFace(GL_BACK);
+			glCullFace(GL_BACK);
 			glEnable(GL_TEXTURE_2D);
-			//glDisable(GL_BLEND);
-			glClearColor(1, 0, 0, 1);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glClearColor(0, 0, 0, 1);
 			glClearDepth(1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

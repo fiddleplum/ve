@@ -1,5 +1,6 @@
 #include "render/image.hpp"
 #include "render/open_gl.hpp"
+#include "util/math.hpp"
 #include <SDL_image.h>
 
 namespace ve
@@ -105,6 +106,7 @@ namespace ve
 		void Image::setSize(Vector2i size_)
 		{
 			size = size_;
+			pixels.resize(size[0] * size[1] * bytesPerPixel);
 			initializeGLPixels();
 		}
 
@@ -167,12 +169,12 @@ namespace ve
 			switch (format)
 			{
 				case Image::RGB24:
-					glInternalFormat = GL_RGB;
+					glInternalFormat = GL_RGB8;
 					glFormat = GL_RGB;
 					glType = GL_UNSIGNED_BYTE;
 					break;
 				case Image::RGBA32:
-					glInternalFormat = GL_RGBA;
+					glInternalFormat = GL_RGBA8;
 					glFormat = GL_RGBA;
 					glType = GL_UNSIGNED_BYTE;
 					break;
@@ -182,14 +184,33 @@ namespace ve
 					glType = GL_UNSIGNED_INT;
 					break;
 			}
+
 			glBindTexture(GL_TEXTURE_2D, glId);
-			glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, &pixels[0]);
+			if (pixels.size() > 0)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, &pixels[0]);
+				int level = 1;
+				while (math::max(size[0] >> level, size[1] >> level) > 0)
+				{
+					glTexImage2D(GL_TEXTURE_2D, level, glInternalFormat, size[0] >> level, size[1] >> level, 0, glFormat, glType, 0);
+					level++;
+				}
+			}
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		}
 
 		void Image::updateGLPixels() const
 		{
 			glBindTexture(GL_TEXTURE_2D, glId);
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size[0], size[1], glFormat, glType, &pixels[0]);
+			if (pixels.size() > 0)
+			{
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size[0], size[1], glFormat, glType, &pixels[0]);
+			}
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		}
 
 		//void Image::loadFromSDLSurface(void const * sdlSurface_)

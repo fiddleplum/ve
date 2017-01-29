@@ -54,10 +54,9 @@ namespace ve
 		std::vector<OwnPtr<render::VertexBufferObject>> vbos;
 		std::vector<Ptr<render::Model>> models;
 		Ptr<render::Font> font;
-		Ptr<render::Shader> shader;
-		unsigned int originUniformLocation;
-		unsigned int imageSizeUniformLocation;
-		unsigned int imageUniformLocation;
-		unsigned int colorUniformLocation;
+		int originUniformLocation;
+		int imageSizeUniformLocation;
+		int imageUniformLocation;
+		int colorUniformLocation;
 	};
 }

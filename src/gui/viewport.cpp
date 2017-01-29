@@ -37,6 +37,7 @@ namespace ve
 	{
 		sprite->setBounds(bounds);
 		renderImage->setSize(bounds.getSize());
+		target->setColorImage(0, renderImage);
 	}
 
 	Ptr<render::ImageTarget> Viewport::getTarget() const

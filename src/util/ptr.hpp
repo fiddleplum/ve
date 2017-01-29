@@ -126,7 +126,7 @@ namespace ve
 	public:
 		char const * what() const override
 		{
-			return "Null pointer exception. ";
+			return "Bad pointer exception. ";
 		}
 	};
 

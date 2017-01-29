@@ -109,7 +109,9 @@ namespace ve
 			}
 			std::string resourceName = TTF_FontFaceFamilyName((TTF_Font *)ttfFont) + std::to_string(blockStart);
 			block.image = OwnPtr<Image>::returnNew(Vector2i{surface->w, surface->h}, Image::RGBA32);
-			std::vector<uint8_t> pixels {&((uint8_t *)surface->pixels)[0], &((uint8_t *)surface->pixels)[surface->pitch * surface->h]};
+			std::vector<uint8_t> pixels;
+			pixels.resize(surface->pitch * surface->h);
+			memcpy(&pixels[0], surface->pixels, surface->pitch * surface->h);
 			block.image->setPixels(pixels);
 			block.image->save("test.png");
 			SDL_FreeSurface(surface);

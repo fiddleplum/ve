@@ -159,7 +159,7 @@ namespace ve
 			auto vbo = OwnPtr<render::VertexBufferObject>::returnNew(pair.second);
 			vbos.push_back(vbo);
 			model->setVertexBufferObject(vbo);
-			model->setShader(shader);
+			model->setShader(getShader());
 			model->setImageAtSlot(image, 0);
 			model->setUniformsFunction([this, image](Ptr<render::Shader> const & shader)
 			{
