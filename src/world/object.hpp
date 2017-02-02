@@ -23,7 +23,7 @@ namespace ve
 
 			Ptr<render::Scene> scene;
 			Ptr<render::Model> model;
-			OwnPtr<render::VertexBufferObject> vbo;
+			OwnPtr<render::Mesh> mesh;
 			int localToWorldTransformLocation;
 		};
 	}

@@ -50,7 +50,7 @@ namespace ve
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glClearColor(0, 0, 0, 1);
+			//glClearColor(0, 0, 0, 1);
 			glClearDepth(1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -102,6 +102,7 @@ namespace ve
 			SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			glViewport(0, 0, viewportSize[0], viewportSize[1]);
+			glClearColor(0, 0, 0, 1);
 		}
 
 		void WindowTarget::postRender() const
@@ -194,6 +195,7 @@ namespace ve
 			}
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 			glViewport(0, 0, colorImages[0]->getSize()[0], colorImages[0]->getSize()[1]);
+			glClearColor(1, 0, 0, 1);
 		}
 
 		void ImageTarget::postRender() const

@@ -14,6 +14,8 @@ namespace ve
 			{
 				shader->setUniformValue(localToWorldTransformLocation, getLocalToWorldTransform());
 			});
+			mesh.setNew();
+			model->setMesh(mesh);
 			updateShader();
 		}
 
@@ -21,9 +23,9 @@ namespace ve
 			: Object(scene)
 		{
 			std::ifstream ifs {filename, std::ios::binary};
-			Mesh mesh {ifs};
-			vbo.setNew(mesh);
-			model->setVertexBufferObject(vbo);
+			mesh.setNew(ifs);
+			model->setMesh(mesh);
+			updateShader();
 		}
 
 		Object::~Object()

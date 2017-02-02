@@ -5,11 +5,10 @@ namespace ve
 	Sprite::Sprite(Ptr<render::Scene> const & scene, Ptr<render::Shader> const & shader)
 		: Widget(scene, shader)
 	{
-		Mesh mesh;
-		mesh.formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
-		mesh.vertices = {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1};
-		mesh.indices = {0, 1, 2, 2, 3, 0};
-		vbo.setNew(mesh);
+		mesh.setNew();
+		mesh->setVertexFormat({render::Mesh::POSITION_2D, render::Mesh::UV0});
+		mesh->setVertices({0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1});
+		mesh->setIndices({0, 1, 2, 2, 3, 0});
 
 		originUniformLocation = shader->getUniformInfo("origin").location;
 		imageSizeUniformLocation = shader->getUniformInfo("imageSize").location;
@@ -17,7 +16,7 @@ namespace ve
 		colorUniformLocation = shader->getUniformInfo("color").location;
 
 		model = scene->createModel();
-		model->setVertexBufferObject(vbo);
+		model->setMesh(mesh);
 		model->setShader(shader);
 		model->setImageAtSlot(image, 0);
 		model->setUniformsFunction([this](Ptr<render::Shader> const & shader)
@@ -55,7 +54,7 @@ namespace ve
 	void Sprite::setBounds(Recti bounds_)
 	{
 		bounds = bounds_;
-		updateVbo();
+		updateMesh();
 	}
 
 	Vector2i Sprite::getImageOffset() const
@@ -66,7 +65,7 @@ namespace ve
 	void Sprite::setImageOffset(Vector2i offset)
 	{
 		imageOffset = offset;
-		updateVbo();
+		updateMesh();
 	}
 
 	void Sprite::setImage(Ptr<render::Image> const & image_)
@@ -83,7 +82,7 @@ namespace ve
 	{
 	}
 
-	void Sprite::updateVbo()
+	void Sprite::updateMesh()
 	{
 		std::vector<float> vertices = {
 			0, 0, (float)imageOffset[0], (float)imageOffset[1],
@@ -91,6 +90,6 @@ namespace ve
 			(float)bounds.getSize()[0], (float)bounds.getSize()[1], (float)imageOffset[0] + bounds.getSize()[0], (float)imageOffset[1] + bounds.getSize()[1],
 			0, (float)bounds.getSize()[1], (float)imageOffset[0], (float)imageOffset[1] + bounds.getSize()[1]
 		};
-		vbo->updateVertices(vertices);
+		mesh->setVertices(vertices);
 	}
 }

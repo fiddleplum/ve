@@ -18,14 +18,14 @@ namespace ve
 			depth = depth_;
 		}
 
-		Ptr<VertexBufferObject> Model::getVertexBufferObject() const
+		Ptr<Mesh> Model::getMesh() const
 		{
-			return vertexBufferObject;
+			return mesh;
 		}
 
-		void Model::setVertexBufferObject(Ptr<VertexBufferObject> const & vertexBufferObject_)
+		void Model::setMesh(Ptr<Mesh> const & mesh_)
 		{
-			vertexBufferObject = vertexBufferObject_;
+			mesh = mesh_;
 		}
 
 		Ptr<Shader> Model::getShader() const
@@ -66,7 +66,7 @@ namespace ve
 
 		void Model::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const
 		{
-			if (!shader || !vertexBufferObject)
+			if (!shader || !mesh)
 			{
 				return;
 			}
@@ -94,7 +94,7 @@ namespace ve
 				}
 			}
 			Image::deactivateRest((unsigned int)images.size());
-			vertexBufferObject->render();
+			mesh->render();
 		}
 
 		bool Model::operator < (Model const & model) const
@@ -136,7 +136,7 @@ namespace ve
 						return images[slot] < model.images[slot];
 					}
 				}
-				return vertexBufferObject < model.vertexBufferObject;
+				return mesh < model.mesh;
 			}
 			else // some blending, sort by depth
 			{

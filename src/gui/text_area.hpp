@@ -51,8 +51,8 @@ namespace ve
 		float depth;
 		Vector4f color;
 		std::string text;
-		std::vector<OwnPtr<render::VertexBufferObject>> vbos;
 		std::vector<Ptr<render::Model>> models;
+		std::vector<OwnPtr<render::Mesh>> meshes;
 		Ptr<render::Font> font;
 		int originUniformLocation;
 		int imageSizeUniformLocation;

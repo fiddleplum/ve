@@ -51,7 +51,7 @@ namespace ve
 			// Internal to renderer. Deactivates all slots equal to or greater than the GL slot. Used to clear out excess textures not needed by a material.
 			static void deactivateRest(unsigned int slot);
 
-			// Internal to renderer. Attaches the texture to the currently bound GL frame buffer.
+			// Internal to renderer. Attaches the texture to the currently bound GL frame buffer. Keep in mind on Windows the texture will be rendered upside-down.
 			void attachToFrameBuffer(unsigned int attachment);
 
 		private:

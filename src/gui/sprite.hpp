@@ -43,13 +43,13 @@ namespace ve
 		void update(float dt);
 
 	private:
-		void updateVbo();
+		void updateMesh();
 
 		Recti bounds;
 		Vector2i imageOffset;
 		Ptr<render::Model> model;
 		Ptr<render::Image> image;
-		OwnPtr<render::VertexBufferObject> vbo;
+		OwnPtr<render::Mesh> mesh;
 		int originUniformLocation;
 		int imageSizeUniformLocation;
 		int imageUniformLocation;

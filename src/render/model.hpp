@@ -1,8 +1,9 @@
 #pragma once
 
-#include "render/vertex_buffer_object.hpp"
+#include "render/mesh.hpp"
 #include "render/image.hpp"
 #include "render/shader.hpp"
+#include "util/ptr.hpp"
 #include <functional>
 #include <unordered_map>
 
@@ -24,10 +25,10 @@ namespace ve
 			void setDepth(float depth);
 
 			// Returns the used vertex buffer object.
-			Ptr<VertexBufferObject> getVertexBufferObject() const;
+			Ptr<Mesh> getMesh() const;
 
 			// Sets the used vertex buffer object.
-			void setVertexBufferObject(Ptr<VertexBufferObject> const & vertexBufferObject);
+			void setMesh(Ptr<Mesh> const & mesh);
 
 			// Gets the shader.
 			Ptr<Shader> getShader() const;
@@ -54,7 +55,7 @@ namespace ve
 			float depth;
 			std::vector<Ptr<Image>> images;
 			Ptr<Shader> shader;
-			Ptr<VertexBufferObject> vertexBufferObject;
+			Ptr<Mesh> mesh;
 			std::function<void(Ptr<Shader> const &)> uniformsFunction;
 		};
 

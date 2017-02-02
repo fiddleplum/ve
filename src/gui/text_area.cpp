@@ -84,7 +84,9 @@ namespace ve
 		}
 		models.clear();
 
-		std::map<Ptr<render::Image>, Mesh> meshes;
+		// A text area may use multiple textures for different code point areas. A separate model is created for each texture.
+		std::map<Ptr<render::Image>, std::vector<float>> meshVertices;
+		std::map<Ptr<render::Image>, std::vector<unsigned int>> meshIndices;
 		Vector2i cursor {0, font->getLineHeight()};
 		for (size_t i = 0; i < text.size();)
 		{
@@ -111,54 +113,51 @@ namespace ve
 			render::Font::GlyphCoords const & glyphCoords = font->getGlyphCoordsFromChar(c);
 			Ptr<render::Image> glyphImage = font->getImageFromChar(c);
 
-			// Find which model to append, or create new model.
-			auto it = meshes.find(glyphImage);
-			if (it == meshes.end())
-			{
-				meshes.insert({glyphImage, Mesh()});
-				it = meshes.find(glyphImage);
-				it->second.formatTypes = {Mesh::POSITION_2D, Mesh::UV0};
-			}
-			Mesh & mesh = it->second;
+			// Setup the vertice and indices for this glyph.
 			Rectf glyphBounds;
 			glyphBounds.min = Vector2f(cursor + glyphCoords.offset);
 			glyphBounds.setSize(Vector2f(glyphCoords.uvBounds.getSize()));
 			Rectf glyphUVBounds = Rectf(glyphCoords.uvBounds);
 			glyphUVBounds.max += Vector2f {1, 1};
-			int startingIndex = (int)mesh.vertices.size() / 4;
-			mesh.vertices.push_back(glyphBounds.min[0]);
-			mesh.vertices.push_back(glyphBounds.min[1]);
-			mesh.vertices.push_back(glyphUVBounds.min[0]);
-			mesh.vertices.push_back(glyphUVBounds.min[1]);
-			mesh.vertices.push_back(glyphBounds.max[0]);
-			mesh.vertices.push_back(glyphBounds.min[1]);
-			mesh.vertices.push_back(glyphUVBounds.max[0]);
-			mesh.vertices.push_back(glyphUVBounds.min[1]);
-			mesh.vertices.push_back(glyphBounds.max[0]);
-			mesh.vertices.push_back(glyphBounds.max[1]);
-			mesh.vertices.push_back(glyphUVBounds.max[0]);
-			mesh.vertices.push_back(glyphUVBounds.max[1]);
-			mesh.vertices.push_back(glyphBounds.min[0]);
-			mesh.vertices.push_back(glyphBounds.max[1]);
-			mesh.vertices.push_back(glyphUVBounds.min[0]);
-			mesh.vertices.push_back(glyphUVBounds.max[1]);
-			mesh.indices.push_back(startingIndex + 0);
-			mesh.indices.push_back(startingIndex + 1);
-			mesh.indices.push_back(startingIndex + 2);
-			mesh.indices.push_back(startingIndex + 2);
-			mesh.indices.push_back(startingIndex + 3);
-			mesh.indices.push_back(startingIndex + 0);
+			std::vector<float> & vertices = meshVertices[glyphImage];
+			int startingIndex = (int)vertices.size() / 4;
+			vertices.push_back(glyphBounds.min[0]);
+			vertices.push_back(glyphBounds.min[1]);
+			vertices.push_back(glyphUVBounds.min[0]);
+			vertices.push_back(glyphUVBounds.min[1]);
+			vertices.push_back(glyphBounds.max[0]);
+			vertices.push_back(glyphBounds.min[1]);
+			vertices.push_back(glyphUVBounds.max[0]);
+			vertices.push_back(glyphUVBounds.min[1]);
+			vertices.push_back(glyphBounds.max[0]);
+			vertices.push_back(glyphBounds.max[1]);
+			vertices.push_back(glyphUVBounds.max[0]);
+			vertices.push_back(glyphUVBounds.max[1]);
+			vertices.push_back(glyphBounds.min[0]);
+			vertices.push_back(glyphBounds.max[1]);
+			vertices.push_back(glyphUVBounds.min[0]);
+			vertices.push_back(glyphUVBounds.max[1]);
+			std::vector<unsigned int> & indices = meshIndices[glyphImage];
+			indices.push_back(startingIndex + 0);
+			indices.push_back(startingIndex + 1);
+			indices.push_back(startingIndex + 2);
+			indices.push_back(startingIndex + 2);
+			indices.push_back(startingIndex + 3);
+			indices.push_back(startingIndex + 0);
 			cursor[0] += glyphCoords.advance;
 		}
 
 		// Construct the models form the text.
-		for (auto const & pair : meshes)
+		for (auto const & pair : meshVertices)
 		{
 			auto image = pair.first;
 			auto model = getScene()->createModel();
-			auto vbo = OwnPtr<render::VertexBufferObject>::returnNew(pair.second);
-			vbos.push_back(vbo);
-			model->setVertexBufferObject(vbo);
+			auto mesh = OwnPtr<render::Mesh>::returnNew();
+			meshes.push_back(mesh);
+			mesh->setVertices(meshVertices[image]);
+			mesh->setIndices(meshIndices[image]);
+			mesh->setVertexFormat({render::Mesh::POSITION_2D, render::Mesh::UV0});
+			model->setMesh(mesh);
 			model->setShader(getShader());
 			model->setImageAtSlot(image, 0);
 			model->setUniformsFunction([this, image](Ptr<render::Shader> const & shader)

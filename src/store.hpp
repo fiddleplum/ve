@@ -1,10 +1,9 @@
 #pragma once
 
-#include "render/vertex_buffer_object.hpp"
 #include "render/shader.hpp"
 #include "render/font.hpp"
 #include "render/image.hpp"
-#include "util/mesh.hpp"
+#include "render/mesh.hpp"
 #include "util/cache.hpp"
 
 namespace ve
@@ -14,8 +13,7 @@ namespace ve
 	{
 	public:
 		Cache<render::Image> images;
-		Cache<Mesh> meshes;
-		Cache<render::VertexBufferObject> vertexBufferObjects;
+		Cache<render::Mesh> meshes;
 		Cache<render::Shader> shaders;
 		Cache<render::Font> fonts;
 	};

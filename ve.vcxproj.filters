@@ -17,7 +17,6 @@
     <ClInclude Include="src\render\open_gl.hpp" />
     <ClInclude Include="src\render\scene.hpp" />
     <ClInclude Include="src\render\shader.hpp" />
-    <ClInclude Include="src\render\vertex_buffer_object.hpp" />
     <ClInclude Include="src\util\cache.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\util\interval.hpp" />
@@ -32,7 +31,6 @@
     <ClInclude Include="src\gui\viewport.hpp" />
     <ClInclude Include="src\util\quaternion.hpp" />
     <ClInclude Include="src\util\ray.hpp" />
-    <ClInclude Include="src\util\mesh.hpp" />
     <ClInclude Include="src\render\target.hpp" />
     <ClInclude Include="src\world\camera.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
@@ -42,10 +40,10 @@
     <ClInclude Include="src\util\ptr_list.hpp" />
     <ClInclude Include="src\util\ptr_set.hpp" />
     <ClInclude Include="src\render\image.hpp" />
+    <ClInclude Include="src\render\mesh.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />
-    <ClCompile Include="src\render\vertex_buffer_object.cpp" />
     <ClCompile Include="src\render\shader.cpp" />
     <ClCompile Include="src\render\model.cpp" />
     <ClCompile Include="src\render\scene.cpp" />
@@ -62,7 +60,6 @@
     <ClCompile Include="src\render\font.cpp" />
     <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\viewport.cpp" />
-    <ClCompile Include="src\util\mesh.cpp" />
     <ClCompile Include="src\render\target.cpp" />
     <ClCompile Include="src\world\camera.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
@@ -71,5 +68,6 @@
     <ClCompile Include="src\world\world.cpp" />
     <ClCompile Include="src\store.cpp" />
     <ClCompile Include="src\render\image.cpp" />
+    <ClCompile Include="src\render\mesh.cpp" />
   </ItemGroup>
 </Project>

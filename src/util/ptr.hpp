@@ -49,6 +49,9 @@ namespace ve
 		//! Returns true if there is at least one UsePtr that points to the object this points to.
 		bool isInUse() const;
 
+		//! Returns the number of references, including this pointer, that point to the object.
+		int getNumReferences() const;
+
 		//! Point the pointer to newP, which can have a type that is subclass of T. Only pass in something that looks like 'new T()' to ensure that the raw pointer isn't used elsewhere.
 		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject);
 
@@ -286,6 +289,12 @@ namespace ve
 	bool PtrBase<T, OWN, USE>::isInUse() const
 	{
 		return p != nullptr && c->uc != 0;
+	}
+
+	template <typename T, bool OWN, bool USE>
+	int PtrBase<T, OWN, USE>::getNumReferences() const
+	{
+		return p != nullptr ? c->pc : 0;
 	}
 
 	template <typename T, bool OWN, bool USE> template <typename Y>
