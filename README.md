@@ -28,3 +28,7 @@ Each window contains a root GUI element, which may in turn contain other element
 
 All resource classes have a corresponding static `resource` object which handles the loading/creating and destroying of that type of resource.
 
+### Shaders
+
+All shaders must implement a "uniform float flipY;" variable which flips the end-result vertex along the Y axis, so that +1 becomes -1, and visa-versa. The uniform flipY is either +1 or -1, so you can just multiply it.
+

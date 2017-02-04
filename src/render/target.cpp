@@ -11,6 +11,7 @@ namespace ve
 
 		Target::Target()
 		{
+			flipY = false;
 		}
 
 		Ptr<Scene> Target::getScene() const
@@ -54,7 +55,7 @@ namespace ve
 			glClearDepth(1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			scene->render(uniformsFunction);
+			scene->render(uniformsFunction, flipY);
 
 			postRender();
 		}
@@ -112,6 +113,10 @@ namespace ve
 
 		ImageTarget::ImageTarget()
 		{
+			if (std::string(SDL_GetPlatform()) == "Windows") // Windows renders to targets upside-down, so the shaders need to flip everything on the Y-axis.
+			{
+				flipY = true;
+			}
 			glGenFramebuffers(1, &framebuffer);
 		}
 

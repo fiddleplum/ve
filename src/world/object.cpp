@@ -50,9 +50,11 @@ namespace ve
 					"uniform mat4 localToWorldTransform;\n"
 					"uniform mat4 worldToCameraTramsform;\n"
 					"uniform mat4 cameraToNdcTransform;\n"
+					"uniform float flipY;\n"
 					"void main(void)\n"
 					"{\n"
 					"	gl_Position = cameraToNdcTransform * worldToCameraTramsform * localToWorldTransform * vec4(position3d, 1.0);\n"
+					"	gl_Position.y *= flipY;\n"
 					"}\n";
 				shaderConfig.fragmentCode =
 					"#version 430\n"

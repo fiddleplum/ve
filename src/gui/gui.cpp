@@ -56,11 +56,12 @@ namespace ve
 			"uniform vec2 origin;\n"
 			"uniform vec2 imageSize;\n"
 			"uniform vec2 guiSize;\n"
+			"uniform float flipY;\n"
 			"attribute vec2 position2d;\n"
 			"attribute vec2 uv0;\n"
 			"varying vec2 v_uv0;\n"
 			"void main(void) {\n"
-			"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, -2 * (origin.y + position2d.y) / guiSize.y + 1, 0, 1);\n"
+			"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, flipY * (-2 * (origin.y + position2d.y) / guiSize.y + 1), 0, 1);\n"
 			"	v_uv0 = vec2(uv0.x / imageSize.x, uv0.y / imageSize.y);\n"
 			"}\n";
 		shaderConfig.children["fragment"].text =

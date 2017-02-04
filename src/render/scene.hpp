@@ -29,11 +29,11 @@ namespace ve
 			//! Removes a model.
 			void destroyModel(Ptr<Model> model);
 
-			//! Sets the function to be called that sets any model-specific uniforms. Called every time the shader is changed.
+			//! Sets the function to be called that sets any scene-specific uniforms. Called every time the shader is changed.
 			void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
 			//! Renders the scene.
-			void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction);
+			void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, bool flipY);
 
 		private:
 			std::set<Ptr<Target>> dependentTargets;

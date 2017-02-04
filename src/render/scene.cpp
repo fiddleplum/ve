@@ -47,7 +47,7 @@ namespace ve
 			uniformsFunction = uniformsFunction_;
 		}
 
-		void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction)
+		void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, bool flipY)
 		{
 			std::multiset<Ptr<Model>> modelsSorted;
 			for (auto model : models)
@@ -56,7 +56,7 @@ namespace ve
 			}
 			for (auto model : modelsSorted)
 			{
-				model->render(stageUniformsFunction, uniformsFunction);
+				model->render(stageUniformsFunction, uniformsFunction, flipY);
 			}
 		}
 	}

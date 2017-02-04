@@ -64,7 +64,7 @@ namespace ve
 			uniformsFunction = uniformsFunction_;
 		}
 
-		void Model::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const
+		void Model::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction, bool flipY) const
 		{
 			if (!shader || !mesh)
 			{
@@ -81,6 +81,7 @@ namespace ve
 				{
 					sceneUniformsFunction(shader);
 				}
+				shader->setUniformValue<float>("flipY", flipY ? -1.0f : 1.0f);
 			}
 			if (uniformsFunction)
 			{

@@ -46,7 +46,7 @@ namespace ve
 			void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
 			// Renders the model.
-			void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction) const;
+			void render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, std::function<void(Ptr<Shader> const &)> const & sceneUniformsFunction, bool flipY) const;
 
 			// Returns true if this model sorts less than the other model.
 			bool operator < (Model const & model) const;

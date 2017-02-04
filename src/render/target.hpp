@@ -38,6 +38,9 @@ namespace ve
 			// Called just after rendering the scene.
 			virtual void postRender() const = 0;
 
+			// Windows renders to image targets (frame buffers) upside-down, and so this is required to render things rightside-up.
+			bool flipY;
+
 		private:
 			Ptr<Scene> scene;
 			std::function<void(Ptr<Shader> const &)> uniformsFunction;
@@ -72,6 +75,7 @@ namespace ve
 			Vector2i viewportSize;
 		};
 
+		// An target that writes the output to images.
 		class ImageTarget : public Target
 		{
 		public:
