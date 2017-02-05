@@ -30,11 +30,20 @@ namespace ve
 		Mesh::Mesh(std::istream & in)
 			: Mesh()
 		{
+			unsigned int numIndicesPerPrimitive;
+			unsigned int numVerticesPerFrame;
+			std::vector<unsigned int> formatTypes;
+			std::vector<float> vertices;
+			std::vector<unsigned int> indices;
 			deserialize(in, numIndicesPerPrimitive);
 			deserialize(in, numVerticesPerFrame);
 			deserialize(in, formatTypes);
 			deserialize(in, vertices);
 			deserialize(in, indices);
+			setNumIndicesPerPrimitive(numIndicesPerPrimitive);
+			setVertexFormat(formatTypes);
+			setVertices(vertices);
+			setIndices(indices);
 		}
 
 		Mesh::~Mesh()
