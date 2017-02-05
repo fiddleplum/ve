@@ -9,6 +9,10 @@ namespace ve
 			color = {1, 1, 1};
 		}
 
+		Light::~Light()
+		{
+		}
+
 		Vector3f Light::getColor() const
 		{
 			return color;

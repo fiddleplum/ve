@@ -23,6 +23,11 @@ namespace ve
 			transformsNeedUpdate = true;
 		}
 
+		Camera:: ~Camera()
+		{
+
+		}
+
 		float Camera::getAspectRatio() const
 		{
 			return aspectRatio;

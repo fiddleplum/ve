@@ -12,6 +12,9 @@ namespace ve
 			// Constructs as a white light.
 			Light();
 
+			// Destructs the light.
+			virtual ~Light();
+
 			// Returns the color.
 			Vector3f getColor() const;
 

@@ -17,7 +17,5 @@ namespace ve
 		Cache<render::Shader> shaders;
 		Cache<render::Font> fonts;
 	};
-
-	Ptr<Store> getStore();
 }
 

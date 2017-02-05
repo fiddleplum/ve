@@ -4,17 +4,158 @@
 
 namespace ve
 {
-	bool looping = false;
-	float secondsPerUpdate = 1.f / 24.f;
-	std::function<void(float dt)> updateCallback;
-	// std::function<void(InputEvent const & inputEvent)> inputEventCallback;
-	std::function<void()> requestQuitCallback;
-	PtrSet<Window> windows;
-	PtrSet<world::World> worlds;
-	OwnPtr<Store> store;
+	App::App()
+	{
+		// Initialize SDL.
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
+		{
+			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
+		}
+
+		store.setNew();
+	}
+
+	App::~App()
+	{
+		windows.queueAllForErase();
+		windows.processEraseQueue();
+		worlds.queueAllForErase();
+		worlds.processEraseQueue();
+
+		store.setNull();
+
+		SDL_Quit();
+	}
+
+	void App::loop()
+	{
+		float lastFrameTime = SDL_GetTicks() / 1000.f;
+		float accumulator = 0.f;
+		looping = true;
+		while (looping)
+		{
+			float currentFrameTime = SDL_GetTicks() / 1000.f;
+
+			//// Handle events
+			//controllers::startFrame();
+			SDL_Event sdlEvent;
+			while (SDL_PollEvent(&sdlEvent))
+			{
+				handleSDLEvent(sdlEvent);
+			}
+			//for(int i = 0; i < controllers::getNumControllers(); i++)
+			//{
+			//	std::vector<std::pair<int, float>> controllerAxisEvents = controllers::getAxesChangedSinceLastFrame(i);
+			//	for(auto controllerAxisEvent : controllerAxisEvents)
+			//	{
+			//		ControllerAxisEvent event{Ptr<Window>()};
+			//		event.controller = i;
+			//		event.axis = controllerAxisEvent.first;
+			//		event.value = controllerAxisEvent.second;
+			//		handleEvent(event);
+			//	}
+			//}
+
+			// Update
+			while (accumulator >= secondsPerUpdate)
+			{
+				if (updateCallback)
+				{
+					updateCallback(secondsPerUpdate);
+				}
+
+				for (auto & window : windows)
+				{
+					window->update(secondsPerUpdate);
+				}
+				//for (auto & scene : scenes)
+				//{
+				//	scene->update(dt);
+				//}
+
+				accumulator -= secondsPerUpdate;
+			}
+
+			// PreRender Update
+			for (auto & window : windows)
+			{
+				//window->preRenderUpdate();
+			}
+
+			// Render (Scene render happens in each Viewport)
+			for (auto const & window : windows)
+			{
+				window->render();
+			}
+
+			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
+			// This algorithm is from http://gafferongames.com/game-physics/fix-your-timestep.
+			accumulator += currentFrameTime - lastFrameTime;
+			lastFrameTime = currentFrameTime;
+
+			// Do frame cleanup.
+			windows.processEraseQueue();
+		}
+	}
+
+	void App::quit()
+	{
+		looping = false;
+	}
+
+	Ptr<Window> App::createWindow()
+	{
+		auto window = *windows.insertNew();
+		window->setCloseRequestedHandler(std::bind(&App::quit, this));
+		return window;
+	}
+
+	void App::destroyWindow(Ptr<Window> const & window)
+	{
+		windows.queueForErase(window);
+		if (!looping) // not looping so we're safe to just erase it.
+		{
+			windows.processEraseQueue();
+		}
+	}
+
+	Ptr<world::World> App::createWorld()
+	{
+		return *worlds.insertNew();
+	}
+
+	void App::destroyWorld(Ptr<world::World> const & world)
+	{
+		worlds.queueForErase(world);
+	}
+
+	void App::showMessage(std::string const & message)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", message.c_str(), nullptr);
+	}
+
+	Ptr<Store> App::getStore()
+	{
+		return store;
+	}
+
+	void App::setUpateCallback(std::function<void(float dt)> const & callback)
+	{
+		updateCallback = callback;
+	}
+
+	//void App::setInputEventCallback(std::function<void(InputEvent const & event)> const & callback)
+	//{
+	//	inputEventCallback = callback;
+	//}
+
+	void App::setRequestQuitCallback(std::function<void()> const & callback)
+	{
+		requestQuitCallback = callback;
+	}
 
 	// SDL has its own window IDs for SDL_Events. This gets the right window associated with that ID. Returns null if none found.
-	Ptr<Window> getWindowFromId(unsigned int id)
+	Ptr<Window> App::getWindowFromId(unsigned int id)
 	{
 		SDL_Window * sdlWindow = SDL_GetWindowFromID(id);
 		if (sdlWindow != NULL)
@@ -31,7 +172,7 @@ namespace ve
 	}
 
 	// This handles a single SDL_Event. Lots of things happen here.
-	void handleSDLEvent(SDL_Event const & sdlEvent)
+	void App::handleSDLEvent(SDL_Event const & sdlEvent)
 	{
 		Ptr<Window> window;
 
@@ -106,128 +247,6 @@ namespace ve
 				//}
 		}
 	}
-
-	void loop()
-	{
-		float lastFrameTime = SDL_GetTicks() / 1000.f;
-		float accumulator = 0.f;
-		looping = true;
-		while (looping)
-		{
-			float currentFrameTime = SDL_GetTicks() / 1000.f;
-
-			//// Handle events
-			//controllers::startFrame();
-			SDL_Event sdlEvent;
-			while (SDL_PollEvent(&sdlEvent))
-			{
-				handleSDLEvent(sdlEvent);
-			}
-			//for(int i = 0; i < controllers::getNumControllers(); i++)
-			//{
-			//	std::vector<std::pair<int, float>> controllerAxisEvents = controllers::getAxesChangedSinceLastFrame(i);
-			//	for(auto controllerAxisEvent : controllerAxisEvents)
-			//	{
-			//		ControllerAxisEvent event{Ptr<Window>()};
-			//		event.controller = i;
-			//		event.axis = controllerAxisEvent.first;
-			//		event.value = controllerAxisEvent.second;
-			//		handleEvent(event);
-			//	}
-			//}
-
-			// Update
-			while (accumulator >= secondsPerUpdate)
-			{
-				if (updateCallback)
-				{
-					updateCallback(secondsPerUpdate);
-				}
-
-				for (auto & window : windows)
-				{
-					window->update(secondsPerUpdate);
-				}
-				//for (auto & scene : scenes)
-				//{
-				//	scene->update(dt);
-				//}
-
-				accumulator -= secondsPerUpdate;
-			}
-
-			// PreRender Update
-			for (auto & window : windows)
-			{
-				//window->preRenderUpdate();
-			}
-
-			// Render (Scene render happens in each Viewport)
-			for (auto const & window : windows)
-			{
-				window->render();
-			}
-
-			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
-			// This algorithm is from http://gafferongames.com/game-physics/fix-your-timestep.
-			accumulator += currentFrameTime - lastFrameTime;
-			lastFrameTime = currentFrameTime;
-
-			// Do frame cleanup.
-			windows.processEraseQueue();
-		}
-	}
-
-	void quit()
-	{
-		looping = false;
-	}
-
-	Ptr<Window> createWindow()
-	{
-		auto window = *windows.insertNew();
-		window->setCloseRequestedHandler(&quit);
-		return window;
-	}
-
-	void destroyWindow(Ptr<Window> const & window)
-	{
-		windows.queueForErase(window);
-		if (!looping) // not looping so we're safe to just erase it.
-		{
-			windows.processEraseQueue();
-		}
-	}
-
-	Ptr<world::World> createWorld()
-	{
-		return *worlds.insertNew();
-	}
-
-	void destroyWorld(Ptr<world::World> const & world)
-	{
-		worlds.queueForErase(world);
-	}
-
-	void showMessage(std::string const & message)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", message.c_str(), nullptr);
-	}
-
-	void setUpateCallback(std::function<void(float dt)> const & callback)
-	{
-		updateCallback = callback;
-	}
-
-	//void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback)
-	//{
-	//	inputEventCallback = callback;
-	//}
-
-	void setRequestQuitCallback(std::function<void()> const & callback)
-	{
-		requestQuitCallback = callback;
-	}
 }
 
 // Called by SDL to run the entire app.
@@ -242,24 +261,7 @@ int main(int argc, char *argv[])
 			args.push_back(std::string(argv[i]));
 		}
 
-		// Initialize SDL.
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
-		{
-			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
-		}
-
-		ve::store.setNew();
-
 		entry(args);
-
-		ve::windows.queueAllForErase();
-		ve::windows.processEraseQueue();
-		ve::worlds.queueAllForErase();
-		ve::worlds.processEraseQueue();
-
-		ve::store.setNull();
-
-		SDL_Quit();
 
 		return 0;
 	}

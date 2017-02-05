@@ -19,6 +19,10 @@ namespace ve
 			});
 		}
 
+		World::~World()
+		{
+		}
+
 		void World::setupTarget(Ptr<render::Target> const & target, Ptr<Camera> const & camera)
 		{
 			target->setScene(scene);
@@ -34,13 +38,6 @@ namespace ve
 			return scene;
 		}
 
-		Ptr<Camera> World::createCamera()
-		{
-			auto camera = OwnPtr<Camera>::returnNew();
-			cameras.insert(camera);
-			return camera;
-		}
-
 		void World::destroyCamera(Ptr<Camera> const & camera)
 		{
 			auto it = std::find(cameras.begin(), cameras.end(), camera);
@@ -52,13 +49,6 @@ namespace ve
 			{
 				cameras.erase(it);
 			}
-		}
-
-		Ptr<Light> World::createLight()
-		{
-			auto light = OwnPtr<Light>::returnNew();
-			lights.insert(light);
-			return light;
 		}
 
 		void World::destroyLight(Ptr<Light> const & light)
@@ -74,13 +64,6 @@ namespace ve
 			}
 		}
 
-		Ptr<Object> World::createObject()
-		{
-			auto object = OwnPtr<Object>::returnNew(scene);
-			objects.insert(object);
-			return object;
-		}
-
 		void World::destroyobject(Ptr<Object> const & object)
 		{
 			auto it = std::find(objects.begin(), objects.end(), object);
@@ -92,6 +75,11 @@ namespace ve
 			{
 				objects.erase(it);
 			}
+		}
+
+		void World::update(float dt)
+		{
+
 		}
 	}
 }

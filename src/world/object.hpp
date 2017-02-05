@@ -10,12 +10,16 @@ namespace ve
 		class Object : public Entity
 		{
 		public:
+			// Constructs an object with an empty model.
 			Object(Ptr<render::Scene> const & scene);
 
+			// Constructs an object from a filename.
 			Object(Ptr<render::Scene> const & scene, std::string const & filename);
 
-			~Object();
+			// Destructs the object.
+			virtual ~Object();
 
+			// Returns the render model used by the object.
 			Ptr<render::Model> getModel() const;
 
 		private:

@@ -12,34 +12,60 @@ union SDL_Event;
 
 namespace ve
 {
-	//! Starts the user loop. It keeps going until quit is called, or the last window is closed.
-	void loop();
+	class App
+	{
+	public:
+		//! Constructs the app.
+		App();
 
-	//! Stops the ve loop at the end of the current frame.
-	void quit();
+		//! Destructs the app.
+		virtual ~App();
 
-	//! Creates a window.
-	Ptr<Window> createWindow();
+		//! Starts the user loop. It keeps going until quit is called, or the last window is closed.
+		void loop();
 
-	//! Destroys a window.
-	void destroyWindow(Ptr<Window> const & window);
+		//! Stops the ve loop at the end of the current frame.
+		void quit();
 
-	//! Creates a world.
-	Ptr<world::World> createWorld();
+		//! Creates a window.
+		Ptr<Window> createWindow();
 
-	//! Destroys a world.
-	void destroyWorld(Ptr<world::World> const & world);
+		//! Destroys a window.
+		void destroyWindow(Ptr<Window> const & window);
 
-	//! Shows a message window.
-	void showMessage(std::string const & message);
+		//! Creates a world.
+		Ptr<world::World> createWorld();
 
-	//! Sets the update callback. Called once per frame.
-	void setUpateCallback(std::function<void(float dt)> const & callback);
+		//! Destroys a world.
+		void destroyWorld(Ptr<world::World> const & world);
 
-	//! Sets the input event callback. Called once per input event.
-	// void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback);
+		//! Shows a message window.
+		void showMessage(std::string const & message);
 
-	//! Sets the request quit callback, called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc. The user needs to implement this.
-	void setRequestQuitCallback(std::function<void()> const & callback);
+		//! Returns the store.
+		Ptr<Store> getStore();
+
+		//! Sets the update callback. Called once per frame.
+		void setUpateCallback(std::function<void(float dt)> const & callback);
+
+		//! Sets the input event callback. Called once per input event.
+		// void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback);
+
+		//! Sets the request quit callback, called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc. The user needs to implement this.
+		void setRequestQuitCallback(std::function<void()> const & callback);
+
+	private:
+		Ptr<Window> getWindowFromId(unsigned int id);
+		void handleSDLEvent(SDL_Event const & sdlEvent);
+
+		bool looping = false;
+		float secondsPerUpdate = 1.f / 24.f;
+		std::function<void(float dt)> updateCallback;
+		// std::function<void(InputEvent const & inputEvent)> inputEventCallback;
+		std::function<void()> requestQuitCallback;
+		PtrSet<Window> windows;
+		PtrSet<world::World> worlds;
+		OwnPtr<Store> store;
+	};
 }
 
