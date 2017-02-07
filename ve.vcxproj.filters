@@ -41,6 +41,7 @@
     <ClInclude Include="src\util\ptr_set.hpp" />
     <ClInclude Include="src\render\image.hpp" />
     <ClInclude Include="src\render\mesh.hpp" />
+    <ClInclude Include="src\app.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />
@@ -69,5 +70,6 @@
     <ClCompile Include="src\store.cpp" />
     <ClCompile Include="src\render\image.cpp" />
     <ClCompile Include="src\render\mesh.cpp" />
+    <ClCompile Include="src\app.cpp" />
   </ItemGroup>
 </Project>
