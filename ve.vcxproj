@@ -186,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="src\app.hpp" />
     <ClInclude Include="src\gui\viewport.hpp" />
+    <ClInclude Include="src\input_event.hpp" />
     <ClInclude Include="src\store.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\std\optional.hpp" />
@@ -229,7 +230,7 @@
   <ItemGroup>
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\gui\viewport.cpp" />
-    <ClCompile Include="src\store.cpp" />
+    <ClCompile Include="src\input_event.cpp" />
     <ClCompile Include="src\ve.cpp" />
     <ClCompile Include="src\gui\text_area.cpp" />
     <ClCompile Include="src\util\config.cpp" />

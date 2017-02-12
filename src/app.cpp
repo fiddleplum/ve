@@ -12,6 +12,7 @@ namespace ve
 			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
 		}
 
+		input.setNew();
 		store.setNew();
 	}
 
@@ -59,10 +60,7 @@ namespace ve
 			// Update
 			while (accumulator >= secondsPerUpdate)
 			{
-				if (updateCallback)
-				{
-					updateCallback(secondsPerUpdate);
-				}
+				update(secondsPerUpdate);
 
 				for (auto & window : windows)
 				{
@@ -99,13 +97,6 @@ namespace ve
 		looping = false;
 	}
 
-	Ptr<Window> App::createWindow()
-	{
-		auto window = *windows.insertNew();
-		window->setCloseRequestedHandler(std::bind(&App::quit, this));
-		return window;
-	}
-
 	void App::destroyWindow(Ptr<Window> const & window)
 	{
 		windows.queueForErase(window);
@@ -117,7 +108,7 @@ namespace ve
 
 	Ptr<world::World> App::createWorld()
 	{
-		return *worlds.insertNew();
+		return *worlds.insertNew<world::World>();
 	}
 
 	void App::destroyWorld(Ptr<world::World> const & world)
@@ -130,24 +121,14 @@ namespace ve
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", message.c_str(), nullptr);
 	}
 
-	Ptr<Store> App::getStore()
+	Ptr<Input> App::getInput() const
+	{
+		return input;
+	}
+
+	Ptr<Store> App::getStore() const
 	{
 		return store;
-	}
-
-	void App::setUpateCallback(std::function<void(float dt)> const & callback)
-	{
-		updateCallback = callback;
-	}
-
-	//void App::setInputEventCallback(std::function<void(InputEvent const & event)> const & callback)
-	//{
-	//	inputEventCallback = callback;
-	//}
-
-	void App::setRequestQuitCallback(std::function<void()> const & callback)
-	{
-		requestQuitCallback = callback;
 	}
 
 	// SDL has its own window IDs for SDL_Events. This gets the right window associated with that ID. Returns null if none found.
@@ -178,6 +159,7 @@ namespace ve
 			case SDL_WINDOWEVENT:
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
+			case SDL_TEXTINPUT:
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_MOUSEBUTTONUP:
 			case SDL_MOUSEMOTION:
@@ -193,10 +175,7 @@ namespace ve
 		switch (sdlEvent.type)
 		{
 			case SDL_QUIT:
-				if (requestQuitCallback)
-				{
-					requestQuitCallback();
-				}
+				requestQuit();
 				break;
 			case SDL_WINDOWEVENT:
 				switch (sdlEvent.window.event)
@@ -211,36 +190,26 @@ namespace ve
 						window->onCursorPositionChanged(std::nullopt);
 						break;
 				}
-				//case SDL_KEYDOWN:
-				//case SDL_KEYUP:
-				//{
-				//	KeyboardEvent kevent;
-				//	kevent.setFromSDL(sdlEvent.type, sdlEvent.key.keysym.sym);
-				//	window->handleInputEvent(kevent);
-				//	break;
-				//}
-				//case SDL_MOUSEBUTTONDOWN:
-				//case SDL_MOUSEBUTTONUP:
-				//{
-				//	MouseButtonEvent mbevent;
-				//	mbevent.setFromSDL(sdlEvent.type, sdlEvent.button.button);
-				//	window->handleInputEvent(mbevent);
-				//	break;
-				//}
-				//case SDL_MOUSEMOTION:
-				//{
-				//	MouseMoveEvent mmevent;
-				//	mmevent.setFromSDL(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
-				//	window->handleInputEvent(mmevent);
-				//	break;
-				//}
-				//case SDL_MOUSEWHEEL:
-				//{
-				//	MouseWheelEvent mwevent;
-				//	mwevent.setFromSDL(sdlEvent.wheel.y * (sdlEvent.wheel.direction == SDL_MOUSEWHEEL_NORMAL ? 1 : -1));
-				//	window->handleInputEvent(mwevent);
-				//	break;
-				//}
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+			case SDL_TEXTINPUT:
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEMOTION:
+			case SDL_MOUSEWHEEL:
+			{
+				std::vector<Input::Event> inputEvents;
+				input->populateFromSDLEvents(inputEvents, sdlEvent);
+				for (auto && inputEvent : inputEvents)
+				{
+					if (window.isValid())
+					{
+						//window->handleInputEven(inputEvent);
+					}
+					handleInputEvent(inputEvent);
+				}
+				break;
+			}
 		}
 	}
 }

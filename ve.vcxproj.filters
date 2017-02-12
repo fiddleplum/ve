@@ -42,6 +42,7 @@
     <ClInclude Include="src\render\image.hpp" />
     <ClInclude Include="src\render\mesh.hpp" />
     <ClInclude Include="src\app.hpp" />
+    <ClInclude Include="src\input_event.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />
@@ -67,9 +68,9 @@
     <ClCompile Include="src\world\light.cpp" />
     <ClCompile Include="src\world\object.cpp" />
     <ClCompile Include="src\world\world.cpp" />
-    <ClCompile Include="src\store.cpp" />
     <ClCompile Include="src\render\image.cpp" />
     <ClCompile Include="src\render\mesh.cpp" />
     <ClCompile Include="src\app.cpp" />
+    <ClCompile Include="src\input_event.cpp" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "window.hpp"
-#include "store.hpp"
 #include "world/world.hpp"
+#include "store.hpp"
+#include "input_event.hpp"
 #include "util/ptr_set.hpp"
 
 union SDL_Event;
@@ -25,7 +26,8 @@ namespace ve
 		void quit();
 
 		//! Creates a window.
-		Ptr<Window> createWindow();
+		template <typename WindowType>
+		Ptr<WindowType> createWindow();
 
 		//! Destroys a window.
 		void destroyWindow(Ptr<Window> const & window);
@@ -39,11 +41,11 @@ namespace ve
 		//! Shows a message window.
 		void showMessage(std::string const & message);
 
-		//! Returns the store.
-		Ptr<Store> getStore();
+		//! Returns the input system.
+		Ptr<Input> getInput() const;
 
-		//! Sets the update callback. Called once per frame.
-		void setUpateCallback(std::function<void(float dt)> const & callback);
+		//! Returns the store.
+		Ptr<Store> getStore() const;
 
 		//! Sets the input event callback. Called once per input event.
 		// void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback);
@@ -51,18 +53,33 @@ namespace ve
 		//! Sets the request quit callback, called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc. The user needs to implement this.
 		void setRequestQuitCallback(std::function<void()> const & callback);
 
+	protected:
+		//! Called once per time step to update the app.
+		virtual void update(float dt) {}
+
+		//! Called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc.
+		virtual void requestQuit() {}
+
+		//! Called once per input event.
+		virtual void handleInputEvent(Input::Event const & inputEvent) {}
+
 	private:
 		Ptr<Window> getWindowFromId(unsigned int id);
 		void handleSDLEvent(SDL_Event const & sdlEvent);
 
 		bool looping = false;
 		float secondsPerUpdate = 1.f / 24.f;
-		std::function<void(float dt)> updateCallback;
-		// std::function<void(InputEvent const & inputEvent)> inputEventCallback;
-		std::function<void()> requestQuitCallback;
+		OwnPtr<Input> input;
+		OwnPtr<Store> store;
 		PtrSet<Window> windows;
 		PtrSet<world::World> worlds;
-		OwnPtr<Store> store;
 	};
+
+	template <typename WindowType>
+	Ptr<WindowType> App::createWindow()
+	{
+		auto window = *windows.insertNew<WindowType>();
+		return window;
+	}
 }
 

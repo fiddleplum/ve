@@ -19,7 +19,7 @@ namespace ve
 		PtrSet();
 
 		// Inserts the element. Returns the position and true, or the end and false if the element was already there.
-		template <typename ... Args>
+		template <typename YType, typename ... Args>
 		iterator insertNew(Args && ... args);
 
 		// Removes the element.
@@ -92,10 +92,10 @@ namespace ve
 	{
 	}
 
-	template <typename T> template <typename ... Args>
+	template <typename T> template <typename YType, typename ... Args>
 	typename PtrSet<T>::iterator PtrSet<T>::insertNew(Args && ... args)
 	{
-		auto t = OwnPtr<T>::returnNew(args...);
+		auto t = OwnPtr<YType>::returnNew(args...);
 		auto iter = set.insert(t);
 		lookup[t] = iter.first;
 		return iterator(iter.first);
