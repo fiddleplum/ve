@@ -139,11 +139,11 @@ namespace ve
 			vertices.push_back(glyphUVBounds.max[1]);
 			std::vector<unsigned int> & indices = meshIndices[glyphImage];
 			indices.push_back(startingIndex + 0);
+			indices.push_back(startingIndex + 2);
 			indices.push_back(startingIndex + 1);
-			indices.push_back(startingIndex + 2);
-			indices.push_back(startingIndex + 2);
-			indices.push_back(startingIndex + 3);
 			indices.push_back(startingIndex + 0);
+			indices.push_back(startingIndex + 3);
+			indices.push_back(startingIndex + 2);
 			cursor[0] += glyphCoords.advance;
 		}
 

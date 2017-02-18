@@ -13,7 +13,7 @@ namespace ve
 		{
 		public:
 			// The formats supported.
-			enum Format { RGB24, RGBA32, GRAYSCALE32 };
+			enum Format { RGB24, RGBA32, GRAYSCALE32, DEPTH };
 
 			// Create a blank image. Pixels are uninitializaed.
 			Image(Vector2i size, Format format);

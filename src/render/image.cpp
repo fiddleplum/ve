@@ -17,6 +17,7 @@ namespace ve
 			switch (format)
 			{
 				case RGB24:
+				case DEPTH:
 					bytesPerPixel = 3;
 					break;
 				case RGBA32:
@@ -70,11 +71,6 @@ namespace ve
 			}
 			SDL_FreeSurface(surface);
 		}
-
-		//Image::Image(void const * sdlSurface)
-		//{
-		//	loadFromSDLSurface(sdlSurface);
-		//}
 
 		Image::~Image()
 		{
@@ -183,6 +179,11 @@ namespace ve
 					glFormat = GL_RED;
 					glType = GL_UNSIGNED_INT;
 					break;
+				case Image::DEPTH:
+					glInternalFormat = GL_DEPTH_COMPONENT24;
+					glFormat = GL_DEPTH_COMPONENT;
+					glType = GL_UNSIGNED_BYTE;
+					break;
 			}
 
 			glBindTexture(GL_TEXTURE_2D, glId);
@@ -212,33 +213,5 @@ namespace ve
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		}
-
-		//void Image::loadFromSDLSurface(void const * sdlSurface_)
-		//{
-		//	SDL_Surface const * sdlSurface = (SDL_Surface const *)sdlSurface_;
-		//	if (sdlSurface == 0)
-		//	{
-		//		throw std::runtime_error("Null pointer. ");
-		//	}
-		//	size[0] = sdlSurface->w;
-		//	size[1] = sdlSurface->h;
-
-		//	switch (sdlSurface->format->BitsPerPixel)
-		//	{
-		//		case 24:
-		//			format = RGB24;
-		//			bytesPerPixel = 3;
-		//			break;
-		//		case 32:
-		//			format = RGBA32;
-		//			bytesPerPixel = 4;
-		//			break;
-		//		default:
-		//			throw std::runtime_error("Only RGB24 and RGBA32 pixel formats are supported. ");
-		//	}
-
-		//	pixels.resize(size[0] * size[1] * bytesPerPixel);
-		//	memcpy(&pixels[0], sdlSurface->pixels, pixels.size());
-		//}
 	}
 }

@@ -8,7 +8,7 @@ namespace ve
 		mesh.setNew();
 		mesh->setVertexFormat({render::Mesh::POSITION_2D, render::Mesh::UV0});
 		mesh->setVertices({0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1});
-		mesh->setIndices({0, 1, 2, 2, 3, 0});
+		mesh->setIndices({0, 2, 1, 0, 3, 2});
 
 		originUniformLocation = shader->getUniformInfo("origin").location;
 		imageSizeUniformLocation = shader->getUniformInfo("imageSize").location;

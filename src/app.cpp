@@ -155,7 +155,7 @@ namespace ve
 		updateCallback = callback;
 	}
 
-	void App::setInputEventCallback(std::function<void(Input::Event const & event)> const & callback)
+	void App::setInputEventCallback(std::function<void(InputEvent const & event)> const & callback)
 	{
 		inputEventCallback = callback;
 	}
@@ -235,13 +235,13 @@ namespace ve
 			case SDL_MOUSEMOTION:
 			case SDL_MOUSEWHEEL:
 			{
-				std::vector<Input::Event> inputEvents;
+				std::vector<InputEvent> inputEvents;
 				input->populateFromSDLEvents(inputEvents, sdlEvent);
 				for (auto && inputEvent : inputEvents)
 				{
 					if (window.isValid())
 					{
-						//window->handleInputEven(inputEvent);
+						//window->handleInputEvent(inputEvent);
 					}
 					if (inputEventCallback)
 					{

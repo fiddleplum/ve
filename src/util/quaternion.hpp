@@ -96,7 +96,7 @@ namespace ve
 	Quaternion<T>::Quaternion(T r_, Vector<3, T> ijk_)
 	{
 		r = r_;
-		ijk = ijk_
+		ijk = ijk_;
 	}
 
 	template <typename T>
@@ -258,7 +258,7 @@ namespace ve
 	template <typename T>
 	Quaternion<T> operator * (Quaternion<T> const & q_lhs, Quaternion<T> const & q_rhs)
 	{
-		return Quaternion<T>(q_lhs.r * q_rhs.r - q_lhs.ijk.dot(q_rhs.ijk), q_lhs.r * q_rhs.ijk + q_rhs.r * q_lhs.jik + q_lhs.ijk.cross(q_rhs.ijk));
+		return Quaternion<T>(q_lhs.r * q_rhs.r - q_lhs.ijk.dot(q_rhs.ijk), q_lhs.r * q_rhs.ijk + q_rhs.r * q_lhs.ijk + q_lhs.ijk.cross(q_rhs.ijk));
 	}
 
 	template <typename T>

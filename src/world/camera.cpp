@@ -1,4 +1,5 @@
 #include "world/camera.hpp"
+#include "util/math.hpp"
 
 namespace ve
 {
@@ -9,7 +10,7 @@ namespace ve
 			aspectRatio = 1.0f;
 			near = 0.1f;
 			far = 1000.0f;
-			fovY = 3.14159f / 2.0f;
+			fovY = (float)math::PI_OVER_2;
 			height = 1.0f;
 			perspective = true;
 			localToNdcTransform = ndcToLocalTransform = Matrix44f::identity();

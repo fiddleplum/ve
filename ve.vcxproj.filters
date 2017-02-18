@@ -43,6 +43,7 @@
     <ClInclude Include="src\render\mesh.hpp" />
     <ClInclude Include="src\app.hpp" />
     <ClInclude Include="src\input_event.hpp" />
+    <ClInclude Include="src\input.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />
@@ -72,5 +73,6 @@
     <ClCompile Include="src\render\mesh.cpp" />
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\input_event.cpp" />
+    <ClCompile Include="src\input.cpp" />
   </ItemGroup>
 </Project>

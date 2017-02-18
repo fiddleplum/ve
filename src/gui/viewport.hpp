@@ -39,7 +39,8 @@ namespace ve
 		void update(float dt);
 
 	private:
-		OwnPtr<render::Image> renderImage;
+		OwnPtr<render::Image> renderColorImage;
+		OwnPtr<render::Image> renderDepthImage;
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
 		OwnPtr<render::ImageTarget> target;
 	};

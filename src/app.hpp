@@ -3,7 +3,7 @@
 #include "window.hpp"
 #include "world/world.hpp"
 #include "store.hpp"
-#include "input_event.hpp"
+#include "input.hpp"
 #include "util/ptr_set.hpp"
 
 union SDL_Event;
@@ -49,13 +49,13 @@ namespace ve
 		//! Sets the quit callback. Called right after the game loop exits. Use this to clean up your application.
 		void setQuitCallback(std::function<void()> const & callback);
 
-		//! Sets the update callback. Called once per frame.
+		//! Sets the update callback. Called once per frame. Use this for animations and per frame movements.
 		void setUpdateCallback(std::function<void(float secondsPerFrame)> const & callback);
 
-		//! Sets the input event callback. Called once per input event.
-		void setInputEventCallback(std::function<void(Input::Event const & event)> const & callback);
+		//! Sets the input event callback. Called once per input event. Use this to handle user input.
+		void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback);
 
-		//! Sets the request quit callback, called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc. The user needs to implement this.
+		//! Sets the request quit callback, called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc. Use this for "Are you sure you want to quit?" functions.
 		void setRequestQuitCallback(std::function<void()> const & callback);
 
 	private:
@@ -71,7 +71,7 @@ namespace ve
 
 		std::function<void()> quitCallback;
 		std::function<void(float secondsPerFrame)> updateCallback;
-		std::function<void(Input::Event const & event)> inputEventCallback;
+		std::function<void(InputEvent const & event)> inputEventCallback;
 		std::function<void()> requestQuitCallback;
 	};
 }
