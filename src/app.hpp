@@ -10,11 +10,11 @@ union SDL_Event;
 
 namespace ve
 {
-	class App
+	class App final
 	{
 	public:
 		//! Constructs the app.
-		App(std::vector<std::string> const & args);
+		App();
 
 		//! Destructs the app.
 		virtual ~App();
@@ -26,8 +26,7 @@ namespace ve
 		void quit();
 
 		//! Creates a window.
-		template <typename WindowType>
-		Ptr<WindowType> createWindow();
+		Ptr<Window> createWindow();
 
 		//! Destroys a window.
 		void destroyWindow(Ptr<Window> const & window);
@@ -47,21 +46,17 @@ namespace ve
 		//! Returns the store.
 		Ptr<Store> getStore() const;
 
+		//! Sets the quit callback. Called right after the game loop exits. Use this to clean up your application.
+		void setQuitCallback(std::function<void()> const & callback);
+
+		//! Sets the update callback. Called once per frame.
+		void setUpdateCallback(std::function<void(float secondsPerFrame)> const & callback);
+
 		//! Sets the input event callback. Called once per input event.
-		// void setInputEventCallback(std::function<void(InputEvent const & event)> const & callback);
+		void setInputEventCallback(std::function<void(Input::Event const & event)> const & callback);
 
 		//! Sets the request quit callback, called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc. The user needs to implement this.
 		void setRequestQuitCallback(std::function<void()> const & callback);
-
-	protected:
-		//! Called once per time step to update the app.
-		virtual void update(float dt) {}
-
-		//! Called when the user requests a quit, either by closing the last window, Cmd-Q, Alt-F4, etc.
-		virtual void requestQuit() {}
-
-		//! Called once per input event.
-		virtual void handleInputEvent(Input::Event const & inputEvent) {}
 
 	private:
 		Ptr<Window> getWindowFromId(unsigned int id);
@@ -73,13 +68,11 @@ namespace ve
 		OwnPtr<Store> store;
 		PtrSet<Window> windows;
 		PtrSet<world::World> worlds;
-	};
 
-	template <typename WindowType>
-	Ptr<WindowType> App::createWindow()
-	{
-		auto window = *windows.insertNew<WindowType>();
-		return window;
-	}
+		std::function<void()> quitCallback;
+		std::function<void(float secondsPerFrame)> updateCallback;
+		std::function<void(Input::Event const & event)> inputEventCallback;
+		std::function<void()> requestQuitCallback;
+	};
 }
 

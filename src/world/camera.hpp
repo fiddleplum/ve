@@ -8,7 +8,7 @@ namespace ve
 {
 	namespace world
 	{
-		class Camera : public Entity
+		class Camera final : public Entity
 		{
 		public:
 			// Constructs a camera in perspective mode, with an aspect ratio of 1, a near of .1, a far of 1000, an an fovY of 90 degrees.

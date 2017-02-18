@@ -2,13 +2,12 @@
 
 #include "app.hpp"
 #include "util/ptr.hpp"
+#include <vector>
+#include <string>
 
-// The user implements this function. It should just create a new pointer of a subclass of an App.
-ve::OwnPtr<ve::App> createApp(std::vector<std::string> const & args);
+// User implemented. Called just before the game loop.
+void entry(ve::Ptr<ve::App> const & app, std::vector<std::string> const & args);
 
-namespace ve
-{
-	// Returns the created app. It can be used by others ONLY after the createApp function has been called.
-	ve::Ptr<ve::App> getApp();
-}
+// User implemented. Called just after the game loop.
+void exit();
 

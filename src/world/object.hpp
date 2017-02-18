@@ -7,7 +7,7 @@ namespace ve
 {
 	namespace world
 	{
-		class Object : public Entity
+		class Object final : public Entity
 		{
 		public:
 			// Constructs an object with an empty model.

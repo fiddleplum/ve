@@ -4,7 +4,7 @@
 
 namespace ve
 {
-	App::App(std::vector<std::string> const & args)
+	App::App()
 	{
 		// Initialize SDL.
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
@@ -60,11 +60,14 @@ namespace ve
 			// Update
 			while (accumulator >= secondsPerUpdate)
 			{
-				update(secondsPerUpdate);
-
-				for (auto & window : windows)
+				for (auto && window : windows)
 				{
 					window->update(secondsPerUpdate);
+				}
+
+				if (updateCallback)
+				{
+					updateCallback(secondsPerUpdate);
 				}
 
 				accumulator -= secondsPerUpdate;
@@ -90,11 +93,22 @@ namespace ve
 			// Do frame cleanup.
 			windows.processEraseQueue();
 		}
+
+		if (quitCallback)
+		{
+			quitCallback();
+		}
 	}
 
 	void App::quit()
 	{
 		looping = false;
+	}
+
+	Ptr<Window> App::createWindow()
+	{
+		auto window = *windows.insertNew<Window>();
+		return window;
 	}
 
 	void App::destroyWindow(Ptr<Window> const & window)
@@ -129,6 +143,26 @@ namespace ve
 	Ptr<Store> App::getStore() const
 	{
 		return store;
+	}
+
+	void App::setQuitCallback(std::function<void()> const & callback)
+	{
+		quitCallback = callback;
+	}
+
+	void App::setUpdateCallback(std::function<void(float secondsPerFrame)> const & callback)
+	{
+		updateCallback = callback;
+	}
+
+	void App::setInputEventCallback(std::function<void(Input::Event const & event)> const & callback)
+	{
+		inputEventCallback = callback;
+	}
+
+	void App::setRequestQuitCallback(std::function<void()> const & callback)
+	{
+		requestQuitCallback = callback;
 	}
 
 	// SDL has its own window IDs for SDL_Events. This gets the right window associated with that ID. Returns null if none found.
@@ -175,7 +209,10 @@ namespace ve
 		switch (sdlEvent.type)
 		{
 			case SDL_QUIT:
-				requestQuit();
+				if (requestQuitCallback)
+				{
+					requestQuitCallback();
+				}
 				break;
 			case SDL_WINDOWEVENT:
 				switch (sdlEvent.window.event)
@@ -206,7 +243,10 @@ namespace ve
 					{
 						//window->handleInputEven(inputEvent);
 					}
-					handleInputEvent(inputEvent);
+					if (inputEventCallback)
+					{
+						inputEventCallback(inputEvent);
+					}
 				}
 				break;
 			}

@@ -102,11 +102,11 @@ namespace ve
 	template <typename T>
 	Quaternion<T>::Quaternion(Vector<3, T> const & start, Vector<3, T> const & end, bool vectorsAreNormalized)
 	{
-		r = startCoord.dot(end);
+		r = startVector.dot(end);
 		Vector<3, T> axis;
 		if (r != -1)
 		{
-			ijk = startCoord.cross(end);
+			ijk = startVector.cross(end);
 		}
 		else
 		{
@@ -198,7 +198,7 @@ namespace ve
 	template <typename T>
 	Vector<3, T> Quaternion<T>::rotate(Vector<3, T> const & v) const
 	{
-		Coord<3, T> t = (T)2 * ijk.cross(v);
+		Vector<3, T> t = (T)2 * ijk.cross(v);
 		return v + r * t + ijk.cross(t);
 	}
 
@@ -209,7 +209,7 @@ namespace ve
 		{
 			throw std::exception();
 		}
-		Coord3f axis;
+		Vector3f axis;
 		unsigned int j = (i + 1) % 3;
 		unsigned int k = (i + 2) % 3;
 		axis[i] = 1.0f - 2.0f * (ijk[j] * ijk[j] + ijk[k] * ijk[k]);

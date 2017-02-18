@@ -3,14 +3,6 @@
 
 ve::OwnPtr<ve::App> app;
 
-namespace ve
-{
-	ve::Ptr<ve::App> getApp()
-	{
-		return app;
-	}
-}
-
 // Called by SDL to run the entire app.
 int main(int argc, char *argv[])
 {
@@ -23,7 +15,9 @@ int main(int argc, char *argv[])
 			args.push_back(std::string(argv[i]));
 		}
 
-		app = createApp(args);
+		auto app = ve::OwnPtr<ve::App>::returnNew();
+
+		entry(app, args);
 
 		app->loop();
 

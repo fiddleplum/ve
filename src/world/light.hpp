@@ -6,7 +6,7 @@ namespace ve
 {
 	namespace world
 	{
-		class Light : public Entity
+		class Light final : public Entity
 		{
 		public:
 			// Constructs as a white light.

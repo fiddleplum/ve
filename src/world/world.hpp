@@ -10,7 +10,7 @@ namespace ve
 {
 	namespace world
 	{
-		class World
+		class World final
 		{
 		public:
 			// Constructs an empty world. Fill it with things!
@@ -23,24 +23,19 @@ namespace ve
 
 			Ptr<render::Scene> getScene() const;
 
-			template <typename CameraType>
-			Ptr<CameraType> createCamera();
+			Ptr<Camera> createCamera();
 
 			void destroyCamera(Ptr<Camera> const & camera);
 
-			template <typename LightType>
-			Ptr<LightType> createLight();
+			Ptr<Light> createLight();
 
 			void destroyLight(Ptr<Light> const & light);
 
-			template <typename ObjectType>
-			Ptr<ObjectType> createObject();
+			Ptr<Object> createObject();
 
 			void destroyobject(Ptr<Object> const & object);
 
 		private:
-			void update(float dt);
-
 			OwnPtr<render::Scene> scene;
 			std::unordered_set<OwnPtr<Camera>> cameras;
 			std::unordered_set<OwnPtr<Light>> lights;
@@ -48,32 +43,5 @@ namespace ve
 
 			friend class App;
 		};
-
-		template <typename CameraType>
-		Ptr<CameraType> World::createCamera()
-		{
-			static_assert(std::is_base_of<Camera, CameraType>::value, "Class is not derived from Camera. ");
-			OwnPtr<Camera> camera = OwnPtr<CameraType>::returnNew();
-			cameras.insert(camera);
-			return camera;
-		}
-
-		template <typename LightType>
-		Ptr<LightType> World::createLight()
-		{
-			static_assert(std::is_base_of<Light, LightType>::value, "Class is not derived from Light. ");
-			OwnPtr<Light> light = OwnPtr<LightType>::returnNew();
-			lights.insert(light);
-			return light;
-		}
-
-		template <typename ObjectType>
-		Ptr<ObjectType> World::createObject()
-		{
-			static_assert(std::is_base_of<Object, ObjectType>::value, "Class is not derived from Object. ");
-			OwnPtr<Object> object = OwnPtr<ObjectType>::returnNew(scene);
-			objects.insert(object);
-			return object;
-		}
 	}
 }
