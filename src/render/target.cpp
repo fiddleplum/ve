@@ -14,6 +14,17 @@ namespace ve
 			flipY = false;
 		}
 
+		Vector2i Target::getSize() const
+		{
+			return size;
+		}
+
+		void Target::setSize(Vector2i size_)
+		{
+			size = size_;
+
+		}
+
 		Ptr<Scene> Target::getScene() const
 		{
 			return scene;
@@ -48,7 +59,6 @@ namespace ve
 			preRender();
 
 			glEnable(GL_CULL_FACE);
-			//glDisable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LESS);
@@ -93,21 +103,11 @@ namespace ve
 			}
 		}
 
-		Vector2i WindowTarget::getWindowSize() const
-		{
-			return viewportSize;
-		}
-
-		void WindowTarget::setWindowSize(Vector2i size)
-		{
-			viewportSize = size;
-		}
-
 		void WindowTarget::preRender() const
 		{
 			SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			glViewport(0, 0, viewportSize[0], viewportSize[1]);
+			glViewport(0, 0, getSize()[0], getSize()[1]);
 			glClearColor(0, 0, 0, 1);
 		}
 
@@ -130,6 +130,28 @@ namespace ve
 			glDeleteFramebuffers(1, &framebuffer);
 		}
 
+		void ImageTarget::setSize(Vector2i size)
+		{
+			for (unsigned int i = 0; i < colorImages.size(); i++)
+			{
+				colorImages[i]->setSize(size);
+				glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+				colorImages[i]->attachToFrameBuffer(GL_COLOR_ATTACHMENT0 + i);
+			}
+			if (depthImage.isValid())
+			{
+				depthImage->setSize(size);
+				glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+				depthImage->attachToFrameBuffer(GL_DEPTH_ATTACHMENT);
+			}
+			if (stencilImage.isValid())
+			{
+				stencilImage->setSize(size);
+				glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+				stencilImage->attachToFrameBuffer(GL_STENCIL_ATTACHMENT);
+			}
+		}
+
 		Ptr<Image> ImageTarget::getColorImage(unsigned int index) const
 		{
 			if (index < colorImages.size())
@@ -144,6 +166,7 @@ namespace ve
 
 		void ImageTarget::setColorImage(unsigned int index, Ptr<Image> image)
 		{
+			image->setSize(getSize());
 			if (index >= colorImages.size())
 			{
 				colorImages.resize(index + 1);
@@ -173,6 +196,7 @@ namespace ve
 
 		void ImageTarget::setDepthImage(Ptr<Image> image)
 		{
+			image->setSize(getSize());
 			depthImage = image;
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 			image->attachToFrameBuffer(GL_DEPTH_ATTACHMENT);
@@ -185,6 +209,7 @@ namespace ve
 
 		void ImageTarget::setStencilImage(Ptr<Image> image)
 		{
+			image->setSize(getSize());
 			stencilImage = image;
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 			image->attachToFrameBuffer(GL_STENCIL_ATTACHMENT);

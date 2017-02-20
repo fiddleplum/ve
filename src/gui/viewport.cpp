@@ -46,10 +46,7 @@ namespace ve
 	void Viewport::setBounds(Recti bounds)
 	{
 		sprite->setBounds(bounds);
-		renderColorImage->setSize(bounds.getSize());
-		renderDepthImage->setSize(bounds.getSize());
-		target->setColorImage(0, renderColorImage);
-		target->setDepthImage(renderDepthImage);
+		target->setSize(bounds.getSize());
 	}
 
 	Ptr<render::ImageTarget> Viewport::getTarget() const

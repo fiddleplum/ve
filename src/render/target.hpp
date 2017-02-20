@@ -19,14 +19,20 @@ namespace ve
 			//! Virtual default destructor for inheritance.
 			virtual ~Target() {}
 
+			//! Returns the pixel size of the render target and the associated images.
+			Vector2i getSize() const;
+
+			//! Sets the pixel size of the render target and the associated images.
+			virtual void setSize(Vector2i size);
+
 			//! Returns the scene that will be rendered to this target.
 			Ptr<Scene> getScene() const;
 
 			//! Sets the scene that will be rendered to this target.
-			void setScene(Ptr<Scene> scene);
+			virtual void setScene(Ptr<Scene> scene);
 
 			//! Sets a function to be called that sets any target-specific uniforms. Called every time the shader is changed.
-			void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
+			virtual void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
 			//! Renders the scene to the target. First renders all targets upon which the scene depends.
 			void render() const;
@@ -42,6 +48,7 @@ namespace ve
 			bool flipY;
 
 		private:
+			Vector2i size;
 			Ptr<Scene> scene;
 			std::function<void(Ptr<Shader> const &)> uniformsFunction;
 		};
@@ -55,12 +62,6 @@ namespace ve
 			//! Destructs the window stage.
 			~WindowTarget();
 
-			//! Returns the window used in rendering.
-			Vector2i getWindowSize() const;
-
-			//! Sets the window used in rendering.
-			void setWindowSize(Vector2i size);
-
 		protected:
 			// Called just before rendering the scene.
 			void preRender() const override;
@@ -72,7 +73,6 @@ namespace ve
 			static unsigned int numWindowTargets;
 			static void * glContext;
 			void * sdlWindow;
-			Vector2i viewportSize;
 		};
 
 		// An target that writes the output to images.
@@ -84,6 +84,9 @@ namespace ve
 
 			// Destructor.
 			~ImageTarget();
+
+			//! Sets the pixel size of the render target and the associated images.
+			void setSize(Vector2i size) override;
 
 			// Returns the image at the specified index.
 			Ptr<Image> getColorImage(unsigned int index) const;

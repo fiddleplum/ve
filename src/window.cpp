@@ -16,7 +16,7 @@ namespace ve
 
 		// Create a new window target.
 		target.setNew(sdlWindow);
-		target->setWindowSize(initialSize);
+		target->setSize(initialSize);
 
 		// Create the gui and connect it to the window target.
 		gui.setNew();
@@ -56,7 +56,7 @@ namespace ve
 
 	void Window::onResized(Vector2i size)
 	{
-		target->setWindowSize(size);
+		target->setSize(size);
 		gui->setSize(size);
 	}
 
