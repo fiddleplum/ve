@@ -13,6 +13,7 @@ namespace ve
 		}
 
 		input.setNew();
+		render.setNew();
 		store.setNew();
 	}
 
@@ -24,6 +25,8 @@ namespace ve
 		worlds.processEraseQueue();
 
 		store.setNull();
+		render.setNull();
+		input.setNull();
 
 		SDL_Quit();
 	}
@@ -78,6 +81,7 @@ namespace ve
 			{
 				//window->preRenderUpdate();
 			}
+			render->preRenderUpdate();
 
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
@@ -138,6 +142,11 @@ namespace ve
 	Ptr<Input> App::getInput() const
 	{
 		return input;
+	}
+
+	Ptr<render::Render> App::getRender() const
+	{
+		return render;
 	}
 
 	Ptr<Store> App::getStore() const

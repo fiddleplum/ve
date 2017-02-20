@@ -14,18 +14,14 @@ namespace ve
 		: Widget(scene, shader)
 	{
 		sprite.setNew(scene, shader);
-		renderColorImage.setNew(getBounds().getSize(), render::Image::RGB24);
-		renderDepthImage.setNew(getBounds().getSize(), render::Image::DEPTH);
-		sprite->setImage(renderColorImage);
-		target.setNew();
-		target->setColorImage(0, renderColorImage);
-		target->setDepthImage(renderDepthImage);
-		scene->addDependentTarget(target);
 	}
 
 	Viewport::~Viewport()
 	{
-		getScene()->removeDependentTarget(target);
+		if (target.isValid())
+		{
+			getScene()->removeDependentTarget(target);
+		}
 	}
 
 	float Viewport::getDepth() const
@@ -46,12 +42,27 @@ namespace ve
 	void Viewport::setBounds(Recti bounds)
 	{
 		sprite->setBounds(bounds);
-		target->setSize(bounds.getSize());
+		if (target.isValid())
+		{
+			target->setSize(bounds.getSize());
+		}
 	}
 
 	Ptr<render::ImageTarget> Viewport::getTarget() const
 	{
 		return target;
+	}
+
+	void Viewport::setTarget(Ptr<render::ImageTarget> const & target_)
+	{
+		if (target.isValid())
+		{
+			getScene()->removeDependentTarget(target);
+		}
+		target = target_;
+		target->setSize(sprite->getBounds().getSize());
+		sprite->setImage(target->getColorImage(0));
+		getScene()->addDependentTarget(target);
 	}
 
 	void Viewport::onCursorPositionChanged(std::optional<Vector2i> cursorPosition)

@@ -18,7 +18,7 @@ namespace ve
 		// Default constructor.
 		PtrSet();
 
-		// Inserts the element. Returns the position and true, or the end and false if the element was already there.
+		// Creates ands inserts the element. Returns the position as an iterator.
 		template <typename YType, typename ... Args>
 		iterator insertNew(Args && ... args);
 

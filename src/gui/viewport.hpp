@@ -32,6 +32,9 @@ namespace ve
 		// Returns the image target that the viewport uses.
 		Ptr<render::ImageTarget> getTarget() const;
 
+		// Sets the image target that the viewport uses.
+		void setTarget(Ptr<render::ImageTarget> const & target);
+
 		// Internal to gui. Called when the user moves the cursor within the widget or out of the widget.
 		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition) override;
 
@@ -39,9 +42,7 @@ namespace ve
 		void update(float dt);
 
 	private:
-		OwnPtr<render::Image> renderColorImage;
-		OwnPtr<render::Image> renderDepthImage;
 		OwnPtr<Sprite> sprite; // Uses much of the functionality of a sprite and more!
-		OwnPtr<render::ImageTarget> target;
+		Ptr<render::ImageTarget> target;
 	};
 }

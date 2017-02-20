@@ -4,6 +4,7 @@
 #include "world/world.hpp"
 #include "store.hpp"
 #include "input.hpp"
+#include "render/render.hpp"
 #include "util/ptr_set.hpp"
 
 union SDL_Event;
@@ -43,6 +44,9 @@ namespace ve
 		//! Returns the input system.
 		Ptr<Input> getInput() const;
 
+		//! Returns the render system.
+		Ptr<render::Render> getRender() const;
+
 		//! Returns the store.
 		Ptr<Store> getStore() const;
 
@@ -65,6 +69,7 @@ namespace ve
 		bool looping = false;
 		float secondsPerUpdate = 1.f / 24.f;
 		OwnPtr<Input> input;
+		OwnPtr<render::Render> render;
 		OwnPtr<Store> store;
 		PtrSet<Window> windows;
 		PtrSet<world::World> worlds;

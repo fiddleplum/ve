@@ -40,6 +40,11 @@ namespace ve
 			uniformsFunction = uniformsFunction_;
 		}
 
+		void Target::clearRenderedThisFrameFlag()
+		{
+			renderedThisFrame = false;
+		}
+
 		void Target::render() const
 		{
 			// Clear out the shaders and textures.
@@ -53,7 +58,10 @@ namespace ve
 
 			for (auto && dependentTarget : scene->getDependentTargets())
 			{
-				dependentTarget->render();
+				if (!dependentTarget->renderedThisFrame)
+				{
+					dependentTarget->render();
+				}
 			}
 
 			preRender();
@@ -73,6 +81,8 @@ namespace ve
 			scene->render(uniformsFunction, flipY);
 
 			postRender();
+
+			renderedThisFrame = true;
 		}
 
 		WindowTarget::WindowTarget(void * sdlWindow_)

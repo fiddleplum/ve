@@ -34,10 +34,12 @@ namespace ve
 			//! Sets a function to be called that sets any target-specific uniforms. Called every time the shader is changed.
 			virtual void setUniformsFunction(std::function<void(Ptr<Shader> const &)> const & uniformsFunction);
 
+			//! Clears the renderedThisFrame flag for proper scene/target dependency graph travel.
+			void clearRenderedThisFrameFlag();
+
 			//! Renders the scene to the target. First renders all targets upon which the scene depends.
 			void render() const;
 
-		protected:
 			// Called just before rendering the scene.
 			virtual void preRender() const = 0;
 
@@ -51,6 +53,7 @@ namespace ve
 			Vector2i size;
 			Ptr<Scene> scene;
 			std::function<void(Ptr<Shader> const &)> uniformsFunction;
+			mutable bool renderedThisFrame;
 		};
 
 		class WindowTarget : public Target
