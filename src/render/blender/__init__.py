@@ -1,13 +1,22 @@
+'''
+Notes:
+
+- To create smoothing groups, use edges and make them either sharp or smooth.
+
+
+'''
+
 bl_info = {
-	"name": "Mesh Format",
+	"name": "VE Model Format",
 	"author": "Stephen Hurley",
 	"blender": (2, 63, 0),
-	"location": "File > Export -> Mesh Format (.msh)",
-	"description": "Export Mesh, ",
+	"location": "File > Export -> VE Model Format (.vemodel)",
+	"description": "Export VE Model, ",
 	"category": "Import-Export"
 }
 
 import bpy
+import bmesh
 from bpy_extras.io_utils import ExportHelper
 import copy
 import struct
@@ -16,6 +25,7 @@ class Vertex:
 	def __init__(self):
 		self.position = [0, 0, 0]
 		self.normal = [0, 0, 0]
+		self.used = False
 		self.uvs = []
 
 class Mesh:
@@ -36,43 +46,74 @@ def write_string(file, v):
 	file.write((v + '\0').encode('utf_8'))
 
 class ExportModel(bpy.types.Operator, ExportHelper):
-	bl_idname = "default.msh"
-	bl_label = "Export Mesh"
-	filename_ext = ".msh"
+	bl_idname = "default.vemodel"
+	bl_label = "Export VE Model"
+	filename_ext = ".vemodel"
 
 	def execute(self, context):
-		mesh = Mesh()
-		bmesh = None
-		for bobject in bpy.data.objects:
-			if bobject.type == 'MESH':
-				bmesh = bobject.data
+
+		# find the first mesh object
+		meshObjectFound = False
+		for bpyObject in bpy.data.objects:
+			if bpyObject.type == 'MESH':
+				meshObjectFound = True
 				break
-		if bmesh is None:
-			raise "No mesh found!"
+		if not meshObjectFound:
+			raise "No mesh object found!"
+
+		# apply auto smoothing by edge splitting at the same angle as the auto smooth
+		if bpyObject.data.use_auto_smooth == 1:
+			modifier = bpyObject.modifiers.new("Edge Split", type = 'EDGE_SPLIT')
+			modifier.use_edge_angle = True
+			modifier.use_edge_sharp = False
+			modifier.split_angle = bpyObject.data.auto_smooth_angle
+		mesh = bpyObject.to_mesh(bpy.data.scenes[0], apply_modifiers = True, settings = 'RENDER')
+		if bpyObject.data.use_auto_smooth == 1:
+			bpyObject.modifiers.remove(modifier)
+
+		# create the bmesh to work with
+		bMesh = bmesh.new()
+		bMesh.from_mesh(mesh)
+
+		# split edges based on edge and face smoothing params, only if auto_smoothing is off
+		if bpyObject.data.use_auto_smooth == 0:
+			edges_to_split = []
+			for edge in bMesh.edges:
+				if not edge.smooth:
+					edges_to_split.append(edge)
+			for face in bMesh.faces:
+				if not face.smooth:
+					edges_to_split.extend(face.edges)
+			bmesh.ops.split_edges(bMesh, edges = list(set(edges_to_split)))
+
+		# make sure everything is a triangle
+		bmesh.ops.triangulate(bMesh, faces = bMesh.faces)
+
+		# write the mesh part of the model file
 		file = open(self.filepath, 'wb')
 		write_int(file, 3) # num indices per primitive
 		write_int(file, 0) # num vertices per frame
 		write_int(file, len([0, 2])) # format types: position_xyz, normal
 		write_int(file, 0) # format types: position_xyz, normal
 		write_int(file, 2) # format types: position_xyz, normal
-		write_int(file, len(bmesh.vertices) * 6)
-		for bvertex in bmesh.vertices:
-			write_float(file, bvertex.co[0])
-			write_float(file, bvertex.co[1])
-			write_float(file, bvertex.co[2])
-			write_float(file, bvertex.normal[0])
-			write_float(file, bvertex.normal[1])
-			write_float(file, bvertex.normal[2])
-		write_int(file, len(bmesh.polygons) * 3)
-		for bpolygon in bmesh.polygons:
-			if len(bpolygon.vertices) != 3:
-				raise "Not all faces are triangles! You must TRIANGULATE! (edit mode -> ctrl-t)"
-			write_int(file, bpolygon.vertices[0])
-			write_int(file, bpolygon.vertices[1])
-			write_int(file, bpolygon.vertices[2])
+		write_int(file, len(bMesh.verts) * 6)
+		for bmVert in bMesh.verts:
+			write_float(file, bmVert.co[0])
+			write_float(file, bmVert.co[1])
+			write_float(file, bmVert.co[2])
+			write_float(file, bmVert.normal[0])
+			write_float(file, bmVert.normal[1])
+			write_float(file, bmVert.normal[2])
+		write_int(file, len(bMesh.faces) * 3)
+		for bmFace in bMesh.faces:
+			write_int(file, bmFace.verts[0].index)
+			write_int(file, bmFace.verts[2].index)
+			write_int(file, bmFace.verts[1].index) # change from CW to CCW ordering for OpenGL.
 		file.close()
-		# if len(bmesh.materials) > 0:
-			# bmaterial = bmesh.materials[0]
+		bMesh.free()
+		del bMesh
+		# if len(bMesh.materials) > 0:
+			# bmaterial = bMesh.materials[0]
 			# mesh.material.diffuse_color[0] = bmaterial.diffuse_color[0]
 			# mesh.material.diffuse_color[1] = bmaterial.diffuse_color[1]
 			# mesh.material.diffuse_color[2] = bmaterial.diffuse_color[2]
@@ -86,27 +127,27 @@ class ExportModel(bpy.types.Operator, ExportHelper):
 						# texture.type = 'diffuse'
 					# if texture_slot.texture_coords == 'UV':
 						# uv_layer_i = 0
-						# for uv_layer in bmesh.uv_layers:
+						# for uv_layer in bMesh.uv_layers:
 							# if uv_layer.name == texture_slot.uv_layer:
 								# texture.uv_index = uv_layer_i
 							# uv_layer_i += 1
 					# mesh.material.textures.append(texture)
-		# for bvertex in bmesh.vertices:
+		# for bvertex in bMesh.vertices:
 			# mesh.vertices.append(bvertex.co[0]);
 			# mesh.vertices.append(bvertex.co[1]);
 			# mesh.vertices.append(bvertex.co[2]);
 			# mesh.vertices.append(bvertex.normal[0]);
 			# mesh.vertices.append(bvertex.normal[1]);
 			# mesh.vertices.append(bvertex.normal[2]);
-		# for bpolygon in bmesh.polygons:
+		# for bpolygon in bMesh.polygons:
 			# if len(bpolygon.vertices) != 3:
 				# raise "Not all faces are triangles! You must TRIANGULATE! (edit mode -> ctrl-t)"
 			# mesh.indices.append(bpolygon.vertices[0])
 			# mesh.indices.append(bpolygon.vertices[1])
 			# mesh.indices.append(bpolygon.vertices[2])
-		# mesh.num_uvs = len(bmesh.uv_layers)
-		# for uv_layer_i in range(0, len(bmesh.uv_layers)):
-			# uv_layer = bmesh.uv_layers[uv_layer_i]
+		# mesh.num_uvs = len(bMesh.uv_layers)
+		# for uv_layer_i in range(0, len(bMesh.uv_layers)):
+			# uv_layer = bMesh.uv_layers[uv_layer_i]
 			# for uv_loop_i in range(0, len(uv_layer.data)):
 				# uv = uv_layer.data[uv_loop_i].uv
 				# vertex = mesh.vertices[mesh.indices[uv_loop_i]]
@@ -155,7 +196,7 @@ class ExportModel(bpy.types.Operator, ExportHelper):
 		return {'FINISHED'}
 
 def menu_func_export(self, context):
-	self.layout.operator(ExportModel.bl_idname, text="Mesh Format (.msh)")
+	self.layout.operator(ExportModel.bl_idname, text="VE Model Format (.vemodel)")
 
 def register():
 	bpy.utils.register_module(__name__)
