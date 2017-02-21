@@ -14,10 +14,6 @@ namespace ve
 
 			~Render();
 
-			Ptr<Scene> createScene();
-
-			void destroyScene(Ptr<Scene> const & scene);
-
 			Ptr<ImageTarget> createImageTarget();
 
 			void destroyImageTarget(Ptr<ImageTarget> const & target);
@@ -25,7 +21,6 @@ namespace ve
 			void preRenderUpdate();
 
 		private:
-			PtrSet<Scene> scenes;
 			PtrSet<ImageTarget> imageTargets;
 		};
 	}

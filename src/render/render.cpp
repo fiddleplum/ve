@@ -13,18 +13,6 @@ namespace ve
 		{
 			imageTargets.queueAllForErase();
 			imageTargets.processEraseQueue();
-			scenes.queueAllForErase();
-			scenes.processEraseQueue();
-		}
-
-		Ptr<Scene> Render::createScene()
-		{
-			return *scenes.insertNew<Scene>();
-		}
-
-		void Render::destroyScene(Ptr<Scene> const & scene)
-		{
-			scenes.queueForErase(scene);
 		}
 
 		Ptr<ImageTarget> Render::createImageTarget()
@@ -39,7 +27,6 @@ namespace ve
 
 		void Render::preRenderUpdate()
 		{
-			scenes.processEraseQueue();
 			imageTargets.processEraseQueue();
 
 			for (auto && imageTarget : imageTargets)
