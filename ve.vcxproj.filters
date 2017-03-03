@@ -45,6 +45,7 @@
     <ClInclude Include="src\input_event.hpp" />
     <ClInclude Include="src\input.hpp" />
     <ClInclude Include="src\render\render.hpp" />
+    <ClInclude Include="src\world\controller.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />

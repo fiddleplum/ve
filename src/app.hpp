@@ -26,6 +26,15 @@ namespace ve
 		//! Stops the ve loop at the end of the current frame.
 		void quit();
 
+		// Returns the interval in seconds over which an update will occur.
+		float getSecondsPerUpdate() const;
+
+		// Sets the interval in seconds over which an update will occur.
+		void setSecondsPerUpdate(float dt);
+
+		// Returns the iterval in seconds over which a single loop (one frame render) will occur.
+		float getSecondsPerLoop() const;
+
 		//! Creates a window.
 		Ptr<Window> createWindow();
 
@@ -68,6 +77,7 @@ namespace ve
 
 		bool looping = false;
 		float secondsPerUpdate = 1.f / 24.f;
+		float secondsPerLoop = 0;
 		OwnPtr<Input> input;
 		OwnPtr<render::Render> render;
 		OwnPtr<Store> store;

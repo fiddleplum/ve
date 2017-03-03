@@ -3,14 +3,16 @@
 #include "world/camera.hpp"
 #include "world/light.hpp"
 #include "world/object.hpp"
+#include "world/controller.hpp"
 #include "render/scene.hpp"
 #include "render/target.hpp"
+#include "util/ptr_set.hpp"
 
 namespace ve
 {
 	namespace world
 	{
-		class World final
+		class World
 		{
 		public:
 			// Constructs an empty world. Fill it with things!
@@ -23,25 +25,64 @@ namespace ve
 
 			Ptr<render::Scene> getScene() const;
 
-			Ptr<Camera> createCamera();
+			template <typename CameraType>
+			Ptr<CameraType> createCamera();
 
 			void destroyCamera(Ptr<Camera> const & camera);
 
-			Ptr<Light> createLight();
+			template <typename LightType>
+			Ptr<LightType> createLight();
 
 			void destroyLight(Ptr<Light> const & light);
 
-			Ptr<Object> createObject();
+			template <typename ObjectType>
+			Ptr<ObjectType> createObject();
 
-			void destroyobject(Ptr<Object> const & object);
+			void destroyObject(Ptr<Object> const & object);
+
+			template <typename ControllerType>
+			Ptr<ControllerType> createController();
+
+			void destroyController(Ptr<Controller> const & controller);
+
+			void update(float dt);
+
+			void handleInputEvent(InputEvent const & inputEvent);
 
 		private:
 			OwnPtr<render::Scene> scene;
-			std::unordered_set<OwnPtr<Camera>> cameras;
-			std::unordered_set<OwnPtr<Light>> lights;
-			std::unordered_set<OwnPtr<Object>> objects;
-
-			friend class App;
+			PtrSet<Camera> cameras;
+			PtrSet<Light> lights;
+			PtrSet<Object> objects;
+			PtrSet<Controller> controllers;
 		};
+
+		template <typename CameraType>
+		Ptr<CameraType> World::createCamera()
+		{
+			static_assert(std::is_base_of<Camera, CameraType>::value, "Class is not derived from Camera. ");
+			return cameras.insertNew<CameraType>();
+		}
+
+		template <typename LightType>
+		Ptr<LightType> World::createLight()
+		{
+			static_assert(std::is_base_of<Light, LightType>::value, "Class is not derived from Light. ");
+			return lights.insertNew<LightType>();
+		}
+
+		template <typename ObjectType>
+		Ptr<ObjectType> World::createObject()
+		{
+			static_assert(std::is_base_of<Object, ObjectType>::value, "Class is not derived from Object. ");
+			return objects.insertNew<ObjectType>(scene);
+		}
+
+		template <typename ControllerType>
+		Ptr<ControllerType> World::createController()
+		{
+			static_assert(std::is_base_of<Controller, ControllerType>::value, "Class is not derived from Controller. ");
+			return controller.insertNew<ControllerType>();
+		}
 	}
 }

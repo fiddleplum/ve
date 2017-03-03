@@ -17,7 +17,7 @@ namespace ve
 
 		Ptr<ImageTarget> Render::createImageTarget()
 		{
-			return *imageTargets.insertNew<ImageTarget>();
+			return imageTargets.insertNew<ImageTarget>();
 		}
 
 		void Render::destroyImageTarget(Ptr<ImageTarget> const & target)

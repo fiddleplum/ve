@@ -10,8 +10,8 @@ namespace ve
 			aspectRatio = 1.0f;
 			near = 0.1f;
 			far = 1000.0f;
-			fovY = (float)math::PI_OVER_2;
-			height = 1.0f;
+			fov = (float)math::PI_OVER_2;
+			size = 1.0f;
 			perspective = true;
 			localToNdcTransform = ndcToLocalTransform = Matrix44f::identity();
 			localToNdcTransform(1, 1) = 0;
@@ -62,26 +62,26 @@ namespace ve
 			transformsNeedUpdate = true;
 		}
 
-		float Camera::getFovY() const
+		float Camera::getFov() const
 		{
-			return perspective ? fovY : 0;
+			return perspective ? fov : 0;
 		}
 
-		void Camera::setFovY(float fovY_)
+		void Camera::setFov(float fov_)
 		{
-			fovY = fovY_;
+			fov = fov_;
 			perspective = true;
 			transformsNeedUpdate = true;
 		}
 
-		float Camera::getHeight() const
+		float Camera::getSize() const
 		{
-			return !perspective ? height : 0;
+			return !perspective ? size : 0;
 		}
 
-		void Camera::setHeight(float height_)
+		void Camera::setSize(float size_)
 		{
-			height = height_;
+			size = size_;
 			perspective = false;
 			transformsNeedUpdate = true;
 		}
@@ -119,21 +119,31 @@ namespace ve
 				float scale;
 				if (perspective)
 				{
-					scale = std::tan(fovY / 2.0f);
+					scale = std::tan(fov / 2.0f);
 				}
 				else
 				{
-					scale = height;
+					scale = size;
 				}
 				if (scale == 0 || aspectRatio == 0 || far == near || near == 0 || far == 0)
 				{
 					return;
 				}
 				float scaleInv = 1.0f / scale;
-				localToNdcTransform(0, 0) = scaleInv / aspectRatio;
-				localToNdcTransform(1, 2) = scaleInv;
-				ndcToLocalTransform(0, 0) = scale * aspectRatio;
-				ndcToLocalTransform(2, 1) = scale;
+				if (aspectRatio >= 1)
+				{
+					localToNdcTransform(0, 0) = scaleInv / aspectRatio;
+					localToNdcTransform(1, 2) = scaleInv;
+					ndcToLocalTransform(0, 0) = scale * aspectRatio;
+					ndcToLocalTransform(2, 1) = scale;
+				}
+				else
+				{
+					localToNdcTransform(0, 0) = scaleInv;
+					localToNdcTransform(1, 2) = scaleInv * aspectRatio;
+					ndcToLocalTransform(0, 0) = scale;
+					ndcToLocalTransform(2, 1) = scale / aspectRatio;
+				}
 				if (perspective)
 				{
 					float nf2 = 2 * near * far;

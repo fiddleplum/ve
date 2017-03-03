@@ -10,6 +10,10 @@ namespace ve
 			transformsNeedUpdate = false;
 		}
 
+		Entity::~Entity()
+		{
+		}
+
 		Vector3f const & Entity::getPosition() const
 		{
 			return position;
@@ -42,10 +46,6 @@ namespace ve
 		{
 			checkTransforms();
 			return worldToLocalTransform;
-		}
-
-		Entity::~Entity()
-		{
 		}
 
 		void Entity::checkTransforms() const

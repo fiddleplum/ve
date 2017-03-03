@@ -14,6 +14,9 @@ namespace ve
 			// Constructs at the origin with the identity orientation.
 			Entity();
 
+			// Virtual destructor for inheritance.
+			virtual ~Entity();
+
 			// Returns the position.
 			Vector3f const & getPosition() const;
 
@@ -31,10 +34,6 @@ namespace ve
 
 			// Returns the world to local transform matrix.
 			Matrix44f const & getWorldToLocalTransform() const;
-
-		protected:
-			// Virtual destructor for inheritance.
-			virtual ~Entity();
 
 		private:
 			void checkTransforms() const;

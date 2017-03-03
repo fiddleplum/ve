@@ -8,7 +8,7 @@ namespace ve
 {
 	namespace world
 	{
-		class Camera final : public Entity
+		class Camera : public Entity
 		{
 		public:
 			// Constructs a camera in perspective mode, with an aspect ratio of 1, a near of .1, a far of 1000, an an fovY of 90 degrees.
@@ -26,26 +26,26 @@ namespace ve
 			// Returns the near z distance.
 			float getNear() const;
 
-			// Sets the near z distance.
+			// Sets the near distance.
 			void setNear(float near);
 
 			// Returns the far z distance.
 			float getFar() const;
 
-			// Sets the far z distance.
+			// Sets the far distance.
 			void setFar(float far);
 
-			// Returns the the vertical field of view, if in perspective mode.
-			float getFovY() const;
+			// Returns the the maximum field of view, if in perspective mode.
+			float getFov() const;
 
-			// Sets the vertical field of view and sets the camera into perspective mode.
-			void setFovY(float fovY);
+			// Sets the maximum field of view and sets the camera into perspective mode.
+			void setFov(float fovY);
 
-			// Returns the spanned vertical distance, if in orthogonal mode.
-			float getHeight() const;
+			// Returns the maximum view size, if in orthogonal mode.
+			float getSize() const;
 
-			// Sets the spanned vertical distance and sets the camera into orthogonal mode.
-			void setHeight(float height);
+			// Sets the maximum view size and sets the camera into orthogonal mode.
+			void setSize(float size);
 
 			// Returns the normalized device coordinates of a given position in world coordinates.
 			Vector2f getNdcPosition(Vector3f worldPosition) const;
@@ -65,8 +65,8 @@ namespace ve
 			float aspectRatio;
 			float near;
 			float far;
-			float fovY;
-			float height;
+			float fov;
+			float size;
 			bool perspective;
 			mutable bool transformsNeedUpdate;
 			mutable Matrix44f localToNdcTransform;

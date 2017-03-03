@@ -38,63 +38,44 @@ namespace ve
 			return scene;
 		}
 
-		Ptr<Camera> World::createCamera()
-		{
-			OwnPtr<Camera> camera = OwnPtr<Camera>::returnNew();
-			cameras.insert(camera);
-			return camera;
-		}
-
 		void World::destroyCamera(Ptr<Camera> const & camera)
 		{
-			auto it = std::find(cameras.begin(), cameras.end(), camera);
-			if (it != cameras.end())
-			{
-				throw std::runtime_error("Camera not found. ");
-			}
-			else
-			{
-				cameras.erase(it);
-			}
-		}
-
-		Ptr<Light> World::createLight()
-		{
-			OwnPtr<Light> light = OwnPtr<Light>::returnNew();
-			lights.insert(light);
-			return light;
+			cameras.queueForErase(camera);
 		}
 
 		void World::destroyLight(Ptr<Light> const & light)
 		{
-			auto it = std::find(lights.begin(), lights.end(), light);
-			if (it != lights.end())
+			lights.queueForErase(light);
+		}
+
+		void World::destroyObject(Ptr<Object> const & object)
+		{
+			objects.queueForErase(object);
+		}
+
+		void World::destroyController(Ptr<Controller> const & controller)
+		{
+			controllers.queueForErase(controller);
+		}
+
+		void World::update(float dt)
+		{
+			cameras.processEraseQueue();
+			lights.processEraseQueue();
+			objects.processEraseQueue();
+			controllers.processEraseQueue();
+
+			for (auto && controller : controllers)
 			{
-				throw std::runtime_error("Light not found. ");
-			}
-			else
-			{
-				lights.erase(it);
+				controller->update(dt);
 			}
 		}
 
-		Ptr<Object> World::createObject()
+		void World::handleInputEvent(InputEvent const & inputEvent)
 		{
-			OwnPtr<Object> object = OwnPtr<Object>::returnNew(scene);
-			objects.insert(object);
-			return object;
-		}
-
-		void World::destroyobject(Ptr<Object> const & object)
-		{
-			auto it = std::find(objects.begin(), objects.end(), object);
-			if (it != objects.end())
+			for (auto && controller : controllers)
 			{
-				throw std::runtime_error("Object not found. ");
-			}
-			else
-			{
-				objects.erase(it);
+				controller->handleInputEvent(inputEvent);
 			}
 		}
 	}

@@ -20,7 +20,7 @@ namespace ve
 
 		// Creates ands inserts the element. Returns the position as an iterator.
 		template <typename YType, typename ... Args>
-		iterator insertNew(Args && ... args);
+		Ptr<YType> insertNew(Args && ... args);
 
 		// Removes the element.
 		void queueForErase(Ptr<T> const & ptr);
@@ -93,12 +93,12 @@ namespace ve
 	}
 
 	template <typename T> template <typename YType, typename ... Args>
-	typename PtrSet<T>::iterator PtrSet<T>::insertNew(Args && ... args)
+	typename Ptr<YType> PtrSet<T>::insertNew(Args && ... args)
 	{
 		auto t = OwnPtr<YType>::returnNew(args...);
 		auto iter = set.insert(t);
 		lookup[t] = iter.first;
-		return iterator(iter.first);
+		return t;
 	}
 
 	template <typename T>

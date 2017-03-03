@@ -224,6 +224,7 @@
     <ClInclude Include="src\util\serialize.hpp" />
     <ClInclude Include="src\window.hpp" />
     <ClInclude Include="src\world\camera.hpp" />
+    <ClInclude Include="src\world\controller.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
     <ClInclude Include="src\world\light.hpp" />
     <ClInclude Include="src\world\object.hpp" />

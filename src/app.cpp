@@ -92,6 +92,7 @@ namespace ve
 			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
 			// This algorithm is from http://gafferongames.com/game-physics/fix-your-timestep.
 			accumulator += currentFrameTime - lastFrameTime;
+			secondsPerLoop = currentFrameTime - lastFrameTime;
 			lastFrameTime = currentFrameTime;
 
 			// Do frame cleanup.
@@ -109,9 +110,24 @@ namespace ve
 		looping = false;
 	}
 
+	float App::getSecondsPerUpdate() const
+	{
+		return secondsPerUpdate;
+	}
+
+	void App::setSecondsPerUpdate(float dt)
+	{
+		secondsPerUpdate = dt;
+	}
+
+	float App::getSecondsPerLoop() const
+	{
+		return secondsPerLoop;
+	}
+
 	Ptr<Window> App::createWindow()
 	{
-		auto window = *windows.insertNew<Window>();
+		auto window = windows.insertNew<Window>();
 		return window;
 	}
 
@@ -126,7 +142,7 @@ namespace ve
 
 	Ptr<world::World> App::createWorld()
 	{
-		return *worlds.insertNew<world::World>();
+		return worlds.insertNew<world::World>();
 	}
 
 	void App::destroyWorld(Ptr<world::World> const & world)
