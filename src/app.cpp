@@ -68,6 +68,11 @@ namespace ve
 					window->update(secondsPerUpdate);
 				}
 
+				for (auto && world : worlds)
+				{
+					world->update(secondsPerUpdate);
+				}
+
 				if (updateCallback)
 				{
 					updateCallback(secondsPerUpdate);
@@ -267,6 +272,10 @@ namespace ve
 					if (window.isValid())
 					{
 						//window->handleInputEvent(inputEvent);
+					}
+					for (auto && world : worlds)
+					{
+						world->handleInputEvent(inputEvent);
 					}
 					if (inputEventCallback)
 					{

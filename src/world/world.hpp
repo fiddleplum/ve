@@ -82,7 +82,7 @@ namespace ve
 		Ptr<ControllerType> World::createController()
 		{
 			static_assert(std::is_base_of<Controller, ControllerType>::value, "Class is not derived from Controller. ");
-			return controller.insertNew<ControllerType>();
+			return controllers.insertNew<ControllerType>();
 		}
 	}
 }
