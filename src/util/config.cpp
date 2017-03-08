@@ -9,6 +9,17 @@ namespace ve
 
 	Config::Config(std::string const & filename)
 	{
+		load(filename);
+	}
+
+	void Config::load(std::string const & filename)
+	{
+		// Clear out data.
+		type = String;
+		text.clear();
+		children.clear();
+
+		// Load new data.
 		std::string content = readFile(filename);
 		size_t i = 0;
 		parse(content, i);
@@ -17,8 +28,65 @@ namespace ve
 	void Config::save(std::string const & filename) const
 	{
 		std::string content;
-		toString(content);
+		stringify(content);
 		writeFile(filename, content);
+	}
+
+	void Config::stringify(std::string & t, size_t tabDepth) const
+	{
+		if (type == Dictionary)
+		{
+			t += "{\n";
+			for (auto iter : children)
+			{
+				for (unsigned int i = 0; i < tabDepth + 1; i++)
+				{
+					t += '\t';
+				}
+				t += iter.first;
+				t += " : ";
+				iter.second.stringify(t, tabDepth + 1);
+			}
+			for (unsigned int i = 0; i < tabDepth; i++)
+			{
+				t += '\t';
+			}
+			t += "}\n";
+		}
+		else if (type == List)
+		{
+			t += "[\n";
+			unsigned int count = 0;
+			while (true)
+			{
+				auto iter = children.find(std::to_string(count));
+				if (iter == children.end())
+				{
+					break;
+				}
+				for (unsigned int i = 0; i < tabDepth + 1; i++)
+				{
+					t += '\t';
+				}
+				iter->second.stringify(t, tabDepth + 1);
+				count++;
+			}
+			for (unsigned int i = 0; i < tabDepth; i++)
+			{
+				t += '\t';
+			}
+			t += "]\n";
+		}
+		else if (type == String)
+		{
+			t += text;
+			t += '\n';
+		}
+	}
+
+	bool Config::hasChild(std::string const & key) const
+	{
+		return children.find(key) != children.end();
 	}
 
 	std::optional<Config const &> Config::operator [] (std::string const & key) const
@@ -41,9 +109,9 @@ namespace ve
 		return std::optional<Config &>();
 	}
 
-	std::optional<Config const &> Config::operator [] (int i) const
+	std::optional<Config const &> Config::operator [] (int index) const
 	{
-		auto it = children.find(std::to_string(i));
+		auto it = children.find(std::to_string(index));
 		if (it != children.end())
 		{
 			return it->second;
@@ -51,9 +119,9 @@ namespace ve
 		return std::optional<Config const &>();
 	}
 
-	std::optional<Config &> Config::operator [] (int i)
+	std::optional<Config &> Config::operator [] (int index)
 	{
-		auto it = children.find(std::to_string(i));
+		auto it = children.find(std::to_string(index));
 		if (it != children.end())
 		{
 			return it->second;
@@ -142,56 +210,101 @@ namespace ve
 		}
 	}
 
-	void Config::toString(std::string & t, size_t tabDepth) const
+	template <> bool Config::getChildAs(std::string const & key, bool defaultValue) const
 	{
-		if (type == Dictionary)
+		auto it = children.find(key);
+		if (it != children.end() && it->second.type == String)
 		{
-			t += "{\n";
-			for (auto iter : children)
-			{
-				for (unsigned int i = 0; i < tabDepth + 1; i++)
-				{
-					t += '\t';
-				}
-				t += iter.first;
-				t += " : ";
-				iter.second.toString(t, tabDepth + 1);
-			}
-			for (unsigned int i = 0; i < tabDepth; i++)
-			{
-				t += '\t';
-			}
-			t += "}\n";
+			if (it->second.text == "true") return true;
+			if (it->second.text == "false") return false;
 		}
-		else if (type == List)
-		{
-			t += "[\n";
-			unsigned int count = 0;
-			while (true)
-			{
-				auto iter = children.find(std::to_string(count));
-				if (iter == children.end())
-				{
-					break;
-				}
-				for (unsigned int i = 0; i < tabDepth + 1; i++)
-				{
-					t += '\t';
-				}
-				iter->second.toString(t, tabDepth + 1);
-				count++;
-			}
-			for (unsigned int i = 0; i < tabDepth; i++)
-			{
-				t += '\t';
-			}
-			t += "]\n";
-		}
-		else if (type == String)
-		{
-			t += text;
-			t += '\n';
-		}
+		return defaultValue;
 	}
 
+	template <> int Config::getChildAs(std::string const & key, int defaultValue) const
+	{
+		auto it = children.find(key);
+		if (it != children.end() && it->second.type == String)
+		{
+			try
+			{
+				return std::stoi(it->second.text);
+			}
+			catch (...) {}
+		}
+		return defaultValue;
+	}
+
+	template <> float Config::getChildAs(std::string const & key, float defaultValue) const
+	{
+		auto it = children.find(key);
+		if (it != children.end() && it->second.type == String)
+		{
+			try
+			{
+				return std::stof(it->second.text);
+			}
+			catch (...) {}
+		}
+		return defaultValue;
+	}
+
+	template <> std::string Config::getChildAs(std::string const & key, std::string defaultValue) const
+	{
+		auto it = children.find(key);
+		if (it != children.end() && it->second.type == String)
+		{
+			return it->second.text;
+		}
+		return defaultValue;
+	}
+
+	template <> bool Config::getChildAs(int index, bool defaultValue) const
+	{
+		auto it = children.find(std::to_string(index));
+		if (it != children.end() && it->second.type == String)
+		{
+			if (it->second.text == "true") return true;
+			if (it->second.text == "false") return false;
+		}
+		return defaultValue;
+	}
+
+	template <> int Config::getChildAs(int index, int defaultValue) const
+	{
+		auto it = children.find(std::to_string(index));
+		if (it != children.end() && it->second.type == String)
+		{
+			try
+			{
+				return std::stoi(it->second.text);
+			}
+			catch (...) {}
+		}
+		return defaultValue;
+	}
+
+	template <> float Config::getChildAs(int index, float defaultValue) const
+	{
+		auto it = children.find(std::to_string(index));
+		if (it != children.end() && it->second.type == String)
+		{
+			try
+			{
+				return std::stof(it->second.text);
+			}
+			catch (...) {}
+		}
+		return defaultValue;
+	}
+
+	template <> std::string Config::getChildAs(int index, std::string defaultValue) const
+	{
+		auto it = children.find(std::to_string(index));
+		if (it != children.end() && it->second.type == String)
+		{
+			return it->second.text;
+		}
+		return defaultValue;
+	}
 }

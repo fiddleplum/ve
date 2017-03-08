@@ -31,6 +31,11 @@ namespace ve
 		profileLog.close();
 	}
 
+	bool Profiler::isInitialized()
+	{
+		return profileLog.is_open();
+	}
+
 	void Profiler::startSample(std::string const & name)
 	{
 		if (samples.size() > 256)

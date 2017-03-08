@@ -14,6 +14,9 @@ namespace ve
 		//! Finalizes the profiler. Called by App.
 		static void finalize();
 
+		//! Returns true if the profiler is initialized.
+		static bool isInitialized();
+
 		//! Starts a sample with the given name.
 		static void startSample(std::string const & name);
 

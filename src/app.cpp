@@ -1,16 +1,32 @@
 #include "store.hpp"
 #include "ve.hpp"
+#include "log.hpp"
+#include "util/profiler.hpp"
 #include <SDL.h>
 
 namespace ve
 {
-	App::App()
+	App::App(Config const & config)
 	{
+		// Initialize the profiler if it is configured.
+		if (config.getChildAs<bool>("profile", false))
+		{
+			Profiler::initialize();
+		}
+
+		// Initialize the log.
+		Log::initialize();
+
 		// Initialize SDL.
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == -1)
 		{
 			throw std::runtime_error(std::string("Could not initialize SDL:	") + SDL_GetError() + ". ");
 		}
+
+		// Set the loop update time to the refresh rate.
+		SDL_DisplayMode sdlDisplayMode;
+		SDL_GetDisplayMode(0, 0, &sdlDisplayMode);
+		secondsPerUpdate = 1.0f / sdlDisplayMode.refresh_rate;
 
 		input.setNew();
 		render.setNew();
@@ -29,18 +45,26 @@ namespace ve
 		input.setNull();
 
 		SDL_Quit();
+
+		Log::finalize();
+
+		if (Profiler::isInitialized())
+		{
+			Profiler::finalize();
+		}
 	}
 
 	void App::loop()
 	{
-		float lastFrameTime = SDL_GetTicks() / 1000.f;
+		float lastFrameTime = (float)SDL_GetTicks() / 1000.0f;
 		float accumulator = 0.f;
 		looping = true;
+
 		while (looping)
 		{
-			float currentFrameTime = SDL_GetTicks() / 1000.f;
+			float currentFrameTime = (float)SDL_GetTicks() / 1000.f;
 
-			//// Handle events
+			// Handle events
 			//controllers::startFrame();
 			SDL_Event sdlEvent;
 			while (SDL_PollEvent(&sdlEvent))
@@ -91,13 +115,13 @@ namespace ve
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
-				window->render();
+				window->render(accumulator);
 			}
 
-			// The loop might have temporal aliasing if the targetSecondsPerFrame is much less than the render frame rate.
+			// The loop might have temporal aliasing if the secondsPerUpdate is much less than the render frame rate.
 			// This algorithm is from http://gafferongames.com/game-physics/fix-your-timestep.
-			accumulator += currentFrameTime - lastFrameTime;
 			secondsPerLoop = currentFrameTime - lastFrameTime;
+			accumulator += secondsPerLoop;
 			lastFrameTime = currentFrameTime;
 
 			// Do frame cleanup.

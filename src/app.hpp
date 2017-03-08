@@ -15,7 +15,7 @@ namespace ve
 	{
 	public:
 		//! Constructs the app.
-		App();
+		App(Config const & config);
 
 		//! Destructs the app.
 		virtual ~App();
