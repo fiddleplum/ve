@@ -23,23 +23,23 @@ namespace ve
 		// Sets the function to be called when the user has requested to close the window.
 		void setCloseRequestedHandler(std::function<void()> closeRequestedHandler);
 
-		// Internal. Gets the SDL Window handle.
+		// Called by App to get the SDL Window handle.
 		void * getSDLWindow() const;
 
-		// Internal. Called when the user clicks the close button on the window or equivalent shortcut.
+		// Called by App when the user clicks the close button on the window or equivalent shortcut.
 		void onCloseRequested();
 
-		// Internal. Called when the user resizes the window.
+		// Called by App when the user resizes the window.
 		void onResized(Vector2i size);
 
-		// Internal. Called when the user moves the cursor within the window or out of the window.
+		// Called by App when the user moves the cursor within the window or out of the window.
 		void onCursorPositionChanged(std::optional<Vector2i> cursorPosition);
 
-		// Internal. Updates the window and the contained gui.
+		// Called by App to updates the window and the contained gui.
 		void update(float dt);
 
-		// Internal. Called to render the window.
-		void render() const;
+		// Called by App to render the window. dt is the number of seconds left over since the last update, used for extrapolation into the next frame.
+		void render(float dt) const;
 
 	private:
 		void * sdlWindow;
