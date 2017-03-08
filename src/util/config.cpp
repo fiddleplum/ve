@@ -200,12 +200,12 @@ namespace ve
 			text += getStringFromChar(c);
 			if (!quoteStart.empty())
 			{
-				text = readUntil(content, i, quoteStart);
+				text += readUntil(content, i, quoteStart);
 				i += quoteStart.size();
 			}
 			else
 			{
-				text = readUntilAny(content, i, " \t\n\r}]");
+				text += readUntilAny(content, i, " \t\n\r}]");
 			}
 		}
 	}
