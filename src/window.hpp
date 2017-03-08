@@ -39,7 +39,7 @@ namespace ve
 		void update(float dt);
 
 		// Called by App to render the window. dt is the number of seconds left over since the last update, used for extrapolation into the next frame.
-		void render(float dt) const;
+		void render() const;
 
 	private:
 		void * sdlWindow;

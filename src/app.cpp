@@ -115,7 +115,7 @@ namespace ve
 			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
-				window->render(accumulator);
+				window->render();
 			}
 
 			// The loop might have temporal aliasing if the secondsPerUpdate is much less than the render frame rate.
