@@ -78,11 +78,12 @@ namespace ve
 
 	void TextArea::updateModels()
 	{
-		for (auto & model : models)
+		for (auto && model : models)
 		{
 			getScene()->destroyModel(model);
 		}
 		models.clear();
+		meshes.clear();
 
 		// A text area may use multiple textures for different code point areas. A separate model is created for each texture.
 		std::map<Ptr<render::Image>, std::vector<float>> meshVertices;
