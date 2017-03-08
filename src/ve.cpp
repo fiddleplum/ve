@@ -1,5 +1,7 @@
 #include "ve.hpp"
+#include "util/config.hpp"
 #include <SDL.h>
+#include <filesystem>
 
 ve::OwnPtr<ve::App> app;
 
@@ -8,16 +10,16 @@ int main(int argc, char *argv[])
 {
 	try
 	{
-		// Grab the params. Don't include the 0th arg, because it is the program name.
-		std::vector<std::string> args;
-		for (int i = 1; i < argc; ++i)
+		ve::Config config;
+		std::string configFilename = "config.txt";
+		if (std::experimental::filesystem::exists(configFilename))
 		{
-			args.push_back(std::string(argv[i]));
+			config.load(configFilename);
 		}
 
-		auto app = ve::OwnPtr<ve::App>::returnNew();
+		auto app = ve::OwnPtr<ve::App>::returnNew(config);
 
-		entry(app, args);
+		entry(app, config);
 
 		app->loop();
 
