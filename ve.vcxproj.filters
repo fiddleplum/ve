@@ -46,6 +46,8 @@
     <ClInclude Include="src\input.hpp" />
     <ClInclude Include="src\render\render.hpp" />
     <ClInclude Include="src\world\controller.hpp" />
+    <ClInclude Include="src\log.hpp" />
+    <ClInclude Include="src\util\profiler.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />
@@ -77,5 +79,7 @@
     <ClCompile Include="src\input_event.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\render\render.cpp" />
+    <ClCompile Include="src\log.cpp" />
+    <ClCompile Include="src\util\profiler.cpp" />
   </ItemGroup>
 </Project>
