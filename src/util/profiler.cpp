@@ -43,7 +43,7 @@ namespace ve
 			throw std::runtime_error("Profiler start sample without end sample. ");
 		}
 		std::string spaces = " ";
-		for (int i = 0; i < samples.size(); i++)
+		for (unsigned int i = 0; i < samples.size(); i++)
 		{
 			spaces += " ";
 		}
