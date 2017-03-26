@@ -48,6 +48,7 @@
     <ClInclude Include="src\world\controller.hpp" />
     <ClInclude Include="src\log.hpp" />
     <ClInclude Include="src\util\profiler.hpp" />
+    <ClInclude Include="src\world\controllers\free_fly.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\render\open_gl.cpp" />
@@ -81,5 +82,6 @@
     <ClCompile Include="src\render\render.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\util\profiler.cpp" />
+    <ClCompile Include="src\world\controllers\free_fly.cpp" />
   </ItemGroup>
 </Project>

@@ -103,6 +103,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)%(RelativeDir)\</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName)_d.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +126,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)%(RelativeDir)\</ObjectFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName)_d.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -227,6 +231,7 @@
     <ClInclude Include="src\window.hpp" />
     <ClInclude Include="src\world\camera.hpp" />
     <ClInclude Include="src\world\controller.hpp" />
+    <ClInclude Include="src\world\controllers\free_fly.hpp" />
     <ClInclude Include="src\world\entity.hpp" />
     <ClInclude Include="src\world\light.hpp" />
     <ClInclude Include="src\world\object.hpp" />
@@ -260,6 +265,7 @@
     <ClCompile Include="src\util\stringutil.cpp" />
     <ClCompile Include="src\window.cpp" />
     <ClCompile Include="src\world\camera.cpp" />
+    <ClCompile Include="src\world\controllers\free_fly.cpp" />
     <ClCompile Include="src\world\entity.cpp" />
     <ClCompile Include="src\world\light.cpp" />
     <ClCompile Include="src\world\object.cpp" />
