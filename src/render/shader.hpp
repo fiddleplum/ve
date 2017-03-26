@@ -16,6 +16,8 @@ namespace ve
 			// Blending options. This will get more complicated as time goes on.
 			enum Blending { NONE, ADDITIVE, ALPHA };
 
+			enum DepthTest { NEVER, ALWAYS, LESS, GREATER, EQUAL, NOT_EQUAL, LESS_OR_EQUAL, GREATER_OR_EQUAL };
+
 			enum UniformType { INT, COORD_2I, COORD_3I, COORD_4I, FLOAT, COORD_2F, COORD_3F, COORD_4F, MATRIX_22F, MATRIX_33F, MATRIX_44F, TEXTURE_2D, TEMPLATE };
 
 			// Uniform information for use by Materials.
@@ -30,6 +32,8 @@ namespace ve
 				std::string vertexCode;
 				std::string fragmentCode;
 				Blending blending = Blending::NONE;
+				bool depthWrite = false;
+				DepthTest depthTest = DepthTest::LESS_OR_EQUAL;
 			};
 
 			//! Constructs a shader from a shader config.
@@ -87,6 +91,8 @@ namespace ve
 			unsigned int program;
 
 			Blending blending;
+			bool depthWrite;
+			DepthTest depthTest;
 		};
 
 		template <> void Shader::setUniformValue(int location, int const & value);

@@ -25,6 +25,8 @@ namespace ve
 	{
 		unsigned int currentProgram = 0; // the current open gl shader program
 		Shader::Blending currentBlending = Shader::Blending::NONE; // the current blending state
+		bool currentDepthWrite = true;
+		Shader::DepthTest currentDepthTest = Shader::DepthTest::LESS_OR_EQUAL;
 		std::map<std::string, int> attributeLocations = { // mapping from attribute names as strings to their corresponding bound locations
 			{"position3d", Mesh::POSITION_3D},
 			{"position2d", Mesh::POSITION_2D},
@@ -45,6 +47,8 @@ namespace ve
 			unsigned int vertexObject = compileShaderObject(Vertex, shaderConfig.vertexCode);
 			unsigned int fragmentObject = compileShaderObject(Fragment, shaderConfig.fragmentCode);
 			blending = shaderConfig.blending;
+			depthWrite = shaderConfig.depthWrite;
+			depthTest = shaderConfig.depthTest;
 			program = linkShaderProgram({vertexObject, fragmentObject});
 			bindAttributeLocations();
 			glDetachShader(program, vertexObject);
@@ -156,6 +160,43 @@ namespace ve
 						blending = Blending::ALPHA;
 					}
 				}
+
+				depthWrite = config.getChildAs<bool>("depthWrite", false);
+
+				depthTest = DepthTest::LESS_OR_EQUAL;
+				auto depthTestValue = config.getChildAs<std::string>("depthTest", "lessOrEqual");
+				if (depthTestValue == "never")
+				{
+					depthTest = DepthTest::NEVER;
+				}
+				else if (depthTestValue == "always")
+				{
+					depthTest = DepthTest::ALWAYS;
+				}
+				else if (depthTestValue == "less")
+				{
+					depthTest = DepthTest::LESS;
+				}
+				else if (depthTestValue == "greater")
+				{
+					depthTest = DepthTest::GREATER;
+				}
+				else if (depthTestValue == "equal")
+				{
+					depthTest = DepthTest::EQUAL;
+				}
+				else if (depthTestValue == "notEqual")
+				{
+					depthTest = DepthTest::NOT_EQUAL;
+				}
+				else if (depthTestValue == "lessOrEqual")
+				{
+					depthTest = DepthTest::LESS_OR_EQUAL;
+				}
+				else if (depthTestValue == "greaterOrEqual")
+				{
+					depthTest = DepthTest::GREATER_OR_EQUAL;
+				}
 			}
 			catch (...)
 			{
@@ -226,24 +267,43 @@ namespace ve
 
 		bool Shader::activate()
 		{
-			//if (currentBlending != blending)
-			//{
-			//	if (blending == Blending::NONE)
-			//	{
-			//		glDisable(GL_BLEND);
-			//	}
-			//	else if (blending == Blending::ADDITIVE)
-			//	{
-			//		glEnable(GL_BLEND);
-			//		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			//	}
-			//	else if (blending == Blending::ALPHA)
-			//	{
-			//		glEnable(GL_BLEND);
-			//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			//	}
-			//	currentBlending = blending;
-			//}
+			if (currentBlending != blending)
+			{
+				if (blending == Blending::NONE)
+				{
+					glDisable(GL_BLEND);
+				}
+				else if (blending == Blending::ADDITIVE)
+				{
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				}
+				else if (blending == Blending::ALPHA)
+				{
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				}
+				currentBlending = blending;
+			}
+			if (currentDepthWrite != depthWrite)
+			{
+				glDepthMask(depthWrite);
+				currentDepthWrite = depthWrite;
+			}
+			if (currentDepthTest != depthTest)
+			{
+				switch (depthTest)
+				{
+					case NEVER: glDepthFunc(GL_NEVER); break;
+					case ALWAYS: glDepthFunc(GL_ALWAYS); break;
+					case LESS: glDepthFunc(GL_LESS); break;
+					case GREATER: glDepthFunc(GL_GREATER); break;
+					case EQUAL: glDepthFunc(GL_EQUAL); break;
+					case NOT_EQUAL: glDepthFunc(GL_NOTEQUAL); break;
+					case LESS_OR_EQUAL: glDepthFunc(GL_LEQUAL); break;
+					case GREATER_OR_EQUAL: glDepthFunc(GL_GEQUAL); break;
+				}
+			}
 			if (currentProgram != program)
 			{
 				currentProgram = program;
