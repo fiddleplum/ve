@@ -49,7 +49,7 @@ namespace ve
 
 		void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, bool flipY)
 		{
-			std::multiset<Ptr<Model>> modelsSorted;
+			std::set<Ptr<Model>> modelsSorted;
 			for (auto model : models)
 			{
 				modelsSorted.insert(model);

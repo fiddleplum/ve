@@ -22,7 +22,7 @@ namespace ve
 		template <typename YType, typename ... Args>
 		Ptr<YType> insertNew(Args && ... args);
 
-		// Removes the element.
+		// Queues the element for erase at next processEraseQueue().
 		void queueForErase(Ptr<T> const & ptr);
 
 		// Returns the iterator of a given element, or end if it is not found.
@@ -31,7 +31,7 @@ namespace ve
 		// Returns true if there there are no elements.
 		bool empty() const;
 
-		// Removes all elements.
+		// Queues all elements for erase at the next processEraseQueue().
 		void queueAllForErase();
 
 		// Returns true if there are no elements queued for erasure.
