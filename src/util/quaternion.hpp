@@ -102,11 +102,11 @@ namespace ve
 	template <typename T>
 	Quaternion<T>::Quaternion(Vector<3, T> const & start, Vector<3, T> const & end, bool vectorsAreNormalized)
 	{
-		r = startVector.dot(end);
+		r = start.dot(end);
 		Vector<3, T> axis;
 		if (r != -1)
 		{
-			ijk = startVector.cross(end);
+			ijk = start.cross(end);
 		}
 		else
 		{
