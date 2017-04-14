@@ -14,17 +14,6 @@ namespace ve
 			flipY = false;
 		}
 
-		Vector2i Target::getSize() const
-		{
-			return size;
-		}
-
-		void Target::setSize(Vector2i size_)
-		{
-			size = size_;
-
-		}
-
 		Ptr<Scene> Target::getScene() const
 		{
 			return scene;
@@ -43,18 +32,28 @@ namespace ve
 		void Target::clearRenderedThisFrameFlag()
 		{
 			renderedThisFrame = false;
+			if (scene.isValid())
+			{
+				for (auto && dependentTarget : scene->getDependentTargets())
+				{
+					if (dependentTarget->renderedThisFrame)
+					{
+						dependentTarget->clearRenderedThisFrameFlag();
+					}
+				}
+			}
 		}
 
 		void Target::render() const
 		{
-			// Clear out the shaders and textures.
-			Shader::deactivate();
-			Image::deactivateRest(0);
-
 			if (!scene.isValid())
 			{
 				return;
 			}
+
+			// Clear out the shaders and textures.
+			Shader::deactivate();
+			Image::deactivateRest(0);
 
 			for (auto && dependentTarget : scene->getDependentTargets())
 			{
@@ -74,8 +73,9 @@ namespace ve
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			//glClearColor(0, 0, 0, 1);
+			glClearColor(0, 0, 0, 1);
 			glClearDepth(1.0);
+			glViewport(0, 0, getSize()[0], getSize()[1]);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			scene->render(uniformsFunction, flipY);
@@ -111,12 +111,17 @@ namespace ve
 			}
 		}
 
+		Vector2i WindowTarget::getSize() const
+		{
+			Vector2i size;
+			SDL_GetWindowSize((SDL_Window *)sdlWindow, &size[0], &size[1]);
+			return size;
+		}
+
 		void WindowTarget::preRender() const
 		{
 			SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			glViewport(0, 0, getSize()[0], getSize()[1]);
-			glClearColor(0, 0, 0, 1);
 		}
 
 		void WindowTarget::postRender() const
@@ -136,6 +141,23 @@ namespace ve
 		ImageTarget::~ImageTarget()
 		{
 			glDeleteFramebuffers(1, &framebuffer);
+		}
+
+		Vector2i ImageTarget::getSize() const
+		{
+			if (colorImages.size() > 0)
+			{
+				return colorImages[0]->getSize();
+			}
+			if (depthImage.isValid())
+			{
+				return depthImage->getSize();
+			}
+			if (stencilImage.isValid())
+			{
+				return stencilImage->getSize();
+			}
+			return Vector2i {0, 0};
 		}
 
 		void ImageTarget::setSize(Vector2i size)
@@ -232,13 +254,7 @@ namespace ve
 
 		void ImageTarget::preRender() const
 		{
-			if (colorImages.empty() || !colorImages[0].isValid())
-			{
-				throw std::runtime_error("The color image at index 0 needs to be valid. ");
-			}
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glViewport(0, 0, colorImages[0]->getSize()[0], colorImages[0]->getSize()[1]);
-			glClearColor(1, 0, 0, 1);
 		}
 
 		void ImageTarget::postRender() const

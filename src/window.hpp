@@ -38,7 +38,10 @@ namespace ve
 		// Called by App to updates the window and the contained gui.
 		void update(float dt);
 
-		// Called by App to render the window. dt is the number of seconds left over since the last update, used for extrapolation into the next frame.
+		// Called by App to prepare the window for rendering.
+		void preRender();
+
+		// Called by App to render the window.
 		void render() const;
 
 	private:

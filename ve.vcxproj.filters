@@ -80,7 +80,6 @@
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\input_event.cpp" />
     <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\render\render.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\util\profiler.cpp" />
     <ClCompile Include="src\world\controllers\free_fly.cpp" />

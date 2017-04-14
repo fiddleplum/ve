@@ -19,12 +19,6 @@ namespace ve
 			//! Virtual default destructor for inheritance.
 			virtual ~Target() {}
 
-			//! Returns the pixel size of the render target and the associated images.
-			Vector2i getSize() const;
-
-			//! Sets the pixel size of the render target and the associated images.
-			virtual void setSize(Vector2i size);
-
 			//! Returns the scene that will be rendered to this target.
 			Ptr<Scene> getScene() const;
 
@@ -40,6 +34,9 @@ namespace ve
 			//! Renders the scene to the target. First renders all targets upon which the scene depends.
 			void render() const;
 
+			//! Returns the pixel size of the target and the associated images.
+			virtual Vector2i getSize() const = 0;
+
 			// Called just before rendering the scene.
 			virtual void preRender() const = 0;
 
@@ -50,7 +47,6 @@ namespace ve
 			bool flipY;
 
 		private:
-			Vector2i size;
 			Ptr<Scene> scene;
 			std::function<void(Ptr<Shader> const &)> uniformsFunction;
 			mutable bool renderedThisFrame;
@@ -65,10 +61,16 @@ namespace ve
 			//! Destructs the window stage.
 			~WindowTarget();
 
-		protected:
+			//! Returns the pixel size of the target and the associated images.
+			Vector2i getSize() const override;
+
+			// Sets the pixel size of the render target and the associated images.
+			//void setSize(Vector2i size);
+
 			// Called just before rendering the scene.
 			void preRender() const override;
 
+		protected:
 			// Called just after rendering the scene.
 			void postRender() const override;
 
@@ -88,8 +90,11 @@ namespace ve
 			// Destructor.
 			~ImageTarget();
 
+			//! Returns the pixel size of the target and the associated images.
+			Vector2i getSize() const override;
+
 			//! Sets the pixel size of the render target and the associated images.
-			void setSize(Vector2i size) override;
+			void setSize(Vector2i size);
 
 			// Returns the image at the specified index.
 			Ptr<Image> getColorImage(unsigned int index) const;

@@ -105,14 +105,11 @@ namespace ve
 				accumulator -= secondsPerUpdate;
 			}
 
-			// PreRender Update
 			for (auto & window : windows)
 			{
-				//window->preRenderUpdate();
+				window->preRender();
 			}
-			render->preRenderUpdate();
 
-			// Render (Scene render happens in each Viewport)
 			for (auto const & window : windows)
 			{
 				window->render();

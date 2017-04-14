@@ -16,7 +16,6 @@ namespace ve
 
 		// Create a new window target.
 		target.setNew(sdlWindow);
-		target->setSize(initialSize);
 
 		// Create the gui and connect it to the window target.
 		gui.setNew(render);
@@ -56,7 +55,6 @@ namespace ve
 
 	void Window::onResized(Vector2i size)
 	{
-		target->setSize(size);
 		gui->setSize(size);
 	}
 
@@ -69,6 +67,11 @@ namespace ve
 	void Window::update(float dt)
 	{
 		gui->update(dt);
+	}
+
+	void Window::preRender()
+	{
+		target->clearRenderedThisFrameFlag();
 	}
 
 	void Window::render() const

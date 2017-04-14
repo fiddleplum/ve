@@ -32,8 +32,6 @@ namespace ve
 			Cache<render::ImageTarget> imageTargets;
 			Cache<render::WindowTarget> windowTargets;
 			Cache<render::Scene> scenes;
-
-			void preRenderUpdate();
 		};
 	}
 }
