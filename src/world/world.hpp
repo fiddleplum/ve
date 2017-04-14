@@ -6,6 +6,7 @@
 #include "world/controller.hpp"
 #include "render/scene.hpp"
 #include "render/target.hpp"
+#include <render/render.hpp>
 #include "util/ptr_set.hpp"
 
 namespace ve
@@ -16,7 +17,7 @@ namespace ve
 		{
 		public:
 			// Constructs an empty world. Fill it with things!
-			World();
+			World(Ptr<render::Render> const & render);
 
 			// Destructs the world.
 			virtual ~World();
@@ -50,7 +51,7 @@ namespace ve
 			void handleInputEvent(InputEvent const & inputEvent);
 
 		private:
-			OwnPtr<render::Scene> scene;
+			Ptr<render::Scene> scene;
 			PtrSet<Camera> cameras;
 			PtrSet<Light> lights;
 			PtrSet<Object> objects;

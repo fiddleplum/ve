@@ -1,7 +1,8 @@
 #pragma once
 
 #include "gui/panel.hpp"
-#include "render/scene.hpp"
+#include <render/scene.hpp>
+#include <render/render.hpp>
 
 namespace ve
 {
@@ -9,7 +10,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Gui();
+		Gui(Ptr<render::Render> const & render);
 
 		// Destructor.
 		~Gui();
@@ -30,10 +31,8 @@ namespace ve
 		void update(float dt);
 
 	private:
-		void createShader();
-
 		OwnPtr<Panel> root;
-		OwnPtr<render::Scene> scene;
-		OwnPtr<render::Shader> shader;
+		Ptr<render::Scene> scene;
+		Ptr<render::Shader> shader;
 	};
 }

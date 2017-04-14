@@ -4,7 +4,7 @@
 
 namespace ve
 {
-	Window::Window()
+	Window::Window(Ptr<render::Render> const & render)
 	{
 		// Initialize SDL.
 		Vector2i initialSize {800, 600};
@@ -19,7 +19,7 @@ namespace ve
 		target->setSize(initialSize);
 
 		// Create the gui and connect it to the window target.
-		gui.setNew();
+		gui.setNew(render);
 		gui->setSize(initialSize);
 		target->setScene(gui->getScene());
 	}

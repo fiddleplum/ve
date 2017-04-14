@@ -2,11 +2,34 @@
 
 namespace ve
 {
-	Gui::Gui()
+	Gui::Gui(Ptr<render::Render> const & render)
 	{
-		createShader();
+		Config shaderConfig;
+		shaderConfig.children["vertex"].text =
+			"#version 430\n"
+			"uniform vec2 origin;\n"
+			"uniform vec2 imageSize;\n"
+			"uniform vec2 guiSize;\n"
+			"uniform float flipY;\n"
+			"attribute vec2 position2d;\n"
+			"attribute vec2 uv0;\n"
+			"varying vec2 v_uv0;\n"
+			"void main(void) {\n"
+			"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, flipY * (-2 * (origin.y + position2d.y) / guiSize.y + 1), 0, 1);\n"
+			"	v_uv0 = vec2(uv0.x / imageSize.x, uv0.y / imageSize.y);\n"
+			"}\n";
+		shaderConfig.children["fragment"].text =
+			"#version 430\n"
+			"varying vec2 v_uv0;\n"
+			"uniform vec4 color;\n"
+			"uniform sampler2D image;\n"
+			"void main(void) {\n"
+			"	gl_FragColor = color * texture(image, clamp(v_uv0, 0, 1));\n"
+			"}\n";
+		shaderConfig.children["blending"].text = "alpha";
+		shader = render->shaders.create(shaderConfig);
 
-		scene.setNew();
+		scene = render->scenes.create();
 		scene->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 		{
 			Recti bounds = this->getRootPanel()->getBounds();
@@ -19,8 +42,6 @@ namespace ve
 
 	Gui::~Gui()
 	{
-		root.setNull();
-		scene.setNull();
 	}
 
 	Ptr<Panel> Gui::getRootPanel() const
@@ -46,33 +67,5 @@ namespace ve
 	void Gui::update(float dt)
 	{
 		root->update(dt);
-	}
-
-	void Gui::createShader()
-	{
-		Config shaderConfig;
-		shaderConfig.children["vertex"].text =
-			"#version 430\n"
-			"uniform vec2 origin;\n"
-			"uniform vec2 imageSize;\n"
-			"uniform vec2 guiSize;\n"
-			"uniform float flipY;\n"
-			"attribute vec2 position2d;\n"
-			"attribute vec2 uv0;\n"
-			"varying vec2 v_uv0;\n"
-			"void main(void) {\n"
-			"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, flipY * (-2 * (origin.y + position2d.y) / guiSize.y + 1), 0, 1);\n"
-			"	v_uv0 = vec2(uv0.x / imageSize.x, uv0.y / imageSize.y);\n"
-			"}\n";
-		shaderConfig.children["fragment"].text =
-			"#version 430\n"
-			"varying vec2 v_uv0;\n"
-			"uniform vec4 color;\n"
-			"uniform sampler2D image;\n"
-			"void main(void) {\n"
-			"	gl_FragColor = color * texture(image, clamp(v_uv0, 0, 1));\n"
-			"}\n";
-		shaderConfig.children["blending"].text = "alpha";
-		shader.setNew(shaderConfig);
 	}
 }

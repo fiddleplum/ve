@@ -4,9 +4,9 @@ namespace ve
 {
 	namespace world
 	{
-		World::World()
+		World::World(Ptr<render::Render> const & render)
 		{
-			scene.setNew();
+			scene = render->scenes.create();
 			scene->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 			{
 				unsigned int lightIndex = 0;

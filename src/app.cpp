@@ -156,7 +156,7 @@ namespace ve
 
 	Ptr<Window> App::createWindow()
 	{
-		auto window = windows.insertNew<Window>();
+		auto window = windows.insertNew<Window>(render);
 		return window;
 	}
 
@@ -171,7 +171,7 @@ namespace ve
 
 	Ptr<world::World> App::createWorld()
 	{
-		return worlds.insertNew<world::World>();
+		return worlds.insertNew<world::World>(render);
 	}
 
 	void App::destroyWorld(Ptr<world::World> const & world)

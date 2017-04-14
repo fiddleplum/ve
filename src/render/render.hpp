@@ -1,3 +1,5 @@
+#pragma once
+
 #include "render/shader.hpp"
 #include "render/font.hpp"
 #include "render/image.hpp"

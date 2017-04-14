@@ -2,18 +2,6 @@
 
 #include <util/ptr.hpp>
 #include <unordered_set>
-#include <stdexcept>
-
-/*
-If I use Ptr,
-1. Users must explicitly call create and destroy and clean cannot exist. -
-2. If a user uses a destroyed ptr, the error is at the access. +
-If I use UsePtr,
-1. Users just stop using their UsePtr and call clean. +
-2. If the Cache is destructed and there are still UsePtrs out there, it errors in the destructor. -
-
-If I can ensure that all UsePtrs are no longer used, then UsePtrs are better.
-*/
 
 namespace ve
 {
@@ -22,13 +10,13 @@ namespace ve
 	class Cache
 	{
 	public:
-		// Destructor. Calls clean(). Throws an exception if it still has any objects.
+		// Destructor. Calls clean().
 		~Cache();
 
 		// Constructs and returns a new object.
 		template <typename ... Args> Ptr<T> create(Args && ... args);
 
-		// Removes and destroys the objects that aren't referenced outside of the cache by UsePtrs.
+		// Removes and destroys the objects that aren't referenced outside of the cache.
 		void clean();
 
 		// The iterators.
@@ -85,7 +73,7 @@ namespace ve
 		clean();
 		if (!objects.empty())
 		{
-			//throw std::runtime_error("Cannot destruct. There are still objects referenced. ");
+			//throw std::runtime_error("Cannot destruct. There are still objects referenced. "); // Only use this for debugging as throwing exceptions in destructors is bad.
 		}
 	}
 
