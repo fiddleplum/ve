@@ -29,9 +29,8 @@ int main(int argc, char *argv[])
 	}
 	catch (std::exception const & e)
 	{
-		//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error! Uncaught exception: ", e.what(), nullptr);
-		//return -1;
-		throw;
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error! Uncaught exception: ", e.what(), nullptr);
+		return -1;
 	}
 }
 

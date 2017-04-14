@@ -146,18 +146,16 @@ namespace ve
 	template <typename T> template <typename Y, typename ... Args>
 	typename Ptr<Y> PtrList<T>::appendNew(Args && ... args)
 	{
-		auto t = OwnPtr<Y>::returnNew(args...);
-		auto iter = list.insert(list.end(), t);
-		lookup[t] = iter;
-		return t;
+		auto ownPtr = OwnPtr<Y>::returnNew(std::forward<Args>(args)...);
+		Ptr<Y> ptr = ownPtr;
+		lookup[ptr] = list.insert(list.end(), std::move(ownPtr));
+		return ptr;
 	}
 
 	template <typename T> template <typename Y, typename ... Args>
 	typename Ptr<Y> PtrList<T>::insertNew(const_iterator const & position, Args && ... args)
 	{
-		auto t = OwnPtr<Y>::returnNew(args...);
-		list.insert(position, t);
-		return t;
+		return *list.insert(position, std::move(OwnPtr<Y>::returnNew(args...)));
 	}
 
 	template <typename T>

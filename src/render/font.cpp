@@ -116,7 +116,7 @@ namespace ve
 			block.image->save("test.png");
 			SDL_FreeSurface(surface);
 			block.start = blockStart;
-			blocks[blockStart] = block;
+			blocks[blockStart] = std::move(block);
 		}
 
 		//void Font::getInfoFromChar(unsigned int c, GlyphInfo & glyphInfo)

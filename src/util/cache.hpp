@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <util/ptr.hpp>
 #include <unordered_set>
 #include <stdexcept>
 
@@ -26,7 +26,7 @@ namespace ve
 		~Cache();
 
 		// Constructs and returns a new object.
-		template <typename ... Args> UsePtr<T> create(Args && ... args);
+		template <typename ... Args> Ptr<T> create(Args && ... args);
 
 		// Removes and destroys the objects that aren't referenced outside of the cache by UsePtrs.
 		void clean();
@@ -90,19 +90,9 @@ namespace ve
 	}
 
 	template <typename T> template <typename ... Args>
-	UsePtr<T> Cache<T>::create(Args && ... args)
+	Ptr<T> Cache<T>::create(Args && ... args)
 	{
-		OwnPtr<T> object;
-		try
-		{
-			object.setNew(std::forward<Args>(args)...);
-		}
-		catch (std::runtime_error const & e)
-		{
-			throw std::runtime_error(std::string("Error while constructing object: ") + e.what());
-		}
-		objects.insert(object);
-		return object;
+		return *objects.insert(std::move(OwnPtr<T>::returnNew(std::forward<Args>(args)...))).first;
 	}
 
 	template <typename T>
@@ -110,7 +100,7 @@ namespace ve
 	{
 		for (auto it = objects.begin(); it != objects.end();)
 		{
-			if (!it->isInUse())
+			if (it->numPtrs() == 0)
 			{
 				it = objects.erase(it);
 			}

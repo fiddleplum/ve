@@ -19,8 +19,8 @@ namespace ve
 		PtrSet();
 
 		// Creates ands inserts the element. Returns the position as an iterator.
-		template <typename YType, typename ... Args>
-		Ptr<YType> insertNew(Args && ... args);
+		template <typename Y, typename ... Args>
+		Ptr<Y> insertNew(Args && ... args);
 
 		// Queues the element for erase at next processEraseQueue().
 		void queueForErase(Ptr<T> const & ptr);
@@ -92,13 +92,13 @@ namespace ve
 	{
 	}
 
-	template <typename T> template <typename YType, typename ... Args>
-	typename Ptr<YType> PtrSet<T>::insertNew(Args && ... args)
+	template <typename T> template <typename Y, typename ... Args>
+	typename Ptr<Y> PtrSet<T>::insertNew(Args && ... args)
 	{
-		auto t = OwnPtr<YType>::returnNew(args...);
-		auto iter = set.insert(t);
-		lookup[t] = iter.first;
-		return t;
+		auto ownPtr = OwnPtr<Y>::returnNew(std::forward<Args>(args)...);
+		Ptr<Y> ptr = ownPtr;
+		lookup[ptr] = set.insert(std::move(ownPtr)).first;
+		return ptr;
 	}
 
 	template <typename T>

@@ -23,9 +23,7 @@ namespace ve
 
 		Ptr<Model> Scene::createModel()
 		{
-			auto model = OwnPtr<Model>::returnNew();
-			models.insert(model);
-			return model;
+			return *models.insert(std::move(OwnPtr<Model>::returnNew())).first;
 		}
 
 		void Scene::destroyModel(Ptr<Model> model)
@@ -50,11 +48,11 @@ namespace ve
 		void Scene::render(std::function<void(Ptr<Shader> const &)> const & stageUniformsFunction, bool flipY)
 		{
 			std::set<Ptr<Model>> modelsSorted;
-			for (auto model : models)
+			for (auto && model : models)
 			{
 				modelsSorted.insert(model);
 			}
-			for (auto model : modelsSorted)
+			for (auto && model : modelsSorted)
 			{
 				model->render(stageUniformsFunction, uniformsFunction, flipY);
 			}

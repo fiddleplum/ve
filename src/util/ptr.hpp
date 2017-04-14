@@ -8,49 +8,85 @@ namespace ve
 	//! This is a function that can be passed to OwnPtr to delete arrays properly.
 	template <typename T> void deleteArray(T * p);
 
-	//! This is the standard delete function. It just calls the delete operator.
+	//! This is the standard delete function for OwnPtr. It just calls the delete operator.
 	template <typename T> void deleteObject(T * p);
 
 	//! An exception for accessing objects that don't exist (null pointers, bad pointers, etc).
 	class bad_dereference_exception;
 
-	//! An exception for when an OwnPtr destructs but there are still UsePtrs left.
-	class bad_destroy_exception;
-
 	// Forward declaration for internal counting class.
 	class _PtrCounter;
 
-	//! The base class for OwnPtr, UsePtr, and Ptr. OwnPtr declares ownership of a referenced object, and UsePtr and Ptr declare use of a referenced object. UsePtr guarantees that the referenced object has not been destroyed, whereas Ptr has no such guarantee. If a Ptr class referencing a destroyed object is dereferenced, it will throw a bad_dereference_exception. If an OwnPtr tries to destruct its referenced object (because it is the last reference to that object) but a UsePtr still references the object, it will throw a bad_destroy_exception.
-	template <typename T, bool OWN, bool USE>
-	class PtrBase final
+	// A base for the OwnPtr and Ptr classes for shared function. This class cannot be instantiated on its own.
+	template <typename T>
+	class PtrBase
 	{
 	public:
-		//! Default constructor. Initializes this to point to null.
-		PtrBase();
-
-		//! Default copy constructor. Needed otherwise C++ will create its own.
-		PtrBase(PtrBase<T, OWN, USE> const & ptr);
-
-		//! Templated copy constructor. It can take a PtrBase that has a type that is a subclass of T. An OwnPtr cannot be copy-constructed from a UsePtr.
-		template <typename Y, bool OWNY, bool USEY> PtrBase(PtrBase<Y, OWNY, USEY> const & ptr);
-
-		//! Destructor. If this is an OwnPtr and is the last reference to the object, either delete is called or the destroy function is called if it is specified. There must be no UsePtrs pointing to the object.
-		~PtrBase();
-
-		//! Default assignment operator. Needed otherwise C++ will create its own.
-		PtrBase<T, OWN, USE> & operator = (PtrBase<T, OWN, USE> const & ptr);
-
-		//! Templated assignment operator. This can take a BasePtr that has a type that is a subclass of T. A UsePtr cannot be assigned to an OwnPtr.
-		template <typename Y, bool OWNY, bool USEY> PtrBase<T, OWN, USE> & operator = (PtrBase<Y, OWNY, USEY> const & ptr);
-
 		//! Returns true if this points to something non-null.
 		bool isValid() const;
 
-		//! Returns true if there is at least one UsePtr that points to the object this points to.
-		bool isInUse() const;
+		//! Provides access to the pointee's members.
+		T * operator -> () const;
 
-		//! Returns the number of references, including this pointer, that point to the object.
-		int getNumReferences() const;
+		//! Provides access to the element located at index. Warning: this provides no index out-of-bounds checking for efficiency.
+		T & operator [] (int index) const;
+
+		//! Provides reference access to the pointee's members.
+		T & operator * () const;
+
+		//! Only to be used for functions that require a raw pointer to the pointee. Be careful how you use this.
+		T * raw() const;
+
+		//! Get the unsigned integer value of the address of the pointee.
+		operator intptr_t() const;
+
+		//! Returns true if the address of the pointee is less than the address of ptr's pointee.
+		template <typename Y> bool operator < (PtrBase<Y> const & ptr) const;
+
+		//! Returns true if the address of the pointee is equal to the address of ptr's pointee.
+		template <typename Y> bool operator == (PtrBase<Y> const & ptr) const;
+
+	protected:
+		PtrBase();
+
+		template <typename Y> PtrBase(Y * p, _PtrCounter * c);
+
+		~PtrBase() {}
+
+		T * p = nullptr;
+		_PtrCounter * c = nullptr;
+
+		template<typename Y> friend class PtrBase;
+	};
+
+	//! A unique smart pointer that can pass out Ptrs for use by others. It is not bound by the other Ptrs. See rationale at the end of the file.
+	template <typename T>
+	class OwnPtr final : public PtrBase<T>
+	{
+	public:
+		//! Default constructor. Initializes this to null.
+		OwnPtr();
+
+		//! Move constructor. Moves ownership of ownPtr's pointee to this.
+		OwnPtr(OwnPtr<T> && ownPtr);
+
+		//! Templated move constructor. Moves ownership of ownPtr's pointee to this. Y must be a subclass of T.
+		template <typename Y> OwnPtr(OwnPtr<Y> && ownPtr);
+
+		//! Move assignment operator. Moves ownership of ownPtr's pointee to this and returns this.
+		OwnPtr<T> & operator = (OwnPtr<T> && ownPtr);
+
+		//! Templated move assignment operator. Moves ownership of ownPtr's pointee to this and returns this. Y must be a subclass of T.
+		template <typename Y> OwnPtr<T> & operator = (OwnPtr<Y> && ownPtr);
+
+		//! Destructor.
+		~OwnPtr();
+
+		//! Returns the number of pointers that refer to the pointee.
+		int numPtrs() const;
+
+		//! Resets this to point to null.
+		void setNull();
 
 		//! Point the pointer to newP, which can have a type that is subclass of T. Only pass in something that looks like 'new T()' to ensure that the raw pointer isn't used elsewhere.
 		template <typename Y> void setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject);
@@ -62,55 +98,57 @@ namespace ve
 		template <typename Y, typename ... Args> void setNew(Args && ... args);
 
 		//! Returns a newly created OwnPtr using setNew above.
-		template <typename ... Args> static PtrBase<T, OWN, USE> returnNew(Args && ... args);
+		template <typename ... Args> static OwnPtr<T> returnNew(Args && ... args);
+
+		template<typename Y> friend class OwnPtr;
+		template<typename Y> friend class Ptr;
+	};
+
+	// A copyable referencing smart pointer acquired from an OwnPtr. See rationale at the end of the file.
+	template <typename T>
+	class Ptr final : public PtrBase<T>
+	{
+	public:
+		//! Default constructor. Initializes this to null.
+		Ptr();
+
+		//! Copy constructor.
+		Ptr(Ptr<T> const & ptr);
+
+		//! Copy constructor from OwnPtrs.
+		Ptr(OwnPtr<T> const & ownPtr);
+
+		//! Templated copy constructor. Y must be a subclass of T.
+		template <typename Y> Ptr(Ptr<Y> const & ptr);
+
+		//! Templated copy constructor from OwnPtrs. Y must be a subclass of T.
+		template <typename Y> Ptr(OwnPtr<Y> const & ownPtr);
+
+		//! Copy assignment operator.
+		Ptr<T> & operator = (Ptr<T> const & ptr);
+
+		//! Copy assignment operator from OwnPtrs.
+		Ptr<T> & operator = (OwnPtr<T> const & ownPtr);
+
+		//! Templated copy assignment operator. Y must be a subclass of T.
+		template <typename Y> Ptr<Y> & operator = (Ptr<Y> const & ptr);
+
+		//! Templated copy assignment operator from OwnPtrs. Y must be a subclass of T.
+		template <typename Y> Ptr<Y> & operator = (OwnPtr<Y> const & ownPtr);
+
+		//! Destructor.
+		~Ptr();
 
 		//! Resets this to point to null.
 		void setNull();
 
-		//! Provides access to the pointed-to object's members.
-		T * operator -> () const;
+		//! Returns a Ptr dynamically casted to Y. Y must be a superclass of T.
+		template <typename Y> Ptr<Y> as() const;
 
-		//! Provides access to the element located at index. Warning: this provides no index out-of-bounds checking.
-		T & operator [] (int index) const;
-
-		//! Provides reference access to the pointed-to object's members.
-		T & operator * () const;
-
-		//! Only to be used for functions that require a raw pointer to the object. Be careful how you use this.
-		T * raw() const;
-
-		//! Get the unsigned integer value of the address of the pointed-to object.
-		operator intptr_t() const;
-
-		//! Returns a PtrBase dynamically casted to Y.
-		template <typename Y> PtrBase<Y, OWN, USE> as() const;
-
-		//! Returns true if the address of this's object is less than the address of ptr's object.
-		template <typename Y, bool OWNY, bool USEY> bool operator < (PtrBase<Y, OWNY, USEY> const & ptr) const;
-
-		//! Returns true if the address of this's object is equal to the address of ptr's object.
-		template <typename Y, bool OWNY, bool USEY> bool operator == (PtrBase<Y, OWNY, USEY> const & ptr) const;
-
-	private:
-		T * p;
-		_PtrCounter * c;
-
-		template<typename Y, bool OWNY, bool USEY> friend class PtrBase;
+		template<typename Y> friend class Ptr;
 	};
 
-	//! A smart pointer for owning an object. It can be copied around for multiple ownership.
-	template <typename T>
-	using OwnPtr = PtrBase<T, true, false>;
-
-	//! A smart pointer for using an object with a guarantee of the object being valid.
-	template <typename T>
-	using UsePtr = PtrBase<T, false, true>;
-
-	//! A smart pointer for using an object with no guarantee of the object being valid.
-	template <typename T>
-	using Ptr = PtrBase<T, false, false>;
-
-	// Template Implementation.
+	// Template Implementation
 
 	template <typename T>
 	void deleteArray(T * p)
@@ -133,15 +171,6 @@ namespace ve
 		}
 	};
 
-	class bad_destroy_exception : public std::exception
-	{
-	public:
-		char const * what() const override
-		{
-			return "Bad OwnPtr destruction exception. ";
-		}
-	};
-
 	// Needs to be a separate class (not an inner class) because otherwise it would be templated and not compatible with other templates.
 	class _PtrCounter
 	{
@@ -149,9 +178,7 @@ namespace ve
 		virtual intptr_t hash() = 0; // Used in comparisons and intptr_t casting. Needed because of virtual inheritance.
 		virtual void destroy() = 0;
 
-		int oc = 0; // PtrBase[OWN=true] reference counter
-		int uc = 0; // PtrBase[USE=true] reference counter
-		int pc = 0; // PtrBase[ANY] reference counter
+		int pc = 1; // OwnPtr and Ptr reference counter
 	};
 
 	// This is used for proper destruction of subclasses of T.
@@ -167,10 +194,6 @@ namespace ve
 
 		intptr_t hash() override
 		{
-			if (oc == 0)
-			{
-				return 0;
-			}
 			return (intptr_t)p;
 		}
 
@@ -188,226 +211,61 @@ namespace ve
 		void(*deleteFunction) (T *) = deleteObject; // User-supplied destroy function.
 	};
 
-	template <typename T, bool OWN, bool USE>
-	PtrBase<T, OWN, USE>::PtrBase() : p(nullptr), c(nullptr)
+	template <typename T>
+	PtrBase<T>::PtrBase()
 	{
 	}
 
-	template <typename T, bool OWN, bool USE>
-	PtrBase<T, OWN, USE>::PtrBase(PtrBase<T, OWN, USE> const & ptr) : p(ptr.p), c(ptr.c)
+	template <typename T> template <typename Y>
+	PtrBase<T>::PtrBase(Y * p, _PtrCounter * c)
+		: p(p), c(c)
 	{
-		if (p != nullptr)
-		{
-			if (OWN)
-			{
-				c->oc++;
-			}
-			if (USE)
-			{
-				c->uc++;
-			}
-			c->pc++;
-		}
 	}
 
-	template <typename T, bool OWN, bool USE> template <typename Y, bool OWNY, bool USEY>
-	PtrBase<T, OWN, USE>::PtrBase(PtrBase<Y, OWNY, USEY> const & ptr) : p(ptr.p), c(ptr.c)
-	{
-		static_assert(!OWN || OWNY, "Can't convert from Ptr or UsePtr to OwnPtr");
-		static_assert(!USE || USEY || OWNY, "Can't convert from Ptr to UsePtr");
-		if (p != nullptr)
-		{
-			if (OWN)
-			{
-				c->oc++;
-			}
-			if (USE)
-			{
-				c->uc++;
-			}
-			c->pc++;
-		}
-	}
-
-	template <typename T, bool OWN, bool USE>
-	PtrBase<T, OWN, USE>::~PtrBase()
-	{
-		setNull();
-	}
-
-	template <typename T, bool OWN, bool USE>
-	PtrBase<T, OWN, USE> & PtrBase<T, OWN, USE>::operator = (PtrBase<T, OWN, USE> const & ptr)
-	{
-		setNull();
-		p = ptr.p;
-		c = ptr.c;
-		if (p != nullptr)
-		{
-			if (OWN)
-			{
-				c->oc++;
-			}
-			if (USE)
-			{
-				c->uc++;
-			}
-			c->pc++;
-		}
-		return *this;
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename Y, bool OWNY, bool USEY>
-	PtrBase<T, OWN, USE> & PtrBase<T, OWN, USE>::operator = (PtrBase<Y, OWNY, USEY> const & ptr)
-	{
-		static_assert(!OWN || OWNY, "Can't convert from Ptr or UsePtr to OwnPtr");
-		static_assert(!USE || USEY || OWNY, "Can't convert from Ptr to UsePtr");
-		setNull();
-		p = ptr.p;
-		c = ptr.c;
-		if (p != nullptr)
-		{
-			if (OWN)
-			{
-				c->oc++;
-			}
-			if (USE)
-			{
-				c->uc++;
-			}
-			c->pc++;
-		}
-		return *this;
-	}
-
-	template <typename T, bool OWN, bool USE>
-	bool PtrBase<T, OWN, USE>::isValid() const
+	template <typename T>
+	bool PtrBase<T>::isValid() const
 	{
 		return p != nullptr;
 	}
 
-	template <typename T, bool OWN, bool USE>
-	bool PtrBase<T, OWN, USE>::isInUse() const
+	template <typename T>
+	T * PtrBase<T>::operator -> () const
 	{
-		return p != nullptr && c->uc != 0;
-	}
-
-	template <typename T, bool OWN, bool USE>
-	int PtrBase<T, OWN, USE>::getNumReferences() const
-	{
-		return p != nullptr ? c->pc : 0;
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename Y>
-	void PtrBase<T, OWN, USE>::setRaw(Y * newP, void(*deleteFunction) (Y *))
-	{
-		static_assert(OWN, "Must be OwnPtr");
-		setNull();
-		p = newP;
-		if (p != nullptr)
-		{
-			c = new _PtrCounterTyped<Y>(newP, deleteFunction);
-			c->oc++;
-			c->pc++;
-		}
-		else
-		{
-			c = nullptr;
-		}
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename ... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args && ... args)
-	{
-		setRaw(new T(std::forward<Args>(args)...));
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename Y, typename ... Args>
-	void PtrBase<T, OWN, USE>::setNew(Args && ... args)
-	{
-		setRaw(new Y(std::forward<Args>(args)...));
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename ... Args>
-	PtrBase<T, OWN, USE> PtrBase<T, OWN, USE>::returnNew(Args && ... args)
-	{
-		PtrBase<T, OWN, USE> ptr;
-		ptr.setNew(std::forward<Args>(args)...);
-		return ptr;
-	}
-
-	template <typename T, bool OWN, bool USE>
-	void PtrBase<T, OWN, USE>::setNull()
-	{
-		if (p != nullptr)
-		{
-			if (OWN)
-			{
-				if (c->oc == 1 && c->uc > 0)
-				{
-					throw bad_destroy_exception(); // This OwnPtr still has other UsePtrs out there, so it can't be destroyed. All other UsePtrs need to be cleared.
-				}
-				c->oc--;
-				if (c->oc == 0) // Last OwnPtr, so destroy the object. The counter object still stays around until no other PtrBases are pointing to the now-defunct object.
-				{
-					c->destroy();
-				}
-			}
-			if (USE)
-			{
-				c->uc--;
-			}
-			c->pc--;
-			if (c->pc == 0) // this is the last PtrBase to point to this object, so delete the counter object.
-			{
-				delete c;
-			}
-			p = nullptr;
-			c = nullptr;
-		}
-	}
-
-	template <typename T, bool OWN, bool USE>
-	T * PtrBase<T, OWN, USE>::operator -> () const
-	{
-		if (c == nullptr || c->oc == 0)
+		if (p == nullptr)
 		{
 			throw bad_dereference_exception(); // This points to null or to a destroyed object.
 		}
 		return p;
 	}
 
-	template <typename T, bool OWN, bool USE>
-	T & PtrBase<T, OWN, USE>::operator [] (int index) const
+	template <typename T>
+	T & PtrBase<T>::operator [] (int index) const
 	{
-		if (c == nullptr || c->oc == 0)
+		if (p == nullptr)
 		{
 			throw bad_dereference_exception(); // This points to null or to a destroyed object.
 		}
 		return p[index];
 	}
 
-	template <typename T, bool OWN, bool USE>
-	T & PtrBase<T, OWN, USE>::operator * () const
+	template <typename T>
+	T & PtrBase<T>::operator * () const
 	{
-		if (c == nullptr || c->oc == 0)
+		if (p == nullptr)
 		{
 			throw bad_dereference_exception(); // This points to null or to a destroyed object.
 		}
 		return *p;
 	}
 
-	template <typename T, bool OWN, bool USE>
-	T * PtrBase<T, OWN, USE>::raw() const
+	template <typename T>
+	T * PtrBase<T>::raw() const
 	{
-		if (c == nullptr || c->oc == 0)
-		{
-			return nullptr; // The object was destroyed already, so just return a null_ptr.
-		}
 		return p;
 	}
 
-	template <typename T, bool OWN, bool USE>
-	PtrBase<T, OWN, USE>::operator intptr_t() const
+	template <typename T>
+	PtrBase<T>::operator intptr_t() const
 	{
 		if (c == nullptr)
 		{
@@ -416,37 +274,252 @@ namespace ve
 		return c->hash();
 	}
 
-	template <typename T, bool OWN, bool USE> template <typename Y>
-	PtrBase<Y, OWN, USE> PtrBase<T, OWN, USE>::as() const
-	{
-		PtrBase<Y, OWN, USE> pp;
-		pp.p = dynamic_cast<Y *>(p);
-		pp.c = c;
-		if (p != nullptr)
-		{
-			if (OWN)
-			{
-				c->oc++;
-			}
-			if (USE)
-			{
-				c->uc++;
-			}
-			c->pc++;
-		}
-		return pp;
-	}
-
-	template <typename T, bool OWN, bool USE> template <typename Y, bool OWNY, bool USEY>
-	bool PtrBase<T, OWN, USE>::operator < (PtrBase<Y, OWNY, USEY> const & ptr) const
+	template <typename T> template <typename Y>
+	bool PtrBase<T>::operator < (PtrBase<Y> const & ptr) const
 	{
 		return (intptr_t)*this < (intptr_t)ptr;
 	}
 
-	template <typename T, bool OWN, bool USE> template <typename Y, bool OWNY, bool USEY>
-	bool PtrBase<T, OWN, USE>::operator == (PtrBase<Y, OWNY, USEY> const & ptr) const
+	template <typename T> template <typename Y>
+	bool PtrBase<T>::operator == (PtrBase<Y> const & ptr) const
 	{
 		return (intptr_t)*this == (intptr_t)ptr;
+	}
+
+	template <typename T>
+	OwnPtr<T>::OwnPtr()
+	{
+	}
+
+	template <typename T>
+	OwnPtr<T>::OwnPtr(OwnPtr<T> && ownPtr)
+		: PtrBase<T>(ownPtr.p, ownPtr.c)
+	{
+		ownPtr.p = nullptr;
+		ownPtr.c = nullptr;
+	}
+
+	template <typename T> template <typename Y>
+	OwnPtr<T>::OwnPtr(OwnPtr<Y> && ownPtr)
+		: PtrBase<T>(ownPtr.p, ownPtr.c)
+	{
+		ownPtr.p = nullptr;
+		ownPtr.c = nullptr;
+	}
+
+	template <typename T>
+	OwnPtr<T> & OwnPtr<T>::operator = (OwnPtr<T> && ownPtr)
+	{
+		p = ownPtr.p;
+		c = ownPtr.c;
+		ownPtr.p = nullptr;
+		ownPtr.c = nullptr;
+		return *this;
+	}
+
+	template <typename T> template <typename Y>
+	OwnPtr<T> & OwnPtr<T>::operator = (OwnPtr<Y> && ownPtr)
+	{
+		p = ownPtr.p;
+		c = ownPtr.c;
+		ownPtr.p = nullptr;
+		ownPtr.c = nullptr;
+		return *this;
+	}
+
+	template <typename T>
+	OwnPtr<T>::~OwnPtr()
+	{
+		setNull();
+	}
+
+	template <typename T>
+	int OwnPtr<T>::numPtrs() const
+	{
+		return (c != nullptr) ? (c->pc - 1) : 0;
+	}
+
+	template <typename T>
+	void OwnPtr<T>::setNull()
+	{
+		if (p != nullptr)
+		{
+			c->destroy();
+			c->pc--;
+			if (c->pc == 0) // there is nothing else pointing to this object, so delete the counter object.
+			{
+				delete c;
+			}
+			p = nullptr;
+			c = nullptr;
+		}
+	}
+
+	template <typename T> template <typename Y>
+	void OwnPtr<T>::setRaw(Y * newP, void(*deleteFunction) (Y *) = deleteObject)
+	{
+		setNull();
+		p = newP;
+		if (p != nullptr)
+		{
+			c = new _PtrCounterTyped<Y>(newP, deleteFunction);
+		}
+		else
+		{
+			c = nullptr;
+		}
+	}
+
+	template <typename T> template <typename ... Args>
+	void OwnPtr<T>::setNew(Args && ... args)
+	{
+		setRaw(new T(std::forward<Args>(args)...));
+	}
+
+	template <typename T> template <typename Y, typename ... Args>
+	void OwnPtr<T>::setNew(Args && ... args)
+	{
+		setRaw(new Y(std::forward<Args>(args)...));
+	}
+
+	template <typename T> template <typename ... Args>
+	OwnPtr<T> OwnPtr<T>::returnNew(Args && ... args)
+	{
+		OwnPtr<T> ptr;
+		ptr.setNew(std::forward<Args>(args)...);
+		return ptr;
+	}
+
+	template <typename T>
+	Ptr<T>::Ptr()
+	{
+
+	}
+
+	template <typename T>
+	Ptr<T>::Ptr(Ptr<T> const & ptr)
+		: PtrBase<T>(ptr.p, ptr.c)
+	{
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+	}
+
+	template <typename T>
+	Ptr<T>::Ptr(OwnPtr<T> const & ownPtr)
+		: PtrBase<T>(ownPtr.p, ownPtr.c)
+	{
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+	}
+
+	template <typename T> template <typename Y>
+	Ptr<T>::Ptr(Ptr<Y> const & ptr)
+		: PtrBase<T>(ptr.p, ptr.c)
+	{
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+	}
+
+	template <typename T> template <typename Y>
+	Ptr<T>::Ptr(OwnPtr<Y> const & ownPtr)
+		: PtrBase<T>(ownPtr.p, ownPtr.c)
+	{
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+	}
+
+	template <typename T>
+	Ptr<T> & Ptr<T>::operator = (Ptr<T> const & ptr)
+	{
+		setNull();
+		p = ptr.p;
+		c = ptr.c;
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+		return *this;
+	}
+
+	template <typename T>
+	Ptr<T> & Ptr<T>::operator = (OwnPtr<T> const & ownPtr)
+	{
+		setNull();
+		p = ownPtr.p;
+		c = ownPtr.c;
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+		return *this;
+	}
+
+	template <typename T> template <typename Y>
+	Ptr<Y> & Ptr<T>::operator = (Ptr<Y> const & ptr)
+	{
+		setNull();
+		p = ptr.p;
+		c = ptr.c;
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+		return *this;
+	}
+
+	template <typename T> template <typename Y>
+	Ptr<Y> & Ptr<T>::operator = (OwnPtr<Y> const & ownPtr)
+	{
+		setNull();
+		p = ownPtr.p;
+		c = ownPtr.c;
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+		return *this;
+	}
+
+	template <typename T>
+	Ptr<T>::~Ptr()
+	{
+		setNull();
+	}
+
+	template <typename T>
+	void Ptr<T>::setNull()
+	{
+		if (p != nullptr)
+		{
+			c->pc--;
+			if (c->pc == 0) // this is the last OwnPtr or Ptr to point to this object, so delete the counter object.
+			{
+				delete c;
+			}
+			p = nullptr;
+			c = nullptr;
+		}
+	}
+
+	template <typename T> template <typename Y>
+	Ptr<Y> Ptr<T>::as() const
+	{
+		Ptr<Y> ptr;
+		ptr.p = dynamic_cast<Y *>(p);
+		ptr.c = c;
+		if (c != nullptr)
+		{
+			c->pc++;
+		}
+		return ptr;
 	}
 }
 
@@ -454,11 +527,40 @@ namespace ve
 
 namespace std
 {
-	template <typename T, bool OWN, bool USE> struct hash<ve::PtrBase<T, OWN, USE>>
+	template <typename T> struct hash<ve::OwnPtr<T>>
 	{
-		size_t operator()(ve::PtrBase<T, OWN, USE> const & p) const
+		size_t operator()(ve::OwnPtr<T> const & p) const
+		{
+			return (intptr_t)p;
+		}
+	};
+
+	template <typename T> struct hash<ve::Ptr<T>>
+	{
+		size_t operator()(ve::Ptr<T> const & p) const
 		{
 			return (intptr_t)p;
 		}
 	};
 }
+
+/*
+
+Rationale:
+
+The smart pointers shared_ptr and weak_ptr have flaws:
+
+1. They have unnecessary thread safety which costs performance. Thread safety should be handled via other syncrhonization methods and not be in smart pointers. The underlying objects aren't thread safe even if the smart pointers are.
+2. weak_ptr calls lock, which creates a shared_ptr. This is required for thread safety, but isn't useful otherwise. A weak_ptr should never be able to control the lifetime of an object owned by a shared_ptr.
+3. shared_ptr has no way of knowing how many weak_ptrs reference it, so a storage system isn't possible without additional reference counting.
+4. shared_ptr is copyable, but ownership of an object should be unique. This is why most say use a unique_ptr instead of shared_ptr. But a unique_ptr doesn't allow for weak_ptr references.
+
+These OwnPtr and Ptr address these flaws:
+
+1. They do not have thread safety. Any thread safety should be handled via other synchronization methods.
+2. Ptr cannot ever extend the lifetime of OwnPtr. If Ptr references an obselete OwnPtr, an exception is thrown.
+3. OwnPtr can return how many Ptrs reference it.
+4. OwnPtr is unique, making ownership very clear.
+
+*/
+

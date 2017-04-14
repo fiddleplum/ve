@@ -153,9 +153,9 @@ namespace ve
 		{
 			auto image = pair.first;
 			auto model = getScene()->createModel();
-			auto mesh = OwnPtr<render::Mesh>::returnNew();
-			meshes.push_back(mesh);
-			mesh->setVertices(meshVertices[image]);
+			meshes.push_back(std::move(OwnPtr<render::Mesh>::returnNew()));
+			auto & mesh = meshes.back();
+			meshes.back()->setVertices(meshVertices[image]);
 			mesh->setIndices(meshIndices[image]);
 			mesh->setVertexFormat({render::Mesh::POSITION_2D, render::Mesh::UV0});
 			model->setMesh(mesh);

@@ -195,6 +195,7 @@
     <ClInclude Include="src\log.hpp" />
     <ClInclude Include="src\render\render.hpp" />
     <ClInclude Include="src\store.hpp" />
+    <ClInclude Include="src\util\cache.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\util\profiler.hpp" />
@@ -218,7 +219,7 @@
     <ClInclude Include="src\render\shader.hpp" />
     <ClInclude Include="src\render\target.hpp" />
     <ClInclude Include="src\ve.hpp" />
-    <ClInclude Include="src\util\cache.hpp" />
+    <ClInclude Include="src\util\named_cache.hpp" />
     <ClInclude Include="src\render\glcorearb.h" />
     <ClInclude Include="src\render\image.hpp" />
     <ClInclude Include="src\util\ptr_list.hpp" />
