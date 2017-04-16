@@ -4,9 +4,9 @@ namespace ve
 {
 	namespace world
 	{
-		World::World(Ptr<render::Render> const & render)
+		World::World()
 		{
-			scene = render->scenes.create();
+			scene.setNew();
 			scene->setUniformsFunction([this](Ptr<render::Shader> const & shader)
 			{
 				unsigned int lightIndex = 0;
@@ -21,6 +21,9 @@ namespace ve
 
 		World::~World()
 		{
+			objects.queueAllForErase();
+			objects.processEraseQueue();
+			scene.setNull();
 		}
 
 		void World::setupTarget(Ptr<render::Target> const & target, Ptr<Camera> const & camera)

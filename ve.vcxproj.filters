@@ -5,7 +5,6 @@
     <ClInclude Include="src\util\math.hpp" />
     <ClInclude Include="src\std\optional.hpp" />
     <ClInclude Include="src\ve.hpp" />
-    <ClInclude Include="src\store.hpp" />
     <ClInclude Include="src\gui\gui.hpp" />
     <ClInclude Include="src\gui\panel.hpp" />
     <ClInclude Include="src\gui\sprite.hpp" />
@@ -43,7 +42,6 @@
     <ClInclude Include="src\app.hpp" />
     <ClInclude Include="src\input_event.hpp" />
     <ClInclude Include="src\input.hpp" />
-    <ClInclude Include="src\render\render.hpp" />
     <ClInclude Include="src\world\controller.hpp" />
     <ClInclude Include="src\log.hpp" />
     <ClInclude Include="src\util\profiler.hpp" />

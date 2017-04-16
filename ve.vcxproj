@@ -193,8 +193,6 @@
     <ClInclude Include="src\input.hpp" />
     <ClInclude Include="src\input_event.hpp" />
     <ClInclude Include="src\log.hpp" />
-    <ClInclude Include="src\render\render.hpp" />
-    <ClInclude Include="src\store.hpp" />
     <ClInclude Include="src\util\cache.hpp" />
     <ClInclude Include="src\util\config.hpp" />
     <ClInclude Include="src\std\optional.hpp" />

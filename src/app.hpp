@@ -2,9 +2,7 @@
 
 #include "window.hpp"
 #include "world/world.hpp"
-#include "store.hpp"
 #include "input.hpp"
-#include "render/render.hpp"
 #include "util/ptr_set.hpp"
 
 union SDL_Event;
@@ -53,12 +51,6 @@ namespace ve
 		//! Returns the input system.
 		Ptr<Input> getInput() const;
 
-		//! Returns the render system.
-		Ptr<render::Render> getRender() const;
-
-		//! Returns the store.
-		Ptr<Store> getStore() const;
-
 		//! Sets the quit callback. Called right after the game loop exits. Use this to clean up your application.
 		void setQuitCallback(std::function<void()> const & callback);
 
@@ -79,8 +71,6 @@ namespace ve
 		float secondsPerUpdate = 1.f / 24.f;
 		float secondsPerLoop = 0;
 		OwnPtr<Input> input;
-		OwnPtr<render::Render> render;
-		OwnPtr<Store> store;
 		PtrSet<Window> windows;
 		PtrSet<world::World> worlds;
 

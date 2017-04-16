@@ -1,4 +1,3 @@
-#include "store.hpp"
 #include "ve.hpp"
 #include "log.hpp"
 #include "util/profiler.hpp"
@@ -29,8 +28,6 @@ namespace ve
 		secondsPerUpdate = 1.0f / sdlDisplayMode.refresh_rate;
 
 		input.setNew();
-		render.setNew();
-		store.setNew();
 	}
 
 	App::~App()
@@ -40,8 +37,6 @@ namespace ve
 		worlds.queueAllForErase();
 		worlds.processEraseQueue();
 
-		store.setNull();
-		render.setNull();
 		input.setNull();
 
 		SDL_Quit();
@@ -153,7 +148,7 @@ namespace ve
 
 	Ptr<Window> App::createWindow()
 	{
-		auto window = windows.insertNew<Window>(render);
+		auto window = windows.insertNew<Window>();
 		return window;
 	}
 
@@ -168,7 +163,7 @@ namespace ve
 
 	Ptr<world::World> App::createWorld()
 	{
-		return worlds.insertNew<world::World>(render);
+		return worlds.insertNew<world::World>();
 	}
 
 	void App::destroyWorld(Ptr<world::World> const & world)
@@ -184,16 +179,6 @@ namespace ve
 	Ptr<Input> App::getInput() const
 	{
 		return input;
-	}
-
-	Ptr<render::Render> App::getRender() const
-	{
-		return render;
-	}
-
-	Ptr<Store> App::getStore() const
-	{
-		return store;
 	}
 
 	void App::setQuitCallback(std::function<void()> const & callback)

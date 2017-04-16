@@ -2,7 +2,6 @@
 
 #include "gui/panel.hpp"
 #include <render/scene.hpp>
-#include <render/render.hpp>
 
 namespace ve
 {
@@ -10,7 +9,7 @@ namespace ve
 	{
 	public:
 		// Constructor.
-		Gui(Ptr<render::Render> const & render);
+		Gui();
 
 		// Destructor.
 		~Gui();
@@ -31,8 +30,11 @@ namespace ve
 		void update(float dt);
 
 	private:
+		void createSharedResources();
+
 		OwnPtr<Panel> root;
-		Ptr<render::Scene> scene;
+		OwnPtr<render::Scene> scene;
 		Ptr<render::Shader> shader;
+		static OwnPtr<render::Shader> shaderShared;
 	};
 }

@@ -1,5 +1,4 @@
 #include "world/object.hpp"
-#include "store.hpp"
 #include <fstream>
 
 namespace ve

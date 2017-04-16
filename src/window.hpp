@@ -12,7 +12,7 @@ namespace ve
 	{
 	public:
 		// Construct the window.
-		Window(Ptr<render::Render> const & render);
+		Window();
 
 		// Destruct the window.
 		~Window();
