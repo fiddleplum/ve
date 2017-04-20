@@ -27,20 +27,6 @@ namespace ve
 		Shader::Blending currentBlending = Shader::Blending::NONE; // the current blending state
 		bool currentDepthWrite = true;
 		Shader::DepthTest currentDepthTest = Shader::DepthTest::LESS_OR_EQUAL;
-		std::map<std::string, int> attributeLocations = { // mapping from attribute names as strings to their corresponding bound locations
-			{"position3d", Mesh::POSITION_3D},
-			{"position2d", Mesh::POSITION_2D},
-			{"normal", Mesh::NORMAL},
-			{"tangent", Mesh::TANGENT},
-			{"color0rgb", Mesh::COLOR0_RGB},
-			{"color0rgba", Mesh::COLOR0_RGBA},
-			{"color1rgb", Mesh::COLOR1_RGB},
-			{"color1rgba", Mesh::COLOR1_RGBA},
-			{"uv0", Mesh::UV0},
-			{"uv0", Mesh::UV1},
-			{"uv0", Mesh::UV2},
-			{"uv0", Mesh::UV3}
-		};
 
 		Shader::Shader(Config const & shaderConfig)
 		{
@@ -50,7 +36,6 @@ namespace ve
 			depthWrite = shaderConfig.depthWrite;
 			depthTest = shaderConfig.depthTest;
 			program = linkShaderProgram({vertexObject, fragmentObject});
-			bindAttributeLocations();
 			glDetachShader(program, vertexObject);
 			glDeleteShader(vertexObject);
 			glDetachShader(program, fragmentObject);
@@ -207,7 +192,6 @@ namespace ve
 				throw;
 			}
 			program = linkShaderProgram(shaderObjects); // delete shader objects as well
-			bindAttributeLocations();
 			for (unsigned int shaderObject : shaderObjects)
 			{
 				glDetachShader(program, shaderObject);
@@ -242,16 +226,6 @@ namespace ve
 			{
 				throw std::runtime_error("The uniform '" + name + "' not found in the shader. ");
 			}
-		}
-
-		int Shader::getAttributeLocation(std::string const & name) const
-		{
-			auto it = attributeLocations.find(name);
-			if (it == attributeLocations.end())
-			{
-				return -1;
-			}
-			return it->second;
 		}
 
 		Shader::Blending Shader::getBlending() const
@@ -378,46 +352,6 @@ namespace ve
 				throw std::runtime_error("Error linking shader: " + log);
 			}
 			return program;
-		}
-
-		void Shader::bindAttributeLocations()
-		{
-			GLint numVariables;
-			GLint maxNameSize;
-			std::string name;
-			glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &numVariables);
-			glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxNameSize);
-			for (int i = 0; i < numVariables; i++)
-			{
-				GLsizei nameSize;
-				GLint size;
-				GLenum type;
-				name.resize(maxNameSize);
-				glGetActiveAttrib(program, i, maxNameSize, &nameSize, &size, &type, &name[0]);
-				name.resize(nameSize);
-				if (attributeLocations.find(name) != attributeLocations.end())
-				{
-					GLint location = attributeLocations[name];
-					glBindAttribLocation(program, location, name.c_str());
-				}
-				else
-				{
-					throw std::runtime_error("Invalid attribute name in shader. The name may only be one of the predefined attributes in Shader::Attribute. ");
-				}
-			}
-			glLinkProgram(program); // need to relink after attributes are bound. No checking of errors here, because it was already linked successfully once.
-			GLint good;
-			glGetProgramiv(program, GL_LINK_STATUS, &good);
-			if (good == GL_FALSE)
-			{
-				GLint logLength;
-				std::string log;
-				glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
-				log.resize(logLength);
-				glGetProgramInfoLog(program, logLength, 0, &log[0]);
-				glDeleteProgram(program);
-				throw std::runtime_error("Error linking shader: " + log);
-			}
 		}
 
 		void Shader::populateUniformInfos()

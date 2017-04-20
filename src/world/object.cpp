@@ -23,14 +23,14 @@ namespace ve
 			updateShader();
 		}
 
-		Object::Object(Ptr<render::Scene> const & scene, std::string const & filename)
-			: Object(scene)
-		{
-			std::ifstream ifs {filename, std::ios::binary};
-			mesh.setNew(ifs);
-			model->setMesh(mesh);
-			updateShader();
-		}
+		//Object::Object(Ptr<render::Scene> const & scene, std::string const & filename)
+		//	: Object(scene)
+		//{
+		//	std::ifstream ifs {filename, std::ios::binary};
+		//	mesh.setNew(ifs);
+		//	model->setMesh(mesh);
+		//	updateShader();
+		//}
 
 		Object::~Object()
 		{

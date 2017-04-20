@@ -6,8 +6,9 @@ namespace ve
 		: Widget(scene, shader)
 	{
 		mesh.setNew();
-		mesh->setVertexFormat({render::Mesh::POSITION_2D, render::Mesh::UV0});
-		mesh->setVertices({0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1});
+		mesh->setVertices(0, {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1}, sizeof(float) * 4);
+		mesh->setVertexComponent(0, 2, 0, 0);
+		mesh->setVertexComponent(1, 2, sizeof(float) * 2, 0);
 		mesh->setIndices({0, 2, 1, 0, 3, 2});
 
 		originUniformLocation = shader->getUniformInfo("origin").location;
@@ -90,6 +91,6 @@ namespace ve
 			(float)bounds.getSize()[0], (float)bounds.getSize()[1], (float)imageOffset[0] + bounds.getSize()[0], (float)imageOffset[1] + bounds.getSize()[1],
 			0, (float)bounds.getSize()[1], (float)imageOffset[0], (float)imageOffset[1] + bounds.getSize()[1]
 		};
-		mesh->setVertices(vertices);
+		mesh->setVertices(0, vertices, sizeof(float) * 4);
 	}
 }

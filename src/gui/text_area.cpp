@@ -155,9 +155,10 @@ namespace ve
 			auto model = getScene()->createModel();
 			meshes.push_back(std::move(OwnPtr<render::Mesh>::returnNew()));
 			auto & mesh = meshes.back();
-			meshes.back()->setVertices(meshVertices[image]);
+			meshes.back()->setVertices(0, meshVertices[image], sizeof(float) * 4);
+			meshes.back()->setVertexComponent(0, 2, 0, 0);
+			meshes.back()->setVertexComponent(1, 2, sizeof(float) * 2, 0);
 			mesh->setIndices(meshIndices[image]);
-			mesh->setVertexFormat({render::Mesh::POSITION_2D, render::Mesh::UV0});
 			model->setMesh(mesh);
 			model->setShader(getShader());
 			model->setImageAtSlot(image, 0);

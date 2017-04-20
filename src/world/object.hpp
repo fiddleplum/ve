@@ -13,8 +13,8 @@ namespace ve
 			// Constructs an object with an empty model.
 			Object(Ptr<render::Scene> const & scene);
 
-			// Constructs an object from a filename.
-			Object(Ptr<render::Scene> const & scene, std::string const & filename);
+			//// Constructs an object from a filename.
+			//Object(Ptr<render::Scene> const & scene, std::string const & filename);
 
 			// Destructs the object.
 			virtual ~Object();

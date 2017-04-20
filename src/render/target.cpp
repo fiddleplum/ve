@@ -1,5 +1,6 @@
 #include "render/target.hpp"
 #include "render/open_gl.hpp"
+#include <log.hpp>
 #include <SDL.h>
 
 namespace ve
@@ -73,7 +74,7 @@ namespace ve
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glClearColor(0, 0, 0, 1);
+			//glClearColor(0, 0, 0, 1);
 			glClearDepth(1.0);
 			glViewport(0, 0, getSize()[0], getSize()[1]);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -89,14 +90,15 @@ namespace ve
 		{
 			sdlWindow = sdlWindow_;
 
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 			if (numWindowTargets == 0)
 			{
 				glContext = SDL_GL_CreateContext((SDL_Window *)sdlWindow);
 				SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 				glInitialize();
+				Log::write((char const *)glGetString(GL_VERSION));
 			}
 
 			numWindowTargets++;
@@ -122,6 +124,7 @@ namespace ve
 		{
 			SDL_GL_MakeCurrent((SDL_Window *)sdlWindow, glContext);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glClearColor(1, 0, 0, 1);
 		}
 
 		void WindowTarget::postRender() const
@@ -255,10 +258,12 @@ namespace ve
 		void ImageTarget::preRender() const
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+			glClearColor(0, 0, 1, 1);
 		}
 
 		void ImageTarget::postRender() const
 		{
+			colorImages[0]->save("test.png");
 		}
 	}
 }

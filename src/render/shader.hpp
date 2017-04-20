@@ -60,9 +60,6 @@ namespace ve
 			// Sets a uniform value of the currently active shader. Value types for T are below this class definition. Slower than using the location because of the string lookup.
 			template <typename T> void setUniformValue(char const * name, T const & value);
 
-			// Returns the location of an attribute given the name.
-			int getAttributeLocation(std::string const & name) const;
-
 			// Returns the blending state.
 			Blending getBlending() const;
 
@@ -81,8 +78,6 @@ namespace ve
 			static unsigned int compileShaderObject(Type type, std::string const & code);
 
 			static unsigned int linkShaderProgram(std::vector<unsigned int> const & shaderObjects);
-
-			void bindAttributeLocations();
 
 			void populateUniformInfos();
 
