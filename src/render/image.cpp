@@ -11,25 +11,10 @@ namespace ve
 
 		Image::Image(Vector2i size_, Format format_)
 		{
-			format = format_;
 			size = size_;
-
-			switch (format)
-			{
-				case RGB24:
-				case DEPTH:
-					bytesPerPixel = 3;
-					break;
-				case RGBA32:
-				case GRAYSCALE32:
-					bytesPerPixel = 4;
-					break;
-			}
-
-			pixels.resize(size[0] * size[1] * bytesPerPixel);
-
+			format = format_;
 			glGenTextures(1, &glId);
-			initializeGLPixels();
+			initializeGLPixels(nullptr);
 		}
 
 		Image::Image(std::string const & filename)
@@ -41,28 +26,21 @@ namespace ve
 			}
 			try
 			{
-				size[0] = surface->w;
-				size[1] = surface->h;
-
+				size = {surface->w, surface->h};
 				switch (surface->format->BitsPerPixel)
 				{
 					case 24:
 						format = RGB24;
-						bytesPerPixel = 3;
 						break;
 					case 32:
 						format = RGBA32;
-						bytesPerPixel = 4;
 						break;
 					default:
 						throw std::runtime_error("Error loading image '" + filename + "'. Only RGB24 and RGBA32 pixel formats are supported. ");
 				}
 
-				pixels.resize(size[0] * size[1] * bytesPerPixel);
-				memcpy(&pixels[0], surface->pixels, pixels.size());
-
 				glGenTextures(1, &glId);
-				initializeGLPixels();
+				initializeGLPixels(surface->pixels);
 			}
 			catch (std::runtime_error const & e)
 			{
@@ -85,7 +63,7 @@ namespace ve
 			}
 
 			SDL_Surface * surface = SDL_CreateRGBSurface(0, size[0], size[1], bytesPerPixel * 8, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
-			memcpy(surface->pixels, &pixels[0], surface->pitch * surface->h);
+			glGetTexImage(GL_TEXTURE_2D, 0, glFormat, glType, surface->pixels);
 			int result = IMG_SavePNG(surface, filename.c_str());
 			SDL_FreeSurface(surface);
 			if (result != 0)
@@ -102,8 +80,7 @@ namespace ve
 		void Image::setSize(Vector2i size_)
 		{
 			size = size_;
-			pixels.resize(size[0] * size[1] * bytesPerPixel);
-			initializeGLPixels();
+			initializeGLPixels(nullptr);
 		}
 
 		Image::Format Image::getFormat() const
@@ -111,19 +88,28 @@ namespace ve
 			return format;
 		}
 
-		std::vector<uint8_t> const & Image::getPixels() const
+		std::vector<uint8_t> Image::getPixels() const
 		{
+			std::vector<uint8_t> pixels;
+			pixels.resize(size[0] * size[1] * bytesPerPixel);
+			glGetTexImage(GL_TEXTURE_2D, 0, glFormat, glType, &pixels[0]);
 			return pixels;
 		}
 
-		void Image::setPixels(std::vector<uint8_t> const & pixels_)
+		void Image::setPixels(std::vector<uint8_t> const & pixels)
 		{
-			if (pixels.size() != pixels_.size())
+			if (size[0] * size[1] * bytesPerPixel != pixels.size())
 			{
 				throw std::runtime_error("Error setting pixels. Wrong size for pixel data. ");
 			}
-			pixels = pixels_;
-			updateGLPixels();
+			glBindTexture(GL_TEXTURE_2D, glId);
+			if (pixels.size() > 0)
+			{
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size[0], size[1], glFormat, glType, &pixels[0]);
+			}
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		}
 
 		void Image::activate(unsigned int slot) const
@@ -159,55 +145,46 @@ namespace ve
 			glFramebufferTexture(GL_FRAMEBUFFER, attachment, glId, 0);
 		}
 
-		void Image::initializeGLPixels()
+		void Image::initializeGLPixels(void const * pixels)
 		{
-			int glInternalFormat;
 			switch (format)
 			{
 				case Image::RGB24:
-					glInternalFormat = GL_RGB8;
 					glFormat = GL_RGB;
 					glType = GL_UNSIGNED_BYTE;
+					glInternalFormat = GL_RGB8;
+					bytesPerPixel = 3;
 					break;
 				case Image::RGBA32:
-					glInternalFormat = GL_RGBA8;
 					glFormat = GL_RGBA;
 					glType = GL_UNSIGNED_BYTE;
+					glInternalFormat = GL_RGBA8;
+					bytesPerPixel = 4;
 					break;
 				case Image::GRAYSCALE32:
-					glInternalFormat = GL_R32UI;
 					glFormat = GL_RED;
 					glType = GL_UNSIGNED_INT;
+					glInternalFormat = GL_R32UI;
+					bytesPerPixel = 4;
 					break;
 				case Image::DEPTH:
-					glInternalFormat = GL_DEPTH_COMPONENT24;
 					glFormat = GL_DEPTH_COMPONENT;
 					glType = GL_UNSIGNED_BYTE;
+					glInternalFormat = GL_DEPTH_COMPONENT24;
+					bytesPerPixel = 1;
 					break;
 			}
 
 			glBindTexture(GL_TEXTURE_2D, glId);
-			if (pixels.size() > 0)
+			if (size[0] > 0 && size[1] > 0)
 			{
-				glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, &pixels[0]);
+				glTexImage2D(GL_TEXTURE_2D, 0, glInternalFormat, size[0], size[1], 0, glFormat, glType, pixels);
 				int level = 1;
 				while (math::max(size[0] >> level, size[1] >> level) > 0)
 				{
 					glTexImage2D(GL_TEXTURE_2D, level, glInternalFormat, size[0] >> level, size[1] >> level, 0, glFormat, glType, 0);
 					level++;
 				}
-			}
-			glGenerateMipmap(GL_TEXTURE_2D);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		}
-
-		void Image::updateGLPixels() const
-		{
-			glBindTexture(GL_TEXTURE_2D, glId);
-			if (pixels.size() > 0)
-			{
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size[0], size[1], glFormat, glType, &pixels[0]);
 			}
 			glGenerateMipmap(GL_TEXTURE_2D);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

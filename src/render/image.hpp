@@ -40,7 +40,7 @@ namespace ve
 			Format getFormat() const;
 
 			// Gets the raw pixel data.
-			std::vector<uint8_t> const & getPixels() const;
+			std::vector<uint8_t> getPixels() const;
 
 			// Sets the raw pixel data.
 			void setPixels(std::vector<uint8_t> const & pixels);
@@ -55,17 +55,16 @@ namespace ve
 			void attachToFrameBuffer(unsigned int attachment);
 
 		private:
-			void initializeGLPixels();
-			void updateGLPixels() const;
+			void initializeGLPixels(void const * pixels);
 			void loadFromSDLSurface(void const * sdlSurface);
 
-			Format format;
 			Vector2i size;
-			int bytesPerPixel;
-			std::vector<uint8_t> pixels;
+			Format format;
 			unsigned int glId;
 			unsigned int glFormat;
 			unsigned int glType;
+			unsigned int glInternalFormat;
+			unsigned int bytesPerPixel;
 		};
 	}
 }
