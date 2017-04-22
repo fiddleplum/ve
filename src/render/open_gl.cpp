@@ -1452,6 +1452,20 @@ namespace ve
 			return major + minor / 10.f; // for later versions, opengl version is the same as glsl version
 		}
 
+		std::string glGetExtensions()
+		{
+			std::string extensions;
+			int numExtensions;
+			glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+			for (int i = 0; i < numExtensions; i++)
+			{
+				extensions += (char const *)glGetStringi(GL_EXTENSIONS, i);
+				extensions += "\n";
+				i++;
+			}
+			return extensions;
+		}
+
 		void glScissorPush(GLint x, GLint y, GLsizei width, GLsizei height)
 		{
 			Recti rect {{x, y}, {width, height}};

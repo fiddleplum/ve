@@ -51,7 +51,7 @@ namespace ve
 			// Returns information on all of the uniforms.
 			std::map<std::string, UniformInfo> const & getUniformInfos() const;
 
-			// Returns the information on a uniform given the name.
+			// Returns the information on a uniform given the name. If it isn't found, it returns -1 for the location.
 			UniformInfo getUniformInfo(std::string const & name) const;
 
 			// Sets a uniform value of the currently active shader. Value types for T are below this class definition.

@@ -65,20 +65,21 @@ namespace ve
 				"uniform vec2 imageSize;\n"
 				"uniform vec2 guiSize;\n"
 				"uniform float flipY;\n"
-				"layout(location = 0) in vec2 position2d;\n"
+				"layout(location = 0) in vec2 pos;\n"
 				"layout(location = 1) in vec2 uv0;\n"
-				"layout(location = 0) out vec2 v_uv0;\n"
+				"out vec2 v_uv0;\n"
 				"void main(void) {\n"
-				"	gl_Position = vec4(2 * (origin.x + position2d.x) / guiSize.x - 1, flipY * (-2 * (origin.y + position2d.y) / guiSize.y + 1), 0, 1);\n"
+				"	gl_Position = vec4(2 * (origin.x + pos.x) / guiSize.x - 1, flipY * (-2 * (origin.y + pos.y) / guiSize.y + 1), 0, 1);\n"
 				"	v_uv0 = vec2(uv0.x / imageSize.x, uv0.y / imageSize.y);\n"
 				"}\n";
 			shaderConfig.children["fragment"].text =
 				"#version 430\n"
 				"uniform vec4 color;\n"
 				"uniform sampler2D image;\n"
-				"layout(location = 0) in vec2 v_uv0;\n"
+				"in vec2 v_uv0;\n"
+				"out vec4 fragColor;\n"
 				"void main(void) {\n"
-				"	gl_FragColor = color * texture(image, clamp(v_uv0, 0, 1));\n"
+				"	fragColor = color * texture(image, clamp(v_uv0, 0, 1));\n"
 				"}\n";
 			shaderConfig.children["blending"].text = "alpha";
 			shaderShared.setNew(shaderConfig);

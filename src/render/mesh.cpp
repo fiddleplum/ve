@@ -48,9 +48,9 @@ namespace ve
 		void Mesh::setVertexComponent(unsigned int componentIndex, unsigned int numDimensions, unsigned int byteOffsetInVertex, unsigned int verticesIndex)
 		{
 			glBindVertexArray(vertexArrayObject);
+			glEnableVertexAttribArray(componentIndex);
 			glVertexAttribFormat(componentIndex, numDimensions, GL_FLOAT, GL_FALSE, byteOffsetInVertex);
 			glVertexAttribBinding(componentIndex, verticesIndex);
-			glEnableVertexAttribArray(componentIndex);
 		}
 
 		void Mesh::setVertices(unsigned int index, std::vector<float> const & vertices, unsigned int byteSizeOfVertex)
@@ -63,6 +63,7 @@ namespace ve
 				{
 					glBindVertexArray(vertexArrayObject);
 					glGenBuffers(1, &vertexBufferObject);
+					glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject); // Even though this isn't required, my video card has a bug which does require it for glBindVertexBuffer.
 					glBindVertexBuffer(index, vertexBufferObject, 0, byteSizeOfVertex);
 					vertexBufferObjects.insert(std::pair<unsigned int, unsigned int>(index, vertexBufferObject));
 				}

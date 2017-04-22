@@ -263,7 +263,6 @@ namespace ve
 
 		void ImageTarget::postRender() const
 		{
-			colorImages[0]->save("test.png");
 		}
 	}
 }

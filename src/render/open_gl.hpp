@@ -2,6 +2,7 @@
 
 #define NOMINMAX
 #include "glcorearb.h"
+#include <string>
 
 namespace ve
 {
@@ -10,6 +11,8 @@ namespace ve
 		void glInitialize();
 
 		float glGetGLSLVersion();
+
+		std::string glGetExtensions();
 
 		void glScissorPush(GLint x, GLint y, GLsizei width, GLsizei height);
 

@@ -222,9 +222,9 @@ namespace ve
 			{
 				return iter->second;
 			}
-			else
+			else // If not found, it returns -1 for the location.
 			{
-				throw std::runtime_error("The uniform '" + name + "' not found in the shader. ");
+				return UniformInfo {-1, INT};
 			}
 		}
 
