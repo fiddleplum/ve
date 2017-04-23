@@ -7,8 +7,8 @@ namespace ve
 	{
 		mesh.setNew();
 		mesh->setVertices(0, {0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1}, sizeof(float) * 4);
-		mesh->setVertexComponent(0, 2, 0, 0);
-		mesh->setVertexComponent(1, 2, sizeof(float) * 2, 0);
+		mesh->setVertexComponent(0, 2, 0, 0, false);
+		mesh->setVertexComponent(1, 2, sizeof(float) * 2, 0, false);
 		mesh->setIndices({0, 2, 1, 0, 3, 2});
 
 		originUniformLocation = shader->getUniformInfo("origin").location;

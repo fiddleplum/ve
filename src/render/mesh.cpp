@@ -8,7 +8,8 @@ namespace ve
 		Mesh::Mesh()
 		{
 			numIndicesPerPrimitive = 3;
-			numIndices = 0;
+			numIndicesInInstance = 0;
+			numInstances = 1;
 			glMode = GL_TRIANGLES;
 			glGenVertexArrays(1, &vertexArrayObject);
 			glGenBuffers(1, &indexBufferObject);
@@ -45,12 +46,16 @@ namespace ve
 			}
 		}
 
-		void Mesh::setVertexComponent(unsigned int componentIndex, unsigned int numDimensions, unsigned int byteOffsetInVertex, unsigned int verticesIndex)
+		void Mesh::setVertexComponent(unsigned int componentIndex, unsigned int numDimensions, unsigned int byteOffsetInVertex, unsigned int verticesIndex, bool instanced)
 		{
 			glBindVertexArray(vertexArrayObject);
 			glEnableVertexAttribArray(componentIndex);
 			glVertexAttribFormat(componentIndex, numDimensions, GL_FLOAT, GL_FALSE, byteOffsetInVertex);
 			glVertexAttribBinding(componentIndex, verticesIndex);
+			if (instanced)
+			{
+				glVertexAttribDivisor(componentIndex, 1);
+			}
 		}
 
 		void Mesh::setVertices(unsigned int index, std::vector<float> const & vertices, unsigned int byteSizeOfVertex)
@@ -87,9 +92,14 @@ namespace ve
 
 		void Mesh::setIndices(std::vector<unsigned int> const & indices)
 		{
-			numIndices = (unsigned int)indices.size();
+			numIndicesInInstance = (unsigned int)indices.size();
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), (void const *)&indices[0], GL_STATIC_DRAW);
+		}
+
+		void Mesh::setNumInstances(unsigned int numInstances_)
+		{
+			numInstances = numInstances_;
 		}
 
 		void Mesh::render() const
@@ -98,7 +108,7 @@ namespace ve
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-			glDrawElements(glMode, numIndices, GL_UNSIGNED_INT, 0);
+			glDrawElementsInstanced(glMode, numIndicesInInstance, GL_UNSIGNED_INT, 0, numInstances);
 			glBindVertexArray(0);
 		}
 	}

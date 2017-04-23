@@ -10,6 +10,7 @@ namespace ve
 		imageSizeUniformLocation = shader->getUniformInfo("imageSize").location;
 		imageUniformLocation = shader->getUniformInfo("image").location;
 		colorUniformLocation = shader->getUniformInfo("color").location;
+		color = {1, 1, 1, 1};
 	}
 
 	TextArea::~TextArea()
@@ -78,6 +79,11 @@ namespace ve
 
 	void TextArea::updateModels()
 	{
+		if (!font.isValid())
+		{
+			return;
+		}
+
 		for (auto && model : models)
 		{
 			getScene()->destroyModel(model);
@@ -156,8 +162,8 @@ namespace ve
 			meshes.push_back(std::move(OwnPtr<render::Mesh>::returnNew()));
 			auto & mesh = meshes.back();
 			meshes.back()->setVertices(0, meshVertices[image], sizeof(float) * 4);
-			meshes.back()->setVertexComponent(0, 2, 0, 0);
-			meshes.back()->setVertexComponent(1, 2, sizeof(float) * 2, 0);
+			meshes.back()->setVertexComponent(0, 2, 0, 0, false);
+			meshes.back()->setVertexComponent(1, 2, sizeof(float) * 2, 0, false);
 			mesh->setIndices(meshIndices[image]);
 			model->setMesh(mesh);
 			model->setShader(getShader());
