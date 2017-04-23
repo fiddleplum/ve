@@ -139,9 +139,17 @@ namespace ve
 				}
 				return mesh < model.mesh;
 			}
-			else // some blending, sort by depth
+			else if (getDepth() < model.getDepth()) // some blending, sort by depth
 			{
-				return getDepth() < model.getDepth();
+				return true;
+			}
+			else if (getDepth() > model.getDepth())
+			{
+				return false;
+			}
+			else // just do the pointer to guarantee an explicit ordering.
+			{
+				return this < &model;
 			}
 		}
 
