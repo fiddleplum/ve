@@ -46,19 +46,15 @@ namespace ve
 			}
 		}
 
-		void Mesh::setVertexComponent(unsigned int componentIndex, unsigned int numDimensions, unsigned int byteOffsetInVertex, unsigned int verticesIndex, bool instanced)
+		void Mesh::setVertexComponent(unsigned int componentIndex, unsigned int numDimensions, unsigned int byteOffsetInVertex, unsigned int verticesIndex)
 		{
 			glBindVertexArray(vertexArrayObject);
 			glEnableVertexAttribArray(componentIndex);
 			glVertexAttribFormat(componentIndex, numDimensions, GL_FLOAT, GL_FALSE, byteOffsetInVertex);
 			glVertexAttribBinding(componentIndex, verticesIndex);
-			if (instanced)
-			{
-				glVertexAttribDivisor(componentIndex, 1);
-			}
 		}
 
-		void Mesh::setVertices(unsigned int index, std::vector<float> const & vertices, unsigned int byteSizeOfVertex)
+		void Mesh::setVertices(unsigned int index, std::vector<float> const & vertices, unsigned int byteSizeOfVertex, bool instanced)
 		{
 			auto & it = vertexBufferObjects.find(index);
 			if (vertices.size() > 0 && byteSizeOfVertex > 0)
@@ -70,6 +66,7 @@ namespace ve
 					glGenBuffers(1, &vertexBufferObject);
 					glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject); // Even though this isn't required, my video card has a bug which does require it for glBindVertexBuffer.
 					glBindVertexBuffer(index, vertexBufferObject, 0, byteSizeOfVertex);
+					glVertexBindingDivisor(index, instanced ? 1 : 0);
 					vertexBufferObjects.insert(std::pair<unsigned int, unsigned int>(index, vertexBufferObject));
 				}
 				else
@@ -105,8 +102,6 @@ namespace ve
 		void Mesh::render() const
 		{
 			glBindVertexArray(vertexArrayObject);
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 			glDrawElementsInstanced(glMode, numIndicesInInstance, GL_UNSIGNED_INT, 0, numInstances);
 			glBindVertexArray(0);

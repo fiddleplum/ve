@@ -161,9 +161,9 @@ namespace ve
 			auto model = getScene()->createModel();
 			meshes.push_back(std::move(OwnPtr<render::Mesh>::returnNew()));
 			auto & mesh = meshes.back();
-			meshes.back()->setVertices(0, meshVertices[image], sizeof(float) * 4);
-			meshes.back()->setVertexComponent(0, 2, 0, 0, false);
-			meshes.back()->setVertexComponent(1, 2, sizeof(float) * 2, 0, false);
+			meshes.back()->setVertices(0, meshVertices[image], sizeof(float) * 4, false);
+			meshes.back()->setVertexComponent(0, 2, 0, 0);
+			meshes.back()->setVertexComponent(1, 2, sizeof(float) * 2, 0);
 			mesh->setIndices(meshIndices[image]);
 			model->setMesh(mesh);
 			model->setShader(getShader());
